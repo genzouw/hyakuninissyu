@@ -16,7 +16,7 @@
     <![endif]-->
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <title>エンジニア研修 理解度試験</title>
+    <title>ITエンジニア スキルチェック</title>
   </head>
 
   <body>
@@ -29,67 +29,54 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <h1>エンジニア研修 理解度試験</h1>
+            <h1>ITエンジニア スキルチェック</h1>
           </li>
         </ul>
       </div>
     </nav>
 
     <div class="container-fluid">
-      <div class="row justify-content-center">
-        <div class="col-sm-10 p-2" id="quiz-start-page">
+      <div class="row justify-content-center" id="app">
+        <div class="col-sm-10 p-2 quiz-start-page" v-if="currentQuestionIndex === -1">
           <section class="p-5">
-            <h2>エンジニア研修 理解度試験</h2>
+            <h2>ITエンジニア スキルチェック</h2>
             <p class="intro">準備ができましたら「スタート」ボタンを教えてください。</p>
-            <button type="submit" class="btn btn-lg btn-primary start">スタート</button>
+            <button class="btn btn-lg btn-primary start" @click.prevent="clickStart">スタート</button>
           </section>
         </div>
 
-        <div class="col-sm-10 p-2 cont main-container bg-light" id="quizContainer">
-          <div id="question" class="question"></div>
-          <label class="option">
-            <input type="radio" name="option" value="1" />
-            <span></span>
-          </label>
-          <label class="option">
-            <input type="radio" name="option" value="2" />
-            <span></span>
-          </label>
-          <label class="option">
-            <input type="radio" name="option" value="3" />
-            <span></span>
-          </label>
-          <label class="option">
-            <input type="radio" name="option" value="4" />
-            <span></span>
+        <div class="col-sm-10 p-2 cont main-container bg-light" v-else-if="currentQuestionIndex < totalQuestions">
+          <pre class="question">({{ currentQuestionIndex + 1 }}) {{ questionData.question }}</pre>
+          <label class="option" v-for="(c, i) in questionData.choices" v-bind:class="{ correct: !thinking && c === questionData.answer,  choiced: !thinking && c === choice }">
+            <input type="radio" v-model="choice" v-bind:value="c" v-bind:disabled="!thinking" />
+            <span>{{ c }}</span>
           </label>
           <div class="row justify-content-center">
             <div class="col-auto">
-              <button id="answerButton" class="btn btn-lg btn-danger">決定</button>
-              <button id="nextButton" class="btn btn-lg btn-info">次へ</button>
+              <button class="btn btn-lg btn-danger" v-bind:disabled="!(choice && choice.length > 0)" v-if="thinking" @click.prevent="clickAnswer">決定</button>
+              <button class="btn btn-lg btn-info" v-if="!thinking" @click.prevent="clickNext">次へ</button>
             </div>
           </div>
         </div>
 
-        <div class="col-sm-10 p-2">
-          <div class="cont result" style="display:none;" id="result">
-          </div>
+        <div class="col-sm-10 p-2" v-else>
+          <div class="cont result">{{ result }}</div>
         </div>
       </div>
     </div>
 
     <footer class="page-footer font-small fixed-bottom bg-dark text-light justify-content-center">
       <div class="footer-copyright text-center py-3">
-        <a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="large" data-text="エンジニア研修 理解度試験！" data-url="">Tweet</a>
+        <a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="large" data-text="ITエンジニア スキルチェック！" data-url="">Tweet</a>
         <a href="https://twitter.com/genzouw" class="twitter-follow-button" data-size="large" data-show-count="false">Follow @genzouw</a>
       </div>
     </footer>
 
+    <script async="async" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script async="async" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="question.js"></script>
     <script src="script.js"></script>
   </body>

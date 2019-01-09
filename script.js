@@ -1,84 +1,53 @@
-$(() => {
-  let currentQuestionIndex = 0
-  let score = 0
-  // const countOfRestQuestions = questions.length
-  const totalQuestions = 3
+const vue = new Vue({
+  el: '#app',
+  data: {
+    currentQuestionIndex: -1,
+    score: 0,
+    totalQuestions: 3,
+    questionData: {
+      question: '',
+      choices: [],
+      answer: '',
+    },
+    choice: null,
+    thinking: false,
+    result: '',
+  },
+  methods: {
+    clickStart() {
+      this.clickNext()
+    },
+    clickAnswer() {
+      this.thinking = false
 
-  const quizContainer = $('#quizContainer')
-  const questionQ = $('#question')
-  const answerButton = $('#answerButton')
-  const nextButton = $('#nextButton')
+      const selectedOption = $('input[name=option]:checked')
 
-  const loadQuestion = ((index) => {
-    const q = questions[index]
+      if (this.questionData.answer === this.choice) {
+        selectedOption.closest('label').addClass('correct')
+        this.score++
+      } else {
+        selectedOption.closest('label').addClass('incorrect')
+      }
+    },
+    clickNext() {
+      this.currentQuestionIndex++
 
-    questionQ.text(q.question)
-
-    $('label.option').each((i, label) => {
-      $(label)
-        .removeClass('correct incorrect')
-        .find('span')
-        .text(q.choices[i])
-        .siblings('input')[0].checked = false
-    })
-
-    answerButton.show()
-    nextButton.hide()
-    $('input[name=option]').prop('disabled', false)
-  })
-
-  quizContainer.hide()
-  $('.start').on('click', () => {
-    $('#quiz-start-page').hide()
-    quizContainer.show()
-    loadQuestion(currentQuestionIndex)
-  })
-
-  answerButton.on('click', () => {
-    const selectedOption = $('input[name=option]:checked')
-    if (selectedOption.length === 0) {
-      swal({
-        title: '回答を選択してください。',
-        icon: 'warning',
-        button: 'OK',
-      })
-      return
-    }
-
-    const q = questions[currentQuestionIndex]
-
-    const selectedLabel = selectedOption.siblings('span')
-    if (q.answer === selectedLabel.text()) {
-      selectedOption.closest('label').addClass('correct')
-      score++
-    } else {
-      selectedOption.closest('label').addClass('incorrect')
-    }
-
-    answerButton.hide()
-    nextButton.show()
-    $('input[name=option]').prop('disabled', true)
-  })
-
-  nextButton.on('click', () => {
-    currentQuestionIndex++
-    loadNextQuestion()
-  })
-
-  function loadNextQuestion() {
-    if (currentQuestionIndex < totalQuestions) {
-      loadQuestion(currentQuestionIndex)
-    } else {
-      const rate = Math.round(100 * score / totalQuestions)
-      quizContainer.hide()
-      $('#result')
-        .show()
-        .text(`スコアは ${score}/${totalQuestions} ( ${rate}% ) です。`)
-    }
-  }
+      if (this.currentQuestionIndex < this.totalQuestions) {
+        this.loadQuestion()
+      } else {
+        const rate = Math.round(100 * this.score / this.totalQuestions)
+        this.result = `スコアは ${this.score}/${this.totalQuestions} ( ${rate}% ) です。`
+      }
+    },
+    loadQuestion() {
+      this.questionData = questions[this.currentQuestionIndex]
+      this.thinking = true
+      this.choice = null
+    },
+  },
 })
 
-//  < !--TWITTER WIDGET -->
+// Twitter
 window.twttr = (function (d, s, id) {
   let js; const fjs = d.getElementsByTagName(s)[0]
 

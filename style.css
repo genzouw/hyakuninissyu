@@ -2,12 +2,16 @@ h1 {
   color: white;
 }
 
-#quiz-start-page {
+#navbarSupportedContent h1 {
+  font-size: 100%;
+}
+
+.quiz-start-page {
   text-align: center;
   background: linear-gradient(to bottom right, #f7ff9194, #f7ff91b8);
 }
 
-#quiz-start-page, .cont {
+.quiz-start-page, .cont {
   box-shadow: 5px 5px 25px 0 rgba(46, 61, 73, .2);
   border-radius: 7px;
 }
@@ -20,7 +24,7 @@ h1 {
 }
 
 .option {
-  width: 45%;
+  width: 48%;
   display: inline-block;
   padding: 10px 0 10px 15px;
   background: #e2e2e2;
@@ -46,10 +50,26 @@ input:checked {
   color: #000;
 }
 
+.choiced {
+  background-color: pink;
+}
+
+.choiced:after {
+  content: " ×";
+  color: red;
+  font-weight: bold;
+}
+
 .correct {
+  background-color: lightblue;
+}
+
+.correct.choiced {
   background-color: lightgreen;
 }
 
-.incorrect {
-  background-color: pink;
+.correct.choiced:after {
+  content: " ○";
+  color: blue;
+  font-weight: bold;
 }

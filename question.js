@@ -1,26 +1,32 @@
 const questions = [
   {
-    question: '1. Which of these is not a logical operator?',
+    question: `
+Widows Server上で動作するWebサーバは？
+`,
     choices: [
-      '&&',
-      '!',
-      '!!',
-      '||',
+      'Apache',
+      'Nginx',
+      'IIS',
+      'Tomcat',
     ],
-    answer: '!!',
+    answer: 'IIS',
   },
   {
-    question: '2. Which of the following methods combines the text of two strings and returns a new string?',
+    question: `
+世界初の商用RDBMSであり、メインフレームからパーソナルコンピュータまで、幅広いプラットフォームをサポートしているものはどれか？
+`,
     choices: [
-      'add()',
-      'merge()',
-      'concat()',
-      'append()',
+      'MySQL',
+      'PostgreSQL',
+      'DB2',
+      'Oracle',
     ],
-    answer: 'concat()',
+    answer: 'Oracle',
   },
   {
-    question: '3. Which of the following methods does not return a new array?',
+    question: `
+Which of the following methods does not return a new array?
+`,
     choices: [
       'forEach()',
       'map()',
@@ -30,7 +36,9 @@ const questions = [
     answer: 'forEach()',
   },
   {
-    question: '4. Which is not a primitive data type in JavaScript?',
+    question: `
+Which is not a primitive data type in JavaScript?
+`,
     choices: [
       'Boolean',
       'Null',
@@ -40,7 +48,9 @@ const questions = [
     answer: 'Character',
   },
   {
-    question: '5. What character ends a JavaScript statement?',
+    question: `
+What character ends a JavaScript statement?
+`,
     choices: [
       ':',
       '.',
@@ -50,7 +60,9 @@ const questions = [
     answer: ';',
   },
   {
-    question: '6. Is JavaScript case sensitive?',
+    question: `
+Is JavaScript case sensitive?
+`,
     choices: [
       'No',
       'Yes',
@@ -60,7 +72,9 @@ const questions = [
     answer: 'Yes',
   },
   {
-    question: "7. What does 3+4+'7' evaluate to?",
+    question: `
+What does 3+4+'7' evaluate to?
+`,
     choices: [
       '14',
       '7',
@@ -70,7 +84,9 @@ const questions = [
     answer: '77',
   },
   {
-    question: '8. What looping structures are there in JavaScript?',
+    question: `
+What looping structures are there in JavaScript?
+`,
     choices: [
       'for',
       'while',
@@ -80,7 +96,9 @@ const questions = [
     answer: 'all of them',
   },
   {
-    question: '9. If the submit button on a form is clicked which event handler is invoked?',
+    question: `
+If the submit button on a form is clicked which event handler is invoked?
+`,
     choices: [
       'onsubmit',
       'onclick',
@@ -90,7 +108,9 @@ const questions = [
     answer: 'onsubmit',
   },
   {
-    question: '10. Which method changes the contents of an array by removing existing elements and/or adding new elements?',
+    question: `
+Which method changes the contents of an array by removing existing elements and/or adding new elements?
+`,
     choices: [
       'sort()',
       'splice()',
