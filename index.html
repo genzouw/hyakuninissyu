@@ -1,64 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>JavaScript Quiz</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=0, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <!-- Bootstrap -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="style.css" rel="stylesheet" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <title>エンジニア研修 理解度試験</title>
   </head>
+
   <body>
-    <main>
-      <div class="wrapper">
-        <!-- QUIZ START PAGE -->
-        <section class="quiz-start-page">
-          <h1>JS QUIZ</h1>
-          <p class="intro">For every correct answer you score 10, and for every wrong answer you score -5.</p>
-          <button type="submit" class="start">START!</button>
-        </section>
-        <!-- END QUIZ START PAGE -->
-        <section id="quizContainer" class="container main-container">
-          <div class="title">JavaScript Quiz</div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+      <a class="navbar-brand" href="/"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <h1>エンジニア研修 理解度試験</h1>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row justify-content-center">
+        <div class="col-sm-10 p-2" id="quiz-start-page">
+          <section class="p-5">
+            <h2>エンジニア研修 理解度試験</h2>
+            <p class="intro">準備ができましたら「スタート」ボタンを教えてください。</p>
+            <button type="submit" class="btn btn-lg btn-primary start">スタート</button>
+          </section>
+        </div>
+
+        <div class="col-sm-10 p-2 cont main-container bg-light" id="quizContainer">
           <div id="question" class="question"></div>
           <label class="option">
             <input type="radio" name="option" value="1" />
-            <span id="opt1"></span>
+            <span></span>
           </label>
           <label class="option">
             <input type="radio" name="option" value="2" />
-            <span id="opt2"></span>
+            <span></span>
           </label>
           <label class="option">
             <input type="radio" name="option" value="3" />
-            <span id="opt3"></span>
+            <span></span>
           </label>
           <label class="option">
             <input type="radio" name="option" value="4" />
-            <span id="opt4"></span>
+            <span></span>
           </label>
-          <div class="button-container">
-            <!-- <button id="prevButton" class="next-btn">Previous</button> -->
-            <button id="nextButton" class="next-btn">Next</button>
+          <div class="row justify-content-center">
+            <div class="col-auto">
+              <button id="answerButton" class="btn btn-lg btn-danger">決定</button>
+              <button id="nextButton" class="btn btn-lg btn-info">次へ</button>
+            </div>
           </div>
-          <div class="wrapper">
-            <div id="result" class="container result" style="display:none;"></div>
+        </div>
+
+        <div class="col-sm-10 p-2">
+          <div class="cont result" style="display:none;" id="result">
           </div>
-        </section>
-        <!-- RESULT CONTAINER ENDS HERE -->
+        </div>
       </div>
-    </main>
-    <!-- FOOTER STARTS HERE -->
-    <footer>
-      <div class="wrapper">
-        <a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="large" data-text="I took the JS quiz !" data-url="">Tweet</a>
-        <a href="https://twitter.com/shatabdi_nb" class="twitter-follow-button" data-size="large" data-show-count="false">Follow @Shatabdi</a>
-        <p>© Shatabdi Bhattacharjee</p>
+    </div>
+
+    <footer class="page-footer font-small fixed-bottom bg-dark text-light justify-content-center">
+      <div class="footer-copyright text-center py-3">
+        <a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="large" data-text="エンジニア研修 理解度試験！" data-url="">Tweet</a>
+        <a href="https://twitter.com/genzouw" class="twitter-follow-button" data-size="large" data-show-count="false">Follow @genzouw</a>
       </div>
     </footer>
-    <!-- FOOTER ENDS HERE -->
-    <!-- SCRIPT SOURCES -->
-    <script src='https://code.jquery.com/jquery-3.2.1.min.js' integrity='sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=' crossorigin='anonymous'></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script async="async" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="question.js"></script>

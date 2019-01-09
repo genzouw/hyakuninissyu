@@ -1,81 +1,79 @@
-// DOCUMENT READY
 $(() => {
-  let currentQuestion = 0
+  let currentQuestionIndex = 0
   let score = 0
-  // const totalQuestions = questions.length
+  // const countOfRestQuestions = questions.length
   const totalQuestions = 3
 
-  // ALL THE VARIABLES
-  const container = $('#quizContainer')
+  const quizContainer = $('#quizContainer')
   const questionQ = $('#question')
+  const answerButton = $('#answerButton')
   const nextButton = $('#nextButton')
-  let q
 
-  // PAGE LOAD
-
-  $('.main-container').hide()
-  $('.start').on('click', () => {
-    $('.quiz-start-page').hide()
-    $('.main-container').show()
-  })
-  // CREATE A FUNCTION TO LOAD THE QUESTION
   const loadQuestion = ((index) => {
-    q = questions[index]
+    const q = questions[index]
+
     questionQ.text(q.question)
 
-    for (let i = 4; i > 0; i -= 1) {
-      $(`#opt${i}`)
-        .text(q[`option${i}`])
+    $('label.option').each((i, label) => {
+      $(label)
+        .removeClass('correct incorrect')
+        .find('span')
+        .text(q.choices[i])
         .siblings('input')[0].checked = false
-    }
+    })
+
+    answerButton.show()
+    nextButton.hide()
+    $('input[name=option]').prop('disabled', false)
   })
 
-  loadQuestion(currentQuestion)
-
-  // CREATE A FUNCTION TO LOAD THE NEXT QUESTION
-  nextButton.on('click', () => {
-    currentQuestion += 1
-    loadNextQuestion()
+  quizContainer.hide()
+  $('.start').on('click', () => {
+    $('#quiz-start-page').hide()
+    quizContainer.show()
+    loadQuestion(currentQuestionIndex)
   })
 
-  function loadNextQuestion() {
+  answerButton.on('click', () => {
     const selectedOption = $('input[name=option]:checked')
     if (selectedOption.length === 0) {
       swal({
-        title: 'Please select an answer!',
+        title: '回答を選択してください。',
         icon: 'warning',
         button: 'OK',
       })
       return
     }
 
-    const answer = selectedOption.siblings('span').text()
-    if (q.answer === answer) {
-      alert('正解！')
-      score += 1
+    const q = questions[currentQuestionIndex]
+
+    const selectedLabel = selectedOption.siblings('span')
+    if (q.answer === selectedLabel.text()) {
+      selectedOption.closest('label').addClass('correct')
+      score++
     } else {
-      alert('残念。。。')
+      selectedOption.closest('label').addClass('incorrect')
     }
 
-    if (currentQuestion === totalQuestions) {
-      let text = `Your score is ${score}! `
+    answerButton.hide()
+    nextButton.show()
+    $('input[name=option]').prop('disabled', true)
+  })
 
-      if (score < 5) {
-        text += 'Uh oh you need work harder!'
-      } else if (score < 8) {
-        text += 'Wow, that\'s impressive!'
-      } else {
-        text += 'You\'re a JS ninja! Want to take the intermediate level?'
-      }
+  nextButton.on('click', () => {
+    currentQuestionIndex++
+    loadNextQuestion()
+  })
 
-      container.show()
-      $('#result')
-        .text(text)
-        .show()
+  function loadNextQuestion() {
+    if (currentQuestionIndex < totalQuestions) {
+      loadQuestion(currentQuestionIndex)
     } else {
-      nextButton.text('Finish')
-
-      loadQuestion(currentQuestion)
+      const rate = Math.round(100 * score / totalQuestions)
+      quizContainer.hide()
+      $('#result')
+        .show()
+        .text(`スコアは ${score}/${totalQuestions} ( ${rate}% ) です。`)
     }
   }
 })
