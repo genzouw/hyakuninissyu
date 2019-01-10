@@ -3,7 +3,7 @@ const vue = new Vue({
   data: {
     currentQuestionIndex: -1,
     score: 0,
-    totalQuestions: 3,
+    totalQuestions: 25,
     questionData: {
       question: '',
       choices: [],
@@ -11,7 +11,12 @@ const vue = new Vue({
     },
     choice: null,
     thinking: false,
+    questionList: [],
     result: '',
+  },
+  mounted() {
+    $('#app').show()
+    this.questionList = _.shuffle(questions)
   },
   methods: {
     clickStart() {
@@ -40,7 +45,8 @@ const vue = new Vue({
       }
     },
     loadQuestion() {
-      this.questionData = questions[this.currentQuestionIndex]
+      this.questionData = this.questionList[this.currentQuestionIndex]
+      this.questionData.choices = _.shuffle(this.questionData.choices)
       this.thinking = true
       this.choice = null
     },

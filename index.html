@@ -16,7 +16,7 @@
     <![endif]-->
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <title>ITエンジニア スキルチェック</title>
+    <title>ITエンジニア 初級者問題集</title>
   </head>
 
   <body>
@@ -29,28 +29,32 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <h1>ITエンジニア スキルチェック</h1>
+            <h1>ITエンジニア 初級者問題集</h1>
           </li>
         </ul>
       </div>
     </nav>
 
     <div class="container-fluid">
-      <div class="row justify-content-center" id="app">
+      <div class="row justify-content-center" id="app" style="display: none;">
         <div class="col-sm-10 p-2 quiz-start-page" v-if="currentQuestionIndex === -1">
           <section class="p-5">
-            <h2>ITエンジニア スキルチェック</h2>
-            <p class="intro">準備ができましたら「スタート」ボタンを教えてください。</p>
+            <h2>ITエンジニア 初級者問題集</h2>
+            <p class="intro">出題数 <input type="number" v-model="totalQuestions" style="width: 3em; text-align: right;" max="40" /> 問</p>
             <button class="btn btn-lg btn-primary start" @click.prevent="clickStart">スタート</button>
           </section>
         </div>
 
         <div class="col-sm-10 p-2 cont main-container bg-light" v-else-if="currentQuestionIndex < totalQuestions">
-          <pre class="question">({{ currentQuestionIndex + 1 }}) {{ questionData.question }}</pre>
-          <label class="option" v-for="(c, i) in questionData.choices" v-bind:class="{ correct: !thinking && c === questionData.answer,  choiced: !thinking && c === choice }">
-            <input type="radio" v-model="choice" v-bind:value="c" v-bind:disabled="!thinking" />
-            <span>{{ c }}</span>
-          </label>
+          <div class="question">第{{ currentQuestionIndex + 1 }}問 <span v-html="questionData.question"></span></div>
+          <div class="row">
+            <div class="col-sm-12" v-for="(c, i) in questionData.choices">
+              <label class="option" v-bind:class="{ correct: !thinking && c === questionData.answer,  choiced: !thinking && c === choice }">
+                <input type="radio" v-model="choice" v-bind:value="c" v-bind:disabled="!thinking" />
+                <span>({{ i+1 }}) {{ c }}</span>
+              </label>
+            </div>
+          </div>
           <div class="row justify-content-center">
             <div class="col-auto">
               <button class="btn btn-lg btn-danger" v-bind:disabled="!(choice && choice.length > 0)" v-if="thinking" @click.prevent="clickAnswer">決定</button>
@@ -67,12 +71,14 @@
 
     <footer class="page-footer font-small fixed-bottom bg-dark text-light justify-content-center">
       <div class="footer-copyright text-center py-3">
-        <a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="large" data-text="ITエンジニア スキルチェック！" data-url="">Tweet</a>
+        <a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="large" data-text="ITエンジニア 初級者問題集！" data-url="">Tweet</a>
         <a href="https://twitter.com/genzouw" class="twitter-follow-button" data-size="large" data-show-count="false">Follow @genzouw</a>
       </div>
     </footer>
 
+
     <script async="async" src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js" charset="utf-8"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
