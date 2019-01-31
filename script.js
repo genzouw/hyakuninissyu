@@ -3,7 +3,7 @@ const vue = new Vue({
   data: {
     currentQuestionIndex: -1,
     score: 0,
-    totalQuestions: 25,
+    totalQuestions: 10,
     questionData: {
       question: '',
       choices: [],
@@ -41,11 +41,27 @@ const vue = new Vue({
         this.loadQuestion()
       } else {
         const rate = Math.round(100 * this.score / this.totalQuestions)
-        this.result = `スコアは ${this.score}/${this.totalQuestions} ( ${rate}% ) です。`
+        this.result = `${this.score}/${this.totalQuestions} ( ${rate}% )`
       }
     },
     loadQuestion() {
       this.questionData = this.questionList[this.currentQuestionIndex]
+      let dummies = _.shuffle(
+        _.filter(
+          _.map(this.questionList, (v, k) => {
+            return v.answer
+          }),
+          (v) => {
+            return v != this.questionData.answer
+          }
+        )
+      )
+      this.questionData.choices = [
+        this.questionData.answer,
+        dummies[0],
+        dummies[1],
+        dummies[2],
+      ]
       this.questionData.choices = _.shuffle(this.questionData.choices)
       this.thinking = true
       this.choice = null

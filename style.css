@@ -1,25 +1,16 @@
-h1 {
-  color: white;
-}
-
 #navbarSupportedContent h1 {
   font-size: 100%;
 }
 
 .quiz-start-page {
   text-align: center;
-  background: linear-gradient(to bottom right, #f7ff9194, #f7ff91b8);
-}
-
-.quiz-start-page, .cont {
-  box-shadow: 5px 5px 25px 0 rgba(46, 61, 73, .2);
-  border-radius: 7px;
+  /* background: linear-gradient(to bottom right, #f7ff9194, #f7ff91b8); */
 }
 
 .question {
-  font-size: 15px;
+  font-size: 20px;
   /* border-radius: 20px; */
-  height: 8em;
+  height: 4em;
   overflow-y: scroll;
 }
 
@@ -40,8 +31,7 @@ h1 {
 
 .result {
   text-align: center;
-  font-size: 50px;
-  background: linear-gradient(to bottom right, #02b3e4, #02ccba);
+  font-size: 45px;
 }
 
 input:checked {
@@ -54,7 +44,7 @@ input:checked {
 }
 
 .choiced:after {
-  content: " ×";
+  content: "";
   color: red;
   font-weight: bold;
 }

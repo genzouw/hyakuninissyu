@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, user-scalable=0, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
     <!-- Bootstrap -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- <link rel="stylesheet" href="/node_modules/startbootstrap-sb-admin-2/css/sb-admin-2.min.css"> -->
+    <link href="/yeti/bootstrap.min.css" rel="stylesheet" />
     <link href="style.css" rel="stylesheet" />
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -16,37 +18,29 @@
     <![endif]-->
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <title>ITエンジニア 初級者問題集</title>
+    <title>ひゃくにんいっしゅをおぼえよう</title>
   </head>
 
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
-      <a class="navbar-brand" href="/"></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
 
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <h1>ITエンジニア 初級者問題集</h1>
-          </li>
-        </ul>
-      </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
+      <a class="navbar-brand" href="/">ひゃくにんいっしゅをおぼえよう</a>
+
+        <a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="large" data-text="ひゃくにんいっしゅをおぼえよう" data-url="">シェア</a>
     </nav>
 
     <div class="container-fluid">
       <div class="row justify-content-center" id="app" style="display: none;">
         <div class="col-sm-10 p-2 quiz-start-page" v-if="currentQuestionIndex === -1">
           <section class="p-5">
-            <h2>ITエンジニア 初級者問題集</h2>
+            <h1><p>ひゃくにんいっしゅを</p><p>おぼえよう</p></h1>
             <p class="intro">出題数 <input type="number" v-model="totalQuestions" style="width: 3em; text-align: right;" max="40" /> 問</p>
             <button class="btn btn-lg btn-primary start" @click.prevent="clickStart">スタート</button>
           </section>
         </div>
 
-        <div class="col-sm-10 p-2 cont main-container bg-light" v-else-if="currentQuestionIndex < totalQuestions">
-          <div class="question">第{{ currentQuestionIndex + 1 }}問 <span v-html="questionData.question"></span></div>
+        <div class="col-sm-10 p-2 cont main-container bg-secondary text-dark" v-else-if="currentQuestionIndex < totalQuestions">
+          <div class="question">[第{{ currentQuestionIndex + 1 }}問]<p v-html="questionData.question"></p></div>
           <div class="row">
             <div class="col-sm-12" v-for="(c, i) in questionData.choices">
               <label class="option" v-bind:class="{ correct: !thinking && c === questionData.answer,  choiced: !thinking && c === choice }">
@@ -64,15 +58,20 @@
         </div>
 
         <div class="col-sm-10 p-2" v-else>
-          <div class="cont result">{{ result }}</div>
+          <div class="cont result bg-dark text-light"><p>スコアは</p> <p>{{ result }}</p> <p>です</p></div>
+          <div class="row justify-content-center">
+            <div class="col-auto">
+              <strong>よろしければシェアをお願いします！</strong>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <footer class="page-footer font-small fixed-bottom bg-dark text-light justify-content-center">
+    <footer class="page-footer font-small fixed-bottom bg-light text-dark justify-content-center">
       <div class="footer-copyright text-center py-3">
-        <a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="large" data-text="ITエンジニア 初級者問題集！" data-url="">Tweet</a>
-        <a href="https://twitter.com/genzouw" class="twitter-follow-button" data-size="large" data-show-count="false">Follow @genzouw</a>
+        <a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-size="large" data-text="ひゃくにんいっしゅをおぼえよう" data-url="">シェア</a>
+        <a href="https://twitter.com/genzouw" class="twitter-follow-button" data-size="large" data-show-count="false">@genzouw をフォロー</a>
       </div>
     </footer>
 
