@@ -13,12 +13,10 @@ const vue = new Vue({
     thinking: false,
     questionList: [],
     result: '',
-    histories: [],
   },
   mounted() {
     $('#app').show()
     this.questionList = _.shuffle(questions)
-    this.histories = JSON.parse(localStorage.histories || '[]')
   },
   methods: {
     clickStart() {
@@ -44,22 +42,19 @@ const vue = new Vue({
       } else {
         const rate = Math.round(100 * this.score / this.totalQuestions)
         this.result = `${this.score}/${this.totalQuestions}`
-
-        this.histories.push({
-          date: new Date(),
-          score: this.score,
-          total: this.totalQuestions,
-        })
-        localStorage.histories = JSON.stringify(this.histories)
       }
     },
     loadQuestion() {
       this.questionData = this.questionList[this.currentQuestionIndex]
-      const dummies = _.shuffle(
+      let dummies = _.shuffle(
         _.filter(
-          _.map(this.questionList, (v, k) => v.answer),
-          v => v != this.questionData.answer,
-        ),
+          _.map(this.questionList, (v, k) => {
+            return v.answer
+          }),
+          (v) => {
+            return v != this.questionData.answer
+          }
+        )
       )
       this.questionData.choices = [
         this.questionData.answer,
