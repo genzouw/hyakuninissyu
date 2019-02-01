@@ -8,9 +8,9 @@
 }
 
 .question {
-  font-size: 20px;
+  font-size: 18px;
   /* border-radius: 20px; */
-  height: 4em;
+  height: 4.5em;
   overflow-y: scroll;
 }
 
@@ -24,27 +24,27 @@
   margin-bottom: 0.25em;
 }
 
-.option:hover {
-  background: #08038C;
-  color: #f6f6f6;
-}
+/* .option:hover { */
+  /* background: #08038C; */
+  /* color: #f6f6f6; */
+/* } */
 
 .result {
   text-align: center;
   font-size: 45px;
 }
 
-input:checked {
-  background: #08038C;
-  color: #000;
-}
+/* input:checked { */
+  /* background: #08038C; */
+  /* color: #000; */
+/* } */
 
 .choiced {
   background-color: pink;
 }
 
 .choiced:after {
-  content: "";
+  content: " ×";
   color: red;
   font-weight: bold;
 }

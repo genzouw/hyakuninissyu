@@ -41,7 +41,7 @@ const vue = new Vue({
         this.loadQuestion()
       } else {
         const rate = Math.round(100 * this.score / this.totalQuestions)
-        this.result = `${this.score}/${this.totalQuestions} ( ${rate}% )`
+        this.result = `${this.score}/${this.totalQuestions}`
       }
     },
     loadQuestion() {
