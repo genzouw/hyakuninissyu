@@ -45,7 +45,7 @@ php_flag display_errors Off
     ExpiresByType application/rss+xml       "access plus 1 hour"
 
     # Favicon (cannot be renamed)
-    ExpiresByType image/x-icon              "access plus 1 week" 
+    ExpiresByType image/x-icon              "access plus 1 week"
 
     # Media: images, video, audio
     ExpiresByType image/gif                 "access plus 1 month"
@@ -68,9 +68,9 @@ php_flag display_errors Off
     ExpiresByType application/vnd.ms-fontobject "access plus 1 month"
 
     # CSS and JavaScript
-    ExpiresByType text/css                  "access plus 1 year"
-    ExpiresByType application/javascript    "access plus 1 year"
-    ExpiresByType text/javascript           "access plus 1 year"
+    ExpiresByType text/css                  "access plus 1 hour"
+    ExpiresByType application/javascript    "access plus 1 hour"
+    ExpiresByType text/javascript           "access plus 1 hour"
 
     <IfModule mod_headers.c>
         Header append Cache-Control "public"
