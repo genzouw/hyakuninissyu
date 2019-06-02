@@ -4,6 +4,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import App from './App'
 import Meta from 'vue-meta'
+import VueAnalytics from 'vue-analytics'
 import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -13,6 +14,10 @@ import './assets/yeti/bootstrap.min.css'
 Vue.use(Vuex)
 Vue.use(Meta)
 Vue.use(BootstrapVue)
+Vue.use(VueAnalytics, {
+  id: 'UA-41583079-14',
+  router
+})
 
 Vue.config.productionTip = false
 
