@@ -1,502 +1,661 @@
+<template>
+  <div>
+    <div class="row justify-content-center" id="app">
+      <div class="col-sm-10 cont main-container bg-secondary text-dark">
+        <h2>[だい{{ currentQuestionIndex + 1 }}もん]<p v-html="questionData.question"></p></h2>
+        <div class="row">
+          <div class="col-sm-12" v-for="(c, i) in questionData.choices" v-bind:key="c">
+            <label class="option" v-bind:class="{ correct: !thinking && c === questionData.answer,  choiced: !thinking && c === choice }">
+              <input type="radio" v-model="choice" v-bind:value="c" v-bind:disabled="!thinking" @change.prevent="clickAnswer"/>
+              <span>({{ i+1 }}) {{ c }}</span>
+            </label>
+          </div>
+        </div>
+        <div class="row justify-content-center">
+          <div class="col-auto">
+            <button class="btn btn-lg btn-primary" v-bind:disabled="thinking" @click.prevent="clickNext">次へ</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-auto text-center">
+        <img src="@/assets/hyakunin_issyu.png" class="img-fluid w-75 center-block" alt="">
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import _ from 'underscore'
+import $ from 'jquery'
+
+export default {
+  data () {
+    return {
+      currentQuestionIndex: 0,
+      score: 0,
+      countOfQuestions: 0,
+      questionData: {
+        question: '',
+        choices: [],
+        answer: ''
+      },
+      choice: null,
+      thinking: false,
+      questionList: []
+    }
+  },
+  mounted () {
+    this.countOfQuestions = this.$route.params.countOfQuestions
+    this.questionList = _.shuffle(questions)
+    this.loadQuestion()
+  },
+  methods: {
+    clickStart () {
+      this.clickNext()
+    },
+    clickAnswer () {
+      this.thinking = false
+
+      const selectedOption = $('input[name=option]:checked')
+
+      if (this.questionData.answer === this.choice) {
+        selectedOption.closest('label').addClass('correct')
+        this.score++
+      } else {
+        selectedOption.closest('label').addClass('incorrect')
+      }
+    },
+    clickNext () {
+      this.currentQuestionIndex++
+
+      if (this.currentQuestionIndex < this.countOfQuestions) {
+        this.loadQuestion()
+      } else {
+        // const rate = Math.round(100 * this.score / this.countOfQuestions)
+        this.$router.push(`/gameSet/${this.countOfQuestions}/${this.score}`)
+      }
+    },
+    loadQuestion () {
+      this.questionData = this.questionList[this.currentQuestionIndex]
+      let dummies = _.shuffle(
+        _.filter(
+          _.map(this.questionList, (v, k) => {
+            return v.answer
+          }),
+          (v) => {
+            return v !== this.questionData.answer
+          }
+        )
+      )
+      this.questionData.choices = [
+        this.questionData.answer,
+        dummies[0],
+        dummies[1],
+        dummies[2]
+      ]
+      this.questionData.choices = _.shuffle(this.questionData.choices)
+      this.thinking = true
+      this.choice = null
+    }
+  }
+}
+
 const questions = [
   {
     question: 'あきのたの　かりほのいほの　とまをあらみ',
     choices: [],
-    answer: 'わがころもでは　つゆにぬれつつ',
+    answer: 'わがころもでは　つゆにぬれつつ'
   },
   {
     question: 'はるすぎて　なつきにけらし　しろたへの',
     choices: [],
-    answer: 'ころもほすてふ　あまのかぐやま',
+    answer: 'ころもほすてふ　あまのかぐやま'
   },
   {
     question: 'あしびきの　やまどりのをの　しだりをの',
     choices: [],
-    answer: 'ながながしよを　ひとりかもねむ',
+    answer: 'ながながしよを　ひとりかもねむ'
   },
   {
     question: 'たごのうらに　うちいでてみれば　しろたへの',
     choices: [],
-    answer: 'ふじのたかねに　ゆきはふりつつ',
+    answer: 'ふじのたかねに　ゆきはふりつつ'
   },
   {
     question: 'おくやまに　もみぢふみわけ　なくしかの',
     choices: [],
-    answer: 'こゑきくときぞ　あきはかなしき',
+    answer: 'こゑきくときぞ　あきはかなしき'
   },
   {
     question: 'かささぎの　わたせるはしに　おくしもの',
     choices: [],
-    answer: 'しろきをみれば　よぞふけにける',
+    answer: 'しろきをみれば　よぞふけにける'
   },
   {
     question: 'あまのはら　ふりさけみれば　かすがなる',
     choices: [],
-    answer: 'みかさのやまに　いでしつきかも',
+    answer: 'みかさのやまに　いでしつきかも'
   },
   {
     question: 'わがいほは　みやこのたつみ　しかぞすむ',
     choices: [],
-    answer: 'よをうぢやまと　ひとはいふなり',
+    answer: 'よをうぢやまと　ひとはいふなり'
   },
   {
     question: 'はなのいろは　うつりにけりな　いたづらに',
     choices: [],
-    answer: 'わがみよにふる　ながめせしまに',
+    answer: 'わがみよにふる　ながめせしまに'
   },
   {
     question: 'これやこの　ゆくもかへるも　わかれては',
     choices: [],
-    answer: 'しるもしらぬも　あふさかのせき',
+    answer: 'しるもしらぬも　あふさかのせき'
   },
   {
     question: 'わたのはら　やそしまかけて　こぎいでぬと',
     choices: [],
-    answer: 'ひとにはつげよ　あまのつりぶね',
+    answer: 'ひとにはつげよ　あまのつりぶね'
   },
   {
     question: 'あまつかぜ　くものかよひぢ　ふきとぢよ',
     choices: [],
-    answer: 'をとめのすがた　しばしとどめむ',
+    answer: 'をとめのすがた　しばしとどめむ'
   },
   {
     question: 'つくばねの　みねよりおつる　みなのがは',
     choices: [],
-    answer: 'こひぞつもりて　ふちとなりぬる',
+    answer: 'こひぞつもりて　ふちとなりぬる'
   },
   {
     question: 'みちのくの　しのぶもぢずり　たれゆゑに',
     choices: [],
-    answer: 'みだれそめにし　われならなくに',
+    answer: 'みだれそめにし　われならなくに'
   },
   {
     question: 'きみがため　はるののにいでて　わかなつむ',
     choices: [],
-    answer: 'わがころもでに　ゆきはふりつつ',
+    answer: 'わがころもでに　ゆきはふりつつ'
   },
   {
     question: 'たちわかれ　いなばのやまの　みねにおふる',
     choices: [],
-    answer: 'まつとしきかば　いまかへりこむ',
+    answer: 'まつとしきかば　いまかへりこむ'
   },
   {
     question: 'ちはやぶる　かみよもきかず　たつたがは',
     choices: [],
-    answer: 'からくれなゐに　みづくくるとは',
+    answer: 'からくれなゐに　みづくくるとは'
   },
   {
     question: 'すみのえの　きしによるなみ　よるさへや',
     choices: [],
-    answer: 'ゆめのかよひぢ　ひとめよくらむ',
+    answer: 'ゆめのかよひぢ　ひとめよくらむ'
   },
   {
     question: 'なにはがた　みじかきあしの　ふしのまも',
     choices: [],
-    answer: 'あはでこのよを　すぐしてよとや',
+    answer: 'あはでこのよを　すぐしてよとや'
   },
   {
     question: 'わびぬれば　いまはたおなじ　なにはなる',
     choices: [],
-    answer: 'みをつくしても　あはむとぞおもふ',
+    answer: 'みをつくしても　あはむとぞおもふ'
   },
   {
     question: 'いまこむと　いひしばかりに　ながつきの',
     choices: [],
-    answer: 'ありあけのつきを　まちいでつるかな',
+    answer: 'ありあけのつきを　まちいでつるかな'
   },
   {
     question: 'ふくからに　あきのくさきの　しをるれば',
     choices: [],
-    answer: 'むべやまかぜを　あらしといふらむ',
+    answer: 'むべやまかぜを　あらしといふらむ'
   },
   {
     question: 'つきみれば　ちぢにものこそ　かなしけれ',
     choices: [],
-    answer: 'わがみひとつの　あきにはあらねど',
+    answer: 'わがみひとつの　あきにはあらねど'
   },
   {
     question: 'このたびは　ぬさもとりあへず　たむけやま',
     choices: [],
-    answer: 'もみぢのにしき　かみのまにまに',
+    answer: 'もみぢのにしき　かみのまにまに'
   },
   {
     question: 'なにしおはば　あふさかやまの　さねかづら',
     choices: [],
-    answer: 'ひとにしられで　くるよしもがな',
+    answer: 'ひとにしられで　くるよしもがな'
   },
   {
     question: 'をぐらやま　みねのもみぢば　こころあらば',
     choices: [],
-    answer: 'いまひとたびの　みゆきまたなむ',
+    answer: 'いまひとたびの　みゆきまたなむ'
   },
   {
     question: 'みかのはら　わきてながるる　いづみがは',
     choices: [],
-    answer: 'いつみきとてか　こひしかるらむ',
+    answer: 'いつみきとてか　こひしかるらむ'
   },
   {
     question: 'やまざとは　ふゆぞさびしさ　まさりける',
     choices: [],
-    answer: 'ひとめもくさも　かれぬとおもへば',
+    answer: 'ひとめもくさも　かれぬとおもへば'
   },
   {
     question: 'こころあてに　をらばやをらむ　はつしもの',
     choices: [],
-    answer: 'おきまどはせる　しらぎくのはな',
+    answer: 'おきまどはせる　しらぎくのはな'
   },
   {
     question: 'ありあけの　つれなくみえし　わかれより',
     choices: [],
-    answer: 'あかつきばかり　うきものはなし',
+    answer: 'あかつきばかり　うきものはなし'
   },
   {
     question: 'あさぼらけ　ありあけのつきと　みるまでに',
     choices: [],
-    answer: 'よしののさとに　ふれるしらゆき',
+    answer: 'よしののさとに　ふれるしらゆき'
   },
   {
     question: 'やまがはに　かぜのかけたる　しがらみは',
     choices: [],
-    answer: 'ながれもあへぬ　もみぢなりけり',
+    answer: 'ながれもあへぬ　もみぢなりけり'
   },
   {
     question: 'ひさかたの　ひかりのどけき　はるのひに',
     choices: [],
-    answer: 'しづごころなく　はなのちるらむ',
+    answer: 'しづごころなく　はなのちるらむ'
   },
   {
     question: 'たれをかも　しるひとにせむ　たかさごの',
     choices: [],
-    answer: 'まつもむかしの　ともならなくに',
+    answer: 'まつもむかしの　ともならなくに'
   },
   {
     question: 'ひとはいさ　こころもしらず　ふるさとは',
     choices: [],
-    answer: 'はなぞむかしの　かににほひける',
+    answer: 'はなぞむかしの　かににほひける'
   },
   {
     question: 'なつのよは　まだよひながら　あけぬるを',
     choices: [],
-    answer: 'くものいづこに　つきやどるらむ',
+    answer: 'くものいづこに　つきやどるらむ'
   },
   {
     question: 'しらつゆに　かぜのふきしく　あきののは',
     choices: [],
-    answer: 'つらぬきとめぬ　たまぞちりける',
+    answer: 'つらぬきとめぬ　たまぞちりける'
   },
   {
     question: 'わすらるる　みをばおもはず　ちかひてし',
     choices: [],
-    answer: 'ひとのいのちの　をしくもあるかな',
+    answer: 'ひとのいのちの　をしくもあるかな'
   },
   {
     question: 'あさぢふの　をののしのはら　しのぶれど',
     choices: [],
-    answer: 'あまりてなどか　ひとのこひしき',
+    answer: 'あまりてなどか　ひとのこひしき'
   },
   {
     question: 'しのぶれど　いろにいでにけり　わがこひは',
     choices: [],
-    answer: 'ものやおもふと　ひとのとふまで',
+    answer: 'ものやおもふと　ひとのとふまで'
   },
   {
     question: 'こひすてふ　わがなはまだき　たちにけり',
     choices: [],
-    answer: 'ひとしれずこそ　おもひそめしか',
+    answer: 'ひとしれずこそ　おもひそめしか'
   },
   {
     question: 'ちぎりきな　かたみにそでを　しぼりつつ',
     choices: [],
-    answer: 'すゑのまつやま　なみこさじとは',
+    answer: 'すゑのまつやま　なみこさじとは'
   },
   {
     question: 'あひみての　のちのこころに　くらぶれば',
     choices: [],
-    answer: 'むかしはものを　おもはざりけり',
+    answer: 'むかしはものを　おもはざりけり'
   },
   {
     question: 'あふことの　たえてしなくは　なかなかに',
     choices: [],
-    answer: 'ひとをもみをも　うらみざらまし',
+    answer: 'ひとをもみをも　うらみざらまし'
   },
   {
     question: 'あはれとも　いふべきひとは　おもほえで',
     choices: [],
-    answer: 'みのいたづらに　なりぬべきかな',
+    answer: 'みのいたづらに　なりぬべきかな'
   },
   {
     question: 'ゆらのとを　わたるふなびと　かぢをたえ',
     choices: [],
-    answer: 'ゆくへもしらぬ　こひのみちかな',
+    answer: 'ゆくへもしらぬ　こひのみちかな'
   },
   {
     question: 'やへむぐら　しげれるやどの　さびしきに',
     choices: [],
-    answer: 'ひとこそみえね　あきはきにけり',
+    answer: 'ひとこそみえね　あきはきにけり'
   },
   {
     question: 'かぜをいたみ　いはうつなみの　おのれのみ',
     choices: [],
-    answer: 'くだけてものを　おもふころかな',
+    answer: 'くだけてものを　おもふころかな'
   },
   {
     question: 'みかきもり　ゑじのたくひの　よるはもえ',
     choices: [],
-    answer: 'ひるはきえつつ　ものをこそおもへ',
+    answer: 'ひるはきえつつ　ものをこそおもへ'
   },
   {
     question: 'きみがため　をしからざりし　いのちさへ',
     choices: [],
-    answer: 'ながくもがなと　おもひけるかな',
+    answer: 'ながくもがなと　おもひけるかな'
   },
   {
     question: 'かくとだに　えやはいぶきの　さしもぐさ',
     choices: [],
-    answer: 'さしもしらじな　もゆるおもひを',
+    answer: 'さしもしらじな　もゆるおもひを'
   },
   {
     question: 'あけぬれば　くるるものとは　しりながら',
     choices: [],
-    answer: 'なほうらめしき　あさぼらけかな',
+    answer: 'なほうらめしき　あさぼらけかな'
   },
   {
     question: 'なげきつつ　ひとりぬるよの　あくるまは',
     choices: [],
-    answer: 'いかにひさしき　ものとかはしる',
+    answer: 'いかにひさしき　ものとかはしる'
   },
   {
     question: 'わすれじの　ゆくすゑまでは　かたければ',
     choices: [],
-    answer: 'けふをかぎりの　いのちともがな',
+    answer: 'けふをかぎりの　いのちともがな'
   },
   {
     question: 'たきのおとは　たえてひさしく　なりぬれど',
     choices: [],
-    answer: 'なこそながれて　なほきこえけれ',
+    answer: 'なこそながれて　なほきこえけれ'
   },
   {
     question: 'あらざらむ　このよのほかの　おもひでに',
     choices: [],
-    answer: 'いまひとたびの　あふこともがな',
+    answer: 'いまひとたびの　あふこともがな'
   },
   {
     question: 'めぐりあひて　みしやそれとも　わかぬまに',
     choices: [],
-    answer: 'くもがくれにし　よはのつきかな',
+    answer: 'くもがくれにし　よはのつきかな'
   },
   {
     question: 'ありまやま　ゐなのささはら　かぜふけば',
     choices: [],
-    answer: 'いでそよひとを　わすれやはする',
+    answer: 'いでそよひとを　わすれやはする'
   },
   {
     question: 'やすらはで　ねなましものを　さよふけて',
     choices: [],
-    answer: 'かたぶくまでの　つきをみしかな',
+    answer: 'かたぶくまでの　つきをみしかな'
   },
   {
     question: 'おほえやま　いくののみちの　とほければ',
     choices: [],
-    answer: 'まだふみもみず　あまのはしだて',
+    answer: 'まだふみもみず　あまのはしだて'
   },
   {
     question: 'いにしへの　ならのみやこの　やへざくら',
     choices: [],
-    answer: 'けふここのへに　にほひぬるかな',
+    answer: 'けふここのへに　にほひぬるかな'
   },
   {
     question: 'よをこめて　とりのそらねは　はかるとも',
     choices: [],
-    answer: 'よにあふさかの　せきはゆるさじ',
+    answer: 'よにあふさかの　せきはゆるさじ'
   },
   {
     question: 'いまはただ　おもひたえなむ　とばかりを',
     choices: [],
-    answer: 'ひとづてならで　いふよしもがな',
+    answer: 'ひとづてならで　いふよしもがな'
   },
   {
     question: 'あさぼらけ　うぢのかはぎり　たえだえに',
     choices: [],
-    answer: 'あらはれわたる　せぜのあじろぎ',
+    answer: 'あらはれわたる　せぜのあじろぎ'
   },
   {
     question: 'うらみわび　ほさぬそでだに　あるものを',
     choices: [],
-    answer: 'こひにくちなむ　なこそをしけれ',
+    answer: 'こひにくちなむ　なこそをしけれ'
   },
   {
     question: 'もろともに　あはれとおもへ　やまざくら',
     choices: [],
-    answer: 'はなよりほかに　しるひともなし',
+    answer: 'はなよりほかに　しるひともなし'
   },
   {
     question: 'はるのよの　ゆめばかりなる　たまくらに',
     choices: [],
-    answer: 'かひなくたたむ　なこそをしけれ',
+    answer: 'かひなくたたむ　なこそをしけれ'
   },
   {
     question: 'こころにも　あらでうきよに　ながらへば',
     choices: [],
-    answer: 'こひしかるべき　よはのつきかな',
+    answer: 'こひしかるべき　よはのつきかな'
   },
   {
     question: 'あらしふく　みむろのやまの　もみぢばは',
     choices: [],
-    answer: 'たつたのかはの　にしきなりけり',
+    answer: 'たつたのかはの　にしきなりけり'
   },
   {
     question: 'さびしさに　やどをたちいでて　ながむれば',
     choices: [],
-    answer: 'いづこもおなじ　あきのゆふぐれ',
+    answer: 'いづこもおなじ　あきのゆふぐれ'
   },
   {
     question: 'ゆふされば　かどたのいなば　おとづれて',
     choices: [],
-    answer: 'あしのまろやに　あきかぜぞふく',
+    answer: 'あしのまろやに　あきかぜぞふく'
   },
   {
     question: 'おとにきく　たかしのはまの　あだなみは',
     choices: [],
-    answer: 'かけじやそでの　ぬれもこそすれ',
+    answer: 'かけじやそでの　ぬれもこそすれ'
   },
   {
     question: 'たかさごの　をのへのさくら　さきにけり',
     choices: [],
-    answer: 'とやまのかすみ　たたずもあらなむ',
+    answer: 'とやまのかすみ　たたずもあらなむ'
   },
   {
     question: 'うかりける　ひとをはつせの　やまおろしよ',
     choices: [],
-    answer: 'はげしかれとは　いのらぬものを',
+    answer: 'はげしかれとは　いのらぬものを'
   },
   {
     question: 'ちぎりおきし　させもがつゆを　いのちにて',
     choices: [],
-    answer: 'あはれことしの　あきもいぬめり',
+    answer: 'あはれことしの　あきもいぬめり'
   },
   {
     question: 'わたのはら　こぎいでてみれば　ひさかたの',
     choices: [],
-    answer: 'くもゐにまがふ　おきつしらなみ',
+    answer: 'くもゐにまがふ　おきつしらなみ'
   },
   {
     question: 'せをはやみ　いはにせかるる　たきがはの',
     choices: [],
-    answer: 'われてもすゑに　あはむとぞおもふ',
+    answer: 'われてもすゑに　あはむとぞおもふ'
   },
   {
     question: 'あはぢしま　かよふちどりの　なくこゑに',
     choices: [],
-    answer: 'いくよねざめぬ　すまのせきもり',
+    answer: 'いくよねざめぬ　すまのせきもり'
   },
   {
     question: 'あきかぜに　たなびくくもの　たえまより',
     choices: [],
-    answer: 'もれいづるつきの　かげのさやけさ',
+    answer: 'もれいづるつきの　かげのさやけさ'
   },
   {
     question: 'ながからむ　こころもしらず　くろかみの',
     choices: [],
-    answer: 'みだれてけさは　ものをこそおもへ',
+    answer: 'みだれてけさは　ものをこそおもへ'
   },
   {
     question: 'ほととぎす　なきつるかたを　ながむれば',
     choices: [],
-    answer: 'ただありあけの　つきぞのこれる',
+    answer: 'ただありあけの　つきぞのこれる'
   },
   {
     question: 'おもひわび　さてもいのちは　あるものを',
     choices: [],
-    answer: 'うきにたへぬは　なみだなりけり',
+    answer: 'うきにたへぬは　なみだなりけり'
   },
   {
     question: 'よのなかよ　みちこそなけれ　おもひいる',
     choices: [],
-    answer: 'やまのおくにも　しかぞなくなる',
+    answer: 'やまのおくにも　しかぞなくなる'
   },
   {
     question: 'ながらへば　またこのごろや　しのばれむ',
     choices: [],
-    answer: 'うしとみしよぞ　いまはこひしき',
+    answer: 'うしとみしよぞ　いまはこひしき'
   },
   {
     question: 'よもすがら　ものおもふころは　あけやらで',
     choices: [],
-    answer: 'ねやのひまさへ　つれなかりけり',
+    answer: 'ねやのひまさへ　つれなかりけり'
   },
   {
     question: 'なげけとて　つきやはものを　おもはする',
     choices: [],
-    answer: 'かこちがほなる　わがなみだかな',
+    answer: 'かこちがほなる　わがなみだかな'
   },
   {
     question: 'むらさめの　つゆもまだひぬ　まきのはに',
     choices: [],
-    answer: 'きりたちのぼる　あきのゆふぐれ',
+    answer: 'きりたちのぼる　あきのゆふぐれ'
   },
   {
     question: 'なにはえの　あしのかりねの　ひとよゆゑ',
     choices: [],
-    answer: 'みをつくしてや　こひわたるべき',
+    answer: 'みをつくしてや　こひわたるべき'
   },
   {
     question: 'たまのをよ　たえなばたえね　ながらへば',
     choices: [],
-    answer: 'しのぶることの　よわりもぞする',
+    answer: 'しのぶることの　よわりもぞする'
   },
   {
     question: 'みせばやな　をじまのあまの　そでだにも',
     choices: [],
-    answer: 'ぬれにぞぬれし　いろはかはらず',
+    answer: 'ぬれにぞぬれし　いろはかはらず'
   },
   {
     question: 'きりぎりす　なくやしもよの　さむしろに',
     choices: [],
-    answer: 'ころもかたしき　ひとりかもねむ',
+    answer: 'ころもかたしき　ひとりかもねむ'
   },
   {
     question: 'わがそでは　しほひにみえぬ　おきのいしの',
     choices: [],
-    answer: 'ひとこそしらね　かわくまもなし',
+    answer: 'ひとこそしらね　かわくまもなし'
   },
   {
     question: 'よのなかは　つねにもがもな　なぎさこぐ',
     choices: [],
-    answer: 'あまのをぶねの　つなでかなしも',
+    answer: 'あまのをぶねの　つなでかなしも'
   },
   {
     question: 'みよしのの　やまのあきかぜ　さよふけて',
     choices: [],
-    answer: 'ふるさとさむく　ころもうつなり',
+    answer: 'ふるさとさむく　ころもうつなり'
   },
   {
     question: 'おほけなく　うきよのたみに　おほふかな',
     choices: [],
-    answer: 'わがたつそまに　すみぞめのそで',
+    answer: 'わがたつそまに　すみぞめのそで'
   },
   {
     question: 'はなさそふ　あらしのにはの　ゆきならで',
     choices: [],
-    answer: 'ふりゆくものは　わがみなりけり',
+    answer: 'ふりゆくものは　わがみなりけり'
   },
   {
     question: 'こぬひとを　まつほのうらの　ゆふなぎに',
     choices: [],
-    answer: 'やくやもしほの　みもこがれつつ',
+    answer: 'やくやもしほの　みもこがれつつ'
   },
   {
     question: 'かぜそよぐ　ならのをがはの　ゆふぐれは',
     choices: [],
-    answer: 'みそぎぞなつの　しるしなりける',
+    answer: 'みそぎぞなつの　しるしなりける'
   },
   {
     question: 'ひともをし　ひともうらめし　あぢきなく',
     choices: [],
-    answer: 'よをおもふゆゑに　ものおもふみは',
+    answer: 'よをおもふゆゑに　ものおもふみは'
   },
   {
     question: 'ももしきや　ふるきのきばの　しのぶにも',
     choices: [],
-    answer: 'なほあまりある　むかしなりけり',
-  },
+    answer: 'なほあまりある　むかしなりけり'
+  }
 ]
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+#navbarSupportedContent h1 {
+  font-size: 100%;
+}
+
+.quiz-start-page {
+  text-align: center;
+  /* background: linear-gradient(to bottom right, #f7ff9194, #f7ff91b8); */
+}
+
+h2 {
+  font-size: 18px;
+  /* border-radius: 20px; */
+  height: 4.5em;
+  overflow-y: scroll;
+}
+
+.option {
+  width: 95%;
+  padding: 10px 0 10px 10px;
+  background: #e2e2e2;
+  margin: 10px 0 10px 10px;
+  color: #000000;
+  border-radius: 20px;
+  margin-bottom: 0.25em;
+}
+
+.choiced {
+  background-color: pink;
+}
+
+.choiced:after {
+  content: " ×";
+  color: red;
+  font-weight: bold;
+}
+
+.correct {
+  background-color: lightblue;
+  color: darkblue;
+}
+
+.correct.choiced {
+  background-color: lightgreen;
+}
+
+.correct.choiced:after {
+  content: " ○";
+  color: blue;
+  font-weight: bold;
+}
+</style>
