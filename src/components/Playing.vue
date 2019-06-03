@@ -12,8 +12,8 @@
           </div>
         </div>
         <div class="row justify-content-center">
-          <div class="col-auto">
-            <button class="btn btn-lg btn-primary" v-bind:disabled="thinking" @click.prevent="clickNext">次へ</button>
+          <div class="col-sm-12">
+            <button class="btn btn-lg btn-primary btn-block" v-bind:disabled="thinking" @click.prevent="clickNext">次へ</button>
           </div>
         </div>
       </div>
@@ -28,7 +28,6 @@
 
 <script>
 import _ from 'underscore'
-import $ from 'jquery'
 
 export default {
   data () {
@@ -58,13 +57,8 @@ export default {
     clickAnswer () {
       this.thinking = false
 
-      const selectedOption = $('input[name=option]:checked')
-
       if (this.questionData.answer === this.choice) {
-        selectedOption.closest('label').addClass('correct')
         this.score++
-      } else {
-        selectedOption.closest('label').addClass('incorrect')
       }
     },
     clickNext () {
@@ -73,7 +67,6 @@ export default {
       if (this.currentQuestionIndex < this.countOfQuestions) {
         this.loadQuestion()
       } else {
-        // const rate = Math.round(100 * this.score / this.countOfQuestions)
         this.$router.push(`/gameSet/${this.countOfQuestions}/${this.score}`)
       }
     },

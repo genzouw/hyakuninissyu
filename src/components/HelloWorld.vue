@@ -4,12 +4,14 @@
       <div class="col-auto text-center">
         <h2>なんもんせいかいできるかな？</h2>
         <p class="intro">もんだいのかずをえらんだらはじてみよう。</p>
-        <p class="intro"><input type="number" v-model="countOfQuestions" style="width: 3em; text-align: right;" max="40" />もん</p>
+        <p class="intro">
+          <input type="number" v-model="countOfQuestions" style="width: 3em; text-align: right;" max="40" />もん
+        </p>
       </div>
     </div>
     <div class="row justify-content-center">
-      <div class="col-auto text-center">
-        <router-link v-bind:to="{ name: 'Playing', params: { countOfQuestions: countOfQuestions } }" class="btn btn-lg btn-primary start">はじめる</router-link>
+      <div class="col-sm-10 text-center">
+        <router-link v-bind:to="{ name: 'Playing', params: { countOfQuestions: countOfQuestions } }" class="btn btn-lg btn-primary pl-5 pr-5">はじめる</router-link>
       </div>
     </div>
     <div class="row justify-content-center">

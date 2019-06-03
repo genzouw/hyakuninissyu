@@ -21,7 +21,7 @@ Vue.use(VueAnalytics, {
 
 Vue.config.productionTip = false
 
-new Vue({
+const app = new Vue({
   el: '#app',
   store: new Vuex.Store({
     state: {
@@ -29,7 +29,7 @@ new Vue({
     },
     mutations: {
       updateCountOfQuestions (state, payload) {
-        this.state.countOfQuestions = payload
+        state.countOfQuestions = payload
       }
     }
   }),
@@ -37,3 +37,4 @@ new Vue({
   components: { App },
   template: '<App/>'
 })
+app.$mount('#app')

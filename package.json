@@ -17,6 +17,7 @@
     "axios": "^0.19.0",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.22",
+    "firebase": "^6.1.0",
     "jquery": "^3.4.1",
     "moment": "^2.24.0",
     "underscore": "^1.9.1",
@@ -24,6 +25,7 @@
     "vue-analytics": "^5.17.0",
     "vue-meta": "^1.6.0",
     "vue-router": "^3.0.1",
+    "vue-tweet-embed": "^2.3.0",
     "vuex": "^3.1.1"
   },
   "devDependencies": {
