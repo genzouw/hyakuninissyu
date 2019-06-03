@@ -3,12 +3,13 @@
     <div class="row justify-content-center" id="app">
       <div class="col-auto text-center">
         <h2>なんもんせいかいできるかな？</h2>
-        <p class="intro">もんだいのかずは <input type="number" v-model="countOfQuestions" style="width: 3em; text-align: right;" max="40" /> もんだよ</p>
+        <p class="intro">もんだいのかずをえらんだらはじてみよう。</p>
+        <p class="intro"><input type="number" v-model="countOfQuestions" style="width: 3em; text-align: right;" max="40" />もん</p>
       </div>
     </div>
     <div class="row justify-content-center">
       <div class="col-auto text-center">
-        <router-link v-bind:to="{ name: 'Playing', params: { countOfQuestions: countOfQuestions } }" class="btn btn-lg btn-primary start">スタート</router-link>
+        <router-link v-bind:to="{ name: 'Playing', params: { countOfQuestions: countOfQuestions } }" class="btn btn-lg btn-primary start">はじめる</router-link>
       </div>
     </div>
     <div class="row justify-content-center">
