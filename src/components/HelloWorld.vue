@@ -3,9 +3,9 @@
     <div class="row justify-content-center" id="app">
       <div class="col-auto text-center">
         <h2>なんもんせいかいできるかな？</h2>
-        <p class="intro">もんだいのかずをえらんだらはじてみよう。</p>
+        <p class="intro">もんだいのかずをえらんだら「はじめる」ぼたんをおしてね。</p>
         <p class="intro">
-          <input type="number" v-model="countOfQuestions" style="width: 3em; text-align: right;" max="40" />もん
+          <input type="number" min="1" v-model="countOfQuestions" style="width: 3em; text-align: right;" max="100" />もん
         </p>
       </div>
     </div>
@@ -33,6 +33,11 @@ export default {
         return this.$store.state.countOfQuestions
       },
       set (value) {
+        if (value < 1) {
+          value = 1
+        } else if (value > 100) {
+          value = 100
+        }
         this.$store.commit('updateCountOfQuestions', value)
       }
     }
