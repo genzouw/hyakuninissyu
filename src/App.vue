@@ -92,12 +92,6 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/earlyaccess/hannari.css');
-
-* {
-  font-family: 'Hannari';
-}
-
 h1 {
   font-size: 100%;
 }
