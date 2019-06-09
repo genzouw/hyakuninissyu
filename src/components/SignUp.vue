@@ -28,7 +28,23 @@ export default {
           this.$router.push('/signIn')
         })
         .catch(error => {
-          alert(error.message)
+          let message = error.message
+          switch (error.code) {
+            case 'auth/email-already-in-use':
+              message = 'メールアドレスは既に別のアカウントで使用されています。'
+              break
+            case 'auth/invalid-email':
+              message = 'メールアドレスの形式が正しくありません。'
+              break
+            case 'auth/weak-password':
+              message = 'パスワードは6文字以上にしてください。'
+              break
+            default:
+              console.log(error.code)
+              console.log(error.message)
+              break
+          }
+          alert(message)
         })
     }
   }
