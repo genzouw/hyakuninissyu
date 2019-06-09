@@ -1,8 +1,14 @@
 <template>
   <div>
-    <div class="row justify-content-center" id="app">
+    <div class="row">
+      <div class="col-auto">
+        <h2>[だい{{ currentQuestionIndex + 1 }}もん]</h2>
+      </div>
+    </div>
+
+    <div class="row justify-content-center">
       <div class="col-sm-10 cont main-container bg-secondary text-dark">
-        <h2>[だい{{ currentQuestionIndex + 1 }}もん]<p v-html="questionData.question"></p></h2>
+        <p v-html="questionData.question"></p>
         <div class="row">
           <div class="col-sm-12" v-for="(c, i) in questionData.choices" v-bind:key="c">
             <label class="option" v-bind:class="{ correct: !thinking && c === questionData.answer,  choiced: !thinking && c === choice }">
@@ -608,13 +614,6 @@ const questions = [
 .quiz-start-page {
   text-align: center;
   /* background: linear-gradient(to bottom right, #f7ff9194, #f7ff91b8); */
-}
-
-h2 {
-  font-size: 18px;
-  /* border-radius: 20px; */
-  height: 4.5em;
-  overflow-y: scroll;
 }
 
 .option {

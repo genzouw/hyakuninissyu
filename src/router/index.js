@@ -5,7 +5,7 @@ import Playing from '@/components/Playing'
 import GameSet from '@/components/GameSet'
 import SignUp from '@/components/SignUp'
 import SignIn from '@/components/SignIn'
-// import firebase from 'firebase'
+import Profile from '@/components/Profile'
 
 Vue.use(Router)
 
@@ -36,6 +36,11 @@ let router = new Router({
       path: '/signIn',
       name: 'SignIn',
       component: SignIn
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: Profile
     }
   ]
 })

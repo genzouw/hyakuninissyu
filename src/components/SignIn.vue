@@ -1,9 +1,9 @@
 <template>
   <div class="signin">
-    <h2>ろぐいん</h2>
+    <h2>ログイン</h2>
     <input type="text" placeholder="Username" v-model="username">
     <input type="password" placeholder="Password" v-model="password">
-    <button @click="signIn">ろぐいんする</button>
+    <button @click="signIn">ログインする</button>
     <p>
       <router-link to="/signup">しんきとうろくはこちら</router-link>
     </p>
@@ -25,6 +25,7 @@ export default {
     signIn: function () {
       firebase.auth().signInWithEmailAndPassword(this.username, this.password).then(
         user => {
+          this.$store.commit('updateUser', user)
           this.$router.push('/')
         },
         err => {
