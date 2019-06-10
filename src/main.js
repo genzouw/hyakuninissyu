@@ -5,6 +5,8 @@ import Vuex from 'vuex'
 import App from './App'
 import Meta from 'vue-meta'
 import VueAnalytics from 'vue-analytics'
+import VeeValidate, {Validator} from 'vee-validate'
+import ja from 'vee-validate/dist/locale/ja'
 import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -19,6 +21,9 @@ Vue.use(VueAnalytics, {
   id: 'UA-41583079-14',
   router
 })
+Vue.use(VeeValidate)
+
+Validator.localize('ja', ja)
 
 Vue.config.productionTip = false
 

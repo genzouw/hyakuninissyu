@@ -3,7 +3,7 @@
     <h2>しんきとうろく</h2>
     <input type="text" placeholder="Username" v-model="username">
     <input type="password" placeholder="Password" v-model="password">
-    <button @click="signUp">しんきとうろくする</button>
+    <button @click="signUp" class="btn btn-primary btn-lg">しんきとうろくする</button>
     <p>
       <router-link to="/signin">しんきとうろくずみのかたはこちら</router-link>
     </p>
@@ -25,7 +25,8 @@ export default {
     signUp: function () {
       firebase.auth().createUserWithEmailAndPassword(this.username, this.password)
         .then(user => {
-          this.$router.push('/signIn')
+          // this.$router.push('/signIn')
+          this.$router.push('/')
         })
         .catch(error => {
           let message = error.message
