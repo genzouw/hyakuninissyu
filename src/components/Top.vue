@@ -8,19 +8,33 @@
     </div>
 
     <div class="row justify-content-center">
-      <div class="col-xs">
+      <div class="col-xs-12">
         <div class="form-group row">
-          <label class="col-xs-6 col-form-label col-form-label-lg">もんだいのかず</label>
-          <div class="col-xs-6">
-            <input type="number" min="1" id="countOfQuestions" v-model="countOfQuestions" max="100" class="form-control form-control-lg" />
+          <label class="col-xs-4 col-form-label col-form-label-lg">もんだいのかず</label>
+          <div class="col-xs-4">
+            <input
+              type="number"
+              min="1"
+              name="countOfQuestions"
+              v-model="countOfQuestions"
+              max="100"
+              class="form-control form-control-lg"
+              v-validate="'required|numeric|min:1|max:100'"
+              data-vv-as="もんだいのかず"
+              />
           </div>
-          <label class="col-xs-6 col-form-label col-form-label-lg">もん</label>
+          <label class="col-xs-4 col-form-label col-form-label-lg">もん</label>
         </div>
       </div>
+
+      <div class="col-xs-12">
+        <span class="text-danger">{{ errors.first('countOfQuestions') }}</span>
+      </div>
     </div>
+
     <div class="row justify-content-center">
       <div class="col-xs">
-        <router-link v-bind:to="{ name: 'Playing', params: { countOfQuestions: countOfQuestions } }" class="btn btn-lg btn-primary pl-5 pr-5">はじめる</router-link>
+        <button @click="startGame" class="btn btn-lg btn-primary pl-5 pr-5">はじめる</button>
       </div>
     </div>
 
@@ -46,13 +60,23 @@ export default {
         return this.$store.state.countOfQuestions
       },
       set (value) {
-        if (value < 1) {
-          value = 1
-        } else if (value > 100) {
-          value = 100
-        }
         this.$store.commit('updateCountOfQuestions', value)
       }
+    }
+  },
+  methods: {
+    startGame () {
+      this.$validator.validate().then(result => {
+        if (!result) {
+          return false
+        }
+
+        this.$router.push(
+          {
+            path: `/playing/${this.countOfQuestions}`
+          }
+        )
+      })
     }
   }
 }

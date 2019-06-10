@@ -20,6 +20,8 @@
     "firebase": "^6.1.0",
     "moment": "^2.24.0",
     "underscore": "^1.9.1",
+    "vee-validate": "^2.2.10",
+    "vee-validate-locale-ja": "^1.0.5",
     "vue": "^2.5.2",
     "vue-analytics": "^5.17.0",
     "vue-meta": "^1.6.0",

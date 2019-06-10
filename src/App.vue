@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <b-navbar toggleable="lg" class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
       <router-link class="navbar-brand" to="/">ひゃくにんいっしゅをおぼえよう</router-link>
 
@@ -120,6 +119,7 @@ export default {
   },
   methods: {
     signOut () {
+      if (!window.confirm('ログアウトします。よろしいですか？')) return false
       firebase.auth().signOut().then(() => {
         this.$router.push('/')
       })
@@ -131,7 +131,7 @@ export default {
 }
 </script>
 
-<style>
+<style scope>
 body > #app {
   padding: 0;
 }
@@ -140,5 +140,8 @@ body > #app {
 }
 .dropdown-item:hover {
   color: black;
+}
+div.container-fluid {
+  margin-bottom: 3em;
 }
 </style>

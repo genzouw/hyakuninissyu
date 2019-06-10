@@ -89,7 +89,7 @@ export default {
   },
   methods: {
     unixtimeToString (unixtime) {
-      return moment.unix(Number(unixtime)).format('Mがつ Dにち (ddd) hh:mm')
+      return moment.unix(Number(unixtime)).format('Mがつ Dにち (ddd) HH:mm')
     },
     fetchData () {
       this.countOfQuestions = Number(this.$route.params.countOfQuestions)
