@@ -136,7 +136,7 @@ export default {
 }
 </script>
 
-<style scope>
+<style>
 body > #app {
   padding: 0;
 }
