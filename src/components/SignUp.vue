@@ -3,7 +3,7 @@
     <h2>しんきとうろく</h2>
     <input type="text" placeholder="Username" v-model="username">
     <input type="password" placeholder="Password" v-model="password">
-    <button @click="signUp">しんきとうろくする</button>
+    <button @click="signUp" class="btn btn-primary btn-lg">しんきとうろくする</button>
     <p>
       <router-link to="/signin">しんきとうろくずみのかたはこちら</router-link>
     </p>
@@ -25,10 +25,27 @@ export default {
     signUp: function () {
       firebase.auth().createUserWithEmailAndPassword(this.username, this.password)
         .then(user => {
-          this.$router.push('/signIn')
+          // this.$router.push('/signIn')
+          this.$router.push('/')
         })
         .catch(error => {
-          alert(error.message)
+          let message = error.message
+          switch (error.code) {
+            case 'auth/email-already-in-use':
+              message = 'メールアドレスは既に別のアカウントで使用されています。'
+              break
+            case 'auth/invalid-email':
+              message = 'メールアドレスの形式が正しくありません。'
+              break
+            case 'auth/weak-password':
+              message = 'パスワードは6文字以上にしてください。'
+              break
+            default:
+              console.log(error.code)
+              console.log(error.message)
+              break
+          }
+          alert(message)
         })
     }
   }

@@ -5,6 +5,8 @@ import Vuex from 'vuex'
 import App from './App'
 import Meta from 'vue-meta'
 import VueAnalytics from 'vue-analytics'
+import VeeValidate, {Validator} from 'vee-validate'
+import ja from 'vee-validate/dist/locale/ja'
 import router from './router'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
@@ -19,10 +21,12 @@ Vue.use(VueAnalytics, {
   id: 'UA-41583079-14',
   router
 })
+Vue.use(VeeValidate)
+
+Validator.localize('ja', ja)
 
 Vue.config.productionTip = false
 
-// Your web app's Firebase configuration
 var firebaseConfig = {
   apiKey: 'AIzaSyCoeeYxiF64O-fcwX2e0JlrZLZ3mUNbP2c',
   authDomain: 'hyakuninissyu-genzouw-com.firebaseapp.com',
@@ -30,20 +34,22 @@ var firebaseConfig = {
   projectId: 'hyakuninissyu-genzouw-com',
   storageBucket: 'hyakuninissyu-genzouw-com.appspot.com',
   messagingSenderId: '565783098421'
-  // appId: "1:565783098421:web:023e766423f9a207"
 }
-// Initialize Firebase
+
 firebase.initializeApp(firebaseConfig)
 
 const app = new Vue({
-  el: '#app',
   store: new Vuex.Store({
     state: {
-      countOfQuestions: 10
+      countOfQuestions: 10,
+      user: null
     },
     mutations: {
       updateCountOfQuestions (state, payload) {
         state.countOfQuestions = payload
+      },
+      updateUser (state, user) {
+        state.user = user
       }
     }
   }),

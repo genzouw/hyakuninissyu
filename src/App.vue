@@ -1,20 +1,30 @@
 <template>
-  <div class="container-fluid" id="app">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
-      <router-link class="navbar-brand" to="/"><h1>ひゃくにんいっしゅをおぼえよう</h1></router-link>
+  <div>
+    <b-navbar toggleable="lg" class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
+      <router-link class="navbar-brand" to="/">ひゃくにんいっしゅをおぼえよう</router-link>
 
-      <div>
-      <a class="twitter-share-button float-right" href="//twitter.com/intent/tweet?text=%E3%80%8C%E3%81%B2%E3%82%83%E3%81%8F%E3%81%AB%E3%82%93%E3%81%84%E3%81%A3%E3%81%97%E3%82%85%E3%82%92%E3%81%8A%E3%81%BC%E3%81%88%E3%82%88%E3%81%86%E3%80%8D%E3%81%A7%E7%99%BE%E4%BA%BA%E4%B8%80%E9%A6%96%E3%82%92%E6%A5%BD%E3%81%97%E3%81%8F%E5%AD%A6%E3%81%BC%E3%81%86%EF%BC%81%0A%23%E3%81%B2%E3%82%83%E3%81%8F%E3%81%AB%E3%82%93%E3%81%84%E3%81%A3%E3%81%97%E3%82%85+%23%E7%99%BE%E4%BA%BA%E4%B8%80%E9%A6%96+%23%E6%97%A5%E6%9C%AC%E8%AA%9E+%23%E5%8F%A4%E5%85%B8%0A%0A" data-size="large" data-text="ひゃくにんいっしゅをおぼえよう" data-url="https://hyakuninissyu.genzouw.com">しぇあ</a>
-      <button class="btn btn-secondary float-right text-black" @click="signOut" v-show="isLoggedIn">ログアウト</button>
+      <template v-if="user">
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-      </div>
-    </nav>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav class="ml-auto">
+          <b-dropdown-item @click="profile">{{ user.email }}</b-dropdown-item>
+          <b-dropdown-item @click="signOut">ログアウトする</b-dropdown-item>
+        </b-navbar-nav>
+      </b-collapse>
+      </template>
+      <template v-else>
+        <router-link to="/signIn" class="btn btn-md btn-secondary">ログイン</router-link>
+      </template>
+    </b-navbar>
 
-    <router-view/>
+    <div class="container-fluid">
+      <router-view/>
+    </div>
 
     <footer class="page-footer font-small fixed-bottom bg-light text-dark justify-content-center">
       <div class="footer-copyright text-center py-3">
-        <a class="twitter-share-button" href="//twitter.com/intent/tweet?text=%E3%80%8C%E3%81%B2%E3%82%83%E3%81%8F%E3%81%AB%E3%82%93%E3%81%84%E3%81%A3%E3%81%97%E3%82%85%E3%82%92%E3%81%8A%E3%81%BC%E3%81%88%E3%82%88%E3%81%86%E3%80%8D%E3%81%A7%E7%99%BE%E4%BA%BA%E4%B8%80%E9%A6%96%E3%82%92%E6%A5%BD%E3%81%97%E3%81%8F%E5%AD%A6%E3%81%BC%E3%81%86%EF%BC%81%0A%23%E3%81%B2%E3%82%83%E3%81%8F%E3%81%AB%E3%82%93%E3%81%84%E3%81%A3%E3%81%97%E3%82%85+%23%E7%99%BE%E4%BA%BA%E4%B8%80%E9%A6%96+%23%E6%97%A5%E6%9C%AC%E8%AA%9E+%23%E5%8F%A4%E5%85%B8%0A%0A" data-size="large" data-text="ひゃくにんいっしゅをおぼえよう" data-url="https://hyakuninissyu.genzouw.com">しぇあ</a>
+        <a class="twitter-share-button" href="//twitter.com/intent/tweet?text=%E3%80%8C%E3%81%B2%E3%82%83%E3%81%8F%E3%81%AB%E3%82%93%E3%81%84%E3%81%A3%E3%81%97%E3%82%85%E3%82%92%E3%81%8A%E3%81%BC%E3%81%88%E3%82%88%E3%81%86%E3%80%8D%E3%81%A7%E7%99%BE%E4%BA%BA%E4%B8%80%E9%A6%96%E3%82%92%E6%A5%BD%E3%81%97%E3%81%8F%E5%AD%A6%E3%81%BC%E3%81%86%EF%BC%81%0A%23%E3%81%B2%E3%82%83%E3%81%8F%E3%81%AB%E3%82%93%E3%81%84%E3%81%A3%E3%81%97%E3%82%85+%23%E7%99%BE%E4%BA%BA%E4%B8%80%E9%A6%96+%23%E6%97%A5%E6%9C%AC%E8%AA%9E+%23%E5%8F%A4%E5%85%B8%0A%0A" data-size="large" data-text="ひゃくにんいっしゅをおぼえよう" data-url="https://hyakuninissyu.genzouw.com">シェア</a>
         <a href="//twitter.com/genzouw" class="twitter-follow-button" data-size="large" data-show-count="false">@genzouw をふぉろー</a>
       </div>
     </footer>
@@ -90,40 +100,53 @@ export default {
       },
       {
         itemprop: 'image', content: 'https://hyakuninissyu.genzouw.com/static/hyakunin_issyu.png'
+      },
+
+      // Google Analytics
+      {
+        name: 'google-site-verification', content: 'gFYiPUxpzQzAhrVmsACmY-N3Y7jURnIQMfT5GKlnWmU'
       }
     ]
   },
   data () {
     return {
-      isLoggedIn: false
     }
   },
-  mounted () {
+  created () {
     firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.isLoggedIn = true
-      }
+      this.$store.commit('updateUser', user)
     })
+  },
+  computed: {
+    user () {
+      return this.$store.state.user
+    }
   },
   methods: {
     signOut () {
+      if (!window.confirm('ログアウトします。よろしいですか？')) return false
       firebase.auth().signOut().then(() => {
-        this.isLoggedIn = false
-        document.location = '/'
-        // this.$router.push('/')
+        this.$router.push('/')
       })
+    },
+    profile () {
+      this.$router.push('/profile')
     }
   }
 }
 </script>
 
-<style scoped>
-h1 {
-  font-size: 100%;
-}
-
+<style scope>
 body > #app {
   padding: 0;
 }
-
+.dropdown-item {
+  color: white;
+}
+.dropdown-item:hover {
+  color: black;
+}
+div.container-fluid {
+  margin-bottom: 3em;
+}
 </style>

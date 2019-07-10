@@ -1,9 +1,9 @@
 <template>
   <div class="signin">
-    <h2>ろぐいん</h2>
+    <h2>ログイン</h2>
     <input type="text" placeholder="Username" v-model="username">
     <input type="password" placeholder="Password" v-model="password">
-    <button @click="signIn">ろぐいんする</button>
+    <button @click="signIn" class="btn btn-primary btn-lg">ログインする</button>
     <p>
       <router-link to="/signup">しんきとうろくはこちら</router-link>
     </p>
@@ -27,8 +27,18 @@ export default {
         user => {
           this.$router.push('/')
         },
-        err => {
-          alert(err.message)
+        error => {
+          let message = error.message
+          switch (error.code) {
+            case 'auth/user-not-found':
+              message = 'このメールアドレスに対応するユーザが見つかりません。ユーザーが削除された可能性があります。'
+              break
+            default:
+              console.log(error.code)
+              console.log(error.message)
+              break
+          }
+          alert(message)
         }
       )
     }

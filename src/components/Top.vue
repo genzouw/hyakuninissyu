@@ -1,36 +1,45 @@
 <template>
   <div>
-    <div class="row justify-content-center" id="app">
-      <div class="col-auto text-center">
+    <div class="row">
+      <div class="col-auto">
         <h2>なんもんせいかいできるかな？</h2>
-        <p class="intro">もんだいのかずをえらんだら「はじめる」ぼたんをおしてね。</p>
-        <p class="intro">
-          <input type="number" min="1" v-model="countOfQuestions" style="width: 3em; text-align: right;" max="100" />もん
-        </p>
+        <p>もんだいのかずをえらんだら「はじめる」ボタンをおしてね。</p>
       </div>
     </div>
-    <div class="row justify-content-center" v-show="isLoggedIn">
-      <div class="col-sm-10 text-center">
-        <span style="color: blue; font-style: italic">こんにちわ {{ this.user.email }}さん！</span>
+
+    <div class="row justify-content-center">
+      <div class="col-xs-12">
+        <div class="form-group row">
+          <label class="col-xs-4 col-form-label col-form-label-lg">もんだいのかず</label>
+          <div class="col-xs-4">
+            <input
+              type="number"
+              min="1"
+              name="countOfQuestions"
+              v-model="countOfQuestions"
+              max="100"
+              class="form-control form-control-lg"
+              v-validate="'required|numeric|min:1|max:100'"
+              data-vv-as="もんだいのかず"
+              />
+          </div>
+          <label class="col-xs-4 col-form-label col-form-label-lg">もん</label>
+        </div>
       </div>
-    </div><div class="row justify-content-center">
-      <div class="col-sm-10 text-center">
-        <router-link v-bind:to="{ name: 'Playing', params: { countOfQuestions: countOfQuestions } }" class="btn btn-lg btn-primary pl-5 pr-5">はじめる</router-link>
+
+      <div class="col-xs-12">
+        <span class="text-danger">{{ errors.first('countOfQuestions') }}</span>
       </div>
     </div>
-    <hr v-show="!isLoggedIn" />
-    <div class="row justify-content-center" v-show="!isLoggedIn">
-      <div class="col-auto text-center">
-        <p style="font-style: italic">
-          【近日公開】げーむのきろくをほぞんできるようになります。
-        </p>
-      </div>
-      <div class="col-auto text-center">
-        <router-link to="/signIn" class="btn btn-lg btn-secondary">ろぐいん</router-link>
-        <router-link to="/signUp" class="btn btn-lg btn-secondary">しんきとうろく</router-link>
+
+    <div class="row justify-content-center">
+      <div class="col-xs">
+        <button @click="startGame" class="btn btn-lg btn-primary pl-5 pr-5">はじめる</button>
       </div>
     </div>
+
     <hr />
+
     <div class="row justify-content-center">
       <div class="col-auto text-center">
         <img src="@/assets/hyakunin_issyu.png" class="img-fluid w-75 center-block" alt="">
@@ -40,22 +49,10 @@
 </template>
 
 <script>
-import firebase from 'firebase'
-
 export default {
   data () {
     return {
-      isLoggedIn: false,
-      user: {}
     }
-  },
-  created () {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.isLoggedIn = true
-        this.user = user
-      }
-    })
   },
   computed: {
     countOfQuestions: {
@@ -63,13 +60,23 @@ export default {
         return this.$store.state.countOfQuestions
       },
       set (value) {
-        if (value < 1) {
-          value = 1
-        } else if (value > 100) {
-          value = 100
-        }
         this.$store.commit('updateCountOfQuestions', value)
       }
+    }
+  },
+  methods: {
+    startGame () {
+      this.$validator.validate().then(result => {
+        if (!result) {
+          return false
+        }
+
+        this.$router.push(
+          {
+            path: `/playing/${this.countOfQuestions}`
+          }
+        )
+      })
     }
   }
 }
