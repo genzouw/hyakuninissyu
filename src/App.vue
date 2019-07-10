@@ -100,6 +100,11 @@ export default {
       },
       {
         itemprop: 'image', content: 'https://hyakuninissyu.genzouw.com/static/hyakunin_issyu.png'
+      },
+
+      // Google Analytics
+      {
+        name: 'google-site-verification', content: 'gFYiPUxpzQzAhrVmsACmY-N3Y7jURnIQMfT5GKlnWmU'
       }
     ]
   },
