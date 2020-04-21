@@ -1,0 +1,10 @@
+version: "3"
+services:
+  web:
+    image: httpd:2.4.43-alpine
+    volumes:
+      - $PWD/dist:/usr/local/apache2/htdocs:cached
+    restart: always
+    ports:
+      - 10100:80
+
