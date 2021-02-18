@@ -1,6 +1,3 @@
-#php_flag display_errors On
-php_flag display_errors Off
-
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
