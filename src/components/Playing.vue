@@ -5,7 +5,18 @@
         <h2>[だい{{ currentQuestionIndex + 1 }}もん]</h2>
       </div>
       <div class="col-auto">
-        <button class="btn btn-sm btn-primary" v-bind:class="{ 'btn-primary': this.enableSpeak, 'btn-secondary': !this.enableSpeak }" @click.prevent="clickSpeakToggle">{{ this.enableSpeak ? '○' : '✕' }} よみあげ{{ this.enableSpeak ? 'あり' : 'なし' }}</button>
+        <button
+          class="btn btn-sm btn-primary"
+          v-bind:class="{
+            'btn-primary': this.enableSpeak,
+            'btn-secondary': !this.enableSpeak,
+          }"
+          @click.prevent="clickSpeakToggle"
+        >
+          {{ this.enableSpeak ? "○" : "✕" }} よみあげ{{
+            this.enableSpeak ? "あり" : "なし"
+          }}
+        </button>
       </div>
     </div>
 
@@ -13,30 +24,56 @@
       <div class="col-sm-10 cont main-container bg-secondary text-dark">
         <p v-html="questionData.question"></p>
         <div class="row">
-          <div class="col-sm-12" v-for="(c, i) in questionData.choices" v-bind:key="c">
-            <label class="option" v-bind:class="{ correct: !thinking && c === questionData.answer,  choiced: !thinking && c === choice }">
-              <input type="radio" v-model="choice" v-bind:value="c" v-bind:disabled="!thinking" @change.prevent="clickAnswer"/>
-              <span>({{ i+1 }}) {{ c }}</span>
+          <div
+            class="col-sm-12"
+            v-for="(c, i) in questionData.choices"
+            v-bind:key="c"
+          >
+            <label
+              class="option"
+              v-bind:class="{
+                correct: !thinking && c === questionData.answer,
+                choiced: !thinking && c === choice,
+              }"
+            >
+              <input
+                type="radio"
+                v-model="choice"
+                v-bind:value="c"
+                v-bind:disabled="!thinking"
+                @change.prevent="clickAnswer"
+              />
+              <span>({{ i + 1 }}) {{ c }}</span>
             </label>
           </div>
         </div>
         <div class="row justify-content-center">
           <div class="col-sm-12">
-            <button class="btn btn-lg btn-primary btn-block" v-bind:disabled="thinking" @click.prevent="clickNext">次へ</button>
+            <button
+              class="btn btn-lg btn-primary btn-block"
+              v-bind:disabled="thinking"
+              @click.prevent="clickNext"
+            >
+              次へ
+            </button>
           </div>
         </div>
       </div>
     </div>
     <div class="row justify-content-center">
       <div class="col-auto text-center">
-        <img src="@/assets/hyakunin_issyu.png" class="img-fluid w-75 center-block" alt="">
+        <img
+          src="@/assets/hyakunin_issyu.png"
+          class="img-fluid w-75 center-block"
+          alt=""
+        />
       </div>
     </div>
     <audio id="right-sound" preload>
-      <source src="@/assets/right.mp3" type="audio/mp3">
+      <source src="@/assets/right.mp3" type="audio/mp3" />
     </audio>
     <audio id="wrong-sound" preload>
-      <source src="@/assets/wrong.mp3" type="audio/mp3">
+      <source src="@/assets/wrong.mp3" type="audio/mp3" />
     </audio>
   </div>
 </template>
@@ -59,13 +96,13 @@ export default {
       thinking: false,
       questionList: [],
       speak: new SpeechSynthesisUtterance(),
-      enableSpeak: false,
+      enableSpeak: false
     }
   },
   mounted () {
-    this.speak.rate  = 5; // 読み上げ速度 0.1-10 初期値:1 (倍速なら2, 半分の倍速なら0.5, )
-    this.speak.pitch = 2;　// 声の高さ 0-2 初期値:1(0で女性の声)
-    this.speak.lang  = 'ja-JP'; //(日本語:ja-JP, アメリカ英語:en-US, イギリス英語:en-GB, 中国語:zh-CN, 韓国語:ko-KR)
+    this.speak.rate = 5
+    this.speak.pitch = 2
+    this.speak.lang = 'ja-JP'
 
     this.countOfQuestions = this.$route.params.countOfQuestions
     this.questionList = _.shuffle(questions)
@@ -78,18 +115,18 @@ export default {
     clickAnswer () {
       this.thinking = false
 
-      this.speak.text  = this.questionData.answer;
-      this.enableSpeak && speechSynthesis.speak(this.speak);
+      this.speak.text = this.questionData.answer
+      this.enableSpeak && speechSynthesis.speak(this.speak)
 
       // 正解したら
       if (this.questionData.answer === this.choice) {
         this.score++
 
         let rightSound = document.getElementById('right-sound')
-        rightSound.play();
+        rightSound.play()
       } else {
         let wrongSound = document.getElementById('wrong-sound')
-        wrongSound.play();
+        wrongSound.play()
       }
     },
     clickNext () {
@@ -123,8 +160,8 @@ export default {
       this.thinking = true
       this.choice = null
 
-      this.speak.text  = this.questionData.question;
-      this.enableSpeak && speechSynthesis.speak(this.speak);
+      this.speak.text = this.questionData.question
+      this.enableSpeak && speechSynthesis.speak(this.speak)
     },
     clickSpeakToggle () {
       this.enableSpeak = !this.enableSpeak

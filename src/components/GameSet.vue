@@ -135,7 +135,8 @@ export default {
 
       let scores = []
 
-      for (let k of keys) {
+      let k
+      for (k of keys) {
         scores.push({
           createdAt: this.unixtimeToString(k),
           countOfQuestions: this.scores[k].countOfQuestions,
