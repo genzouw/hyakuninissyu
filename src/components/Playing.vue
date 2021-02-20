@@ -100,8 +100,7 @@ export default {
     }
   },
   mounted () {
-    this.speak.rate = 5
-    this.speak.pitch = 2
+    this.speak.pitch = 1
     this.speak.lang = 'ja-JP'
 
     this.countOfQuestions = this.$route.params.countOfQuestions
