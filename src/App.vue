@@ -3,6 +3,7 @@
     <b-navbar toggleable="lg" class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
       <router-link class="navbar-brand" to="/">ひゃくにんいっしゅをおぼえよう</router-link>
 
+      <!--
       <template v-if="user">
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -16,6 +17,7 @@
       <template v-else>
         <router-link to="/signIn" class="btn btn-md btn-secondary">ログイン</router-link>
       </template>
+      -->
     </b-navbar>
 
     <div class="container-fluid">

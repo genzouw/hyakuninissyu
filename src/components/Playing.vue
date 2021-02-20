@@ -4,6 +4,9 @@
       <div class="col-auto">
         <h2>[だい{{ currentQuestionIndex + 1 }}もん]</h2>
       </div>
+      <div class="col-auto">
+        <button class="btn btn-sm btn-primary" v-bind:class="{ 'btn-primary': this.enableSpeak, 'btn-secondary': !this.enableSpeak }" @click.prevent="clickSpeakToggle">{{ this.enableSpeak ? '○' : '✕' }} よみあげ{{ this.enableSpeak ? 'あり' : 'なし' }}</button>
+      </div>
     </div>
 
     <div class="row justify-content-center">
@@ -29,6 +32,12 @@
         <img src="@/assets/hyakunin_issyu.png" class="img-fluid w-75 center-block" alt="">
       </div>
     </div>
+    <audio id="right-sound" preload>
+      <source src="@/assets/right.mp3" type="audio/mp3">
+    </audio>
+    <audio id="wrong-sound" preload>
+      <source src="@/assets/wrong.mp3" type="audio/mp3">
+    </audio>
   </div>
 </template>
 
@@ -48,10 +57,16 @@ export default {
       },
       choice: null,
       thinking: false,
-      questionList: []
+      questionList: [],
+      speak: new SpeechSynthesisUtterance(),
+      enableSpeak: false,
     }
   },
   mounted () {
+    this.speak.rate  = 5; // 読み上げ速度 0.1-10 初期値:1 (倍速なら2, 半分の倍速なら0.5, )
+    this.speak.pitch = 2;　// 声の高さ 0-2 初期値:1(0で女性の声)
+    this.speak.lang  = 'ja-JP'; //(日本語:ja-JP, アメリカ英語:en-US, イギリス英語:en-GB, 中国語:zh-CN, 韓国語:ko-KR)
+
     this.countOfQuestions = this.$route.params.countOfQuestions
     this.questionList = _.shuffle(questions)
     this.loadQuestion()
@@ -63,8 +78,18 @@ export default {
     clickAnswer () {
       this.thinking = false
 
+      this.speak.text  = this.questionData.answer;
+      this.enableSpeak && speechSynthesis.speak(this.speak);
+
+      // 正解したら
       if (this.questionData.answer === this.choice) {
         this.score++
+
+        let rightSound = document.getElementById('right-sound')
+        rightSound.play();
+      } else {
+        let wrongSound = document.getElementById('wrong-sound')
+        wrongSound.play();
       }
     },
     clickNext () {
@@ -97,6 +122,12 @@ export default {
       this.questionData.choices = _.shuffle(this.questionData.choices)
       this.thinking = true
       this.choice = null
+
+      this.speak.text  = this.questionData.question;
+      this.enableSpeak && speechSynthesis.speak(this.speak);
+    },
+    clickSpeakToggle () {
+      this.enableSpeak = !this.enableSpeak
     }
   }
 }
