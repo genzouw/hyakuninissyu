@@ -159,11 +159,16 @@ export default {
       this.thinking = true
       this.choice = null
 
-      this.speak.text = this.questionData.question
-      this.enableSpeak && speechSynthesis.speak(this.speak)
+      this.speakQuestionIfEnabled()
     },
     clickSpeakToggle () {
       this.enableSpeak = !this.enableSpeak
+
+      this.speakQuestionIfEnabled()
+    },
+    speakQuestionIfEnabled () {
+      this.speak.text = this.questionData.question
+      this.enableSpeak && speechSynthesis.speak(this.speak)
     }
   }
 }
