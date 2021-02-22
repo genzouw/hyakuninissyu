@@ -1,1 +1,1 @@
-Sitemap: https://hyakuninissyu.genzouw.com/static/sitemap.xml
+Sitemap: https://hyakuninissyu.genzouw.com/sitemap.xml
