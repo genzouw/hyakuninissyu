@@ -48,7 +48,7 @@ export default {
         name: 'viewport', content: 'width=device-width, initial-scale=1'
       },
       {
-        name: 'description', content: 'みんなでたのしく「ひゃくにんいっしゅをおぼえよう」！'
+        name: 'description', content: 'ひゃくにんいっしゅをおぼえよう。なんもんせいかいできるかな？'
       },
       // OpenGraph data (Most widely used)
       {
@@ -63,34 +63,34 @@ export default {
       },
       // Should the the same as your canonical link, see below.
       {
-        property: 'og:url', content: 'https://hyakuninissyu.genzouw.com'
+        property: 'og:url', content: 'https://hyakuninissyu.genzouw.com/'
       },
       {
-        property: 'og:image', content: 'https://hyakuninissyu.genzouw.com/static/hyakunin_issyu.png'
+        property: 'og:image', content: 'https://hyakuninissyu.genzouw.com/hyakunin_issyu.png'
       },
       // Often the same as your meta description, but not always.
       {
-        property: 'og:description', content: 'みんなでたのしく「ひゃくにんいっしゅをおぼえよう」！'
+        property: 'og:description', content: 'ひゃくにんいっしゅをおぼえよう。なんもんせいかいできるかな？'
       },
       // Twitter card
       {
         name: 'twitter:card', content: 'summary'
       },
       {
-        name: 'twitter:site', content: 'https://hyakuninissyu.genzouw.com'
+        name: 'twitter:site', content: 'https://hyakuninissyu.genzouw.com/'
       },
       {
         name: 'twitter:title', content: 'ひゃくにんいっしゅをおぼえよう'
       },
       {
-        name: 'twitter:description', content: 'みんなでたのしく「ひゃくにんいっしゅをおぼえよう」！'
+        name: 'twitter:description', content: 'ひゃくにんいっしゅをおぼえよう。なんもんせいかいできるかな？'
       },
       // Your twitter handle, if you have one.
       {
         name: 'twitter:creator', content: '@genzouw'
       },
       {
-        name: 'twitter:image:src', content: 'https://hyakuninissyu.genzouw.com/static/hyakunin_issyu.png'
+        name: 'twitter:image:src', content: 'https://hyakuninissyu.genzouw.com/hyakunin_issyu.png'
       },
 
       // Google / Schema.org markup:
@@ -98,10 +98,10 @@ export default {
         itemprop: 'name', content: 'ひゃくにんいっしゅをおぼえよう'
       },
       {
-        itemprop: 'description', content: 'みんなでたのしく「ひゃくにんいっしゅをおぼえよう」！'
+        itemprop: 'description', content: 'ひゃくにんいっしゅをおぼえよう。なんもんせいかいできるかな？'
       },
       {
-        itemprop: 'image', content: 'https://hyakuninissyu.genzouw.com/static/hyakunin_issyu.png'
+        itemprop: 'image', content: 'https://hyakuninissyu.genzouw.com/hyakunin_issyu.png'
       },
 
       // Google Analytics
