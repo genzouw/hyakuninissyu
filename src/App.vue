@@ -63,7 +63,7 @@ export default {
       },
       // Should the the same as your canonical link, see below.
       {
-        property: 'og:url', content: 'https://hyakuninissyu.genzouw.com/'
+        property: 'og:url', content: 'https://hyakuninissyu.genzouw.com'
       },
       {
         property: 'og:image', content: 'https://hyakuninissyu.genzouw.com/hyakunin_issyu.png'
@@ -77,7 +77,7 @@ export default {
         name: 'twitter:card', content: 'summary'
       },
       {
-        name: 'twitter:site', content: 'https://hyakuninissyu.genzouw.com/'
+        name: 'twitter:site', content: 'https://hyakuninissyu.genzouw.com'
       },
       {
         name: 'twitter:title', content: 'ひゃくにんいっしゅをおぼえよう'
