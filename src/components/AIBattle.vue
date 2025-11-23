@@ -101,7 +101,7 @@
             </div>
 
             <!-- 回答中の状態 -->
-            <div v-if="!playerAnswered">
+            <div v-if="!roundFinished">
               <div class="row">
                 <div
                   v-for="(choice, index) in choices"
@@ -111,7 +111,7 @@
                   <button
                     @click="selectAnswer(index)"
                     class="btn btn-outline-primary btn-lg btn-block choice-btn"
-                    :disabled="waitingForAI"
+                    :disabled="roundFinished"
                   >
                     {{ choice }}
                   </button>
@@ -119,7 +119,7 @@
               </div>
             </div>
 
-            <!-- 回答後の結果表示 -->
+            <!-- 回答後の結果表示（早押し式：正解が出たら即座に次へ） -->
             <div v-else>
               <div class="row">
                 <div
@@ -131,46 +131,28 @@
                     class="btn btn-lg btn-block choice-btn"
                     :class="{
                       'btn-success': index === correctAnswerIndex,
-                      'btn-danger': index === playerAnswerIndex && index !== correctAnswerIndex,
-                      'btn-outline-secondary': index !== playerAnswerIndex && index !== correctAnswerIndex && index !== aiAnswerIndex,
-                      'btn-warning': index === aiAnswerIndex && index !== correctAnswerIndex
+                      'btn-outline-secondary': index !== correctAnswerIndex
                     }"
                     disabled
                   >
                     {{ choice }}
-                    <span v-if="index === playerAnswerIndex">（あなた）</span>
-                    <span v-if="index === aiAnswerIndex">（AI）</span>
+                    <span v-if="index === winnerAnswerIndex">（{{ winner === 'player' ? 'あなた' : 'AI' }}）</span>
                   </button>
                 </div>
               </div>
 
               <div class="text-center mt-4">
-                <div v-if="playerCorrect" class="alert alert-success">
-                  <strong>✅ 正解！</strong>
+                <div v-if="winner === 'player'" class="alert alert-success">
+                  <strong>✅ あなたが先に正解！</strong>
                 </div>
-                <div v-else class="alert alert-danger">
-                  <strong>❌ 不正解</strong> 正解: {{ currentQuestion.answer }}
+                <div v-else-if="winner === 'ai'" class="alert alert-warning">
+                  <strong>🤖 AIが先に正解！</strong>
                 </div>
-
-                <div v-if="aiAnswered">
-                  <div v-if="aiCorrect" class="alert alert-warning">
-                    🤖 AIも正解しました
-                  </div>
-                  <div v-else class="alert alert-info">
-                    🤖 AIは不正解でした
-                  </div>
-                </div>
-                <div v-else class="alert alert-secondary">
-                  🤖 AIが考え中...
+                <div v-else class="alert alert-info">
+                  <strong>😢 どちらも不正解...</strong>
                 </div>
 
-                <button
-                  @click="nextQuestion"
-                  class="btn btn-primary btn-lg mt-3"
-                  :disabled="!aiAnswered"
-                >
-                  次の問題へ
-                </button>
+                <p class="text-muted mt-2">{{ transitionMessage }}</p>
               </div>
             </div>
           </div>
@@ -201,16 +183,18 @@ export default {
 
       // プレイヤーの状態
       playerScore: 0,
-      playerAnswered: false,
-      playerAnswerIndex: -1,
-      playerCorrect: false,
+      playerAnswerTime: null,
 
       // AIの状態
       aiScore: 0,
-      aiAnswered: false,
-      aiAnswerIndex: -1,
-      aiCorrect: false,
-      waitingForAI: false
+      aiAnswerTime: null,
+
+      // ラウンド状態（早押し式）
+      roundFinished: false,
+      winner: null, // 'player', 'ai', null（どちらも不正解）
+      winnerAnswerIndex: -1,
+      transitionMessage: '',
+      aiTimeout: null
     }
   },
   computed: {
@@ -261,52 +245,109 @@ export default {
       // 正解のインデックスを保存
       this.correctAnswerIndex = this.choices.indexOf(this.currentQuestion.answer)
 
-      // 状態をリセット
-      this.playerAnswered = false
-      this.playerAnswerIndex = -1
-      this.playerCorrect = false
-      this.aiAnswered = false
-      this.aiAnswerIndex = -1
-      this.aiCorrect = false
-      this.waitingForAI = false
-    },
-    selectAnswer (index) {
-      this.playerAnswerIndex = index
-      this.playerCorrect = index === this.correctAnswerIndex
-      this.playerAnswered = true
+      // 早押し式：状態をリセット
+      this.roundFinished = false
+      this.winner = null
+      this.winnerAnswerIndex = -1
+      this.transitionMessage = ''
+      this.playerAnswerTime = null
+      this.aiAnswerTime = null
 
-      if (this.playerCorrect) {
-        this.playerScore++
+      // AIのタイマーをクリア（前の問題のタイマーが残っている場合）
+      if (this.aiTimeout) {
+        clearTimeout(this.aiTimeout)
+        this.aiTimeout = null
       }
 
-      // AIの回答を開始
+      // AIの回答タイマーを開始（問題表示と同時に開始）
       this.simulateAIAnswer()
     },
-    simulateAIAnswer () {
-      this.waitingForAI = true
+    selectAnswer (index) {
+      // 既にラウンドが終了している場合は何もしない
+      if (this.roundFinished) {
+        return
+      }
 
+      // プレイヤーの回答時刻を記録
+      this.playerAnswerTime = Date.now()
+
+      // 正解かどうか判定
+      const isCorrect = index === this.correctAnswerIndex
+
+      if (isCorrect) {
+        // プレイヤーが正解 → 即座にラウンド終了
+        this.roundFinished = true
+        this.winner = 'player'
+        this.winnerAnswerIndex = index
+        this.playerScore++
+
+        // AIのタイマーをキャンセル
+        if (this.aiTimeout) {
+          clearTimeout(this.aiTimeout)
+          this.aiTimeout = null
+        }
+
+        // 2秒後に次の問題へ自動遷移
+        this.transitionMessage = '2秒後に次の問題へ進みます...'
+        setTimeout(() => {
+          this.nextQuestion()
+        }, 2000)
+      } else {
+        // プレイヤーが不正解 → AIの結果を待つ
+        // AIがまだ答えていない場合は何もせず、AIのタイマーが発火するのを待つ
+        // AIが既に答えている場合は、AIが正解していれば勝ち、そうでなければ引き分け
+        if (this.aiAnswerTime !== null) {
+          this.checkResult()
+        }
+      }
+    },
+    simulateAIAnswer () {
       // AIの思考時間（ランダム遅延）
       const delay = Math.random() * (this.aiDelayRange.max - this.aiDelayRange.min) + this.aiDelayRange.min
 
-      setTimeout(() => {
+      this.aiTimeout = setTimeout(() => {
+        // 既にラウンドが終了している場合（プレイヤーが先に正解した場合）は何もしない
+        if (this.roundFinished) {
+          return
+        }
+
+        // AIの回答時刻を記録
+        this.aiAnswerTime = Date.now()
+
         // AIが正解するかどうかを判定
         const willAnswerCorrectly = Math.random() < this.aiAccuracy
 
         if (willAnswerCorrectly) {
-          // 正解を選択
-          this.aiAnswerIndex = this.correctAnswerIndex
-          this.aiCorrect = true
+          // AIが正解 → 即座にラウンド終了
+          this.roundFinished = true
+          this.winner = 'ai'
+          this.winnerAnswerIndex = this.correctAnswerIndex
           this.aiScore++
-        } else {
-          // 不正解をランダムに選択
-          const incorrectChoices = [0, 1, 2, 3].filter(i => i !== this.correctAnswerIndex)
-          this.aiAnswerIndex = _.sample(incorrectChoices)
-          this.aiCorrect = false
-        }
 
-        this.aiAnswered = true
-        this.waitingForAI = false
+          // 2秒後に次の問題へ自動遷移
+          this.transitionMessage = '2秒後に次の問題へ進みます...'
+          setTimeout(() => {
+            this.nextQuestion()
+          }, 2000)
+        } else {
+          // AIが不正解 → プレイヤーの結果を確認
+          this.checkResult()
+        }
       }, delay)
+    },
+    checkResult () {
+      // プレイヤーとAIの両方が回答済みで、どちらも正解していない場合は引き分け
+      if (this.playerAnswerTime !== null && this.aiAnswerTime !== null) {
+        this.roundFinished = true
+        this.winner = null
+        this.winnerAnswerIndex = -1
+
+        // 2秒後に次の問題へ自動遷移
+        this.transitionMessage = '2秒後に次の問題へ進みます...'
+        setTimeout(() => {
+          this.nextQuestion()
+        }, 2000)
+      }
     },
     nextQuestion () {
       this.currentQuestionIndex++
