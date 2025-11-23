@@ -106,21 +106,20 @@
             <h4>問題 {{ currentQuestionIndex + 1 }} / {{ selectedQuestionCount }}</h4>
           </div>
           <div class="card-body">
-            <div class="text-center mb-4">
+            <!-- 上の句（カウントダウン終了後のみ表示） -->
+            <div v-if="countdown <= 0" class="text-center mb-4">
               <h3 class="question-text">{{ currentQuestion.question }}</h3>
             </div>
 
-            <!-- 回答中の状態（カウントダウン中も選択肢を表示） -->
-            <div v-if="!roundFinished" class="position-relative">
-              <!-- カウントダウンオーバーレイ -->
-              <div v-if="countdown > 0" class="countdown-overlay">
-                <div class="countdown-display">
-                  <h1 class="display-1 text-primary">{{ countdown }}</h1>
-                  <p class="text-white bg-dark px-3 py-2 rounded">下の句を確認してください...</p>
-                </div>
+            <!-- 回答中の状態 -->
+            <div v-if="!roundFinished">
+              <!-- カウントダウン表示（選択肢の上部） -->
+              <div v-if="countdown > 0" class="text-center mb-4">
+                <h1 class="countdown-number text-primary">{{ countdown }}</h1>
+                <p class="text-muted">下の句を確認してください</p>
               </div>
 
-              <!-- 選択肢（常に表示） -->
+              <!-- 選択肢（カウントダウン中も常に表示） -->
               <div class="row">
                 <div
                   v-for="(choice, index) in choices"
@@ -858,32 +857,11 @@ const questions = [
   margin: 0;
 }
 
-.position-relative {
-  position: relative;
-}
-
-.countdown-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.95);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.countdown-display {
-  text-align: center;
-}
-
-.countdown-display .display-1 {
-  font-size: 8rem;
+.countdown-number {
+  font-size: 3rem;
   font-weight: bold;
   animation: pulse 1s infinite;
-  margin-bottom: 1rem;
+  margin: 0;
 }
 
 @keyframes pulse {
@@ -892,8 +870,8 @@ const questions = [
     opacity: 1;
   }
   50% {
-    transform: scale(1.1);
-    opacity: 0.8;
+    transform: scale(1.05);
+    opacity: 0.9;
   }
 }
 </style>
