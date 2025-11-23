@@ -95,6 +95,9 @@
               <div class="card-body text-center">
                 <h5>🤖 AI</h5>
                 <h2>{{ aiScore }} / {{ currentQuestionIndex }}</h2>
+                <div v-if="aiWrong" class="mt-2 badge badge-warning text-dark">
+                  お手つき！
+                </div>
               </div>
             </div>
           </div>
@@ -206,6 +209,7 @@ export default {
       // AIの状態
       aiScore: 0,
       aiAnswerTime: null,
+      aiWrong: false,
 
       // ラウンド状態（早押し式）
       roundFinished: false,
@@ -284,6 +288,7 @@ export default {
       this.transitionMessage = ''
       this.playerAnswerTime = null
       this.aiAnswerTime = null
+      this.aiWrong = false
       this.canAnswer = false // カウントダウン中は回答不可
 
       // 新しいラウンドIDを生成して、古いAIタイマーのコールバックを無効化
@@ -309,15 +314,20 @@ export default {
           clearInterval(this.countdownInterval)
           this.countdownInterval = null
 
-          // カウントダウン終了後、音声読み上げとAIタイマーを開始
+          // カウントダウン終了後の処理順序：
+          // 1. 音声読み上げ
+          // 2. AIタイマー開始（重要：プレイヤーの回答許可より先に開始）
+          // 3. プレイヤーの回答許可
           this.speakQuestionIfEnabled()
+
+          // AIタイマーを開始（currentRoundIdをキャプチャ）
           this.simulateAIAnswer()
 
-          // AIタイマーが確実に開始された後、プレイヤーの回答を許可
-          // 100msの遅延を入れることで競合状態を回避
-          setTimeout(() => {
+          // プレイヤーの回答を許可
+          // AIタイマーが確実に設定された後に許可することで競合状態を回避
+          this.$nextTick(() => {
             this.canAnswer = true
-          }, 100)
+          })
         }
       }, 1000)
     },
@@ -367,16 +377,21 @@ export default {
       // AIの思考時間（ランダム遅延）
       const delay = Math.random() * (this.aiDelayRange.max - this.aiDelayRange.min) + this.aiDelayRange.min
 
-      // 現在のラウンドIDを保存（クロージャでキャプチャ）
+      // 【競合状態対策】現在のラウンドIDをキャプチャ
+      // このパターンにより、古いタイマーのコールバックを安全に無効化できる
+      // 理由: clearTimeoutだけでは既にスケジュールされたコールバックの実行を完全には防げないため
       const roundIdAtStart = this.currentRoundId
 
       this.aiTimeout = setTimeout(() => {
-        // ラウンドIDが変わっている場合（既に次の問題に移行している場合）は何もしない
+        // 【競合状態チェック1】ラウンドIDの検証
+        // ラウンドIDが変わっている = 既に次の問題に移行している
+        // → この古いタイマーのコールバックをスキップ
         if (this.currentRoundId !== roundIdAtStart) {
           return
         }
 
-        // 既にラウンドが終了している場合（プレイヤーが先に正解した場合）は何もしない
+        // 【競合状態チェック2】ラウンド終了状態の検証
+        // プレイヤーが先に正解してラウンドが終了している場合はスキップ
         if (this.roundFinished) {
           return
         }
@@ -404,6 +419,8 @@ export default {
           }, 2000)
         } else {
           // AIが不正解 → プレイヤーの結果を確認
+          // 「お手つき！」バッジを表示してユーザーに視覚的フィードバックを提供
+          this.aiWrong = true
           this.checkResult()
         }
       }, delay)
