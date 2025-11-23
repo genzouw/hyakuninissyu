@@ -10,6 +10,8 @@ import TimeAttack from '@/components/TimeAttack'
 import TimeAttackResult from '@/components/TimeAttackResult'
 import Ranking from '@/components/Ranking'
 import MyRecords from '@/components/MyRecords'
+import AIBattle from '@/components/AIBattle'
+import AIBattleResult from '@/components/AIBattleResult'
 
 Vue.use(Router)
 
@@ -50,6 +52,16 @@ let router = new Router({
       path: '/my-records',
       name: 'MyRecords',
       component: MyRecords
+    },
+    {
+      path: '/ai-battle',
+      name: 'AIBattle',
+      component: AIBattle
+    },
+    {
+      path: '/ai-battle-result/:playerScore/:aiScore/:totalQuestions/:difficulty',
+      name: 'AIBattleResult',
+      component: AIBattleResult
     },
     {
       path: '/signUp',

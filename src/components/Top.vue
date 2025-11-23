@@ -43,10 +43,13 @@
         <router-link to="/time-attack" class="btn btn-lg btn-success pl-5 pr-5 mr-2">
           ⏱️ タイムアタックモード
         </router-link>
+        <router-link to="/ai-battle" class="btn btn-lg btn-danger pl-5 pr-5 mr-2">
+          🤖 AI対戦モード
+        </router-link>
         <router-link to="/ranking" class="btn btn-lg btn-info pl-5 pr-5">
           🏆 ランキング
         </router-link>
-        <p class="text-muted mt-2">100首全てを制限時間内にクリアしよう！</p>
+        <p class="text-muted mt-2">100首全てを制限時間内にクリアしよう！AIと対戦してスキルを競おう！</p>
       </div>
     </div>
 
