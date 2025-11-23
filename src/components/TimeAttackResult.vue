@@ -67,11 +67,15 @@
                   </tr>
                 </tbody>
               </table>
+              <div class="text-center mt-3">
+                <router-link to="/ranking" class="btn btn-info">📊 全ランキングを見る</router-link>
+              </div>
             </div>
 
             <div class="mt-4">
               <router-link to="/" class="btn btn-primary btn-lg mr-2">ホームに戻る</router-link>
-              <router-link to="/time-attack" class="btn btn-success btn-lg">もう一度挑戦</router-link>
+              <router-link to="/time-attack" class="btn btn-success btn-lg mr-2">もう一度挑戦</router-link>
+              <router-link to="/my-records" class="btn btn-outline-info btn-lg">マイ記録</router-link>
             </div>
           </div>
         </div>

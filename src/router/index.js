@@ -8,6 +8,8 @@ import SignIn from '@/components/SignIn'
 import Profile from '@/components/Profile'
 import TimeAttack from '@/components/TimeAttack'
 import TimeAttackResult from '@/components/TimeAttackResult'
+import Ranking from '@/components/Ranking'
+import MyRecords from '@/components/MyRecords'
 
 Vue.use(Router)
 
@@ -38,6 +40,16 @@ let router = new Router({
       path: '/time-attack-result/:timeMs/:score',
       name: 'TimeAttackResult',
       component: TimeAttackResult
+    },
+    {
+      path: '/ranking',
+      name: 'Ranking',
+      component: Ranking
+    },
+    {
+      path: '/my-records',
+      name: 'MyRecords',
+      component: MyRecords
     },
     {
       path: '/signUp',
