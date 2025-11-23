@@ -110,16 +110,17 @@
               <h3 class="question-text">{{ currentQuestion.question }}</h3>
             </div>
 
-            <!-- カウントダウン表示 -->
-            <div v-if="countdown > 0" class="text-center">
-              <div class="countdown-display">
-                <h1 class="display-1 text-primary">{{ countdown }}</h1>
-                <p class="text-muted">問題を確認してください...</p>
+            <!-- 回答中の状態（カウントダウン中も選択肢を表示） -->
+            <div v-if="!roundFinished" class="position-relative">
+              <!-- カウントダウンオーバーレイ -->
+              <div v-if="countdown > 0" class="countdown-overlay">
+                <div class="countdown-display">
+                  <h1 class="display-1 text-primary">{{ countdown }}</h1>
+                  <p class="text-white bg-dark px-3 py-2 rounded">下の句を確認してください...</p>
+                </div>
               </div>
-            </div>
 
-            <!-- 回答中の状態 -->
-            <div v-else-if="!roundFinished">
+              <!-- 選択肢（常に表示） -->
               <div class="row">
                 <div
                   v-for="(choice, index) in choices"
@@ -129,7 +130,7 @@
                   <button
                     @click="selectAnswer(index)"
                     class="btn btn-outline-primary btn-lg btn-block choice-btn"
-                    :disabled="roundFinished || countdown > 0"
+                    :disabled="countdown > 0"
                   >
                     {{ choice }}
                   </button>
@@ -857,14 +858,32 @@ const questions = [
   margin: 0;
 }
 
+.position-relative {
+  position: relative;
+}
+
+.countdown-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
 .countdown-display {
-  padding: 2rem 0;
+  text-align: center;
 }
 
 .countdown-display .display-1 {
   font-size: 8rem;
   font-weight: bold;
   animation: pulse 1s infinite;
+  margin-bottom: 1rem;
 }
 
 @keyframes pulse {
