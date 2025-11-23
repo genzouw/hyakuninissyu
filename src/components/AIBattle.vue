@@ -213,6 +213,7 @@ export default {
       winnerAnswerIndex: -1,
       transitionMessage: '',
       aiTimeout: null,
+      currentRoundId: 0, // 各問題に一意のIDを割り当てて競合を防ぐ
 
       // 音声読み上げ
       speak: new SpeechSynthesisUtterance(),
@@ -284,6 +285,9 @@ export default {
       this.playerAnswerTime = null
       this.aiAnswerTime = null
       this.canAnswer = false // カウントダウン中は回答不可
+
+      // 新しいラウンドIDを生成して、古いAIタイマーのコールバックを無効化
+      this.currentRoundId++
 
       // AIのタイマーをクリア（前の問題のタイマーが残っている場合）
       if (this.aiTimeout) {
@@ -363,7 +367,15 @@ export default {
       // AIの思考時間（ランダム遅延）
       const delay = Math.random() * (this.aiDelayRange.max - this.aiDelayRange.min) + this.aiDelayRange.min
 
+      // 現在のラウンドIDを保存（クロージャでキャプチャ）
+      const roundIdAtStart = this.currentRoundId
+
       this.aiTimeout = setTimeout(() => {
+        // ラウンドIDが変わっている場合（既に次の問題に移行している場合）は何もしない
+        if (this.currentRoundId !== roundIdAtStart) {
+          return
+        }
+
         // 既にラウンドが終了している場合（プレイヤーが先に正解した場合）は何もしない
         if (this.roundFinished) {
           return
