@@ -38,6 +38,15 @@
       </div>
     </div>
 
+    <div class="row justify-content-center mt-4">
+      <div class="col-xs">
+        <router-link to="/time-attack" class="btn btn-lg btn-success pl-5 pr-5">
+          ⏱️ タイムアタックモード
+        </router-link>
+        <p class="text-muted mt-2">100首全てを制限時間内にクリアしよう！</p>
+      </div>
+    </div>
+
     <hr />
 
     <div class="row justify-content-center">

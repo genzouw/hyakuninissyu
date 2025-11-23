@@ -6,6 +6,8 @@ import GameSet from '@/components/GameSet'
 import SignUp from '@/components/SignUp'
 import SignIn from '@/components/SignIn'
 import Profile from '@/components/Profile'
+import TimeAttack from '@/components/TimeAttack'
+import TimeAttackResult from '@/components/TimeAttackResult'
 
 Vue.use(Router)
 
@@ -26,6 +28,16 @@ let router = new Router({
       path: '/gameSet/:countOfQuestions/:score',
       name: 'GameSet',
       component: GameSet
+    },
+    {
+      path: '/time-attack',
+      name: 'TimeAttack',
+      component: TimeAttack
+    },
+    {
+      path: '/time-attack-result/:timeMs/:score',
+      name: 'TimeAttackResult',
+      component: TimeAttackResult
     },
     {
       path: '/signUp',
