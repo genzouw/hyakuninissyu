@@ -239,11 +239,11 @@ export default {
     },
     aiDelayRange () {
       const delayMap = {
-        easy: { min: 3000, max: 5000 }, // 遅い（3〜5秒）
-        normal: { min: 1500, max: 3000 }, // 普通（1.5〜3秒）
-        hard: { min: 500, max: 1500 } // 速い（0.5〜1.5秒）
+        easy: { min: 4500, max: 7500 }, // 遅い（4.5〜7.5秒）
+        normal: { min: 2250, max: 4500 }, // 普通（2.25〜4.5秒）
+        hard: { min: 750, max: 2250 } // 速い（0.75〜2.25秒）
       }
-      return delayMap[this.difficulty] || { min: 1500, max: 3000 }
+      return delayMap[this.difficulty] || { min: 2250, max: 4500 }
     }
   },
   methods: {
