@@ -110,8 +110,16 @@
               <h3 class="question-text">{{ currentQuestion.question }}</h3>
             </div>
 
+            <!-- カウントダウン表示 -->
+            <div v-if="countdown > 0" class="text-center">
+              <div class="countdown-display">
+                <h1 class="display-1 text-primary">{{ countdown }}</h1>
+                <p class="text-muted">問題を確認してください...</p>
+              </div>
+            </div>
+
             <!-- 回答中の状態 -->
-            <div v-if="!roundFinished">
+            <div v-else-if="!roundFinished">
               <div class="row">
                 <div
                   v-for="(choice, index) in choices"
@@ -121,7 +129,7 @@
                   <button
                     @click="selectAnswer(index)"
                     class="btn btn-outline-primary btn-lg btn-block choice-btn"
-                    :disabled="roundFinished"
+                    :disabled="roundFinished || countdown > 0"
                   >
                     {{ choice }}
                   </button>
@@ -208,7 +216,11 @@ export default {
 
       // 音声読み上げ
       speak: new SpeechSynthesisUtterance(),
-      enableSpeak: false
+      enableSpeak: true,
+
+      // カウントダウン
+      countdown: 0,
+      countdownInterval: null
     }
   },
   mounted () {
@@ -277,11 +289,25 @@ export default {
         this.aiTimeout = null
       }
 
-      // AIの回答タイマーを開始（問題表示と同時に開始）
-      this.simulateAIAnswer()
+      // カウントダウンタイマーをクリア（前の問題のタイマーが残っている場合）
+      if (this.countdownInterval) {
+        clearInterval(this.countdownInterval)
+        this.countdownInterval = null
+      }
 
-      // 問題文を読み上げ
-      this.speakQuestionIfEnabled()
+      // 3秒カウントダウンを開始
+      this.countdown = 3
+      this.countdownInterval = setInterval(() => {
+        this.countdown--
+        if (this.countdown <= 0) {
+          clearInterval(this.countdownInterval)
+          this.countdownInterval = null
+
+          // カウントダウン終了後、音声読み上げとAIタイマーを開始
+          this.speakQuestionIfEnabled()
+          this.simulateAIAnswer()
+        }
+      }, 1000)
     },
     selectAnswer (index) {
       // 既にラウンドが終了している場合は何もしない
@@ -829,5 +855,26 @@ const questions = [
 .card-header h2,
 .card-header h4 {
   margin: 0;
+}
+
+.countdown-display {
+  padding: 2rem 0;
+}
+
+.countdown-display .display-1 {
+  font-size: 8rem;
+  font-weight: bold;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
 }
 </style>
