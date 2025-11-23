@@ -129,7 +129,7 @@
                   <button
                     @click="selectAnswer(index)"
                     class="btn btn-outline-primary btn-lg btn-block choice-btn"
-                    :disabled="countdown > 0"
+                    :disabled="!canAnswer"
                   >
                     {{ choice }}
                   </button>
@@ -220,7 +220,8 @@ export default {
 
       // カウントダウン
       countdown: 0,
-      countdownInterval: null
+      countdownInterval: null,
+      canAnswer: false // プレイヤーが回答可能かどうか
     }
   },
   mounted () {
@@ -282,6 +283,7 @@ export default {
       this.transitionMessage = ''
       this.playerAnswerTime = null
       this.aiAnswerTime = null
+      this.canAnswer = false // カウントダウン中は回答不可
 
       // AIのタイマーをクリア（前の問題のタイマーが残っている場合）
       if (this.aiTimeout) {
@@ -306,12 +308,18 @@ export default {
           // カウントダウン終了後、音声読み上げとAIタイマーを開始
           this.speakQuestionIfEnabled()
           this.simulateAIAnswer()
+
+          // AIタイマーが確実に開始された後、プレイヤーの回答を許可
+          // 100msの遅延を入れることで競合状態を回避
+          setTimeout(() => {
+            this.canAnswer = true
+          }, 100)
         }
       }, 1000)
     },
     selectAnswer (index) {
-      // 既にラウンドが終了している場合は何もしない
-      if (this.roundFinished) {
+      // 回答不可の場合（カウントダウン中など）は何もしない
+      if (!this.canAnswer || this.roundFinished) {
         return
       }
 
