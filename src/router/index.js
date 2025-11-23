@@ -6,6 +6,12 @@ import GameSet from '@/components/GameSet'
 import SignUp from '@/components/SignUp'
 import SignIn from '@/components/SignIn'
 import Profile from '@/components/Profile'
+import TimeAttack from '@/components/TimeAttack'
+import TimeAttackResult from '@/components/TimeAttackResult'
+import Ranking from '@/components/Ranking'
+import MyRecords from '@/components/MyRecords'
+import AIBattle from '@/components/AIBattle'
+import AIBattleResult from '@/components/AIBattleResult'
 
 Vue.use(Router)
 
@@ -26,6 +32,36 @@ let router = new Router({
       path: '/gameSet/:countOfQuestions/:score',
       name: 'GameSet',
       component: GameSet
+    },
+    {
+      path: '/time-attack',
+      name: 'TimeAttack',
+      component: TimeAttack
+    },
+    {
+      path: '/time-attack-result/:timeMs/:score',
+      name: 'TimeAttackResult',
+      component: TimeAttackResult
+    },
+    {
+      path: '/ranking',
+      name: 'Ranking',
+      component: Ranking
+    },
+    {
+      path: '/my-records',
+      name: 'MyRecords',
+      component: MyRecords
+    },
+    {
+      path: '/ai-battle',
+      name: 'AIBattle',
+      component: AIBattle
+    },
+    {
+      path: '/ai-battle-result/:playerScore/:aiScore/:totalQuestions/:difficulty',
+      name: 'AIBattleResult',
+      component: AIBattleResult
     },
     {
       path: '/signUp',
