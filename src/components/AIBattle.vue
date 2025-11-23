@@ -70,6 +70,16 @@
     <!-- ゲーム中の画面 -->
     <div v-else-if="!gameFinished" class="row justify-content-center">
       <div class="col-md-10">
+        <!-- 音声読み上げトグル -->
+        <div class="row mb-3">
+          <div class="col-12 text-right">
+            <button @click="clickSpeakToggle" class="btn btn-sm" :class="enableSpeak ? 'btn-success' : 'btn-outline-secondary'">
+              <span v-if="enableSpeak">🔊 読み上げ ON</span>
+              <span v-else>🔇 読み上げ OFF</span>
+            </button>
+          </div>
+        </div>
+
         <!-- スコア表示 -->
         <div class="row mb-3">
           <div class="col-6">
@@ -194,25 +204,33 @@ export default {
       winner: null, // 'player', 'ai', null（どちらも不正解）
       winnerAnswerIndex: -1,
       transitionMessage: '',
-      aiTimeout: null
+      aiTimeout: null,
+
+      // 音声読み上げ
+      speak: new SpeechSynthesisUtterance(),
+      enableSpeak: false
     }
+  },
+  mounted () {
+    this.speak.pitch = 1
+    this.speak.lang = 'ja-JP'
   },
   computed: {
     aiAccuracy () {
       const accuracyMap = {
-        easy: 0.6,
-        normal: 0.75,
-        hard: 0.9
+        easy: 0.5, // 50% - 弱い
+        normal: 0.75, // 75% - 普通
+        hard: 0.95 // 95% - 強い
       }
       return accuracyMap[this.difficulty] || 0.75
     },
     aiDelayRange () {
       const delayMap = {
-        easy: { min: 2000, max: 4000 },
-        normal: { min: 1000, max: 3000 },
-        hard: { min: 500, max: 2000 }
+        easy: { min: 3000, max: 5000 }, // 遅い（3〜5秒）
+        normal: { min: 1500, max: 3000 }, // 普通（1.5〜3秒）
+        hard: { min: 500, max: 1500 } // 速い（0.5〜1.5秒）
       }
-      return delayMap[this.difficulty] || { min: 1000, max: 3000 }
+      return delayMap[this.difficulty] || { min: 1500, max: 3000 }
     }
   },
   methods: {
@@ -261,6 +279,9 @@ export default {
 
       // AIの回答タイマーを開始（問題表示と同時に開始）
       this.simulateAIAnswer()
+
+      // 問題文を読み上げ
+      this.speakQuestionIfEnabled()
     },
     selectAnswer (index) {
       // 既にラウンドが終了している場合は何もしない
@@ -280,6 +301,9 @@ export default {
         this.winner = 'player'
         this.winnerAnswerIndex = index
         this.playerScore++
+
+        // 正解の下の句を読み上げ
+        this.speakAnswer()
 
         // AIのタイマーをキャンセル
         if (this.aiTimeout) {
@@ -324,6 +348,9 @@ export default {
           this.winnerAnswerIndex = this.correctAnswerIndex
           this.aiScore++
 
+          // 正解の下の句を読み上げ
+          this.speakAnswer()
+
           // 2秒後に次の問題へ自動遷移
           this.transitionMessage = '2秒後に次の問題へ進みます...'
           setTimeout(() => {
@@ -352,6 +379,24 @@ export default {
     nextQuestion () {
       this.currentQuestionIndex++
       this.loadQuestion()
+    },
+    speakQuestionIfEnabled () {
+      if (this.enableSpeak) {
+        speechSynthesis.cancel(this.speak)
+        this.speak.text = this.currentQuestion.question
+        speechSynthesis.speak(this.speak)
+      }
+    },
+    speakAnswer () {
+      if (this.enableSpeak) {
+        speechSynthesis.cancel(this.speak)
+        this.speak.text = this.currentQuestion.answer
+        speechSynthesis.speak(this.speak)
+      }
+    },
+    clickSpeakToggle () {
+      this.enableSpeak = !this.enableSpeak
+      this.speakQuestionIfEnabled()
     },
     finishGame () {
       this.gameFinished = true
