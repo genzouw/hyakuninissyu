@@ -140,18 +140,7 @@ export default {
     }
   },
   mounted () {
-    // ローカルストレージから習得済みIDを読み込み（仮実装）
-    const savedIds = localStorage.getItem(COLLECTED_POEM_IDS_KEY)
-    if (savedIds) {
-      try {
-        this.collectedPoemIds = JSON.parse(savedIds)
-      } catch (e) {
-        console.error('ローカルストレージの "collectedPoemIds" の解析に失敗しました。', e)
-        // 不正なデータを削除して初期化します
-        localStorage.removeItem(COLLECTED_POEM_IDS_KEY)
-        this.collectedPoemIds = []
-      }
-    }
+    this.loadCollectedPoems()
 
     // デモ用: 最初の3首を習得済みにする
     if (this.collectedPoemIds.length === 0) {
@@ -160,6 +149,19 @@ export default {
     }
   },
   methods: {
+    loadCollectedPoems () {
+      const savedIds = localStorage.getItem(COLLECTED_POEM_IDS_KEY)
+      if (savedIds) {
+        try {
+          this.collectedPoemIds = JSON.parse(savedIds)
+        } catch (e) {
+          console.error('Failed to parse collectedPoemIds from localStorage:', e)
+          // エラー発生時はデータをクリアして初期化
+          this.collectedPoemIds = []
+          localStorage.removeItem(COLLECTED_POEM_IDS_KEY)
+        }
+      }
+    },
     isCollected (poemId) {
       return this.collectedPoemIdSet.has(poemId)
     },
