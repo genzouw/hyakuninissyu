@@ -113,7 +113,7 @@
 
 <script>
 import _ from 'underscore'
-import { poems } from '@/data/poems'
+import poems from '@/data/poems'
 import {
   getTodaysChallengePoems,
   isTodaysChallengeCompleted,
