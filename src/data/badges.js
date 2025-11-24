@@ -127,5 +127,3 @@ export const rarityLabels = {
   rare: 'レア',
   legendary: 'レジェンダリー'
 }
-
-export default badges
