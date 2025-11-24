@@ -102,10 +102,10 @@
     </div>
 
     <!-- サウンド -->
-    <audio id="right-sound-daily" preload>
+    <audio ref="rightSoundDaily" preload>
       <source src="@/assets/right.mp3" type="audio/mp3" />
     </audio>
-    <audio id="wrong-sound-daily" preload>
+    <audio ref="wrongSoundDaily" preload>
       <source src="@/assets/wrong.mp3" type="audio/mp3" />
     </audio>
   </div>
@@ -187,14 +187,14 @@ export default {
       // 正解したら
       if (this.questionData.answer === this.choice) {
         this.score++
-        const rightSound = document.getElementById('right-sound-daily')
+        const rightSound = this.$refs.rightSoundDaily
         rightSound.play()
 
         // コレクション図鑑に追加
         const poemId = poems.find(p => p.answer === this.questionData.answer).id
         this.addToCollection(poemId)
       } else {
-        const wrongSound = document.getElementById('wrong-sound-daily')
+        const wrongSound = this.$refs.wrongSoundDaily
         wrongSound.play()
       }
     },
