@@ -125,7 +125,6 @@ export function updateStreak (isSuccess) {
     localStorage.setItem('dailyChallengeStreak', String(currentStreak + 1))
   } else if (lastCompletedDate === todayString) {
     // 今日既に完了済み（ストリークは変更なし）
-    return
   } else {
     // 連続ではない（新規スタート）
     localStorage.setItem('dailyChallengeStreak', '1')
