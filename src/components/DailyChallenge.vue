@@ -215,7 +215,14 @@ export default {
         }
 
         const newStreak = getCurrentStreak()
-        this.$router.push(`/daily-challenge-result/${this.score}/${newStreak}/${previousStreak}`)
+        this.$router.push({
+          name: 'DailyChallengeResult',
+          params: {
+            score: this.score,
+            streak: newStreak,
+            previousStreak: previousStreak
+          }
+        })
       }
     },
     loadQuestion () {
