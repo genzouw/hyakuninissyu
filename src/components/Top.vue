@@ -40,6 +40,9 @@
 
     <div class="row justify-content-center mt-4">
       <div class="col-xs">
+        <router-link to="/daily-challenge" class="btn btn-lg btn-warning pl-5 pr-5 mr-2">
+          📅 デイリーチャレンジ
+        </router-link>
         <router-link to="/time-attack" class="btn btn-lg btn-success pl-5 pr-5 mr-2">
           ⏱️ タイムアタックモード
         </router-link>
@@ -55,7 +58,7 @@
         <router-link to="/badges" class="btn btn-lg btn-warning pl-5 pr-5">
           🎖️ バッジコレクション
         </router-link>
-        <p class="text-muted mt-2">100首全てを制限時間内にクリアしよう！AIと対戦してスキルを競おう！おぼえた歌を図鑑で確認しよう！バッジを集めよう！</p>
+        <p class="text-muted mt-2">毎日5問のチャレンジで連続記録を目指そう！100首全てを制限時間内にクリアしよう！AIと対戦してスキルを競おう！おぼえた歌を図鑑で確認しよう！バッジを集めよう！</p>
       </div>
     </div>
 
