@@ -14,6 +14,8 @@ import AIBattle from '@/components/AIBattle'
 import AIBattleResult from '@/components/AIBattleResult'
 import Badges from '@/components/Badges'
 import Collection from '@/components/Collection'
+import DailyChallenge from '@/components/DailyChallenge'
+import DailyChallengeResult from '@/components/DailyChallengeResult'
 
 Vue.use(Router)
 
@@ -74,6 +76,16 @@ let router = new Router({
       path: '/collection',
       name: 'Collection',
       component: Collection
+    },
+    {
+      path: '/daily-challenge',
+      name: 'DailyChallenge',
+      component: DailyChallenge
+    },
+    {
+      path: '/daily-challenge-result/:score/:streak',
+      name: 'DailyChallengeResult',
+      component: DailyChallengeResult
     },
     {
       path: '/signUp',
