@@ -163,11 +163,10 @@ export default {
       }))
 
       // 選択肢を生成
+      const allAnswers = poems.map(p => p.answer)
       this.questionList.forEach(q => {
         const dummies = _.shuffle(
-          poems
-            .map(p => p.answer)
-            .filter(a => a !== q.answer)
+          allAnswers.filter(a => a !== q.answer)
         ).slice(0, 3)
         q.choices = _.shuffle([q.answer, ...dummies])
       })
