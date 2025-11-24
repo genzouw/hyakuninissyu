@@ -95,13 +95,23 @@
 <script>
 import poems from '@/data/poems'
 
+// フィルター種類の定数
+const FILTERS = {
+  ALL: 'all',
+  COLLECTED: 'collected',
+  UNCOLLECTED: 'uncollected'
+}
+
+// localStorageキーの定数
+const COLLECTED_POEM_IDS_KEY = 'collectedPoemIds'
+
 export default {
   name: 'Collection',
   data () {
     return {
       poems: poems,
       collectedPoemIds: [], // TODO: Vuexまたはlocalstorageから取得
-      filter: 'all',
+      filter: FILTERS.ALL,
       showModal: false,
       selectedPoem: null
     }
@@ -117,10 +127,13 @@ export default {
       if (this.totalCount === 0) return 0
       return Math.round((this.collectedCount / this.totalCount) * 100)
     },
+    collectedPoemIdSet () {
+      return new Set(this.collectedPoemIds)
+    },
     filteredPoems () {
-      if (this.filter === 'collected') {
+      if (this.filter === FILTERS.COLLECTED) {
         return this.poems.filter(p => this.isCollected(p.id))
-      } else if (this.filter === 'uncollected') {
+      } else if (this.filter === FILTERS.UNCOLLECTED) {
         return this.poems.filter(p => !this.isCollected(p.id))
       }
       return this.poems
@@ -128,20 +141,27 @@ export default {
   },
   mounted () {
     // ローカルストレージから習得済みIDを読み込み（仮実装）
-    const savedIds = localStorage.getItem('collectedPoemIds')
+    const savedIds = localStorage.getItem(COLLECTED_POEM_IDS_KEY)
     if (savedIds) {
-      this.collectedPoemIds = JSON.parse(savedIds)
+      try {
+        this.collectedPoemIds = JSON.parse(savedIds)
+      } catch (e) {
+        console.error('ローカルストレージの "collectedPoemIds" の解析に失敗しました。', e)
+        // 不正なデータを削除して初期化します
+        localStorage.removeItem(COLLECTED_POEM_IDS_KEY)
+        this.collectedPoemIds = []
+      }
     }
 
     // デモ用: 最初の3首を習得済みにする
     if (this.collectedPoemIds.length === 0) {
       this.collectedPoemIds = [1, 2, 3]
-      localStorage.setItem('collectedPoemIds', JSON.stringify(this.collectedPoemIds))
+      localStorage.setItem(COLLECTED_POEM_IDS_KEY, JSON.stringify(this.collectedPoemIds))
     }
   },
   methods: {
     isCollected (poemId) {
-      return this.collectedPoemIds.includes(poemId)
+      return this.collectedPoemIdSet.has(poemId)
     },
     showPoemDetail (poem) {
       this.selectedPoem = poem
