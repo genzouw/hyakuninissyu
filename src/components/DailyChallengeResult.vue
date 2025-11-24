@@ -111,13 +111,13 @@ export default {
       return this.currentStreak > this.previousStreak && this.currentStreak > 0
     },
     streakReset () {
-      return this.currentStreak === 0 && this.score < 5
+      return this.currentStreak === 0 && this.previousStreak > 0
     }
   },
   mounted () {
     this.score = parseInt(this.$route.params.score, 10) || 0
     this.currentStreak = parseInt(this.$route.params.streak, 10) || 0
-    this.previousStreak = this.currentStreak - (this.score === 5 ? 1 : 0)
+    this.previousStreak = parseInt(this.$route.params.previousStreak, 10) || 0
 
     // 今回追加されたコレクション数を推定（正解数と同じ）
     this.collectedCount = this.score

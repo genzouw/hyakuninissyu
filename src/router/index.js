@@ -83,7 +83,7 @@ let router = new Router({
       component: DailyChallenge
     },
     {
-      path: '/daily-challenge-result/:score/:streak',
+      path: '/daily-challenge-result/:score/:streak/:previousStreak',
       name: 'DailyChallengeResult',
       component: DailyChallengeResult
     },

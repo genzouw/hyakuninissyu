@@ -207,6 +207,7 @@ export default {
       } else {
         // 全問終了
         const isSuccess = this.score === 5
+        const previousStreak = this.currentStreak
         updateStreak(isSuccess)
 
         if (isSuccess) {
@@ -214,7 +215,7 @@ export default {
         }
 
         const newStreak = getCurrentStreak()
-        this.$router.push(`/daily-challenge-result/${this.score}/${newStreak}`)
+        this.$router.push(`/daily-challenge-result/${this.score}/${newStreak}/${previousStreak}`)
       }
     },
     loadQuestion () {
