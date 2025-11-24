@@ -180,7 +180,14 @@ export default {
     loadUnlockedBadges () {
       const saved = localStorage.getItem('unlockedBadgeIds')
       if (saved) {
-        this.unlockedBadgeIds = JSON.parse(saved)
+        try {
+          this.unlockedBadgeIds = JSON.parse(saved)
+        } catch (e) {
+          console.error('Failed to parse unlockedBadgeIds from localStorage:', e)
+          // エラー発生時はデータをクリアして初期化
+          this.unlockedBadgeIds = []
+          localStorage.removeItem('unlockedBadgeIds')
+        }
       }
     },
     // コレクション系バッジのみをチェック・解除するメソッド
