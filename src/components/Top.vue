@@ -49,10 +49,13 @@
         <router-link to="/ranking" class="btn btn-lg btn-info pl-5 pr-5 mr-2">
           🏆 ランキング
         </router-link>
-        <router-link to="/collection" class="btn btn-lg btn-warning pl-5 pr-5">
+        <router-link to="/collection" class="btn btn-lg btn-primary pl-5 pr-5 mr-2">
           📚 コレクション図鑑
         </router-link>
-        <p class="text-muted mt-2">100首全てを制限時間内にクリアしよう！AIと対戦してスキルを競おう！おぼえた歌を図鑑で確認しよう！</p>
+        <router-link to="/badges" class="btn btn-lg btn-warning pl-5 pr-5">
+          🎖️ バッジコレクション
+        </router-link>
+        <p class="text-muted mt-2">100首全てを制限時間内にクリアしよう！AIと対戦してスキルを競おう！おぼえた歌を図鑑で確認しよう！バッジを集めよう！</p>
       </div>
     </div>
 
