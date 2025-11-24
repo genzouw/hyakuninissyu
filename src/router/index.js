@@ -12,6 +12,7 @@ import Ranking from '@/components/Ranking'
 import MyRecords from '@/components/MyRecords'
 import AIBattle from '@/components/AIBattle'
 import AIBattleResult from '@/components/AIBattleResult'
+import Collection from '@/components/Collection'
 
 Vue.use(Router)
 
@@ -62,6 +63,11 @@ let router = new Router({
       path: '/ai-battle-result/:playerScore/:aiScore/:totalQuestions/:difficulty',
       name: 'AIBattleResult',
       component: AIBattleResult
+    },
+    {
+      path: '/collection',
+      name: 'Collection',
+      component: Collection
     },
     {
       path: '/signUp',
