@@ -157,6 +157,7 @@ export default {
       // 今日のチャレンジ用の5首を取得
       const todaysPoems = getTodaysChallengePoems(poems)
       this.questionList = todaysPoems.map(poem => ({
+        id: poem.id,
         question: poem.question,
         answer: poem.answer,
         choices: []
@@ -191,7 +192,7 @@ export default {
         rightSound.play()
 
         // コレクション図鑑に追加
-        const poemId = poems.find(p => p.answer === this.questionData.answer).id
+        const poemId = this.questionData.id
         this.addToCollection(poemId)
       } else {
         const wrongSound = this.$refs.wrongSoundDaily
