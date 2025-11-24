@@ -183,12 +183,15 @@ export default {
         this.unlockedBadgeIds = JSON.parse(saved)
       }
     },
-    checkAndUnlockBadges () {
+    // コレクション系バッジのみをチェック・解除するメソッド
+    // NOTE: time_attack, ai_battle_win などの他のバッジタイプは未実装です
+    // 今後、各ゲームモードの終了時に適切なバッジチェックを実装する予定です
+    checkAndUnlockCollectionBadges () {
       // コレクション数を取得
       const collectedPoemIds = JSON.parse(localStorage.getItem('collectedPoemIds') || '[]')
       const collectionCount = collectedPoemIds.length
 
-      // コレクション系バッジをチェック
+      // コレクション系バッジのみをチェック
       this.badges.forEach(badge => {
         if (badge.condition.type === 'collection') {
           if (collectionCount >= badge.condition.count) {
@@ -208,7 +211,7 @@ export default {
   },
   mounted () {
     this.loadUnlockedBadges()
-    this.checkAndUnlockBadges()
+    this.checkAndUnlockCollectionBadges()
   }
 }
 </script>
