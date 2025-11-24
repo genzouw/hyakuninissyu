@@ -46,10 +46,13 @@
         <router-link to="/ai-battle" class="btn btn-lg btn-danger pl-5 pr-5 mr-2">
           🤖 AI対戦モード
         </router-link>
-        <router-link to="/ranking" class="btn btn-lg btn-info pl-5 pr-5">
+        <router-link to="/ranking" class="btn btn-lg btn-info pl-5 pr-5 mr-2">
           🏆 ランキング
         </router-link>
-        <p class="text-muted mt-2">100首全てを制限時間内にクリアしよう！AIと対戦してスキルを競おう！</p>
+        <router-link to="/collection" class="btn btn-lg btn-warning pl-5 pr-5">
+          📚 コレクション図鑑
+        </router-link>
+        <p class="text-muted mt-2">100首全てを制限時間内にクリアしよう！AIと対戦してスキルを競おう！おぼえた歌を図鑑で確認しよう！</p>
       </div>
     </div>
 
