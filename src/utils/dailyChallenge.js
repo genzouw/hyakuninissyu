@@ -3,15 +3,23 @@
  */
 
 /**
+ * Dateオブジェクトを YYYY-MM-DD 形式の文字列に変換
+ * @param {Date} date - 変換する日付オブジェクト
+ * @returns {string} YYYY-MM-DD形式の日付文字列
+ */
+export function dateToYMD (date) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
+/**
  * 今日の日付文字列を取得（YYYY-MM-DD形式）
  * @returns {string} 今日の日付
  */
 export function getTodayDateString () {
-  const today = new Date()
-  const year = today.getFullYear()
-  const month = String(today.getMonth() + 1).padStart(2, '0')
-  const day = String(today.getDate()).padStart(2, '0')
-  return `${year}-${month}-${day}`
+  return dateToYMD(new Date())
 }
 
 /**
@@ -110,7 +118,7 @@ export function updateStreak (isSuccess) {
   // 昨日の日付を計算
   const yesterday = new Date()
   yesterday.setDate(yesterday.getDate() - 1)
-  const yesterdayString = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`
+  const yesterdayString = dateToYMD(yesterday)
 
   if (lastCompletedDate === yesterdayString) {
     // 連続達成
