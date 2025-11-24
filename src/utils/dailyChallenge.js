@@ -130,8 +130,6 @@ export function updateStreak (isSuccess) {
     // 連続ではない（新規スタート）
     localStorage.setItem('dailyChallengeStreak', '1')
   }
-
-  markTodaysChallengeCompleted()
 }
 
 /**
