@@ -1,5 +1,5 @@
 // 百人一首データ
-export const poems = [
+export default [
   { id: 1, question: 'あきのたの　かりほのいほの　とまをあらみ', answer: 'わがころもでは　つゆにぬれつつ', author: '天智天皇' },
   { id: 2, question: 'はるすぎて　なつきにけらし　しろたへの', answer: 'ころもほすてふ　あまのかぐやま', author: '持統天皇' },
   { id: 3, question: 'あしびきの　やまどりのをの　しだりをの', answer: 'ながながしよを　ひとりかもねむ', author: '柿本人麻呂' },
@@ -101,5 +101,3 @@ export const poems = [
   { id: 99, question: 'ひともをし　ひともうらめし　あぢきなく', answer: 'よをおもふゆゑに　ものおもふみは', author: '後鳥羽院' },
   { id: 100, question: 'ももしきや　ふるきのきばの　しのぶにも', answer: 'なほあまりある　むかしなりけり', author: '順徳院' }
 ]
-
-export default poems
