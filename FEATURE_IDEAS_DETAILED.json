@@ -1,0 +1,260 @@
+[
+  {
+    "id": 1,
+    "title": "百人一首コレクション図鑑",
+    "description": "100首全ての詳細情報（現代語訳、作者の背景、画像の解説）を閲覧できるデジタル図鑑。ゲームプレイを通じて「習得済み」ステータスになった歌は豪華な装飾で表示される。",
+    "details": {
+      "ui_structure": "グリッド形式の一覧画面と、モーダルまたは別ページによる詳細画面。未取得の歌はシルエットやモノクロで表示し、収集欲を刺激する。",
+      "data_model": "Poemデータ（ID, 上の句, 下の句, 現代語訳, 作者, 解説, 画像URL）。Userデータに`collected_poem_ids`配列を追加。",
+      "features": "検索機能（作者名、決まり字）、フィルター機能（取得済み/未取得）、音声再生ボタン。"
+    },
+    "tech_stack": {
+      "libraries": ["vue-lazyload (画像遅延読み込み)"],
+      "services": "Firebase Firestore (静的データはJSONで管理し、習得状態のみDB保存)"
+    },
+    "implementation_steps": [
+      "百人一首の詳細データ（解説、現代語訳など）の整備とJSON化",
+      "一覧画面（Grid表示）と詳細モーダルのVueコンポーネント作成",
+      "ユーザーの習得状況（正解数など）に基づいて「コレクション済み」判定を行うロジックの実装",
+      "Firebaseへの習得データ保存・読み込み処理の実装"
+    ],
+    "challenges": {
+      "challenge": "100枚の画像や詳細データの管理・読み込みによるパフォーマンス低下。",
+      "solution": "画像の遅延読み込み（Lazy Loading）の実装と、データ構造の最適化（詳細データは必要時のみ取得）。"
+    },
+    "effort": "中",
+    "complexity": "低"
+  },
+  {
+    "id": 2,
+    "title": "実績バッジシステム",
+    "description": "「初勝利」「10連勝」「全首暗記」などの条件達成時にバッジを付与し、プロフィール画面で確認できる機能。",
+    "details": {
+      "ui_structure": "プロフィール画面内にバッジ一覧エリアを追加。達成時はトースト通知やポップアップで演出。",
+      "data_model": "Badge定義（ID, 名前, 条件, 画像）。Userデータに`unlocked_badges`（IDと取得日時の配列）を追加。",
+      "features": "新規バッジ獲得時のリアルタイム通知、未獲得バッジのヒント表示。"
+    },
+    "tech_stack": {
+      "libraries": ["animate.css (獲得演出用)"],
+      "services": "Firebase Firestore"
+    },
+    "implementation_steps": [
+      "バッジのマスタデータと獲得条件の定義",
+      "ゲーム終了時や特定のアクション時に条件をチェックする「実績判定マネージャー」の実装",
+      "プロフィール画面へのバッジ表示コンポーネントの追加",
+      "獲得時の演出と通知UIの実装"
+    ],
+    "challenges": {
+      "challenge": "条件判定ロジックが各機能に散らばり、保守性が下がる。",
+      "solution": "実績判定ロジックを一箇所（Vuexのアクションや専用サービスクラス）に集約し、各機能からはイベントを発火する形にする。"
+    },
+    "effort": "中",
+    "complexity": "中"
+  },
+  {
+    "id": 3,
+    "title": "成長グラフ",
+    "description": "過去の対戦成績や正解率の推移をグラフで可視化し、成長を実感できる機能。",
+    "details": {
+      "ui_structure": "MyRecords画面にタブ切り替えで「正解率推移」「反応速度推移」グラフを表示。",
+      "data_model": "GameHistoryコレクション（日時, モード, 正解数, 平均タイム）を集計して使用。",
+      "features": "期間フィルタ（週間、月間、全期間）、モード別フィルタ。"
+    },
+    "tech_stack": {
+      "libraries": ["vue-chartjs", "chart.js"],
+      "services": "Firebase Firestore"
+    },
+    "implementation_steps": [
+      "Chart.jsおよびvue-chartjsの導入とセットアップ",
+      "Firestoreから過去の対戦履歴データを取得・整形するロジックの実装",
+      "グラフコンポーネントの作成とMyRecords画面への組み込み",
+      "期間やモードによるフィルタリング機能の実装"
+    ],
+    "challenges": {
+      "challenge": "データ量が増えた際の集計処理の遅延。",
+      "solution": "クライアント側での全件計算を避け、日次/週次の集計データを別途保存するか、取得件数に制限（直近100戦など）を設ける。"
+    },
+    "effort": "中",
+    "complexity": "中"
+  },
+  {
+    "id": 4,
+    "title": "デイリーチャレンジ",
+    "description": "毎日ランダムに選ばれた5首の問題に挑戦し、連続達成記録（ストリーク）を伸ばすモード。",
+    "details": {
+      "ui_structure": "Top画面に「今日の挑戦」ボタンを配置。クリア後は「明日までお待ちください」カウントダウン表示。",
+      "data_model": "Userデータに`daily_challenge_streak`（現在ストリーク）, `last_challenge_date`（最終挑戦日）を追加。",
+      "features": "日替わり問題生成ロジック（日付をシード値にする等）、ストリーク継続ボーナス。"
+    },
+    "tech_stack": {
+      "libraries": ["date-fns (日付処理)"],
+      "services": "Firebase Firestore"
+    },
+    "implementation_steps": [
+      "日付に基づき固定の5首を選出するロジック（擬似乱数生成）の実装",
+      "Top画面へのデイリーチャレンジUIの追加",
+      "結果保存時にストリーク判定と更新を行う処理の実装",
+      "日付変更時のリセット処理とカウントダウン表示"
+    ],
+    "challenges": {
+      "challenge": "タイムゾーンの違いによる「日付」の不整合。",
+      "solution": "クライアントのローカル時間ではなく、サーバー時間（Firebase ServerTimestamp）または協定世界時(UTC)を基準に判定を一貫させる。"
+    },
+    "effort": "小",
+    "complexity": "低"
+  },
+  {
+    "id": 5,
+    "title": "ストーリーモード",
+    "description": "百人一首の歌人たちと出会い、対戦しながらストーリーを進めていくアドベンチャーゲーム形式のモード。",
+    "details": {
+      "ui_structure": "マップ選択画面またはチャプターリスト。会話パート（立ち絵＋テキスト）とバトルパートの交互進行。",
+      "data_model": "StoryProgress（ユーザーごとの進行度）、ChapterMaster（シナリオデータ、対戦相手AI設定）。",
+      "features": "シナリオ読み進め、CPU対戦（難易度可変）、クリア報酬（アバターや称号）。"
+    },
+    "tech_stack": {
+      "libraries": [],
+      "services": "Firebase Firestore"
+    },
+    "implementation_steps": [
+      "シナリオデータ（テキスト、登場キャラ、背景）の構造設計と作成",
+      "会話パート（ノベルゲーム風UI）のコンポーネント実装",
+      "既存のAIBattleを流用し、敵パラメータを外部注入可能に改修",
+      "進行状況の保存とチャプター開放ロジックの実装"
+    ],
+    "challenges": {
+      "challenge": "コンテンツ（シナリオ・画像）の作成コストが高い。",
+      "solution": "初期リリースは短編（序章＋1章）に限定。画像はフリー素材やAI生成を活用し、システム構築を優先する。"
+    },
+    "effort": "大",
+    "complexity": "高"
+  },
+  {
+    "id": 6,
+    "title": "弱点克服モード",
+    "description": "過去の回答データから、ユーザーが間違えやすい歌や反応が遅い歌を自動的に抽出して出題する集中特訓モード。",
+    "details": {
+      "ui_structure": "モード選択時に「苦手な歌Top10」などを表示し、そのままプレイ開始。",
+      "data_model": "UserStatsコレクション（歌IDごとの正解数、誤答数、平均タイム）。",
+      "features": "苦手度算出アルゴリズム（誤答率×反応時間）、克服判定（連続正解でリストから除外）。"
+    },
+    "tech_stack": {
+      "libraries": [],
+      "services": "Firebase Firestore"
+    },
+    "implementation_steps": [
+      "プレイ毎に歌ごとの正誤データを蓄積する仕組みの強化",
+      "苦手な歌を抽出・ソートするアルゴリズムの実装",
+      "抽出されたリストに基づいて出題するPlayingモードのバリエーション作成",
+      "克服演出（リストからの削除演出など）の実装"
+    ],
+    "challenges": {
+      "challenge": "データ蓄積がない初期ユーザーには機能しない。",
+      "solution": "一定のプレイ数（例: 50回）に達するまではロックするか、デフォルトで「決まり字が長い歌」などの一般的難問を出題する。"
+    },
+    "effort": "中",
+    "complexity": "中"
+  },
+  {
+    "id": 7,
+    "title": "暗記カードモード",
+    "description": "ゲーム形式ではなく、単語帳のように歌を覚えるための学習専用モード。",
+    "details": {
+      "ui_structure": "表面に上の句、タップ/クリックで裏返って下の句を表示。スワイプまたはボタンで「覚えた」「まだ」を振り分け。",
+      "data_model": "UserMemorization（歌IDごとの暗記フラグ）。",
+      "features": "フリップアニメーション、フィルタ（全て/未暗記のみ）、自動再生モード。"
+    },
+    "tech_stack": {
+      "libraries": ["vue2-touch-events (スワイプ操作用)"],
+      "services": "Firebase Firestore (またはLocal Storage)"
+    },
+    "implementation_steps": [
+      "カード型UIとフリップアニメーション（CSS3）の実装",
+      "「覚えた」「まだ」のステータス管理ロジックの実装",
+      "一覧操作（次へ、前へ、シャッフル）の実装",
+      "設定オプション（上の句表示/下の句表示の切り替えなど）の追加"
+    ],
+    "challenges": {
+      "challenge": "単調になりがちで継続率が下がる。",
+      "solution": "「暗記率 XX%」のプログレスバーを常時表示し、100%を目指すモチベーションを持たせる。"
+    },
+    "effort": "小",
+    "complexity": "低"
+  },
+  {
+    "id": 8,
+    "title": "フレンド対戦モード",
+    "description": "離れた友達とリアルタイムで1対1の対戦ができるモード。",
+    "details": {
+      "ui_structure": "「部屋を作る」「部屋に入る（ID入力）」画面。対戦画面は相手の取り札状況などが同期される。",
+      "data_model": "Roomsコレクション（RoomID, PlayerA, PlayerB, GameState, CardLayout）。",
+      "features": "ルーム作成・入室、お手つき/取り札のリアルタイム同期、勝敗判定。"
+    },
+    "tech_stack": {
+      "libraries": [],
+      "services": "Firebase Realtime Database (低レイテンシ推奨) または Firestore"
+    },
+    "implementation_steps": [
+      "ルーム管理（作成、待機、入室）のバックエンドロジック設計",
+      "対戦状態（どちらが取ったか、次の歌は何か）の同期処理実装",
+      "通信切断時のハンドリング（再接続や不戦勝判定）",
+      "UIへの反映（相手が取った札が消えるアニメーションなど）"
+    ],
+    "challenges": {
+      "challenge": "通信ラグによる「どちらが先に取ったか」の判定問題。",
+      "solution": "サーバー（Firebase）到達順を正とするか、各クライアントのタイムスタンプを比較して判定する厳密なロジックを組む。今回はFirestoreのトランザクションを利用して先着判定を行うのが現実的。"
+    },
+    "effort": "大",
+    "complexity": "高"
+  },
+  {
+    "id": 9,
+    "title": "自分だけの歌集づくり",
+    "description": "好きな歌やお気に入りの歌だけを集めた「マイ歌集」を作成し、そのリスト内だけでプレイできる機能。",
+    "details": {
+      "ui_structure": "歌一覧画面でチェックボックス選択し、「歌集名」をつけて保存。",
+      "data_model": "MyAnthologiesサブコレクション（Title, PoemIDs配列）。",
+      "features": "歌集の作成・編集・削除、歌集を選択してプレイ（Playing/TimeAttack）。"
+    },
+    "tech_stack": {
+      "libraries": [],
+      "services": "Firebase Firestore"
+    },
+    "implementation_steps": [
+      "歌集作成・編集画面のUI実装",
+      "Firestoreへの歌集データ保存処理",
+      "ゲーム開始前の設定画面で「出題範囲」としてマイ歌集を選択できるように改修"
+    ],
+    "challenges": {
+      "challenge": "歌集内の枚数が少ないとゲームとして成立しない場合がある（例：札が足りない）。",
+      "solution": "最低枚数制限（例：10枚以上）を設ける、または不足分をランダムに埋めるオプションを用意する。"
+    },
+    "effort": "小",
+    "complexity": "低"
+  },
+  {
+    "id": 10,
+    "title": "音読練習モード",
+    "description": "表示された歌をユーザーが読み上げ、AIが発音や正確さを判定するモード。",
+    "details": {
+      "ui_structure": "大きな文字で歌を表示。マイクボタンを押して発話。判定結果（OK/NG）を表示。",
+      "data_model": "特になし（結果を保存する場合はHistoryへ）。",
+      "features": "音声認識開始/停止、認識テキストと正解テキストの照合（Fuzzy matching）。"
+    },
+    "tech_stack": {
+      "libraries": ["Web Speech API (SpeechRecognition)", "fast-levenshtein (文字列類似度判定用)"],
+      "services": "なし（ブラウザAPI利用）"
+    },
+    "implementation_steps": [
+      "Web Speech APIの動作確認とラッパーコンポーネント作成",
+      "音声認識結果を受け取り、正解の歌と比較するロジック（完全一致だと厳しいため、類似度判定を導入）",
+      "UIへのフィードバック（認識した文字を表示、正誤判定）実装"
+    ],
+    "challenges": {
+      "challenge": "Web Speech APIの精度やブラウザ互換性（iOS Safariなどでの制限）。",
+      "solution": "対応ブラウザ（Chrome推奨）の明示、または誤認識を許容する「類似度しきい値」の調整機能を持たせる。"
+    },
+    "effort": "中",
+    "complexity": "高"
+  }
+]
