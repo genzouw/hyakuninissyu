@@ -25,7 +25,7 @@ module.exports = {
     'generator-star-spacing': 'off',
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    // cyclomatic complexity - warn if complexity exceeds 10
-    'complexity': ['warn', { 'max': 10 }]
+    // cyclomatic complexity - error if complexity exceeds 10
+    'complexity': ['error', { 'max': 10 }]
   }
 }
