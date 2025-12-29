@@ -6,7 +6,6 @@ import {
 } from '@/utils/dailyChallenge'
 
 describe('dailyChallenge utilities', () => {
-
   it('should generate today date string in YYYY-MM-DD format', () => {
     const dateString = getTodayDateString()
     expect(dateString).toMatch(/^\d{4}-\d{2}-\d{2}$/)
