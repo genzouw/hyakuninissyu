@@ -45,6 +45,20 @@
             🔥 {{ currentStreak }}日連続
           </span>
         </div>
+        <div class="col-auto">
+          <button
+            class="btn btn-sm btn-primary"
+            :class="{
+              'btn-primary': this.enableSpeak,
+              'btn-secondary': !this.enableSpeak,
+            }"
+            @click.prevent="clickSpeakToggle"
+          >
+            {{ this.enableSpeak ? "○" : "✕" }} よみあげ{{
+              this.enableSpeak ? "あり" : "なし"
+            }}
+          </button>
+        </div>
       </div>
 
       <!-- 問題表示 -->
@@ -144,10 +158,15 @@ export default {
         minutes: 0,
         seconds: 0
       },
-      countdownInterval: null
+      countdownInterval: null,
+      speak: new SpeechSynthesisUtterance(),
+      enableSpeak: true
     }
   },
   mounted () {
+    this.speak.pitch = 1
+    this.speak.lang = 'ja-JP'
+
     // 既にクリア済みかチェック
     if (isTodaysChallengeCompleted()) {
       this.alreadyCompleted = true
@@ -184,6 +203,12 @@ export default {
   methods: {
     clickAnswer () {
       this.thinking = false
+
+      if (this.enableSpeak) {
+        speechSynthesis.cancel(this.speak)
+        this.speak.text = this.questionData.answer
+        speechSynthesis.speak(this.speak)
+      }
 
       // 正解したら
       if (this.questionData.answer === this.choice) {
@@ -229,6 +254,8 @@ export default {
       this.questionData = this.questionList[this.currentQuestionIndex]
       this.choice = null
       this.thinking = true
+
+      this.speakQuestionIfEnabled()
     },
     addToCollection (poemId) {
       const collectedPoemIds = JSON.parse(localStorage.getItem('collectedPoemIds') || '[]')
@@ -245,6 +272,18 @@ export default {
     },
     updateCountdown () {
       this.countdown = getTimeUntilNextChallenge()
+    },
+    clickSpeakToggle () {
+      this.enableSpeak = !this.enableSpeak
+
+      this.speakQuestionIfEnabled()
+    },
+    speakQuestionIfEnabled () {
+      if (this.enableSpeak) {
+        speechSynthesis.cancel(this.speak)
+        this.speak.text = this.questionData.question
+        speechSynthesis.speak(this.speak)
+      }
     }
   }
 }
