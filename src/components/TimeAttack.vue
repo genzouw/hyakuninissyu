@@ -115,7 +115,7 @@ export default {
       thinking: false,
       questionList: [],
       speak: new SpeechSynthesisUtterance(),
-      enableSpeak: false
+      enableSpeak: true
     }
   },
   computed: {
