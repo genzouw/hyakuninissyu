@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+import firebase from 'firebase/compat/app'
 
 export default {
   data () {

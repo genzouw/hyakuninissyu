@@ -69,7 +69,7 @@
 </template>
 
 <script>
-import firebase from 'firebase'
+import firebase from 'firebase/compat/app'
 import moment from 'moment'
 
 export default {
