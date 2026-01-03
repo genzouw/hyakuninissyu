@@ -45,6 +45,17 @@
             🔥 {{ currentStreak }}日連続
           </span>
         </div>
+        <div class="col-auto">
+          <button
+            class="btn btn-sm"
+            :class="{ 'btn-primary': enableSpeak, 'btn-secondary': !enableSpeak }"
+            @click.prevent="clickSpeakToggle"
+          >
+            {{ enableSpeak ? "○" : "✕" }} よみあげ{{
+              enableSpeak ? "あり" : "なし"
+            }}
+          </button>
+        </div>
       </div>
 
       <!-- 問題表示 -->
@@ -144,10 +155,15 @@ export default {
         minutes: 0,
         seconds: 0
       },
-      countdownInterval: null
+      countdownInterval: null,
+      speak: new SpeechSynthesisUtterance(),
+      enableSpeak: true
     }
   },
   mounted () {
+    this.speak.pitch = 1
+    this.speak.lang = 'ja-JP'
+
     // 既にクリア済みかチェック
     if (isTodaysChallengeCompleted()) {
       this.alreadyCompleted = true
@@ -184,6 +200,8 @@ export default {
   methods: {
     clickAnswer () {
       this.thinking = false
+
+      this.speakText(this.questionData.answer)
 
       // 正解したら
       if (this.questionData.answer === this.choice) {
@@ -229,6 +247,8 @@ export default {
       this.questionData = this.questionList[this.currentQuestionIndex]
       this.choice = null
       this.thinking = true
+
+      this.speakQuestionIfEnabled()
     },
     addToCollection (poemId) {
       const collectedPoemIds = JSON.parse(localStorage.getItem('collectedPoemIds') || '[]')
@@ -245,6 +265,20 @@ export default {
     },
     updateCountdown () {
       this.countdown = getTimeUntilNextChallenge()
+    },
+    clickSpeakToggle () {
+      this.enableSpeak = !this.enableSpeak
+
+      this.speakQuestionIfEnabled()
+    },
+    speakQuestionIfEnabled () {
+      this.speakText(this.questionData.question)
+    },
+    speakText (text) {
+      if (!this.enableSpeak) return
+      speechSynthesis.cancel()
+      this.speak.text = text
+      speechSynthesis.speak(this.speak)
     }
   }
 }
