@@ -47,15 +47,12 @@
         </div>
         <div class="col-auto">
           <button
-            class="btn btn-sm btn-primary"
-            :class="{
-              'btn-primary': this.enableSpeak,
-              'btn-secondary': !this.enableSpeak,
-            }"
+            class="btn btn-sm"
+            :class="{ 'btn-primary': enableSpeak, 'btn-secondary': !enableSpeak }"
             @click.prevent="clickSpeakToggle"
           >
-            {{ this.enableSpeak ? "○" : "✕" }} よみあげ{{
-              this.enableSpeak ? "あり" : "なし"
+            {{ enableSpeak ? "○" : "✕" }} よみあげ{{
+              enableSpeak ? "あり" : "なし"
             }}
           </button>
         </div>
@@ -204,11 +201,7 @@ export default {
     clickAnswer () {
       this.thinking = false
 
-      if (this.enableSpeak) {
-        speechSynthesis.cancel(this.speak)
-        this.speak.text = this.questionData.answer
-        speechSynthesis.speak(this.speak)
-      }
+      this.speakText(this.questionData.answer)
 
       // 正解したら
       if (this.questionData.answer === this.choice) {
@@ -279,11 +272,13 @@ export default {
       this.speakQuestionIfEnabled()
     },
     speakQuestionIfEnabled () {
-      if (this.enableSpeak) {
-        speechSynthesis.cancel(this.speak)
-        this.speak.text = this.questionData.question
-        speechSynthesis.speak(this.speak)
-      }
+      this.speakText(this.questionData.question)
+    },
+    speakText (text) {
+      if (!this.enableSpeak) return
+      speechSynthesis.cancel()
+      this.speak.text = text
+      speechSynthesis.speak(this.speak)
     }
   }
 }
