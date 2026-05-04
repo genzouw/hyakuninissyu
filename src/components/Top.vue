@@ -49,9 +49,6 @@
         <router-link to="/ai-battle" class="btn btn-lg btn-danger pl-5 pr-5 mr-2">
           🤖 AI対戦モード
         </router-link>
-        <router-link to="/ranking" class="btn btn-lg btn-info pl-5 pr-5 mr-2">
-          🏆 ランキング
-        </router-link>
         <router-link to="/collection" class="btn btn-lg btn-primary pl-5 pr-5 mr-2">
           📚 コレクション図鑑
         </router-link>

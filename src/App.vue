@@ -2,22 +2,6 @@
   <div>
     <b-navbar toggleable="lg" class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
       <router-link class="navbar-brand" to="/">ひゃくにんいっしゅをおぼえよう</router-link>
-
-      <!--
-      <template v-if="user">
-      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-
-      <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav class="ml-auto">
-          <b-dropdown-item @click="profile">{{ user.email }}</b-dropdown-item>
-          <b-dropdown-item @click="signOut">ログアウトする</b-dropdown-item>
-        </b-navbar-nav>
-      </b-collapse>
-      </template>
-      <template v-else>
-        <router-link to="/signIn" class="btn btn-md btn-secondary">ログイン</router-link>
-      </template>
-      -->
     </b-navbar>
 
     <div class="container-fluid">
@@ -34,8 +18,6 @@
 </template>
 
 <script>
-import firebase from 'firebase/compat/app'
-
 export default {
   name: 'App',
   metaInfo: {
@@ -109,31 +91,6 @@ export default {
         name: 'google-site-verification', content: 'gFYiPUxpzQzAhrVmsACmY-N3Y7jURnIQMfT5GKlnWmU'
       }
     ]
-  },
-  data () {
-    return {
-    }
-  },
-  created () {
-    firebase.auth().onAuthStateChanged((user) => {
-      this.$store.commit('updateUser', user)
-    })
-  },
-  computed: {
-    user () {
-      return this.$store.state.user
-    }
-  },
-  methods: {
-    signOut () {
-      if (!window.confirm('ログアウトします。よろしいですか？')) return false
-      firebase.auth().signOut().then(() => {
-        this.$router.push('/')
-      })
-    },
-    profile () {
-      this.$router.push('/profile')
-    }
   }
 }
 </script>
