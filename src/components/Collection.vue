@@ -110,7 +110,7 @@ export default {
   data () {
     return {
       poems: poems,
-      collectedPoemIds: [], // TODO: Vuexまたはlocalstorageから取得
+      collectedPoemIds: [],
       filter: FILTERS.ALL,
       showModal: false,
       selectedPoem: null
