@@ -13,53 +13,33 @@ updates:
       - dependency-name: webpack-dev-server
         update-types:
           - version-update:semver-major
-      - dependency-name: webpack-dev-server
-        applies-to: security-updates
       - dependency-name: css-loader
         update-types:
           - version-update:semver-major
-      - dependency-name: css-loader
-        applies-to: security-updates
       - dependency-name: vue-loader
         update-types:
           - version-update:semver-major
-      - dependency-name: vue-loader
-        applies-to: security-updates
       - dependency-name: autoprefixer
         update-types:
           - version-update:semver-major
-      - dependency-name: autoprefixer
-        applies-to: security-updates
       - dependency-name: optimize-css-assets-webpack-plugin
         update-types:
           - version-update:semver-major
-      - dependency-name: optimize-css-assets-webpack-plugin
-        applies-to: security-updates
       - dependency-name: postcss-loader
         update-types:
           - version-update:semver-major
-      - dependency-name: postcss-loader
-        applies-to: security-updates
       - dependency-name: postcss-import
         update-types:
           - version-update:semver-major
-      - dependency-name: postcss-import
-        applies-to: security-updates
       - dependency-name: postcss-url
         update-types:
           - version-update:semver-major
-      - dependency-name: postcss-url
-        applies-to: security-updates
       # eslint-loader@1.x pins peer eslint@">=1.6.0 <5.0.0", so eslint
       # majors >= 5 fail `npm ci` with ERESOLVE. Moving off eslint-loader
       # would require webpack@>=4. See PR #77 for the last failure.
       - dependency-name: eslint
         update-types:
           - version-update:semver-major
-      - dependency-name: eslint
-        applies-to: security-updates
       - dependency-name: eslint-loader
         update-types:
           - version-update:semver-major
-      - dependency-name: eslint-loader
-        applies-to: security-updates
