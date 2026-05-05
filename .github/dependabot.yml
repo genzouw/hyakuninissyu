@@ -5,11 +5,48 @@ updates:
     schedule:
       interval: weekly
     ignore:
-      # webpack-dev-server@3+ requires webpack@>=4.
-      # This project pins webpack@^3.6.0, so any major bump of
-      # webpack-dev-server cannot be installed (peer dep ERESOLVE).
+      # This project pins webpack@^3.6.0 and vue@^2.5.2.
+      # Any major bump of the loaders / plugins below requires
+      # webpack@>=4 (or webpack@>=5) and/or vue@^3, so it cannot be
+      # installed (peer dep ERESOLVE on `npm ci`). See PR #71 for the
+      # last failure caused by an incompatible Dependabot group bump.
       - dependency-name: webpack-dev-server
         update-types:
           - version-update:semver-major
       - dependency-name: webpack-dev-server
+        applies-to: security-updates
+      - dependency-name: css-loader
+        update-types:
+          - version-update:semver-major
+      - dependency-name: css-loader
+        applies-to: security-updates
+      - dependency-name: vue-loader
+        update-types:
+          - version-update:semver-major
+      - dependency-name: vue-loader
+        applies-to: security-updates
+      - dependency-name: autoprefixer
+        update-types:
+          - version-update:semver-major
+      - dependency-name: autoprefixer
+        applies-to: security-updates
+      - dependency-name: optimize-css-assets-webpack-plugin
+        update-types:
+          - version-update:semver-major
+      - dependency-name: optimize-css-assets-webpack-plugin
+        applies-to: security-updates
+      - dependency-name: postcss-loader
+        update-types:
+          - version-update:semver-major
+      - dependency-name: postcss-loader
+        applies-to: security-updates
+      - dependency-name: postcss-import
+        update-types:
+          - version-update:semver-major
+      - dependency-name: postcss-import
+        applies-to: security-updates
+      - dependency-name: postcss-url
+        update-types:
+          - version-update:semver-major
+      - dependency-name: postcss-url
         applies-to: security-updates
