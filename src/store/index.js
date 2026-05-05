@@ -6,15 +6,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    countOfQuestions: 10,
-    user: null
+    countOfQuestions: 10
   },
   mutations: {
     updateCountOfQuestions (state, payload) {
       state.countOfQuestions = payload
-    },
-    updateUser (state, user) {
-      state.user = user
     }
   },
   modules: {

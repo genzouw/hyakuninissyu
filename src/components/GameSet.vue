@@ -37,91 +37,29 @@
             </h3>
           </div>
         </div>
-
-        <div class="row justify-content-center" v-if="reversedScores.length > 0">
-          <div class="col-auto">
-            <table class="table table-striped table-bordered table-condensed">
-              <colgroup>
-                <col>
-                <col>
-                <col>
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>にちじ</th>
-                  <th>もんだい</th>
-                  <th>てんすう</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="s in reversedScores" :key="s.id">
-                  <td>{{ s.createdAt }}</td>
-                  <td>{{ s.countOfQuestions }}</td>
-                  <td>{{ s.score }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import firebase from 'firebase/compat/app'
-import moment from 'moment'
-
 export default {
   data () {
     return {
       countOfQuestions: 0,
-      score: 0,
-      scores: []
+      score: 0
     }
   },
   created () {
-    moment.locale('ja')
     this.fetchData()
   },
   watch: {
     $route: 'fetchData'
   },
   methods: {
-    unixtimeToString (unixtime) {
-      return moment.unix(Number(unixtime)).format('Mがつ Dにち (ddd) HH:mm')
-    },
     fetchData () {
       this.countOfQuestions = Number(this.$route.params.countOfQuestions)
       this.score = Number(this.$route.params.score)
-
-      firebase.auth().onAuthStateChanged(user => {
-        if (user) {
-          let db = firebase.firestore()
-
-          let now = moment()
-
-          let usersRef = db.collection('users')
-
-          let newData = {}
-          newData[now.unix()] = {
-            score: this.score,
-            countOfQuestions: this.countOfQuestions
-          }
-          usersRef.doc(user.email).set(
-            newData,
-            {
-              merge: true
-            }
-          ).then(() => {
-            usersRef.doc(user.email).get().then((doc) => {
-              if (doc.exists) {
-                this.scores = doc.data()
-              }
-            })
-          })
-        }
-      })
     }
   },
   computed: {
@@ -129,22 +67,6 @@ export default {
       return ` ${this.score}もん せいかい ( ${
         this.countOfQuestions
       }もんちゅう )`
-    },
-    reversedScores () {
-      let keys = Object.keys(this.scores).reverse()
-
-      let scores = []
-
-      let k
-      for (k of keys) {
-        scores.push({
-          createdAt: this.unixtimeToString(k),
-          countOfQuestions: this.scores[k].countOfQuestions,
-          score: this.scores[k].score
-        })
-      }
-
-      return scores
     }
   }
 }
@@ -157,14 +79,5 @@ export default {
 }
 .result .score {
   font-size: 200%;
-}
-thead {
-  text-align: center;
-}
-tbody > tr > td:nth-child(1) {
-  text-align: center;
-}
-tbody > tr > td:nth-child(2), tbody > tr > td:nth-child(3) {
-  text-align: right;
 }
 </style>

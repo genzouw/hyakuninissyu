@@ -3,13 +3,8 @@ import Router from 'vue-router'
 import Top from '@/components/Top'
 import Playing from '@/components/Playing'
 import GameSet from '@/components/GameSet'
-import SignUp from '@/components/SignUp'
-import SignIn from '@/components/SignIn'
-import Profile from '@/components/Profile'
 import TimeAttack from '@/components/TimeAttack'
 import TimeAttackResult from '@/components/TimeAttackResult'
-import Ranking from '@/components/Ranking'
-import MyRecords from '@/components/MyRecords'
 import AIBattle from '@/components/AIBattle'
 import AIBattleResult from '@/components/AIBattleResult'
 import Badges from '@/components/Badges'
@@ -48,16 +43,6 @@ let router = new Router({
       component: TimeAttackResult
     },
     {
-      path: '/ranking',
-      name: 'Ranking',
-      component: Ranking
-    },
-    {
-      path: '/my-records',
-      name: 'MyRecords',
-      component: MyRecords
-    },
-    {
       path: '/ai-battle',
       name: 'AIBattle',
       component: AIBattle
@@ -86,43 +71,8 @@ let router = new Router({
       path: '/daily-challenge-result/:score/:streak/:previousStreak',
       name: 'DailyChallengeResult',
       component: DailyChallengeResult
-    },
-    {
-      path: '/signUp',
-      name: 'SignUp',
-      component: SignUp
-    },
-    {
-      path: '/signIn',
-      name: 'SignIn',
-      component: SignIn
-    },
-    {
-      path: '/profile',
-      name: 'Profile',
-      component: Profile
     }
   ]
 })
-
-/*
-router.beforeEach((to, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
-  if (requiresAuth) {
-    firebase.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        next()
-      } else {
-        next({
-          path: '/signUp',
-          query: { redirect: to.fullPath }
-        })
-      }
-    })
-  } else {
-    next()
-  }
-})
-*/
 
 export default router
