@@ -50,3 +50,16 @@ updates:
           - version-update:semver-major
       - dependency-name: postcss-url
         applies-to: security-updates
+      # eslint-loader@1.x pins peer eslint@">=1.6.0 <5.0.0", so eslint
+      # majors >= 5 fail `npm ci` with ERESOLVE. Moving off eslint-loader
+      # would require webpack@>=4. See PR #77 for the last failure.
+      - dependency-name: eslint
+        update-types:
+          - version-update:semver-major
+      - dependency-name: eslint
+        applies-to: security-updates
+      - dependency-name: eslint-loader
+        update-types:
+          - version-update:semver-major
+      - dependency-name: eslint-loader
+        applies-to: security-updates
