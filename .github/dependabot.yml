@@ -9,5 +9,5 @@ updates:
       # This project pins webpack@^3.6.0, so any major bump of
       # webpack-dev-server cannot be installed (peer dep ERESOLVE).
       - dependency-name: webpack-dev-server
-        update-types:
-          - version-update:semver-major
+        versions:
+          - ">= 3.0.0"
