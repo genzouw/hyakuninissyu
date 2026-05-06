@@ -1,8 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import timeAttack from './modules/timeAttack'
+import collection from './modules/collection'
+import createPersistencePlugin from './plugins/persistence'
 
 Vue.use(Vuex)
+
+const persistencePlugin = createPersistencePlugin([
+  { path: 'collection.collectedPoemIds', key: 'collectedPoemIds', default: [] }
+])
 
 export default new Vuex.Store({
   state: {
@@ -14,6 +20,8 @@ export default new Vuex.Store({
     }
   },
   modules: {
-    timeAttack
-  }
+    timeAttack,
+    collection
+  },
+  plugins: [persistencePlugin]
 })
