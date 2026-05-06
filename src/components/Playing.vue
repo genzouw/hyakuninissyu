@@ -104,6 +104,7 @@ export default {
     this.speak.lang = 'ja-JP'
 
     this.countOfQuestions = this.$route.params.countOfQuestions
+    questions.forEach((q, i) => { q.id = i + 1 })
     this.questionList = _.shuffle(questions)
     this.loadQuestion()
   },
@@ -123,6 +124,7 @@ export default {
       // 正解したら
       if (this.questionData.answer === this.choice) {
         this.score++
+        this.$store.dispatch('collection/addCollectedPoem', this.questionData.id)
 
         let rightSound = document.getElementById('right-sound')
         rightSound.play()
