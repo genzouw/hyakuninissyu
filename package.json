@@ -21,7 +21,7 @@
     "underscore": "^1.13.8",
     "vee-validate": "^2.2.10",
     "vee-validate-locale-ja": "^1.0.5",
-    "vue": "^2.5.2",
+    "vue": "^2.7.16",
     "vue-analytics": "^5.17.0",
     "vue-meta": "^1.6.0",
     "vue-router": "^3.0.1",
