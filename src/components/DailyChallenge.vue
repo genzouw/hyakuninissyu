@@ -251,11 +251,7 @@ export default {
       this.speakQuestionIfEnabled()
     },
     addToCollection (poemId) {
-      const collectedPoemIds = JSON.parse(localStorage.getItem('collectedPoemIds') || '[]')
-      if (!collectedPoemIds.includes(poemId)) {
-        collectedPoemIds.push(poemId)
-        localStorage.setItem('collectedPoemIds', JSON.stringify(collectedPoemIds))
-      }
+      this.$store.dispatch('collection/addCollectedPoem', poemId)
     },
     startCountdown () {
       this.updateCountdown()

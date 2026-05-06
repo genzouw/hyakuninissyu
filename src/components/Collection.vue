@@ -93,6 +93,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import poems from '@/data/poems'
 
 // フィルター種類の定数
@@ -102,33 +103,24 @@ const FILTERS = {
   UNCOLLECTED: 'uncollected'
 }
 
-// localStorageキーの定数
-const COLLECTED_POEM_IDS_KEY = 'collectedPoemIds'
-
 export default {
   name: 'Collection',
   data () {
     return {
       poems: poems,
-      collectedPoemIds: [],
       filter: FILTERS.ALL,
       showModal: false,
       selectedPoem: null
     }
   },
   computed: {
+    ...mapGetters('collection', ['collectedCount', 'isCollected']),
     totalCount () {
       return this.poems.length
-    },
-    collectedCount () {
-      return this.collectedPoemIds.length
     },
     collectionRate () {
       if (this.totalCount === 0) return 0
       return Math.round((this.collectedCount / this.totalCount) * 100)
-    },
-    collectedPoemIdSet () {
-      return new Set(this.collectedPoemIds)
     },
     filteredPoems () {
       if (this.filter === FILTERS.COLLECTED) {
@@ -139,32 +131,7 @@ export default {
       return this.poems
     }
   },
-  mounted () {
-    this.loadCollectedPoems()
-
-    // デモ用: 最初の3首を習得済みにする
-    if (this.collectedPoemIds.length === 0) {
-      this.collectedPoemIds = [1, 2, 3]
-      localStorage.setItem(COLLECTED_POEM_IDS_KEY, JSON.stringify(this.collectedPoemIds))
-    }
-  },
   methods: {
-    loadCollectedPoems () {
-      const savedIds = localStorage.getItem(COLLECTED_POEM_IDS_KEY)
-      if (savedIds) {
-        try {
-          this.collectedPoemIds = JSON.parse(savedIds)
-        } catch (e) {
-          console.error('Failed to parse collectedPoemIds from localStorage:', e)
-          // エラー発生時はデータをクリアして初期化
-          this.collectedPoemIds = []
-          localStorage.removeItem(COLLECTED_POEM_IDS_KEY)
-        }
-      }
-    },
-    isCollected (poemId) {
-      return this.collectedPoemIdSet.has(poemId)
-    },
     showPoemDetail (poem) {
       this.selectedPoem = poem
       this.showModal = true
