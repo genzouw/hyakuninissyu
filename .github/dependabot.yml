@@ -54,3 +54,14 @@ updates:
       - dependency-name: babel-jest
         versions:
           - ">= 22.0.0"
+      # vue-router@4+ requires Vue 3 (peerDependencies: vue@^3.2.0), but this
+      # project pins vue@^2.5.2. src/router/index.js and src/main.js are
+      # written in Vue 2 / vue-router 3 style API (Vue.use(Router),
+      # new Router({...})). Bumping vue-router to 4.x or 5.x would break the
+      # entire app at runtime (no createRouter/createWebHistory APIs in Vue 2
+      # setup), and CI would not catch it (no unit/E2E jobs). A migration to
+      # Vue 3 + vue-router 4 is tracked separately. See PR #84 for the last
+      # incompatible bump.
+      - dependency-name: vue-router
+        versions:
+          - ">= 4.0.0"
