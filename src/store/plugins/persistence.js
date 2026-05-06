@@ -32,10 +32,10 @@ function readFromStorage (storage, key, fallback) {
   }
 }
 
-function writeToStorage (storage, key, value) {
+function writeToStorage (storage, key, serialized) {
   if (!storage) return
   try {
-    storage.setItem(key, JSON.stringify(value))
+    storage.setItem(key, serialized)
   } catch (e) {
     console.error('persistence: failed to write localStorage key "' + key + '":', e)
   }
@@ -55,12 +55,22 @@ export default function createPersistencePlugin (paths, options) {
       store.commit(moduleName + '/HYDRATE', { key: stateKey, value })
     })
 
-    // 永続化: 各 mutation 後に対象 state を localStorage へ書き戻す
+    // 永続化: 値が前回と同一の場合は書き込みをスキップしてオーバーヘッドを減らす
+    const lastSerialized = {}
     store.subscribe((mutation, state) => {
       paths.forEach(entry => {
         const value = getByPath(state, entry.path)
         if (value === undefined) return
-        writeToStorage(storage, entry.key, value)
+        let serialized
+        try {
+          serialized = JSON.stringify(value)
+        } catch (e) {
+          console.error('persistence: failed to serialize key "' + entry.key + '":', e)
+          return
+        }
+        if (lastSerialized[entry.key] === serialized) return
+        lastSerialized[entry.key] = serialized
+        writeToStorage(storage, entry.key, serialized)
       })
     })
   }
