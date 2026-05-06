@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    ignore:
+      # webpack-dev-server@3+ requires webpack@>=4.
+      # This project pins webpack@^3.6.0, so any major bump of
+      # webpack-dev-server cannot be installed (peer dep ERESOLVE).
+      - dependency-name: webpack-dev-server
+        versions:
+          - ">= 3.0.0"
