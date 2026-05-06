@@ -73,13 +73,17 @@ updates:
       - dependency-name: vue-meta
         versions:
           - ">= 3.0.0"
-      # vee-validate has already been bumped to ^4.15.1 (a Vue 3 release)
-      # before this guard was added. Downgrading it back to the Vue 2 series
-      # is tracked separately. This entry prevents any further majors from
-      # landing while that work is pending.
+      # vee-validate@3+ rewrote the API and v4 requires Vue 3. This project
+      # uses Vue 2.7.x with the v2 plugin-style API (Vue.use(VeeValidate),
+      # Validator.localize(...), the bundled `vee-validate/dist/locale/ja`
+      # path, and the `v-validate` / `$validator` / `errors.first` template
+      # API in src/components/Top.vue), all of which were removed in v3/v4.
+      # PR #80 bumped to ^4.15.1 once and broke the runtime; this Issue
+      # restores ^2.2.10 and pins majors >= 3.0.0 so Dependabot cannot
+      # propose another incompatible bump until a Vue 3 migration lands.
       - dependency-name: vee-validate
         versions:
-          - ">= 5.0.0"
+          - ">= 3.0.0"
       # bootstrap-vue@2.x is Bootstrap 4-only and its peerDependencies pin
       # bootstrap@^4.x. Bootstrap 5 drops jQuery, swaps popper.js@1 for
       # @popperjs/core@2, and renames/removes many utility classes
