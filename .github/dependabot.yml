@@ -54,3 +54,29 @@ updates:
       - dependency-name: babel-jest
         versions:
           - ">= 22.0.0"
+      # The Vue ecosystem dependencies below all require Vue 3 for their
+      # latest major versions, but this project pins vue@^2.5.2. The runtime
+      # code (src/main.js, src/router/index.js, src/store/*) uses the Vue 2
+      # global API (Vue.use(...), new Vue({...}), new Router({...})) and
+      # cannot be bumped without a full Vue 3 migration. CI lacks unit/E2E
+      # jobs so an incompatible bump would not be detected. See PR #84 for
+      # the last incompatible bump.
+      - dependency-name: vue
+        versions:
+          - ">= 3.0.0"
+      - dependency-name: vue-router
+        versions:
+          - ">= 4.0.0"
+      - dependency-name: vuex
+        versions:
+          - ">= 4.0.0"
+      - dependency-name: vue-meta
+        versions:
+          - ">= 3.0.0"
+      # vee-validate has already been bumped to ^4.15.1 (a Vue 3 release)
+      # before this guard was added. Downgrading it back to the Vue 2 series
+      # is tracked separately. This entry prevents any further majors from
+      # landing while that work is pending.
+      - dependency-name: vee-validate
+        versions:
+          - ">= 5.0.0"
