@@ -86,5 +86,4 @@ describe('Playing.vue', () => {
       expect(vm.score).toBe(before + 1)
     })
   })
-
 })
