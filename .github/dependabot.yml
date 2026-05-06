@@ -10,9 +10,11 @@ updates:
       # webpack@>=4 (or webpack@>=5) and/or vue@^3, so it cannot be
       # installed (peer dep ERESOLVE on `npm ci`). See PR #71 for the
       # last failure caused by an incompatible Dependabot group bump.
+      # webpack-dev-server is pinned by version range (>= 3.0.0) instead
+      # of semver-major so we keep receiving 2.x security updates.
       - dependency-name: webpack-dev-server
-        update-types:
-          - version-update:semver-major
+        versions:
+          - ">= 3.0.0"
       - dependency-name: css-loader
         update-types:
           - version-update:semver-major
