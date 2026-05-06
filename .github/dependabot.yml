@@ -45,3 +45,12 @@ updates:
       - dependency-name: eslint-loader
         update-types:
           - version-update:semver-major
+      # babel-jest@22+ requires @babel/core (Babel 7+), but this project is
+      # configured with babel-core@6.x (preset-env@1, preset-stage-2, and
+      # transform-* plugins are all Babel 6 series). Bumping babel-jest
+      # would break `npm run unit` even though it would not be caught by CI
+      # (CI runs only ESLint / GitGuardian). A full migration to Babel 7 +
+      # Jest major upgrade + vue-jest version alignment is tracked separately.
+      - dependency-name: babel-jest
+        versions:
+          - ">= 22.0.0"
