@@ -80,3 +80,16 @@ updates:
       - dependency-name: vee-validate
         versions:
           - ">= 5.0.0"
+      # bootstrap-vue@2.x is Bootstrap 4-only and its peerDependencies pin
+      # bootstrap@^4.x. Bootstrap 5 drops jQuery, swaps popper.js@1 for
+      # @popperjs/core@2, and renames/removes many utility classes
+      # (pl-* → ps-*, pr-* → pe-*, mr-* → me-*, ml-* → ms-*, form-group
+      # removed). The templates under src/components/ and the Bootswatch
+      # theme at src/assets/yeti/bootstrap.min.css are written against BS4,
+      # so any BS5 bump would break the UI even though `npm ci` succeeds
+      # (CI lacks unit/E2E coverage). Migration requires Vue 3 +
+      # bootstrap-vue-next, tracked separately. See PR #96 for the last
+      # incompatible bump.
+      - dependency-name: bootstrap
+        versions:
+          - ">= 5.0.0"
