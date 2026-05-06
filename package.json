@@ -19,7 +19,7 @@
     "bootstrap-vue": "^2.0.0-rc.22",
     "moment": "^2.29.4",
     "underscore": "^1.13.8",
-    "vee-validate": "^2.2.10",
+    "vee-validate": "^4.15.1",
     "vee-validate-locale-ja": "^1.0.5",
     "vue": "^2.5.2",
     "vue-analytics": "^5.17.0",
