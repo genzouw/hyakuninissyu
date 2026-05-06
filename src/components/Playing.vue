@@ -104,8 +104,7 @@ export default {
     this.speak.lang = 'ja-JP'
 
     this.countOfQuestions = this.$route.params.countOfQuestions
-    questions.forEach((q, i) => { q.id = i + 1 })
-    this.questionList = _.shuffle(questions)
+    this.questionList = _.shuffle(questions.map((q, i) => ({ ...q, id: i + 1 })))
     this.loadQuestion()
   },
   methods: {
