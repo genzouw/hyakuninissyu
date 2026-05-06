@@ -2,6 +2,12 @@
 // paths で渡したドット区切り state パスを localStorage の key に対応付け、
 // hydration（起動時読み込み）と mutation 後の永続化を一括で扱う。
 //
+// 制約:
+//   - パスは必ず `<moduleName>.<stateKey>` の 2 階層形式で指定する必要があります。
+//     ルート state（例: 'countOfQuestions'）や 3 階層以上のパス（例: 'a.b.c'）には対応していません。
+//   - 各モジュールには `HYDRATE` mutation を実装し、`{ key, value }` を受け取って
+//     対応する state を更新する必要があります。
+//
 // 使用例:
 //   createPersistencePlugin([
 //     { path: 'collection.collectedPoemIds', key: 'collectedPoemIds', default: [] }
