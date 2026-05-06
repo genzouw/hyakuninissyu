@@ -35,10 +35,8 @@ function mountWithQuestion (questionData) {
   const { store, dispatch } = createStore()
   const Constructor = Vue.extend(Playing)
   // mounted を実行させないために $mount を呼ばずにインスタンスのみ生成
-  const vm = new Constructor({
-    store,
-    mocks: { $route: { params: { countOfQuestions: 10 } } }
-  })
+  const vm = new Constructor({ store })
+  vm.$route = { params: { countOfQuestions: 10 } }
   vm.questionData = questionData
   vm.thinking = true
   vm.enableSpeak = false
