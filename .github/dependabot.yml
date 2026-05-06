@@ -122,8 +122,9 @@ updates:
       # --ignore-scripts` and only runs ESLint / GitGuardian, so the
       # incompatibility would not be detected. See PR #100 for the last
       # incompatible bump. Migration requires moving to webpack@>=4 plus the
-      # related loader/plugin majors (vue-loader@^13, html-webpack-plugin@^2,
-      # extract-text-webpack-plugin@^3, etc.), tracked separately.
+      # related loader/plugin majors (beyond vue-loader@^13,
+      # html-webpack-plugin@^2, extract-text-webpack-plugin@^3, etc., which are
+      # the versions currently pinned by this project), tracked separately.
       - dependency-name: uglifyjs-webpack-plugin
         update-types:
           - version-update:semver-major
