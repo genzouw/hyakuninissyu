@@ -1,0 +1,82 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    ignore:
+      # This project pins webpack@^3.6.0 and vue@^2.5.2.
+      # Any major bump of the loaders / plugins below requires
+      # webpack@>=4 (or webpack@>=5) and/or vue@^3, so it cannot be
+      # installed (peer dep ERESOLVE on `npm ci`). See PR #71 for the
+      # last failure caused by an incompatible Dependabot group bump.
+      # webpack-dev-server is pinned by version range (>= 3.0.0) instead
+      # of semver-major so we keep receiving 2.x security updates.
+      - dependency-name: webpack-dev-server
+        versions:
+          - ">= 3.0.0"
+      - dependency-name: css-loader
+        update-types:
+          - version-update:semver-major
+      - dependency-name: vue-loader
+        update-types:
+          - version-update:semver-major
+      - dependency-name: autoprefixer
+        update-types:
+          - version-update:semver-major
+      - dependency-name: optimize-css-assets-webpack-plugin
+        update-types:
+          - version-update:semver-major
+      - dependency-name: postcss-loader
+        update-types:
+          - version-update:semver-major
+      - dependency-name: postcss-import
+        update-types:
+          - version-update:semver-major
+      - dependency-name: postcss-url
+        update-types:
+          - version-update:semver-major
+      # eslint-loader@1.x pins peer eslint@">=1.6.0 <5.0.0", so eslint
+      # majors >= 5 fail `npm ci` with ERESOLVE. Moving off eslint-loader
+      # would require webpack@>=4. See PR #77 for the last failure.
+      - dependency-name: eslint
+        update-types:
+          - version-update:semver-major
+      - dependency-name: eslint-loader
+        update-types:
+          - version-update:semver-major
+      # babel-jest@22+ requires @babel/core (Babel 7+), but this project is
+      # configured with babel-core@6.x (preset-env@1, preset-stage-2, and
+      # transform-* plugins are all Babel 6 series). Bumping babel-jest
+      # would break `npm run unit` even though it would not be caught by CI
+      # (CI runs only ESLint / GitGuardian). A full migration to Babel 7 +
+      # Jest major upgrade + vue-jest version alignment is tracked separately.
+      - dependency-name: babel-jest
+        versions:
+          - ">= 22.0.0"
+      # The Vue ecosystem dependencies below all require Vue 3 for their
+      # latest major versions, but this project pins vue@^2.5.2. The runtime
+      # code (src/main.js, src/router/index.js, src/store/*) uses the Vue 2
+      # global API (Vue.use(...), new Vue({...}), new Router({...})) and
+      # cannot be bumped without a full Vue 3 migration. CI lacks unit/E2E
+      # jobs so an incompatible bump would not be detected. See PR #84 for
+      # the last incompatible bump.
+      - dependency-name: vue
+        versions:
+          - ">= 3.0.0"
+      - dependency-name: vue-router
+        versions:
+          - ">= 4.0.0"
+      - dependency-name: vuex
+        versions:
+          - ">= 4.0.0"
+      - dependency-name: vue-meta
+        versions:
+          - ">= 3.0.0"
+      # vee-validate has already been bumped to ^4.15.1 (a Vue 3 release)
+      # before this guard was added. Downgrading it back to the Vue 2 series
+      # is tracked separately. This entry prevents any further majors from
+      # landing while that work is pending.
+      - dependency-name: vee-validate
+        versions:
+          - ">= 5.0.0"

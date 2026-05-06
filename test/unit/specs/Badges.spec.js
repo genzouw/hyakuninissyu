@@ -1,8 +1,11 @@
 import Vue from 'vue'
+import Vuex from 'vuex'
 import BootstrapVue from 'bootstrap-vue'
 import Badges from '@/components/Badges'
+import collectionModule from '@/store/modules/collection'
 
 Vue.use(BootstrapVue)
+Vue.use(Vuex)
 
 // localStorage mock
 const localStorageMock = {
@@ -12,6 +15,17 @@ const localStorageMock = {
 }
 global.localStorage = localStorageMock
 
+function createStore (collectedPoemIds = []) {
+  return new Vuex.Store({
+    modules: {
+      collection: {
+        ...collectionModule,
+        state: { collectedPoemIds: collectedPoemIds.slice() }
+      }
+    }
+  })
+}
+
 describe('Badges.vue', () => {
   beforeEach(() => {
     localStorageMock.getItem.mockClear()
@@ -20,19 +34,19 @@ describe('Badges.vue', () => {
 
   it('should render correct title', () => {
     const Constructor = Vue.extend(Badges)
-    const vm = new Constructor().$mount()
+    const vm = new Constructor({ store: createStore() }).$mount()
     expect(vm.$el.querySelector('h2').textContent).toContain('バッジコレクション')
   })
 
   it('should calculate total badges correctly', () => {
     const Constructor = Vue.extend(Badges)
-    const vm = new Constructor().$mount()
+    const vm = new Constructor({ store: createStore() }).$mount()
     expect(vm.totalBadges).toBe(14)
   })
 
   it('should calculate unlocked count correctly', () => {
     const Constructor = Vue.extend(Badges)
-    const vm = new Constructor()
+    const vm = new Constructor({ store: createStore() })
     vm.unlockedBadgeIds = ['beginner', 'learner', 'enthusiast']
     vm.$mount()
     expect(vm.unlockedCount).toBe(3)
@@ -40,7 +54,7 @@ describe('Badges.vue', () => {
 
   it('should calculate badge rate correctly', () => {
     const Constructor = Vue.extend(Badges)
-    const vm = new Constructor()
+    const vm = new Constructor({ store: createStore() })
     vm.unlockedBadgeIds = ['beginner', 'learner']
     vm.$mount()
     expect(vm.badgeRate).toBe(14) // 2/14 = 14.28% -> 14%
@@ -48,7 +62,7 @@ describe('Badges.vue', () => {
 
   it('should identify unlocked badges', () => {
     const Constructor = Vue.extend(Badges)
-    const vm = new Constructor()
+    const vm = new Constructor({ store: createStore() })
     vm.unlockedBadgeIds = ['beginner', 'master']
     vm.$mount()
     expect(vm.isUnlocked('beginner')).toBe(true)
@@ -58,7 +72,7 @@ describe('Badges.vue', () => {
 
   it('should filter badges by rarity', () => {
     const Constructor = Vue.extend(Badges)
-    const vm = new Constructor()
+    const vm = new Constructor({ store: createStore() })
     vm.rarityFilter = 'common'
     vm.$mount()
     const filteredBadges = vm.filteredBadges
@@ -67,7 +81,7 @@ describe('Badges.vue', () => {
 
   it('should show all badges when filter is "all"', () => {
     const Constructor = Vue.extend(Badges)
-    const vm = new Constructor()
+    const vm = new Constructor({ store: createStore() })
     vm.rarityFilter = 'all'
     vm.$mount()
     expect(vm.filteredBadges.length).toBe(14)

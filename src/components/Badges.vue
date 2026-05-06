@@ -194,9 +194,8 @@ export default {
     // NOTE: time_attack, ai_battle_win などの他のバッジタイプは未実装です
     // 今後、各ゲームモードの終了時に適切なバッジチェックを実装する予定です
     checkAndUnlockCollectionBadges () {
-      // コレクション数を取得
-      const collectedPoemIds = JSON.parse(localStorage.getItem('collectedPoemIds') || '[]')
-      const collectionCount = collectedPoemIds.length
+      // コレクション数は collection ストアから取得（localStorage 直参照は廃止）
+      const collectionCount = this.$store.getters['collection/collectedCount']
 
       // コレクション系バッジのみをチェック
       this.badges.forEach(badge => {
