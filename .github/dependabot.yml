@@ -104,3 +104,15 @@ updates:
       - dependency-name: bootstrap-vue
         versions:
           - ">= 3.0.0"
+      # chromedriver majors must match the Chrome browser major (e.g.
+      # chromedriver@148 requires Chrome 148) and modern majors also require
+      # Node.js >= 22 (chromedriver@148 declares engines.node ">=22"), while
+      # this project's CI (lint.yml / deploy.yml) still uses node-version 18
+      # and webpack@3 cannot safely be run on Node 22+ without an OpenSSL
+      # legacy-provider workaround. CI uses `npm ci --ignore-scripts` so an
+      # incompatible chromedriver major would silently pass CI but break
+      # `npm run e2e` locally. Pin majors and bump manually when both Chrome
+      # and Node migrations are ready.
+      - dependency-name: chromedriver
+        update-types:
+          - version-update:semver-major
