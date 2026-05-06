@@ -11,5 +11,3 @@ updates:
       - dependency-name: webpack-dev-server
         update-types:
           - version-update:semver-major
-      - dependency-name: webpack-dev-server
-        applies-to: security-updates
