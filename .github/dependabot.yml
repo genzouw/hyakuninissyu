@@ -93,3 +93,10 @@ updates:
       - dependency-name: bootstrap
         versions:
           - ">= 5.0.0"
+      # bootstrap-vue itself is also pinned to the Vue 2 / Bootstrap 4 series.
+      # Any future bootstrap-vue@3+ would require Vue 3 and a migration to
+      # bootstrap-vue-next, so block major bumps here for the same reason as
+      # the Vue ecosystem entries above.
+      - dependency-name: bootstrap-vue
+        versions:
+          - ">= 3.0.0"
