@@ -125,10 +125,10 @@ export default {
         this.score++
         this.$store.dispatch('collection/addCollectedPoem', this.questionData.id)
 
-        let rightSound = document.getElementById('right-sound')
+        const rightSound = document.getElementById('right-sound')
         rightSound.play()
       } else {
-        let wrongSound = document.getElementById('wrong-sound')
+        const wrongSound = document.getElementById('wrong-sound')
         wrongSound.play()
       }
     },
@@ -143,7 +143,7 @@ export default {
     },
     loadQuestion () {
       this.questionData = this.questionList[this.currentQuestionIndex]
-      let dummies = _.shuffle(
+      const dummies = _.shuffle(
         _.filter(
           _.map(this.questionList, (v, k) => {
             return v.answer

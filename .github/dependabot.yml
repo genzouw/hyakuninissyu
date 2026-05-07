@@ -51,30 +51,6 @@ updates:
       - dependency-name: postcss-url
         update-types:
           - version-update:semver-major
-      # eslint-loader@1.x pins peer eslint@">=1.6.0 <5.0.0", so eslint
-      # majors >= 5 fail `npm ci` with ERESOLVE. Moving off eslint-loader
-      # would require webpack@>=4. See PR #77 for the last failure.
-      - dependency-name: eslint
-        update-types:
-          - version-update:semver-major
-      - dependency-name: eslint-loader
-        update-types:
-          - version-update:semver-major
-      # eslint-plugin-standard@5.0.0 was deprecated upstream
-      # ("standard 16.0.0 and eslint-config-standard 16.0.0 no longer
-      # require the eslint-plugin-standard package. You can remove it
-      # from your dependencies with `npm rm eslint-plugin-standard`.")
-      # and its 5.x peerDependencies pin eslint@">=5.0.0", which conflicts
-      # with this project's eslint@^4.15.0 pin (eslint-loader@1.x requires
-      # eslint <5.0.0; see the eslint entry above). The plugin should be
-      # removed entirely once eslint-config-standard is bumped to 16+
-      # (tracked in PR #111). Until then, block major bumps so Dependabot
-      # does not re-propose the deprecated 5.x release. See PR #115 for
-      # the last incompatible bump and standard/standard#1316 for the
-      # upstream deprecation notice.
-      - dependency-name: eslint-plugin-standard
-        update-types:
-          - version-update:semver-major
       # The Vue ecosystem dependencies below all require Vue 3 for their
       # latest major versions, but this project pins vue@^2.5.2. The runtime
       # code (src/main.js, src/router/index.js, src/store/*) uses the Vue 2
