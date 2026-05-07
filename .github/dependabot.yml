@@ -128,3 +128,15 @@ updates:
       - dependency-name: uglifyjs-webpack-plugin
         update-types:
           - version-update:semver-major
+      # webpack-bundle-analyzer v3+ dropped webpack@3 from explicit support
+      # (the v4 series targets webpack@>=4 stats schema, and v5.0.0 declares
+      # `engines.node: ">= 20.9.0"` as a Breaking Change while pulling in
+      # transitive deps such as commander@14 / sirv@3 that also require
+      # Node 20+). This project pins webpack@^3.6.0 and CI runs on Node 18,
+      # so any bump to >= 3.0.0 cannot be safely consumed via
+      # `npm run build -- --report` even though `npm ci` itself succeeds (the
+      # package is devDependency-only and CI never exercises the analyzer
+      # path). See PR #110 / Issue #118 for the last incompatible bump.
+      - dependency-name: webpack-bundle-analyzer
+        versions:
+          - ">= 3.0.0"
