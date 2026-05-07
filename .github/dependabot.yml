@@ -4,6 +4,21 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # The Jest stack must be upgraded as a single unit: jest, babel-jest,
+    # vue-jest, jest-serializer-vue and jest-environment-* are tightly
+    # coupled (transformer ABI, getCacheKey signature, etc.). Allowing
+    # Dependabot to bump them individually is the same failure mode that
+    # left main with babel-jest@30 + babel-core@6 silently broken before
+    # PR #127. CI does not run `npm run unit`, so an individual bump
+    # would not be detected. Group them so updates only land together.
+    groups:
+      jest-stack:
+        patterns:
+          - "jest"
+          - "jest-*"
+          - "babel-jest"
+          - "vue-jest"
+          - "@types/jest"
     ignore:
       # This project pins webpack@^3.6.0 and vue@^2.5.2.
       # Any major bump of the loaders / plugins below requires
