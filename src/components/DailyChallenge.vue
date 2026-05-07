@@ -238,7 +238,7 @@ export default {
           params: {
             score: this.score,
             streak: newStreak,
-            previousStreak: previousStreak
+            previousStreak
           }
         })
       }

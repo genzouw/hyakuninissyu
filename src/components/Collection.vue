@@ -107,7 +107,7 @@ export default {
   name: 'Collection',
   data () {
     return {
-      poems: poems,
+      poems,
       filter: FILTERS.ALL,
       showModal: false,
       selectedPoem: null

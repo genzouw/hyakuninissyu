@@ -142,9 +142,9 @@ export default {
   name: 'Badges',
   data () {
     return {
-      badges: badges,
-      rarityColors: rarityColors,
-      rarityLabels: rarityLabels,
+      badges,
+      rarityColors,
+      rarityLabels,
       unlockedBadgeIds: [],
       rarityFilter: 'all',
       showModal: false,
