@@ -128,10 +128,10 @@ updates:
       - dependency-name: uglifyjs-webpack-plugin
         update-types:
           - version-update:semver-major
-      # url-loader@4.x dropped webpack@3 from peerDependencies
+      # url-loader@2.x+ dropped webpack@3 from peerDependencies
       # ("webpack": "^4.0.0 || ^5.0.0") and depends on loader-utils@^2 /
       # schema-utils@^3 which assume the webpack@4+ Loader Context API
-      # (getOptions() etc.). Any major bump therefore breaks `npm ci`
+      # (getOptions() etc.). Bumping beyond 1.x therefore breaks `npm ci`
       # against this project's webpack@^3.6.0 pin (ERESOLVE) and would
       # also break the `.png/.svg/.mp3/.woff` rules in
       # build/webpack.base.conf.js even if forced through with
