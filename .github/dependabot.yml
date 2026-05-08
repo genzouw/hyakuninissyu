@@ -140,6 +140,22 @@ updates:
       - dependency-name: url-loader
         update-types:
           - version-update:semver-major
+      # chalk@5.x is a pure ESM package (the v5.0.0 release converted the
+      # entry point to ESM-only and removed the CommonJS build). The build
+      # scripts at build/build.js and build/check-versions.js are CommonJS
+      # files invoked directly via `node build/build.js`, and they call
+      # `require('chalk')`. With chalk@5+ that fails at runtime with
+      # `ERR_REQUIRE_ESM: require() of ES Module ... not supported`, which
+      # is exactly what broke the webpack production bundle job on PR #123.
+      # Migrating these scripts to ESM (or replacing chalk with a CJS
+      # alternative such as picocolors) is out of scope for an automated
+      # Dependabot bump, so pin majors here until the build pipeline is
+      # converted. CI uses `npm ci --ignore-scripts` and the build job
+      # explicitly exercises this path, so an incompatible bump would be
+      # detected — but pinning still saves the round-trip.
+      - dependency-name: chalk
+        update-types:
+          - version-update:semver-major
       # webpack-bundle-analyzer v3+ dropped webpack@3 from explicit support
       # (the v4 series targets webpack@>=4 stats schema, and v5.0.0 declares
       # `engines.node: ">= 20.9.0"` as a Breaking Change while pulling in
