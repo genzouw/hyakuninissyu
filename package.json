@@ -11,7 +11,7 @@
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .js,.vue src test/unit test/e2e/specs",
-    "build": "node build/build.js"
+    "build": "node build/build.mjs"
   },
   "dependencies": {
     "@babel/runtime": "^7.24.0",
@@ -40,7 +40,7 @@
     "babel-jest": "^26.6.3",
     "babel-loader": "^8.3.0",
     "babel-plugin-dynamic-import-node": "^2.3.3",
-    "chalk": "^4.1.2",
+    "chalk": "^5.6.2",
     "chromedriver": "^148.0.2",
     "copy-webpack-plugin": "^4.0.1",
     "cross-spawn": "^7.0.6",
