@@ -6,7 +6,6 @@ on:
       - main
 
 permissions:
-  id-token: write
   contents: read
 
 env:
@@ -17,6 +16,8 @@ env:
 
 jobs:
   build:
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
 
     steps:
@@ -45,6 +46,9 @@ jobs:
 
   deploy:
     needs: build
+    permissions:
+      id-token: write
+      contents: read
     runs-on: ubuntu-latest
 
     steps:
