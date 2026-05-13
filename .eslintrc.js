@@ -17,7 +17,9 @@ module.exports = {
   },
   extends: [
     // https://github.com/vuejs/eslint-plugin-vue#priority-a-essential-error-prevention
-    // consider switching to `plugin:vue/strongly-recommended` or `plugin:vue/recommended` for stricter rules.
+    // This project is on Vue 2, so use the `vue2-` prefixed presets explicitly.
+    // For stricter rules, switch to `plugin:vue/vue2-strongly-recommended` or `plugin:vue/vue2-recommended`.
+    // (In eslint-plugin-vue v10, the unprefixed aliases point to Vue 3 presets and must not be used here.)
     'plugin:vue/vue2-essential',
     // https://github.com/standard/standard/blob/master/docs/RULES-en.md
     'standard',
