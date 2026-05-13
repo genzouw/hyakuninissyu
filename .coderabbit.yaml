@@ -1,14 +1,21 @@
 # CodeRabbit configuration
 # https://docs.coderabbit.ai/reference/configuration
 
-language: ja-JP
+language: "ja-JP"
 early_access: false
 enable_free_tier: true
 
 reviews:
-  # 個人運営のためレビューはまず "chill" で緩めに始める。
-  # 必要に応じて "assertive" に切り替えて検出感度を上げる。
-  profile: chill
+  # 個人運営だが、実行環境にデプロイされる前提のため検出漏れを避けたい。
+  # そのため "assertive" を採用して検出感度を高めに維持する。
+  # ノイズが過剰になった場合は将来 "chill" に戻すことも検討する。
+  profile: "assertive"
+
+  # PR全体に対する指針として設定する。
+  # path_instructions で "**/*" を指定するとファイルごとに繰り返し適用され
+  # ノイズが増えるため、広範な指示は instructions に集約する。
+  instructions: |
+    変更がプロジェクト全体に与える影響や、アーキテクチャの観点など、広いスコープからコードレビューを行ってください。必ず日本語でコメントしてください。
 
   # CodeRabbit を bot reviewer として動作させる。
   # 問題なしと判断した PR に対して Approve ステータスを返す。
