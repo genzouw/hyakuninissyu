@@ -22,7 +22,7 @@
 
     <div class="row justify-content-center">
       <div class="col-sm-10 cont main-container bg-secondary text-dark">
-        <p v-html="questionData.question"></p>
+        <p>{{ questionData.question }}</p>
         <div class="row">
           <div
             class="col-sm-12"
