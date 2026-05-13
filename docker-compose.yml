@@ -1,0 +1,11 @@
+version: "3"
+services:
+  web:
+    build:
+      context: web/
+    volumes:
+      - $PWD/dist:/usr/local/apache2/htdocs
+    restart: always
+    ports:
+      - 10100:80
+

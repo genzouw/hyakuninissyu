@@ -1,0 +1,154 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    # The Jest stack must be upgraded as a single unit: jest, babel-jest,
+    # vue-jest, jest-serializer-vue and jest-environment-* are tightly
+    # coupled (transformer ABI, getCacheKey signature, etc.). Allowing
+    # Dependabot to bump them individually is the same failure mode that
+    # left main with babel-jest@30 + babel-core@6 silently broken before
+    # PR #127. CI does not run `npm run unit`, so an individual bump
+    # would not be detected. Group them so updates only land together.
+    groups:
+      jest-stack:
+        patterns:
+          - "jest"
+          - "jest-*"
+          - "babel-jest"
+          - "vue-jest"
+          - "@types/jest"
+    ignore:
+      # This project pins webpack@^3.6.0 and vue@^2.5.2.
+      # Any major bump of the loaders / plugins below requires
+      # webpack@>=4 (or webpack@>=5) and/or vue@^3, so it cannot be
+      # installed (peer dep ERESOLVE on `npm ci`). See PR #71 for the
+      # last failure caused by an incompatible Dependabot group bump.
+      # webpack-dev-server is pinned by version range (>= 3.0.0) instead
+      # of semver-major so we keep receiving 2.x security updates.
+      - dependency-name: webpack-dev-server
+        versions:
+          - ">= 3.0.0"
+      - dependency-name: css-loader
+        update-types:
+          - version-update:semver-major
+      - dependency-name: vue-loader
+        update-types:
+          - version-update:semver-major
+      - dependency-name: autoprefixer
+        update-types:
+          - version-update:semver-major
+      - dependency-name: optimize-css-assets-webpack-plugin
+        update-types:
+          - version-update:semver-major
+      - dependency-name: postcss-loader
+        update-types:
+          - version-update:semver-major
+      - dependency-name: postcss-import
+        update-types:
+          - version-update:semver-major
+      - dependency-name: postcss-url
+        update-types:
+          - version-update:semver-major
+      # The Vue ecosystem dependencies below all require Vue 3 for their
+      # latest major versions, but this project pins vue@^2.5.2. The runtime
+      # code (src/main.js, src/router/index.js, src/store/*) uses the Vue 2
+      # global API (Vue.use(...), new Vue({...}), new Router({...})) and
+      # cannot be bumped without a full Vue 3 migration. CI lacks unit/E2E
+      # jobs so an incompatible bump would not be detected. See PR #84 for
+      # the last incompatible bump.
+      - dependency-name: vue
+        versions:
+          - ">= 3.0.0"
+      - dependency-name: vue-router
+        versions:
+          - ">= 4.0.0"
+      - dependency-name: vuex
+        versions:
+          - ">= 4.0.0"
+      - dependency-name: vue-meta
+        versions:
+          - ">= 3.0.0"
+      # vee-validate@3+ rewrote the API and v4 requires Vue 3. This project
+      # uses Vue 2.7.x with the v2 plugin-style API (Vue.use(VeeValidate),
+      # Validator.localize(...), the bundled `vee-validate/dist/locale/ja`
+      # path, and the `v-validate` / `$validator` / `errors.first` template
+      # API in src/components/Top.vue), all of which were removed in v3/v4.
+      # PR #80 bumped to ^4.15.1 once and broke the runtime; this Issue
+      # restores ^2.2.10 and pins majors >= 3.0.0 so Dependabot cannot
+      # propose another incompatible bump until a Vue 3 migration lands.
+      - dependency-name: vee-validate
+        versions:
+          - ">= 3.0.0"
+      # bootstrap-vue@2.x is Bootstrap 4-only and its peerDependencies pin
+      # bootstrap@^4.x. Bootstrap 5 drops jQuery, swaps popper.js@1 for
+      # @popperjs/core@2, and renames/removes many utility classes
+      # (pl-* → ps-*, pr-* → pe-*, mr-* → me-*, ml-* → ms-*, form-group
+      # removed). The templates under src/components/ and the Bootswatch
+      # theme at src/assets/yeti/bootstrap.min.css are written against BS4,
+      # so any BS5 bump would break the UI even though `npm ci` succeeds
+      # (CI lacks unit/E2E coverage). Migration requires Vue 3 +
+      # bootstrap-vue-next, tracked separately. See PR #96 for the last
+      # incompatible bump.
+      - dependency-name: bootstrap
+        versions:
+          - ">= 5.0.0"
+      # bootstrap-vue itself is also pinned to the Vue 2 / Bootstrap 4 series.
+      # Any future bootstrap-vue@3+ would require Vue 3 and a migration to
+      # bootstrap-vue-next, so block major bumps here for the same reason as
+      # the Vue ecosystem entries above.
+      - dependency-name: bootstrap-vue
+        versions:
+          - ">= 3.0.0"
+      # chromedriver majors must match the Chrome browser major (e.g.
+      # chromedriver@148 requires Chrome 148) and modern majors also require
+      # Node.js >= 22 (chromedriver@148 declares engines.node ">=22"), while
+      # this project's CI (lint.yml / deploy.yml) still uses node-version 18
+      # and webpack@3 cannot safely be run on Node 22+ without an OpenSSL
+      # legacy-provider workaround. CI uses `npm ci --ignore-scripts` so an
+      # incompatible chromedriver major would silently pass CI but break
+      # `npm run e2e` locally. Pin majors and bump manually when both Chrome
+      # and Node migrations are ready.
+      - dependency-name: chromedriver
+        update-types:
+          - version-update:semver-major
+      # uglifyjs-webpack-plugin@2.x dropped webpack@3 from peerDependencies
+      # ("webpack": "^4.0.0"), so any major bump fails `npm ci` with ERESOLVE
+      # against this project's webpack@^3.6.0 pin. CI uses `npm ci
+      # --ignore-scripts` and only runs ESLint / GitGuardian, so the
+      # incompatibility would not be detected. See PR #100 for the last
+      # incompatible bump. Migration requires moving to webpack@>=4 plus the
+      # related loader/plugin majors (beyond vue-loader@^13,
+      # html-webpack-plugin@^2, extract-text-webpack-plugin@^3, etc., which are
+      # the versions currently pinned by this project), tracked separately.
+      - dependency-name: uglifyjs-webpack-plugin
+        update-types:
+          - version-update:semver-major
+      # url-loader@2.x+ dropped webpack@3 from peerDependencies
+      # ("webpack": "^4.0.0 || ^5.0.0") and depends on loader-utils@^2 /
+      # schema-utils@^3 which assume the webpack@4+ Loader Context API
+      # (getOptions() etc.). Bumping beyond 1.x therefore breaks `npm ci`
+      # against this project's webpack@^3.6.0 pin (ERESOLVE) and would
+      # also break the `.png/.svg/.mp3/.woff` rules in
+      # build/webpack.base.conf.js even if forced through with
+      # --legacy-peer-deps. CI uses `npm ci --ignore-scripts` and only
+      # runs ESLint / GitGuardian, so the incompatibility would not be
+      # detected. See PR #112 for the last incompatible bump. Migration
+      # requires webpack@>=4 (or replacing url-loader with webpack 5
+      # asset modules), tracked separately.
+      - dependency-name: url-loader
+        update-types:
+          - version-update:semver-major
+      # webpack-bundle-analyzer v3+ dropped webpack@3 from explicit support
+      # (the v4 series targets webpack@>=4 stats schema, and v5.0.0 declares
+      # `engines.node: ">= 20.9.0"` as a Breaking Change while pulling in
+      # transitive deps such as commander@14 / sirv@3 that also require
+      # Node 20+). This project pins webpack@^3.6.0 and CI runs on Node 18,
+      # so any bump to >= 3.0.0 cannot be safely consumed via
+      # `npm run build -- --report` even though `npm ci` itself succeeds (the
+      # package is devDependency-only and CI never exercises the analyzer
+      # path). See PR #110 / Issue #118 for the last incompatible bump.
+      - dependency-name: webpack-bundle-analyzer
+        versions:
+          - ">= 3.0.0"
