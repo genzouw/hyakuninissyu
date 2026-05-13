@@ -11,6 +11,7 @@ We welcome contributions of all kinds, including bug reports, feature requests, 
 If you find a bug in the application, please help us by reporting it! Before creating a new bug report, please check the [existing issues](https://github.com/genzouw/hyakuninissyu/issues) to see if it has already been reported.
 
 When creating a new bug report, please include:
+
 - A clear and descriptive title.
 - A detailed description of the problem.
 - Steps to reproduce the bug.
@@ -23,6 +24,7 @@ When creating a new bug report, please include:
 We are always looking for ways to improve! If you have an idea for a new feature or an enhancement to an existing one, please submit an issue.
 
 When suggesting an enhancement, please include:
+
 - A clear and descriptive title.
 - A detailed description of the proposed feature and its use case.
 - Any relevant mockups or examples.
@@ -74,6 +76,7 @@ To set up the project locally for development:
 3. Use `npm run dev` to start the local development server at `http://localhost:8080`.
 4. Run `npm run lint` to check for style issues.
 5. Run `npm run unit` to run unit tests.
+6. Run `npm run e2e` to run end-to-end tests.
 
 ## Code Style
 
