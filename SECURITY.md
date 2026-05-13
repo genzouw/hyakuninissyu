@@ -58,7 +58,7 @@ GitHub 経由が難しい場合は以下に直接ご連絡ください。
 
 - Vue 2 / webpack 3 に既知の脆弱性が残っている件は、本リポジトリが当該
   バージョンを維持している事情と静的サイトとしての影響範囲を考慮し、
-  既知のリスクとして受容しています (詳細は [Dependabot](https://github.com/genzouw/hyakuninissyu/security/dependabot) を参照)。
+  既知のリスクとして受容しています。
   ただし新しい同種脆弱性の報告は引き続き歓迎します。
 
 ## Disclosure
