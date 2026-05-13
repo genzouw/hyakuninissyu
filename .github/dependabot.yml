@@ -122,14 +122,10 @@ updates:
         versions:
           - ">= 3.0.0"
       # chromedriver majors must match the Chrome browser major (e.g.
-      # chromedriver@148 requires Chrome 148) and modern majors also require
-      # Node.js >= 22 (chromedriver@148 declares engines.node ">=22"), while
-      # this project's CI (lint.yml / deploy.yml) still uses node-version 18
-      # and webpack@3 cannot safely be run on Node 22+ without an OpenSSL
-      # legacy-provider workaround. CI uses `npm ci --ignore-scripts` so an
-      # incompatible chromedriver major would silently pass CI but break
-      # `npm run e2e` locally. Pin majors and bump manually when both Chrome
-      # and Node migrations are ready.
+      # chromedriver@148 requires Chrome 148). CI uses `npm ci --ignore-scripts`
+      # so an incompatible chromedriver major would silently pass CI but break
+      # `npm run e2e` locally. Pin majors and bump manually when the Chrome
+      # major used locally is aligned.
       - dependency-name: chromedriver
         update-types:
           - version-update:semver-major
@@ -161,11 +157,8 @@ updates:
         update-types:
           - version-update:semver-major
       # webpack-bundle-analyzer v3+ dropped webpack@3 from explicit support
-      # (the v4 series targets webpack@>=4 stats schema, and v5.0.0 declares
-      # `engines.node: ">= 20.9.0"` as a Breaking Change while pulling in
-      # transitive deps such as commander@14 / sirv@3 that also require
-      # Node 20+). This project pins webpack@^3.6.0 and CI runs on Node 18,
-      # so any bump to >= 3.0.0 cannot be safely consumed via
+      # (the v4 series targets webpack@>=4 stats schema). This project pins
+      # webpack@^3.6.0, so any bump to >= 3.0.0 cannot be safely consumed via
       # `npm run build -- --report` even though `npm ci` itself succeeds (the
       # package is devDependency-only and CI never exercises the analyzer
       # path). See PR #110 / Issue #118 for the last incompatible bump.
