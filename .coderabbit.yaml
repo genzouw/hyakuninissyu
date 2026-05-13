@@ -6,8 +6,9 @@ early_access: false
 enable_free_tier: true
 
 reviews:
-  # 個人運営のためレビューはまず "chill" で緩めに始める。
-  # 必要に応じて "assertive" に切り替えて検出感度を上げる。
+  # 個人運営だが、実行環境にデプロイされる前提のため検出漏れを避けたい。
+  # そのため "assertive" を採用して検出感度を高めに維持する。
+  # ノイズが過剰になった場合は将来 "chill" に戻すことも検討する。
   profile: "assertive"
 
   # PR全体に対する指針として設定する。
