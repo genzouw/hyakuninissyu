@@ -23,7 +23,6 @@
     "vee-validate": "^2.2.10",
     "vee-validate-locale-ja": "^1.0.5",
     "vue": "^2.7.16",
-    "vue-analytics": "^5.17.0",
     "vue-meta": "^1.6.0",
     "vue-router": "^3.0.6",
     "vue-tweet-embed": "^2.3.0",
@@ -86,9 +85,5 @@
     "node": ">=18.0.0",
     "npm": ">=9.0.0"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"]
 }
