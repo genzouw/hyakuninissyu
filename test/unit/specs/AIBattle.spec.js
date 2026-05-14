@@ -31,14 +31,21 @@ function createStore () {
 
 function setup ({ correctIndex = 1, currentQuestionId = 1 } = {}) {
   const { store, dispatch } = createStore()
-  const wrapper = shallowMount(AIBattle, { localVue, store })
+  const wrapper = shallowMount(AIBattle, {
+    localVue,
+    store,
+    data () {
+      return {
+        canAnswer: true,
+        roundFinished: false,
+        correctAnswerIndex: correctIndex,
+        currentQuestion: { id: currentQuestionId, question: 'q', answer: 'a' },
+        aiTimeout: null,
+        enableSpeak: false,
+      }
+    },
+  })
   const vm = wrapper.vm
-  vm.canAnswer = true
-  vm.roundFinished = false
-  vm.correctAnswerIndex = correctIndex
-  vm.currentQuestion = { id: currentQuestionId, question: 'q', answer: 'a' }
-  vm.aiTimeout = null
-  vm.enableSpeak = false
   return { wrapper, vm, dispatch }
 }
 
