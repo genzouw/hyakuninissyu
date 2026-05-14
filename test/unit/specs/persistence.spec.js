@@ -1,18 +1,23 @@
-import Vue from 'vue'
+import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import createPersistencePlugin from '@/store/plugins/persistence'
 
-Vue.use(Vuex)
+const localVue = createLocalVue()
+localVue.use(Vuex)
 
 const KEY = 'test_collected'
 
 function createMockLocalStorage (initial) {
   const store = Object.assign({}, initial || {})
   return {
-    getItem: jest.fn(k => (k in store ? store[k] : null)),
-    setItem: jest.fn((k, v) => { store[k] = v }),
-    removeItem: jest.fn(k => { delete store[k] }),
-    _backing: store
+    getItem: jest.fn((k) => (k in store ? store[k] : null)),
+    setItem: jest.fn((k, v) => {
+      store[k] = v
+    }),
+    removeItem: jest.fn((k) => {
+      delete store[k]
+    }),
+    _backing: store,
   }
 }
 
@@ -28,11 +33,11 @@ function buildStore (plugin) {
           },
           ADD (state, id) {
             state.collectedPoemIds.push(id)
-          }
-        }
-      }
+          },
+        },
+      },
     },
-    plugins: [plugin]
+    plugins: [plugin],
   })
 }
 
@@ -78,6 +83,9 @@ describe('persistence plugin', () => {
     store.commit('collection/ADD', 7)
     expect(storage.setItem).toHaveBeenCalledWith(KEY, JSON.stringify([7]))
     store.commit('collection/ADD', 9)
-    expect(storage.setItem).toHaveBeenLastCalledWith(KEY, JSON.stringify([7, 9]))
+    expect(storage.setItem).toHaveBeenLastCalledWith(
+      KEY,
+      JSON.stringify([7, 9])
+    )
   })
 })

@@ -1,14 +1,15 @@
-import Vue from 'vue'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 
-Vue.use(Vuex)
+const localVue = createLocalVue()
+localVue.use(Vuex)
 
 global.SpeechSynthesisUtterance = function () {
   return { pitch: 1, lang: '', text: '' }
 }
 global.speechSynthesis = {
   cancel () {},
-  speak () {}
+  speak () {},
 }
 
 const TimeAttack = require('@/components/TimeAttack').default
@@ -20,7 +21,7 @@ function createStore () {
       collection: {
         namespaced: true,
         state: { collectedPoemIds: [] },
-        actions: { addCollectedPoem: jest.fn() }
+        actions: { addCollectedPoem: jest.fn() },
       },
       timeAttack: {
         namespaced: true,
@@ -28,10 +29,10 @@ function createStore () {
         actions: {
           startGame: jest.fn(),
           answerCard: jest.fn(),
-          stopGame: jest.fn()
-        }
-      }
-    }
+          stopGame: jest.fn(),
+        },
+      },
+    },
   })
   store.dispatch = dispatch
   return { store, dispatch }
@@ -39,15 +40,15 @@ function createStore () {
 
 function mountWithQuestion (questionData) {
   const { store, dispatch } = createStore()
-  const Constructor = Vue.extend(TimeAttack)
-  const vm = new Constructor({ store })
-  vm.questionData = questionData
-  vm.thinking = true
-  vm.enableSpeak = false
   document.body.innerHTML =
     '<audio id="right-sound"></audio><audio id="wrong-sound"></audio>'
   HTMLMediaElement.prototype.play = jest.fn()
-  return { vm, dispatch }
+  const wrapper = shallowMount(TimeAttack, { localVue, store })
+  const vm = wrapper.vm
+  vm.questionData = questionData
+  vm.thinking = true
+  vm.enableSpeak = false
+  return { wrapper, vm, dispatch }
 }
 
 describe('TimeAttack.vue', () => {
@@ -57,7 +58,7 @@ describe('TimeAttack.vue', () => {
         id: 7,
         question: 'q',
         answer: 'a',
-        choices: ['a', 'b', 'c', 'd']
+        choices: ['a', 'b', 'c', 'd'],
       })
       vm.choice = 'a'
       vm.clickAnswer()
@@ -69,7 +70,7 @@ describe('TimeAttack.vue', () => {
         id: 7,
         question: 'q',
         answer: 'a',
-        choices: ['a', 'b', 'c', 'd']
+        choices: ['a', 'b', 'c', 'd'],
       })
       vm.choice = 'b'
       vm.clickAnswer()
@@ -84,7 +85,7 @@ describe('TimeAttack.vue', () => {
         id: 1,
         question: 'q',
         answer: 'a',
-        choices: ['a']
+        choices: ['a'],
       })
       vm.choice = 'a'
       const before = vm.score
