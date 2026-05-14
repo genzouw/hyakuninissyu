@@ -39,9 +39,7 @@ describe('Badges.vue', () => {
 
   it('should render correct title', () => {
     const wrapper = mountBadges()
-    expect(wrapper.element.querySelector('h2').textContent).toContain(
-      'バッジコレクション'
-    )
+    expect(wrapper.find('h2').text()).toContain('バッジコレクション')
   })
 
   it('should calculate total badges correctly', () => {
