@@ -40,16 +40,6 @@ updates:
           - "@vue/vue3-jest"
           - "@types/jest"
     ignore:
-      # bootstrap@5 drops jQuery, swaps popper.js@1 for @popperjs/core@2, and
-      # renames/removes utility classes the templates currently rely on
-      # (pl-* → ps-*, pr-* → pe-*, mr-* → me-*, ml-* → ms-*, form-group
-      # removed). The Bootswatch theme at src/assets/yeti/bootstrap.min.css
-      # is BS4 too. Migration to BS5 (+ bootstrap-vue-next is already
-      # bumped to a BS5-compatible release line) requires a separate UI
-      # sweep. Block major bumps until that effort is scheduled.
-      - dependency-name: bootstrap
-        versions:
-          - ">= 5.0.0"
       # chromedriver majors must match the Chrome browser major (e.g.
       # chromedriver@148 requires Chrome 148). CI uses `npm ci --ignore-scripts`
       # so an incompatible chromedriver major would silently pass CI but break
