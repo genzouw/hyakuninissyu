@@ -192,7 +192,7 @@ export default {
       this.loadQuestion()
     }
   },
-  beforeDestroy () {
+  beforeUnmount () {
     if (this.countdownInterval) {
       clearInterval(this.countdownInterval)
     }
