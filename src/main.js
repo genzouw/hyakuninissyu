@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import { createApp } from 'vue';
 import { createBootstrap } from 'bootstrap-vue-next';
+import { createHead } from '@unhead/vue/client';
 import App from './App';
 import router from './router';
 import store from './store';
@@ -33,4 +34,5 @@ const app = createApp(App);
 app.use(router);
 app.use(store);
 app.use(createBootstrap());
+app.use(createHead());
 app.mount('#app');
