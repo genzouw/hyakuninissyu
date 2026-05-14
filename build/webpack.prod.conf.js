@@ -48,11 +48,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     },
     minimizer: [
       new TerserPlugin({
-        terserOptions: {
-          compress: {
-            warnings: false,
-          },
-        },
         parallel: true,
         extractComments: false,
       }),
