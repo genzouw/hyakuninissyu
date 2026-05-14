@@ -1,10 +1,12 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import { createApp } from 'vue';
+import { createBootstrap } from 'bootstrap-vue-next';
 import App from './App';
 import router from './router';
 import store from './store';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue-next/dist/bootstrap-vue-next.css';
 import './assets/yeti/bootstrap.min.css';
 
 // GA4 計測タグの注入。GA_ID は webpack DefinePlugin により prod.env.js 経由で
@@ -30,4 +32,5 @@ if (process.env.GA_ID) {
 const app = createApp(App);
 app.use(router);
 app.use(store);
+app.use(createBootstrap());
 app.mount('#app');
