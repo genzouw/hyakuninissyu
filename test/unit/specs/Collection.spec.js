@@ -27,8 +27,7 @@ describe('Collection.vue', () => {
 
   it('should render component title', () => {
     const wrapper = mountCollection()
-    const title = wrapper.element.querySelector('h2')
-    expect(title.textContent).toContain('百人一首コレクション図鑑')
+    expect(wrapper.find('h2').text()).toContain('百人一首コレクション図鑑')
   })
 
   it('should calculate total count correctly', () => {
