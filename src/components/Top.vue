@@ -11,11 +11,14 @@
       <div class="row justify-content-center">
         <div class="col-xs-12">
           <div class="form-group row">
-            <label class="col-xs-4 col-form-label col-form-label-lg"
+            <label
+              for="countOfQuestions"
+              class="col-xs-4 col-form-label col-form-label-lg"
               >もんだいのかず</label
             >
             <div class="col-xs-4">
               <Field
+                id="countOfQuestions"
                 name="countOfQuestions"
                 :rules="validateCount"
                 v-model.number="countOfQuestions"
@@ -87,7 +90,7 @@
         <img
           src="@/assets/hyakunin_issyu.png"
           class="img-fluid w-75 center-block"
-          alt=""
+          alt="百人一首のイメージ"
         />
       </div>
     </div>
