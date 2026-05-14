@@ -46,6 +46,8 @@ function mountWithQuestion (questionData) {
       $router: { push: jest.fn() },
     },
   })
+  // mounted 内の loadQuestion() が questionData を上書きするため、
+  // テスト用の値は mounted 完了後に再代入する必要がある。
   const vm = wrapper.vm
   vm.questionData = questionData
   vm.thinking = true

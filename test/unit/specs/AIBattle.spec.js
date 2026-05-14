@@ -34,6 +34,9 @@ function setup ({ correctIndex = 1, currentQuestionId = 1 } = {}) {
   const wrapper = shallowMount(AIBattle, {
     localVue,
     store,
+    mocks: {
+      $router: { push: jest.fn() },
+    },
     data () {
       return {
         canAnswer: true,

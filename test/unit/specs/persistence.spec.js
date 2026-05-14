@@ -2,6 +2,9 @@ import { createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 import createPersistencePlugin from '@/store/plugins/persistence'
 
+// Vuex 3 では new Vuex.Store(...) 呼び出し前に Vue.use(Vuex) (install) が必須
+// で、未 install だと assert で例外を投げる。localVue を経由した install で
+// グローバル Vue を汚染せずにチェックを通す。
 const localVue = createLocalVue()
 localVue.use(Vuex)
 

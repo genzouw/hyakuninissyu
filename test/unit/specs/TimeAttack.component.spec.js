@@ -43,7 +43,17 @@ function mountWithQuestion (questionData) {
   document.body.innerHTML =
     '<audio id="right-sound"></audio><audio id="wrong-sound"></audio>'
   HTMLMediaElement.prototype.play = jest.fn()
-  const wrapper = shallowMount(TimeAttack, { localVue, store })
+  const wrapper = shallowMount(TimeAttack, {
+    localVue,
+    store,
+    mocks: {
+      // clickAnswer の最終問題分岐で $router.push を呼ぶため、テスト拡張時の
+      // TypeError を防ぐ目的で防御的に stub する。
+      $router: { push: jest.fn() },
+    },
+  })
+  // mounted 内の loadQuestion() が questionData を上書きするため、
+  // テスト用の値は mounted 完了後に再代入する必要がある。
   const vm = wrapper.vm
   vm.questionData = questionData
   vm.thinking = true
