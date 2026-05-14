@@ -3,12 +3,6 @@ const state = {
 }
 
 const mutations = {
-  // persistence plugin から呼ばれる: localStorage の値で state を初期化する
-  HYDRATE (state, { key, value }) {
-    if (key in state) {
-      state[key] = value
-    }
-  },
   ADD_COLLECTED_POEM (state, poemId) {
     if (!state.collectedPoemIds.includes(poemId)) {
       state.collectedPoemIds.push(poemId)
