@@ -72,7 +72,6 @@ const webpackConfig = merge(baseWebpackConfig, {
         collapseWhitespace: true,
         removeAttributeQuotes: true,
       },
-      chunksSortMode: 'auto',
     }),
     new CopyWebpackPlugin({
       patterns: [
