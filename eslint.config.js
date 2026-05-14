@@ -38,7 +38,7 @@ module.exports = [
       },
     },
     rules: {
-      'generator-star-spacing': 'off',
+      '@stylistic/generator-star-spacing': 'off',
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
       complexity: ['error', { max: 10 }],
       'vue/multi-word-component-names': 'off',
