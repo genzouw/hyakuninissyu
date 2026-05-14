@@ -1,8 +1,5 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import Vuex from 'vuex'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { shallowMount } from '@vue/test-utils'
+import { createStore as createVuexStore } from 'vuex'
 
 // Playing.vue は data() で new SpeechSynthesisUtterance() を呼ぶため、
 // jsdom 環境ではグローバルにスタブを用意する必要がある。
@@ -22,7 +19,7 @@ const originalMediaPlay = HTMLMediaElement.prototype.play
 
 function createStore () {
   const dispatch = jest.fn()
-  const store = new Vuex.Store({
+  const store = createVuexStore({
     modules: {
       collection: {
         namespaced: true,
@@ -42,11 +39,12 @@ function mountWithQuestion (questionData) {
     '<audio id="right-sound"></audio><audio id="wrong-sound"></audio>'
   HTMLMediaElement.prototype.play = jest.fn()
   const wrapper = shallowMount(Playing, {
-    localVue,
-    store,
-    mocks: {
-      $route: { params: { countOfQuestions: 10 } },
-      $router: { push: jest.fn() },
+    global: {
+      plugins: [store],
+      mocks: {
+        $route: { params: { countOfQuestions: 10 } },
+        $router: { push: jest.fn() },
+      },
     },
   })
   // mounted 内の loadQuestion() が questionData を上書きするため、

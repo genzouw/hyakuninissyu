@@ -38,11 +38,11 @@
 </template>
 
 <script>
-import { useHead } from '@unhead/vue';
+import { useHead } from '@unhead/vue'
 
 export default {
   name: 'App',
-  setup() {
+  setup () {
     useHead({
       title: 'ひゃくにんいっしゅをおぼえよう',
       meta: [
@@ -98,9 +98,9 @@ export default {
           content: 'gFYiPUxpzQzAhrVmsACmY-N3Y7jURnIQMfT5GKlnWmU',
         },
       ],
-    });
+    })
   },
-};
+}
 </script>
 
 <style>

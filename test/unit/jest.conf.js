@@ -1,10 +1,12 @@
-const path = require('path');
+const path = require('path')
 
 module.exports = {
   rootDir: path.resolve(__dirname, '../../'),
   testEnvironment: 'jsdom',
   moduleFileExtensions: ['js', 'json', 'vue'],
   moduleNameMapper: {
+    '\\.(png|jpe?g|gif|svg|webp|mp3|wav|ogg|woff2?|ttf|otf|eot)$':
+      '<rootDir>/test/unit/__mocks__/fileMock.js',
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   transform: {
@@ -21,4 +23,4 @@ module.exports = {
     '!src/router/index.js',
     '!**/node_modules/**',
   ],
-};
+}

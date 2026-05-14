@@ -121,51 +121,51 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import poems from '@/data/poems';
+import { mapGetters } from 'vuex'
+import poems from '@/data/poems'
 
 // フィルター種類の定数
 const FILTERS = {
   ALL: 'all',
   COLLECTED: 'collected',
   UNCOLLECTED: 'uncollected',
-};
+}
 
 export default {
   name: 'Collection',
-  data() {
+  data () {
     return {
       poems,
       filter: FILTERS.ALL,
       showModal: false,
       selectedPoem: null,
-    };
+    }
   },
   computed: {
     ...mapGetters('collection', ['collectedCount', 'isCollected']),
-    totalCount() {
-      return this.poems.length;
+    totalCount () {
+      return this.poems.length
     },
-    collectionRate() {
-      if (this.totalCount === 0) return 0;
-      return Math.round((this.collectedCount / this.totalCount) * 100);
+    collectionRate () {
+      if (this.totalCount === 0) return 0
+      return Math.round((this.collectedCount / this.totalCount) * 100)
     },
-    filteredPoems() {
+    filteredPoems () {
       if (this.filter === FILTERS.COLLECTED) {
-        return this.poems.filter((p) => this.isCollected(p.id));
+        return this.poems.filter((p) => this.isCollected(p.id))
       } else if (this.filter === FILTERS.UNCOLLECTED) {
-        return this.poems.filter((p) => !this.isCollected(p.id));
+        return this.poems.filter((p) => !this.isCollected(p.id))
       }
-      return this.poems;
+      return this.poems
     },
   },
   methods: {
-    showPoemDetail(poem) {
-      this.selectedPoem = poem;
-      this.showModal = true;
+    showPoemDetail (poem) {
+      this.selectedPoem = poem
+      this.showModal = true
     },
   },
-};
+}
 </script>
 
 <style scoped>

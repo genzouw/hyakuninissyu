@@ -1,8 +1,5 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import Vuex from 'vuex'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { shallowMount } from '@vue/test-utils'
+import { createStore as createVuexStore } from 'vuex'
 
 global.SpeechSynthesisUtterance = function () {
   return { pitch: 1, lang: '', text: '' }
@@ -16,7 +13,7 @@ const AIBattle = require('@/components/AIBattle').default
 
 function createStore () {
   const dispatch = jest.fn()
-  const store = new Vuex.Store({
+  const store = createVuexStore({
     modules: {
       collection: {
         namespaced: true,
@@ -32,23 +29,20 @@ function createStore () {
 function setup ({ correctIndex = 1, currentQuestionId = 1 } = {}) {
   const { store, dispatch } = createStore()
   const wrapper = shallowMount(AIBattle, {
-    localVue,
-    store,
-    mocks: {
-      $router: { push: jest.fn() },
-    },
-    data () {
-      return {
-        canAnswer: true,
-        roundFinished: false,
-        correctAnswerIndex: correctIndex,
-        currentQuestion: { id: currentQuestionId, question: 'q', answer: 'a' },
-        aiTimeout: null,
-        enableSpeak: false,
-      }
+    global: {
+      plugins: [store],
+      mocks: {
+        $router: { push: jest.fn() },
+      },
     },
   })
   const vm = wrapper.vm
+  vm.canAnswer = true
+  vm.roundFinished = false
+  vm.correctAnswerIndex = correctIndex
+  vm.currentQuestion = { id: currentQuestionId, question: 'q', answer: 'a' }
+  vm.aiTimeout = null
+  vm.enableSpeak = false
   return { wrapper, vm, dispatch }
 }
 

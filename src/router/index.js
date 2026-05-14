@@ -1,15 +1,15 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import Top from '@/components/Top';
-import Playing from '@/components/Playing';
-import GameSet from '@/components/GameSet';
-import TimeAttack from '@/components/TimeAttack';
-import TimeAttackResult from '@/components/TimeAttackResult';
-import AIBattle from '@/components/AIBattle';
-import AIBattleResult from '@/components/AIBattleResult';
-import Badges from '@/components/Badges';
-import Collection from '@/components/Collection';
-import DailyChallenge from '@/components/DailyChallenge';
-import DailyChallengeResult from '@/components/DailyChallengeResult';
+import { createRouter, createWebHistory } from 'vue-router'
+import Top from '@/components/Top'
+import Playing from '@/components/Playing'
+import GameSet from '@/components/GameSet'
+import TimeAttack from '@/components/TimeAttack'
+import TimeAttackResult from '@/components/TimeAttackResult'
+import AIBattle from '@/components/AIBattle'
+import AIBattleResult from '@/components/AIBattleResult'
+import Badges from '@/components/Badges'
+import Collection from '@/components/Collection'
+import DailyChallenge from '@/components/DailyChallenge'
+import DailyChallengeResult from '@/components/DailyChallengeResult'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -70,6 +70,6 @@ const router = createRouter({
       component: DailyChallengeResult,
     },
   ],
-});
+})
 
-export default router;
+export default router

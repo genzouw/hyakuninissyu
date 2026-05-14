@@ -1,8 +1,5 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
-import Vuex from 'vuex'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
+import { shallowMount } from '@vue/test-utils'
+import { createStore as createVuexStore } from 'vuex'
 
 global.SpeechSynthesisUtterance = function () {
   return { pitch: 1, lang: '', text: '' }
@@ -19,7 +16,7 @@ const originalMediaPlay = HTMLMediaElement.prototype.play
 
 function createStore () {
   const dispatch = jest.fn()
-  const store = new Vuex.Store({
+  const store = createVuexStore({
     modules: {
       collection: {
         namespaced: true,
@@ -47,12 +44,13 @@ function mountWithQuestion (questionData) {
     '<audio id="right-sound"></audio><audio id="wrong-sound"></audio>'
   HTMLMediaElement.prototype.play = jest.fn()
   const wrapper = shallowMount(TimeAttack, {
-    localVue,
-    store,
-    mocks: {
-      // clickAnswer の最終問題分岐で $router.push を呼ぶため、テスト拡張時の
-      // TypeError を防ぐ目的で防御的に stub する。
-      $router: { push: jest.fn() },
+    global: {
+      plugins: [store],
+      mocks: {
+        // clickAnswer の最終問題分岐で $router.push を呼ぶため、テスト拡張時の
+        // TypeError を防ぐ目的で防御的に stub する。
+        $router: { push: jest.fn() },
+      },
     },
   })
   // mounted 内の loadQuestion() が questionData を上書きするため、

@@ -7,7 +7,7 @@
       </div>
     </div>
 
-    <Form @submit="startGame" v-slot="{ errors }">
+    <VeeForm v-slot="{ errors }" @submit="startGame">
       <div class="row justify-content-center">
         <div class="col-xs-12">
           <div class="form-group row">
@@ -43,7 +43,7 @@
           </button>
         </div>
       </div>
-    </Form>
+    </VeeForm>
 
     <div class="row justify-content-center mt-4">
       <div class="col-xs">
@@ -95,45 +95,45 @@
 </template>
 
 <script>
-import { Form, Field } from 'vee-validate';
+import { Form as VeeForm, Field } from 'vee-validate'
 
 export default {
-  components: { Form, Field },
+  components: { VeeForm, Field },
   computed: {
     countOfQuestions: {
-      get() {
-        return this.$store.state.countOfQuestions;
+      get () {
+        return this.$store.state.countOfQuestions
       },
-      set(value) {
-        this.$store.commit('updateCountOfQuestions', value);
+      set (value) {
+        this.$store.commit('updateCountOfQuestions', value)
       },
     },
   },
   methods: {
-    validateCount(value) {
+    validateCount (value) {
       if (value === '' || value === null || value === undefined) {
-        return 'もんだいのかずは必須です';
+        return 'もんだいのかずは必須です'
       }
-      const n = Number(value);
+      const n = Number(value)
       if (!Number.isFinite(n)) {
-        return 'もんだいのかずは数値で入力してください';
+        return 'もんだいのかずは数値で入力してください'
       }
       if (!Number.isInteger(n)) {
-        return 'もんだいのかずは整数で入力してください';
+        return 'もんだいのかずは整数で入力してください'
       }
       if (n < 1) {
-        return 'もんだいのかずは1以上で入力してください';
+        return 'もんだいのかずは1以上で入力してください'
       }
       if (n > 100) {
-        return 'もんだいのかずは100以下で入力してください';
+        return 'もんだいのかずは100以下で入力してください'
       }
-      return true;
+      return true
     },
-    startGame() {
-      this.$router.push({ path: `/playing/${this.countOfQuestions}` });
+    startGame () {
+      this.$router.push({ path: `/playing/${this.countOfQuestions}` })
     },
   },
-};
+}
 </script>
 
 <style scoped>

@@ -1,15 +1,11 @@
-import { mount, createLocalVue } from '@vue/test-utils'
-import Vuex from 'vuex'
-import BootstrapVue from 'bootstrap-vue'
+import { mount } from '@vue/test-utils'
+import { createStore as createVuexStore } from 'vuex'
+import { createBootstrap } from 'bootstrap-vue-next'
 import Collection from '@/components/Collection'
 import collectionModule from '@/store/modules/collection'
 
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(BootstrapVue)
-
 function createStore (collectedPoemIds = []) {
-  return new Vuex.Store({
+  return createVuexStore({
     modules: {
       collection: {
         ...collectionModule,
@@ -22,7 +18,9 @@ function createStore (collectedPoemIds = []) {
 describe('Collection.vue', () => {
   function mountCollection (collectedPoemIds = []) {
     const store = createStore(collectedPoemIds)
-    return mount(Collection, { localVue, store })
+    return mount(Collection, {
+      global: { plugins: [store, createBootstrap()] },
+    })
   }
 
   it('should render component title', () => {
