@@ -14,6 +14,9 @@ global.speechSynthesis = {
 
 const TimeAttack = require('@/components/TimeAttack').default
 
+// HTMLMediaElement.prototype.play の差し替えを後で戻すための保存
+const originalMediaPlay = HTMLMediaElement.prototype.play
+
 function createStore () {
   const dispatch = jest.fn()
   const store = new Vuex.Store({
@@ -62,6 +65,13 @@ function mountWithQuestion (questionData) {
 }
 
 describe('TimeAttack.vue', () => {
+  afterEach(() => {
+    // mountWithQuestion 内で書き換えた DOM とグローバル HTMLMediaElement を
+    // 後続テストへ漏れさせない。
+    document.body.innerHTML = ''
+    HTMLMediaElement.prototype.play = originalMediaPlay
+  })
+
   describe('clickAnswer', () => {
     it('should dispatch collection/addCollectedPoem when answer is correct', () => {
       const { vm, dispatch } = mountWithQuestion({
