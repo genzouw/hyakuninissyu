@@ -1,14 +1,15 @@
-import Vue from 'vue'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 
-Vue.use(Vuex)
+const localVue = createLocalVue()
+localVue.use(Vuex)
 
 global.SpeechSynthesisUtterance = function () {
   return { pitch: 1, lang: '', text: '' }
 }
 global.speechSynthesis = {
   cancel () {},
-  speak () {}
+  speak () {},
 }
 
 const AIBattle = require('@/components/AIBattle').default
@@ -20,9 +21,9 @@ function createStore () {
       collection: {
         namespaced: true,
         state: { collectedPoemIds: [] },
-        actions: { addCollectedPoem: jest.fn() }
-      }
-    }
+        actions: { addCollectedPoem: jest.fn() },
+      },
+    },
   })
   store.dispatch = dispatch
   return { store, dispatch }
@@ -30,15 +31,25 @@ function createStore () {
 
 function setup ({ correctIndex = 1, currentQuestionId = 1 } = {}) {
   const { store, dispatch } = createStore()
-  const Constructor = Vue.extend(AIBattle)
-  const vm = new Constructor({ store })
-  vm.canAnswer = true
-  vm.roundFinished = false
-  vm.correctAnswerIndex = correctIndex
-  vm.currentQuestion = { id: currentQuestionId, question: 'q', answer: 'a' }
-  vm.aiTimeout = null
-  vm.enableSpeak = false
-  return { vm, dispatch }
+  const wrapper = shallowMount(AIBattle, {
+    localVue,
+    store,
+    mocks: {
+      $router: { push: jest.fn() },
+    },
+    data () {
+      return {
+        canAnswer: true,
+        roundFinished: false,
+        correctAnswerIndex: correctIndex,
+        currentQuestion: { id: currentQuestionId, question: 'q', answer: 'a' },
+        aiTimeout: null,
+        enableSpeak: false,
+      }
+    },
+  })
+  const vm = wrapper.vm
+  return { wrapper, vm, dispatch }
 }
 
 describe('AIBattle.vue', () => {
@@ -46,7 +57,7 @@ describe('AIBattle.vue', () => {
     it('should dispatch collection/addCollectedPoem when player answer is correct', () => {
       const { vm, dispatch } = setup({
         correctIndex: 1,
-        currentQuestionId: 25
+        currentQuestionId: 25,
       })
       vm.selectAnswer(1)
       expect(dispatch).toHaveBeenCalledWith('collection/addCollectedPoem', 25)
@@ -55,7 +66,7 @@ describe('AIBattle.vue', () => {
     it('should NOT dispatch when player answer is wrong', () => {
       const { vm, dispatch } = setup({
         correctIndex: 1,
-        currentQuestionId: 25
+        currentQuestionId: 25,
       })
       vm.selectAnswer(2)
       expect(dispatch).not.toHaveBeenCalledWith(

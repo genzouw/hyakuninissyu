@@ -1,7 +1,8 @@
-import Vue from 'vue'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 
-Vue.use(Vuex)
+const localVue = createLocalVue()
+localVue.use(Vuex)
 
 // Playing.vue は data() で new SpeechSynthesisUtterance() を呼ぶため、
 // jsdom 環境ではグローバルにスタブを用意する必要がある。
@@ -10,11 +11,14 @@ global.SpeechSynthesisUtterance = function () {
 }
 global.speechSynthesis = {
   cancel () {},
-  speak () {}
+  speak () {},
 }
 
 // import は data() 評価より先に実行されるため、SpeechSynthesisUtterance のスタブ後に require する
 const Playing = require('@/components/Playing').default
+
+// HTMLMediaElement.prototype.play の差し替えを後で戻すための保存
+const originalMediaPlay = HTMLMediaElement.prototype.play
 
 function createStore () {
   const dispatch = jest.fn()
@@ -23,9 +27,9 @@ function createStore () {
       collection: {
         namespaced: true,
         state: { collectedPoemIds: [] },
-        actions: { addCollectedPoem: jest.fn() }
-      }
-    }
+        actions: { addCollectedPoem: jest.fn() },
+      },
+    },
   })
   store.dispatch = dispatch
   return { store, dispatch }
@@ -33,28 +37,42 @@ function createStore () {
 
 function mountWithQuestion (questionData) {
   const { store, dispatch } = createStore()
-  const Constructor = Vue.extend(Playing)
-  // mounted を実行させないために $mount を呼ばずにインスタンスのみ生成
-  const vm = new Constructor({ store })
-  vm.$route = { params: { countOfQuestions: 10 } }
-  vm.questionData = questionData
-  vm.thinking = true
-  vm.enableSpeak = false
   // clickAnswer 内の document.getElementById('right-sound')/('wrong-sound') 用にスタブ
   document.body.innerHTML =
     '<audio id="right-sound"></audio><audio id="wrong-sound"></audio>'
   HTMLMediaElement.prototype.play = jest.fn()
-  return { vm, dispatch }
+  const wrapper = shallowMount(Playing, {
+    localVue,
+    store,
+    mocks: {
+      $route: { params: { countOfQuestions: 10 } },
+      $router: { push: jest.fn() },
+    },
+  })
+  // mounted 内の loadQuestion() が questionData を上書きするため、
+  // テスト用の値は mounted 完了後に再代入する必要がある。
+  const vm = wrapper.vm
+  vm.questionData = questionData
+  vm.thinking = true
+  vm.enableSpeak = false
+  return { wrapper, vm, dispatch }
 }
 
 describe('Playing.vue', () => {
+  afterEach(() => {
+    // mountWithQuestion 内で書き換えた DOM とグローバル HTMLMediaElement を
+    // 後続テストへ漏れさせない。
+    document.body.innerHTML = ''
+    HTMLMediaElement.prototype.play = originalMediaPlay
+  })
+
   describe('clickAnswer', () => {
     it('should dispatch collection/addCollectedPoem when answer is correct', () => {
       const { vm, dispatch } = mountWithQuestion({
         id: 42,
         question: 'q',
         answer: 'a',
-        choices: ['a', 'b', 'c', 'd']
+        choices: ['a', 'b', 'c', 'd'],
       })
       vm.choice = 'a'
       vm.clickAnswer()
@@ -66,7 +84,7 @@ describe('Playing.vue', () => {
         id: 42,
         question: 'q',
         answer: 'a',
-        choices: ['a', 'b', 'c', 'd']
+        choices: ['a', 'b', 'c', 'd'],
       })
       vm.choice = 'b'
       vm.clickAnswer()
@@ -78,7 +96,7 @@ describe('Playing.vue', () => {
         id: 1,
         question: 'q',
         answer: 'a',
-        choices: ['a']
+        choices: ['a'],
       })
       vm.choice = 'a'
       const before = vm.score

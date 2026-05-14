@@ -1,17 +1,21 @@
-import Vue from 'vue'
+import { shallowMount, createLocalVue } from '@vue/test-utils'
 import Vuex from 'vuex'
 
-Vue.use(Vuex)
+const localVue = createLocalVue()
+localVue.use(Vuex)
 
 global.SpeechSynthesisUtterance = function () {
   return { pitch: 1, lang: '', text: '' }
 }
 global.speechSynthesis = {
   cancel () {},
-  speak () {}
+  speak () {},
 }
 
 const TimeAttack = require('@/components/TimeAttack').default
+
+// HTMLMediaElement.prototype.play の差し替えを後で戻すための保存
+const originalMediaPlay = HTMLMediaElement.prototype.play
 
 function createStore () {
   const dispatch = jest.fn()
@@ -20,7 +24,7 @@ function createStore () {
       collection: {
         namespaced: true,
         state: { collectedPoemIds: [] },
-        actions: { addCollectedPoem: jest.fn() }
+        actions: { addCollectedPoem: jest.fn() },
       },
       timeAttack: {
         namespaced: true,
@@ -28,10 +32,10 @@ function createStore () {
         actions: {
           startGame: jest.fn(),
           answerCard: jest.fn(),
-          stopGame: jest.fn()
-        }
-      }
-    }
+          stopGame: jest.fn(),
+        },
+      },
+    },
   })
   store.dispatch = dispatch
   return { store, dispatch }
@@ -39,25 +43,42 @@ function createStore () {
 
 function mountWithQuestion (questionData) {
   const { store, dispatch } = createStore()
-  const Constructor = Vue.extend(TimeAttack)
-  const vm = new Constructor({ store })
-  vm.questionData = questionData
-  vm.thinking = true
-  vm.enableSpeak = false
   document.body.innerHTML =
     '<audio id="right-sound"></audio><audio id="wrong-sound"></audio>'
   HTMLMediaElement.prototype.play = jest.fn()
-  return { vm, dispatch }
+  const wrapper = shallowMount(TimeAttack, {
+    localVue,
+    store,
+    mocks: {
+      // clickAnswer の最終問題分岐で $router.push を呼ぶため、テスト拡張時の
+      // TypeError を防ぐ目的で防御的に stub する。
+      $router: { push: jest.fn() },
+    },
+  })
+  // mounted 内の loadQuestion() が questionData を上書きするため、
+  // テスト用の値は mounted 完了後に再代入する必要がある。
+  const vm = wrapper.vm
+  vm.questionData = questionData
+  vm.thinking = true
+  vm.enableSpeak = false
+  return { wrapper, vm, dispatch }
 }
 
 describe('TimeAttack.vue', () => {
+  afterEach(() => {
+    // mountWithQuestion 内で書き換えた DOM とグローバル HTMLMediaElement を
+    // 後続テストへ漏れさせない。
+    document.body.innerHTML = ''
+    HTMLMediaElement.prototype.play = originalMediaPlay
+  })
+
   describe('clickAnswer', () => {
     it('should dispatch collection/addCollectedPoem when answer is correct', () => {
       const { vm, dispatch } = mountWithQuestion({
         id: 7,
         question: 'q',
         answer: 'a',
-        choices: ['a', 'b', 'c', 'd']
+        choices: ['a', 'b', 'c', 'd'],
       })
       vm.choice = 'a'
       vm.clickAnswer()
@@ -69,7 +90,7 @@ describe('TimeAttack.vue', () => {
         id: 7,
         question: 'q',
         answer: 'a',
-        choices: ['a', 'b', 'c', 'd']
+        choices: ['a', 'b', 'c', 'd'],
       })
       vm.choice = 'b'
       vm.clickAnswer()
@@ -84,7 +105,7 @@ describe('TimeAttack.vue', () => {
         id: 1,
         question: 'q',
         answer: 'a',
-        choices: ['a']
+        choices: ['a'],
       })
       vm.choice = 'a'
       const before = vm.score
