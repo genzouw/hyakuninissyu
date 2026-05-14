@@ -34,7 +34,6 @@ module.exports = [
       globals: {
         ...globals.browser,
         ...globals.node,
-        ...globals.jest,
       },
     },
     rules: {
@@ -42,6 +41,15 @@ module.exports = [
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
       complexity: ['error', { max: 10 }],
       'vue/multi-word-component-names': 'off',
+    },
+  },
+
+  {
+    files: ['test/**/*.{js,vue}'],
+    languageOptions: {
+      globals: {
+        ...globals.jest,
+      },
     },
   },
 ];
