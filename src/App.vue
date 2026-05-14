@@ -69,7 +69,7 @@ export default {
         },
         // Twitter card
         { name: 'twitter:card', content: 'summary' },
-        { name: 'twitter:site', content: 'https://hyakuninissyu.genzouw.com' },
+        { name: 'twitter:site', content: '@genzouw' },
         { name: 'twitter:title', content: 'ひゃくにんいっしゅをおぼえよう' },
         {
           name: 'twitter:description',
@@ -78,7 +78,7 @@ export default {
         },
         { name: 'twitter:creator', content: '@genzouw' },
         {
-          name: 'twitter:image:src',
+          name: 'twitter:image',
           content: 'https://hyakuninissyu.genzouw.com/hyakunin_issyu.png',
         },
         // Schema.org markup
