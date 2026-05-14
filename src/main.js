@@ -1,19 +1,15 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
+import { createApp } from 'vue'
+import { createBootstrap } from 'bootstrap-vue-next'
+import { createHead } from '@unhead/vue/client'
 import App from './App'
-import Meta from 'vue-meta'
-import VeeValidate, { Validator } from 'vee-validate'
-import ja from 'vee-validate/dist/locale/ja'
 import router from './router'
 import store from './store'
-import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 import './assets/yeti/bootstrap.min.css'
 
-Vue.use(Meta)
-Vue.use(BootstrapVue)
 // GA4 計測タグの注入。GA_ID は webpack DefinePlugin により prod.env.js 経由で
 // `vars.GA_ID` (GitHub Actions Repository Variables) の値が静的に埋め込まれる。
 // 未設定時は null となり、スクリプトの読み込みおよび設定は行われない。
@@ -33,16 +29,10 @@ if (process.env.GA_ID) {
   window.gtag('js', new Date())
   window.gtag('config', process.env.GA_ID)
 }
-Vue.use(VeeValidate)
 
-Validator.localize('ja', ja)
-
-Vue.config.productionTip = false
-
-const app = new Vue({
-  store,
-  router,
-  components: { App },
-  template: '<App/>'
-})
-app.$mount('#app')
+const app = createApp(App)
+app.use(router)
+app.use(store)
+app.use(createBootstrap())
+app.use(createHead())
+app.mount('#app')

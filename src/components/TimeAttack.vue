@@ -140,7 +140,7 @@ export default {
     this.startGame()
     this.loadQuestion()
   },
-  beforeDestroy () {
+  beforeUnmount () {
     // コンポーネント破棄時にタイマーを停止
     this.stopGame()
   },

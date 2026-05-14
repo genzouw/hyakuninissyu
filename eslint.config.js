@@ -19,7 +19,7 @@ module.exports = [
 
   ...neostandard(),
 
-  ...pluginVue.configs['flat/vue2-essential'],
+  ...pluginVue.configs['flat/essential'],
 
   {
     files: ['**/*.{js,vue}'],

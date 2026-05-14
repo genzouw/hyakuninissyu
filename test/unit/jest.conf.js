@@ -5,11 +5,13 @@ module.exports = {
   testEnvironment: 'jsdom',
   moduleFileExtensions: ['js', 'json', 'vue'],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1'
+    '\\.(png|jpe?g|gif|svg|webp|mp3|wav|ogg|woff2?|ttf|otf|eot)$':
+      '<rootDir>/test/unit/__mocks__/fileMock.js',
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
   transform: {
     '^.+\\.js$': '<rootDir>/node_modules/babel-jest',
-    '.*\\.(vue)$': '<rootDir>/node_modules/@vue/vue2-jest'
+    '.*\\.(vue)$': '<rootDir>/node_modules/@vue/vue3-jest',
   },
   testPathIgnorePatterns: ['<rootDir>/test/e2e'],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
@@ -19,6 +21,6 @@ module.exports = {
     'src/**/*.{js,vue}',
     '!src/main.js',
     '!src/router/index.js',
-    '!**/node_modules/**'
-  ]
+    '!**/node_modules/**',
+  ],
 }

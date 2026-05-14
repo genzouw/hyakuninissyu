@@ -1,12 +1,8 @@
-import { mount, createLocalVue } from '@vue/test-utils'
-import Vuex from 'vuex'
-import BootstrapVue from 'bootstrap-vue'
+import { mount } from '@vue/test-utils'
+import { createStore as createVuexStore } from 'vuex'
+import { createBootstrap } from 'bootstrap-vue-next'
 import Badges from '@/components/Badges'
 import collectionModule from '@/store/modules/collection'
-
-const localVue = createLocalVue()
-localVue.use(Vuex)
-localVue.use(BootstrapVue)
 
 // localStorage mock
 const localStorageMock = {
@@ -17,7 +13,7 @@ const localStorageMock = {
 global.localStorage = localStorageMock
 
 function createStore (collectedPoemIds = []) {
-  return new Vuex.Store({
+  return createVuexStore({
     modules: {
       collection: {
         ...collectionModule,
@@ -28,7 +24,9 @@ function createStore (collectedPoemIds = []) {
 }
 
 function mountBadges (collectedPoemIds = []) {
-  return mount(Badges, { localVue, store: createStore(collectedPoemIds) })
+  return mount(Badges, {
+    global: { plugins: [createStore(collectedPoemIds), createBootstrap()] },
+  })
 }
 
 describe('Badges.vue', () => {
