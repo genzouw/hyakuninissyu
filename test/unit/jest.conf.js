@@ -1,15 +1,15 @@
-const path = require('path')
+const path = require('path');
 
 module.exports = {
   rootDir: path.resolve(__dirname, '../../'),
   testEnvironment: 'jsdom',
   moduleFileExtensions: ['js', 'json', 'vue'],
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1'
+    '^@/(.*)$': '<rootDir>/src/$1',
   },
   transform: {
     '^.+\\.js$': '<rootDir>/node_modules/babel-jest',
-    '.*\\.(vue)$': '<rootDir>/node_modules/@vue/vue2-jest'
+    '.*\\.(vue)$': '<rootDir>/node_modules/@vue/vue3-jest',
   },
   testPathIgnorePatterns: ['<rootDir>/test/e2e'],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
@@ -19,6 +19,6 @@ module.exports = {
     'src/**/*.{js,vue}',
     '!src/main.js',
     '!src/router/index.js',
-    '!**/node_modules/**'
-  ]
-}
+    '!**/node_modules/**',
+  ],
+};
