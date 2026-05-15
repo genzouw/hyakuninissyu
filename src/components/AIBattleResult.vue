@@ -57,10 +57,10 @@
 
             <!-- アクションボタン -->
             <div class="mt-4">
-              <router-link to="/ai-battle" class="btn btn-danger btn-lg mr-2">
+              <router-link to="/ai-battle" class="btn btn-danger btn-lg me-2">
                 🤖 もう一度対戦
               </router-link>
-              <router-link to="/time-attack" class="btn btn-success btn-lg mr-2">
+              <router-link to="/time-attack" class="btn btn-success btn-lg me-2">
                 ⏱️ タイムアタックに挑戦
               </router-link>
               <router-link to="/" class="btn btn-outline-primary btn-lg">

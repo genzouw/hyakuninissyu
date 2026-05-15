@@ -9,14 +9,14 @@
 
     <VeeForm v-slot="{ errors }" @submit="startGame">
       <div class="row justify-content-center">
-        <div class="col-xs-12">
-          <div class="form-group row">
+        <div class="col-12">
+          <div class="mb-3 row">
             <label
               for="countOfQuestions"
-              class="col-xs-4 col-form-label col-form-label-lg"
+              class="col-4 col-form-label col-form-label-lg"
               >もんだいのかず</label
             >
-            <div class="col-xs-4">
+            <div class="col-4">
               <Field
                 id="countOfQuestions"
                 name="countOfQuestions"
@@ -28,20 +28,20 @@
                 class="form-control form-control-lg"
               />
             </div>
-            <label class="col-xs-4 col-form-label col-form-label-lg"
+            <label class="col-4 col-form-label col-form-label-lg"
               >もん</label
             >
           </div>
         </div>
 
-        <div class="col-xs-12">
+        <div class="col-12">
           <span class="text-danger">{{ errors.countOfQuestions }}</span>
         </div>
       </div>
 
       <div class="row justify-content-center">
-        <div class="col-xs">
-          <button type="submit" class="btn btn-lg btn-primary pl-5 pr-5">
+        <div class="col">
+          <button type="submit" class="btn btn-lg btn-primary ps-5 pe-5">
             はじめる
           </button>
         </div>
@@ -49,32 +49,32 @@
     </VeeForm>
 
     <div class="row justify-content-center mt-4">
-      <div class="col-xs">
+      <div class="col">
         <router-link
           to="/daily-challenge"
-          class="btn btn-lg btn-warning pl-5 pr-5 mr-2"
+          class="btn btn-lg btn-warning ps-5 pe-5 me-2"
         >
           📅 デイリーチャレンジ
         </router-link>
         <router-link
           to="/time-attack"
-          class="btn btn-lg btn-success pl-5 pr-5 mr-2"
+          class="btn btn-lg btn-success ps-5 pe-5 me-2"
         >
           ⏱️ タイムアタックモード
         </router-link>
         <router-link
           to="/ai-battle"
-          class="btn btn-lg btn-danger pl-5 pr-5 mr-2"
+          class="btn btn-lg btn-danger ps-5 pe-5 me-2"
         >
           🤖 AI対戦モード
         </router-link>
         <router-link
           to="/collection"
-          class="btn btn-lg btn-primary pl-5 pr-5 mr-2"
+          class="btn btn-lg btn-primary ps-5 pe-5 me-2"
         >
           📚 コレクション図鑑
         </router-link>
-        <router-link to="/badges" class="btn btn-lg btn-warning pl-5 pr-5">
+        <router-link to="/badges" class="btn btn-lg btn-warning ps-5 pe-5">
           🎖️ バッジコレクション
         </router-link>
         <p class="text-muted mt-2">
@@ -89,7 +89,7 @@
       <div class="col-auto text-center">
         <img
           src="@/assets/hyakunin_issyu.png"
-          class="img-fluid w-75 center-block"
+          class="img-fluid w-75 mx-auto d-block"
           alt="百人一首のイメージ"
         />
       </div>

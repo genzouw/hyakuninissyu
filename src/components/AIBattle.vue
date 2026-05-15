@@ -8,7 +8,7 @@
             <h2>🤖 AI対戦モード</h2>
           </div>
           <div class="card-body">
-            <div class="form-group">
+            <div class="mb-3">
               <label class="h5">問題数を選択</label>
               <div class="btn-group btn-group-lg d-flex" role="group">
                 <button
@@ -28,7 +28,7 @@
               </div>
             </div>
 
-            <div class="form-group mt-4">
+            <div class="mb-3 mt-4">
               <label class="h5">難易度を選択</label>
               <div class="btn-group btn-group-lg d-flex" role="group">
                 <button
@@ -75,7 +75,7 @@
             <div class="text-center mt-4">
               <button
                 @click="startGame"
-                class="btn btn-lg btn-primary pl-5 pr-5"
+                class="btn btn-lg btn-primary ps-5 pe-5"
               >
                 対戦開始！
               </button>
@@ -90,7 +90,7 @@
       <div class="col-md-10">
         <!-- 音声読み上げトグル -->
         <div class="row mb-3">
-          <div class="col-12 text-right">
+          <div class="col-12 text-end">
             <button
               @click="clickSpeakToggle"
               class="btn btn-sm"

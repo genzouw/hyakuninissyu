@@ -41,7 +41,7 @@
           </span>
         </div>
         <div class="col-auto">
-          <span class="badge badge-success badge-lg">
+          <span class="badge bg-success badge-lg">
             🔥 {{ currentStreak }}日連続
           </span>
         </div>
@@ -105,7 +105,7 @@
         <div class="col-auto text-center">
           <img
             src="@/assets/hyakunin_issyu.png"
-            class="img-fluid w-75 center-block"
+            class="img-fluid w-75 mx-auto d-block"
             alt=""
           />
         </div>

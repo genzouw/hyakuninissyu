@@ -52,7 +52,7 @@
         </div>
 
         <div class="text-center mt-4">
-          <router-link to="/" class="btn btn-lg btn-primary pl-5 pr-5">
+          <router-link to="/" class="btn btn-lg btn-primary ps-5 pe-5">
             トップへ戻る
           </router-link>
         </div>

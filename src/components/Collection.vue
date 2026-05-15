@@ -85,10 +85,10 @@
                 }}</small>
                 <small class="text-muted" v-else>？？？</small>
               </p>
-              <span v-if="isCollected(poem.id)" class="badge badge-success"
+              <span v-if="isCollected(poem.id)" class="badge bg-success"
                 >習得済み</span
               >
-              <span v-else class="badge badge-secondary">未習得</span>
+              <span v-else class="badge bg-secondary">未習得</span>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@
         <hr />
         <p><strong>作者:</strong> {{ selectedPoem.author }}</p>
         <div v-if="isCollected(selectedPoem.id)" class="mt-3">
-          <b-badge variant="success" class="mr-2">習得済み</b-badge>
+          <b-badge variant="success" class="me-2">習得済み</b-badge>
         </div>
         <div v-else class="mt-3">
           <b-alert :model-value="true" variant="info">
