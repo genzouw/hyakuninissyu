@@ -24,9 +24,6 @@ function buildStore (plugin) {
         namespaced: true,
         state: { collectedPoemIds: [] },
         mutations: {
-          HYDRATE (state, { key, value }) {
-            if (key in state) state[key] = value
-          },
           ADD (state, id) {
             state.collectedPoemIds.push(id)
           },

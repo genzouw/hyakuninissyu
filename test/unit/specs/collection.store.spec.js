@@ -10,17 +10,6 @@ describe('collection Vuex module', () => {
   })
 
   describe('mutations', () => {
-    it('HYDRATE should overwrite known state keys', () => {
-      collection.mutations.HYDRATE(state, { key: 'collectedPoemIds', value: [1, 2, 3] })
-      expect(state.collectedPoemIds).toEqual([1, 2, 3])
-    })
-
-    it('HYDRATE should ignore unknown state keys', () => {
-      collection.mutations.HYDRATE(state, { key: 'unknown', value: 'x' })
-      expect(state.collectedPoemIds).toEqual([])
-      expect(state.unknown).toBeUndefined()
-    })
-
     it('ADD_COLLECTED_POEM should append a new poemId', () => {
       collection.mutations.ADD_COLLECTED_POEM(state, 5)
       expect(state.collectedPoemIds).toEqual([5])

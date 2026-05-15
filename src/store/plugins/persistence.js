@@ -5,8 +5,6 @@
 // 制約:
 //   - パスは必ず `<moduleName>.<stateKey>` の 2 階層形式で指定する必要があります。
 //     ルート state（例: 'countOfQuestions'）や 3 階層以上のパス（例: 'a.b.c'）には対応していません。
-//   - 各モジュールには `HYDRATE` mutation を実装し、`{ key, value }` を受け取って
-//     対応する state を更新する必要があります。
 //
 // 使用例:
 //   createPersistencePlugin([
@@ -17,6 +15,13 @@
 
 function getByPath (obj, path) {
   return path.split('.').reduce((acc, key) => (acc == null ? acc : acc[key]), obj)
+}
+
+function setByPath (obj, path, value) {
+  const segments = path.split('.')
+  const last = segments.pop()
+  const parent = segments.reduce((acc, key) => (acc == null ? acc : acc[key]), obj)
+  if (parent != null) parent[last] = value
 }
 
 function defaultStorage () {
@@ -52,14 +57,14 @@ export default function createPersistencePlugin (paths, options) {
   return function plugin (store) {
     const storage = opts.storage || defaultStorage()
 
-    // hydration: 既存の localStorage 値を state に反映
+    // hydration: 既存 state をディープクローンし paths の値だけ localStorage で上書き、
+    // replaceState で一括反映する。これにより各モジュールに HYDRATE mutation を実装する必要がなくなる。
+    const merged = JSON.parse(JSON.stringify(store.state))
     paths.forEach(entry => {
       const value = readFromStorage(storage, entry.key, entry.default)
-      const segments = entry.path.split('.')
-      const moduleName = segments[0]
-      const stateKey = segments[segments.length - 1]
-      store.commit(moduleName + '/HYDRATE', { key: stateKey, value })
+      setByPath(merged, entry.path, value)
     })
+    store.replaceState(merged)
 
     // 永続化: 値が前回と同一の場合は書き込みをスキップしてオーバーヘッドを減らす
     const lastSerialized = {}
