@@ -87,3 +87,6 @@ typings/
 
 
 dist/
+
+# jscpd duplication reports
+reports/

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://raw.githubusercontent.com/kucherenko/jscpd/master/packages/jscpd/schema.json",
+  "threshold": 6,
+  "reporters": ["console", "html"],
+  "output": "./reports/jscpd",
+  "format": ["javascript", "vue", "css"],
+  "ignore": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/coverage/**",
+    "**/reports/**",
+    "**/static/**",
+    "**/test/e2e/**",
+    "**/*.spec.js",
+    "**/*.test.js"
+  ],
+  "absolute": true,
+  "gitignore": true,
+  "minLines": 10,
+  "minTokens": 70
+}
