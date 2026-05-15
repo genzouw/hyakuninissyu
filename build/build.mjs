@@ -4,9 +4,6 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { rimraf } from 'rimraf';
 import webpack from 'webpack';
-import checkVersions from './check-versions.mjs';
-
-checkVersions();
 
 process.env.NODE_ENV = 'production';
 
