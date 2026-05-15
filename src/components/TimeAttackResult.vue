@@ -30,7 +30,7 @@
             </div>
 
             <div class="mt-4">
-              <router-link to="/" class="btn btn-primary btn-lg mr-2">ホームに戻る</router-link>
+              <router-link to="/" class="btn btn-primary btn-lg me-2">ホームに戻る</router-link>
               <router-link to="/time-attack" class="btn btn-success btn-lg">もう一度挑戦</router-link>
             </div>
           </div>
