@@ -9,6 +9,6 @@ As part of updating the CI pipeline to use `bun` instead of `npm`, we ran local 
 | Build                | ~23.3 seconds            | **~22.2 seconds**           |
 | Unit Tests           | ~18.3 seconds            | **~3.8 seconds**            |
 
-### Expected GitHub Actions Impact
+## Expected GitHub Actions Impact
 
 We expect GitHub Actions pipeline to run roughly 15-30 seconds faster due to the much quicker installation process of dependencies. Because bun is used in both linting and testing/building pipelines, we should see speedup in both `CI` and `Deploy to S3` github action runs. The unit tests are notably faster as well.
