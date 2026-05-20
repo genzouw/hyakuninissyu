@@ -3,7 +3,6 @@
 const neostandard = require('neostandard');
 const pluginVue = require('eslint-plugin-vue');
 const vueParser = require('vue-eslint-parser');
-const babelParser = require('@babel/eslint-parser');
 const globals = require('globals');
 
 module.exports = [
@@ -27,10 +26,6 @@ module.exports = [
       ecmaVersion: 2021,
       sourceType: 'module',
       parser: vueParser,
-      parserOptions: {
-        parser: babelParser,
-        requireConfigFile: false,
-      },
       globals: {
         ...globals.browser,
         ...globals.node,
