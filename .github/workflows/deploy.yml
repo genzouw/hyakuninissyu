@@ -72,14 +72,14 @@ jobs:
 
       - name: Deploy to S3
         run: |
-          aws s3 sync dist/ s3://${S3_BUCKET}/${S3_PREFIX}/ \
+          aws s3 sync dist/ "s3://${S3_BUCKET}/${S3_PREFIX}/" \
             --delete \
             --cache-control "max-age=31536000,public" \
             --exclude "*.html" \
             --exclude "*.json"
 
           # HTML and JSON files with shorter cache
-          aws s3 sync dist/ s3://${S3_BUCKET}/${S3_PREFIX}/ \
+          aws s3 sync dist/ "s3://${S3_BUCKET}/${S3_PREFIX}/" \
             --cache-control "max-age=0,no-cache,no-store,must-revalidate" \
             --exclude "*" \
             --include "*.html" \
