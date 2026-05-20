@@ -5,7 +5,7 @@ describe('collection Vuex module', () => {
 
   beforeEach(() => {
     state = {
-      collectedPoemIds: []
+      collectedPoemIds: [],
     }
   })
 
@@ -31,8 +31,21 @@ describe('collection Vuex module', () => {
   describe('actions', () => {
     it('addCollectedPoem should commit ADD_COLLECTED_POEM with the poemId', () => {
       const commit = jest.fn()
-      collection.actions.addCollectedPoem({ commit }, 7)
+      collection.actions.addCollectedPoem({ commit, state }, 7)
       expect(commit).toHaveBeenCalledWith('ADD_COLLECTED_POEM', 7)
+    })
+
+    it('addCollectedPoem should return true when the poem is newly added', () => {
+      const commit = jest.fn()
+      const result = collection.actions.addCollectedPoem({ commit, state }, 7)
+      expect(result).toBe(true)
+    })
+
+    it('addCollectedPoem should return false when the poem is already collected', () => {
+      state.collectedPoemIds = [7]
+      const commit = jest.fn()
+      const result = collection.actions.addCollectedPoem({ commit, state }, 7)
+      expect(result).toBe(false)
     })
 
     it('resetCollected should commit RESET_COLLECTED', () => {
@@ -59,7 +72,9 @@ describe('collection Vuex module', () => {
     it('isCollected should return true for collected poemIds and false otherwise', () => {
       state.collectedPoemIds = [1, 5, 10]
       const set = collection.getters.collectedPoemIdSet(state)
-      const isCollected = collection.getters.isCollected(state, { collectedPoemIdSet: set })
+      const isCollected = collection.getters.isCollected(state, {
+        collectedPoemIdSet: set,
+      })
       expect(isCollected(1)).toBe(true)
       expect(isCollected(10)).toBe(true)
       expect(isCollected(2)).toBe(false)

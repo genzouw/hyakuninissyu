@@ -40,7 +40,10 @@
         <!-- アクションボタン -->
         <div class="row mt-4">
           <div class="col-6">
-            <router-link to="/collection" class="btn btn-lg btn-success btn-block">
+            <router-link
+              to="/collection"
+              class="btn btn-lg btn-success btn-block"
+            >
               📚 コレクション図鑑
             </router-link>
           </div>
@@ -77,7 +80,7 @@ export default {
       score: 0,
       currentStreak: 0,
       previousStreak: 0,
-      collectedCount: 0
+      collectedCount: 0,
     }
   },
   computed: {
@@ -112,16 +115,15 @@ export default {
     },
     streakReset () {
       return this.currentStreak === 0 && this.previousStreak > 0
-    }
+    },
   },
   mounted () {
     this.score = parseInt(this.$route.params.score, 10) || 0
     this.currentStreak = parseInt(this.$route.params.streak, 10) || 0
     this.previousStreak = parseInt(this.$route.params.previousStreak, 10) || 0
-
-    // 今回追加されたコレクション数を推定（正解数と同じ）
-    this.collectedCount = this.score
-  }
+    this.collectedCount =
+      parseInt(this.$route.params.newlyCollectedCount, 10) || 0
+  },
 }
 </script>
 
@@ -177,7 +179,8 @@ export default {
 }
 
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
   }
   50% {
