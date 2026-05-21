@@ -15,7 +15,9 @@
           <div class="card-body text-center">
             <h3 class="mb-3">⏰ 次のチャレンジまで</h3>
             <div class="countdown display-4">
-              {{ countdown.hours }}:{{ String(countdown.minutes).padStart(2, '0') }}:{{ String(countdown.seconds).padStart(2, '0') }}
+              {{ countdown.hours }}:{{
+                String(countdown.minutes).padStart(2, '0')
+              }}:{{ String(countdown.seconds).padStart(2, '0') }}
             </div>
           </div>
         </div>
@@ -48,11 +50,14 @@
         <div class="col-auto">
           <button
             class="btn btn-sm"
-            :class="{ 'btn-primary': enableSpeak, 'btn-secondary': !enableSpeak }"
+            :class="{
+              'btn-primary': enableSpeak,
+              'btn-secondary': !enableSpeak,
+            }"
             @click.prevent="clickSpeakToggle"
           >
-            {{ enableSpeak ? "○" : "✕" }} よみあげ{{
-              enableSpeak ? "あり" : "なし"
+            {{ enableSpeak ? '○' : '✕' }} よみあげ{{
+              enableSpeak ? 'あり' : 'なし'
             }}
           </button>
         </div>
@@ -131,7 +136,7 @@ import {
   getCurrentStreak,
   updateStreak,
   markTodaysChallengeCompleted,
-  getTimeUntilNextChallenge
+  getTimeUntilNextChallenge,
 } from '@/utils/dailyChallenge'
 
 export default {
@@ -141,10 +146,11 @@ export default {
       alreadyCompleted: false,
       currentQuestionIndex: 0,
       score: 0,
+      newlyCollectedCount: 0,
       questionData: {
         question: '',
         choices: [],
-        answer: ''
+        answer: '',
       },
       choice: null,
       thinking: false,
@@ -153,11 +159,11 @@ export default {
       countdown: {
         hours: 0,
         minutes: 0,
-        seconds: 0
+        seconds: 0,
       },
       countdownInterval: null,
       speak: new SpeechSynthesisUtterance(),
-      enableSpeak: true
+      enableSpeak: true,
     }
   },
   mounted () {
@@ -172,18 +178,18 @@ export default {
     } else {
       // 今日のチャレンジ用の5首を取得
       const todaysPoems = getTodaysChallengePoems(poems)
-      this.questionList = todaysPoems.map(poem => ({
+      this.questionList = todaysPoems.map((poem) => ({
         id: poem.id,
         question: poem.question,
         answer: poem.answer,
-        choices: []
+        choices: [],
       }))
 
       // 選択肢を生成
-      const allAnswers = poems.map(p => p.answer)
-      this.questionList.forEach(q => {
+      const allAnswers = poems.map((p) => p.answer)
+      this.questionList.forEach((q) => {
         const dummies = _.shuffle(
-          allAnswers.filter(a => a !== q.answer)
+          allAnswers.filter((a) => a !== q.answer)
         ).slice(0, 3)
         q.choices = _.shuffle([q.answer, ...dummies])
       })
@@ -198,7 +204,7 @@ export default {
     }
   },
   methods: {
-    clickAnswer () {
+    async clickAnswer () {
       this.thinking = false
 
       this.speakText(this.questionData.answer)
@@ -209,9 +215,12 @@ export default {
         const rightSound = this.$refs.rightSoundDaily
         rightSound.play()
 
-        // コレクション図鑑に追加
+        // コレクション図鑑に追加（新規追加だった場合のみカウント）
         const poemId = this.questionData.id
-        this.addToCollection(poemId)
+        const isNew = await this.addToCollection(poemId)
+        if (isNew) {
+          this.newlyCollectedCount++
+        }
       } else {
         const wrongSound = this.$refs.wrongSoundDaily
         wrongSound.play()
@@ -238,8 +247,9 @@ export default {
           params: {
             score: this.score,
             streak: newStreak,
-            previousStreak
-          }
+            previousStreak,
+            newlyCollectedCount: this.newlyCollectedCount,
+          },
         })
       }
     },
@@ -251,7 +261,7 @@ export default {
       this.speakQuestionIfEnabled()
     },
     addToCollection (poemId) {
-      this.$store.dispatch('collection/addCollectedPoem', poemId)
+      return this.$store.dispatch('collection/addCollectedPoem', poemId)
     },
     startCountdown () {
       this.updateCountdown()
@@ -275,8 +285,8 @@ export default {
       speechSynthesis.cancel()
       this.speak.text = text
       speechSynthesis.speak(this.speak)
-    }
-  }
+    },
+  },
 }
 </script>
 
