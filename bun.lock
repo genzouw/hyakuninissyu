@@ -8,7 +8,6 @@
         "@babel/runtime": "^7.24.0",
         "@popperjs/core": "^2.11.8",
         "@unhead/vue": "^3.1.0",
-        "axios": "^1.16.1",
         "bootstrap": "^5.3.8",
         "bootstrap-vue-next": "^0.45.3",
         "moment": "^2.29.4",
