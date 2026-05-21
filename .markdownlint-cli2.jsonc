@@ -26,11 +26,10 @@
   "ignores": [
     "node_modules/**",
     "**/node_modules/**",
-    ".wrangler/**",
     ".claude/**",
-    "backup/**",
-    "backend/dist/**",
-    "frontend/dist/**",
-    "docs/superpowers/**",
+    "dist/**",
+    "**/dist/**",
+    "build/**",
+    "**/build/**"
   ],
 }

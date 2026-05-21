@@ -6,10 +6,11 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: stale-prs
-  cancel-in-progress: false
+  group: stale-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
+  contents: read
   pull-requests: write
   issues: write
 

@@ -15,5 +15,5 @@ if [ -n "$changed_files" ]; then
   echo "🔍 Running lint..."
   bun run lint
   echo "🧪 Running tests..."
-  bun run test
+  bun run unit
 fi
