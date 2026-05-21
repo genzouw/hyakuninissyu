@@ -8,20 +8,12 @@ else
   echo "⚠️ gitleaks is not installed locally. Skipping local secret scan. (Highly recommended: brew install gitleaks)"
 fi
 
-# Run typecheck for changed workspaces
-changed_backend=$(git diff --cached --name-only -- 'backend/src/')
-changed_frontend=$(git diff --cached --name-only -- 'frontend/src/')
+# Run lint and tests for changed files in src/
+changed_files=$(git diff --cached --name-only -- 'src/')
 
-if [ -n "$changed_backend" ]; then
-  echo "🔍 Running backend typecheck..."
-  npm run typecheck --prefix backend
-  echo "🧪 Running backend tests..."
-  npm run test --prefix backend
-fi
-
-if [ -n "$changed_frontend" ]; then
-  echo "🔍 Running frontend typecheck..."
-  npm run typecheck --prefix frontend
-  echo "🧪 Running frontend tests..."
-  npm run test --prefix frontend
+if [ -n "$changed_files" ]; then
+  echo "🔍 Running lint..."
+  bun run lint
+  echo "🧪 Running tests..."
+  bun run test
 fi
