@@ -39,15 +39,6 @@ updates:
           - "babel-jest"
           - "@vue/vue3-jest"
           - "@types/jest"
-    ignore:
-      # chromedriver majors must match the Chrome browser major (e.g.
-      # chromedriver@148 requires Chrome 148). CI uses `npm ci --ignore-scripts`
-      # so an incompatible chromedriver major would silently pass CI but break
-      # `npm run e2e` locally. Pin majors and bump manually when the Chrome
-      # major used locally is aligned.
-      - dependency-name: chromedriver
-        update-types:
-          - version-update:semver-major
 
   # GitHub Actions
   - package-ecosystem: github-actions
