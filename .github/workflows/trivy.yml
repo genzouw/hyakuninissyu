@@ -7,7 +7,7 @@ on:
     branches: [main]
   schedule:
     # 毎週月曜 04:00 JST (= 日曜 19:00 UTC) に再スキャンして新規 CVE を拾う
-    - cron: "0 19 * * 0"
+    - cron: '0 19 * * 0'
 
 concurrency:
   group: trivy-${{ github.ref }}
@@ -22,7 +22,7 @@ jobs:
     name: Trivy filesystem scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
         with:
           persist-credentials: false
 
@@ -41,8 +41,6 @@ jobs:
 
       - name: Run Trivy (vulnerabilities + misconfig)
         run: |
-          # 既存の脆弱性を整理するまでは exit-code 0 で赤検知を回避。
-          # 整備完了後に --exit-code 1 に変更してビルド失敗に切り替える。
           trivy fs \
             --format sarif \
             --output trivy-fs.sarif \
@@ -54,7 +52,7 @@ jobs:
 
       - name: Upload SARIF to GitHub Security
         if: always()
-        uses: github/codeql-action/upload-sarif@9e0d7b8d25671d64c341c19c0152d693099fb5ba # v4.35.5
+        uses: github/codeql-action/upload-sarif@78ed0c7291d93e40c51b085850dc669a4c3ab73b # v3
         with:
-          sarif_file: "trivy-fs.sarif"
+          sarif_file: 'trivy-fs.sarif'
           category: trivy-fs

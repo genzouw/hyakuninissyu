@@ -1,40 +1,40 @@
-## Description
+<!--
+  PR の説明テンプレート。
+  該当しないセクションは削除して構いません。
+-->
 
-<!-- Please include a summary of the changes and the related issue. Please also include relevant motivation and context. -->
+## 概要
 
-## Related Issue(s)
+<!-- このPRが何を解決するか / 何を追加するかを1〜3行で。 -->
 
-<!-- Please link to the issue(s) here. For example: "Fixes #123" -->
+## 関連 Issue / 設計ドキュメント
 
-Fixes #
+<!-- 例: Closes #123, Refs docs/superpowers/specs/xxx.md -->
 
-## Type of Change
+## 変更内容
 
-<!-- Please delete options that are not relevant. -->
+<!-- 主要な変更点を箇条書きで。 -->
 
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Documentation update
-- [ ] Refactoring (no functional changes, no api changes)
-- [ ] Other:
+-
+-
 
-## Checklist
+## 動作確認
 
-<!-- Please go over all the following points, and put an `x` in all the boxes that apply. -->
+<!-- ローカル / ステージングでどう確認したか、または確認方法。スクショ・ログがあれば貼る。 -->
 
-- [ ] My code follows the style guidelines of this project.
-- [ ] I have performed a self-review of my own code.
-- [ ] I have commented my code, particularly in hard-to-understand areas.
-- [ ] I have made corresponding changes to the documentation.
-- [ ] My changes generate no new warnings (run `npm run lint`).
-- [ ] I have added tests that prove my fix is effective or that my feature works.
-- [ ] New and existing tests pass locally with my changes (`npm test`).
+- [ ] ローカルで動作確認した
+- [ ] テストを追加・更新した（または不要な理由を記載）
 
-## Screenshots / Screen Recordings (if applicable)
+## セルフチェック
 
-<!-- If your changes affect the UI, please provide screenshots or a short video demonstrating the changes. -->
+- [ ] `bun --cwd backend run lint` / `bun --cwd frontend run lint` がパスする
+- [ ] `bun --cwd backend run typecheck` / `bun --cwd frontend run typecheck` がパスする
+- [ ] 破壊的変更がある場合、README または docs を更新した
+- [ ] DB マイグレーションがある場合、ロールバック手順を確認した
+- [ ] secret / 個人情報を含むコードや設定が含まれていない
 
-## Additional Context
+## デプロイ時の注意
 
-<!-- Add any other context about the Pull Request here. -->
+<!-- 環境変数追加 / インフラ変更 / 手動オペレーションが必要なら明記。なければ「なし」。 -->
+
+なし
