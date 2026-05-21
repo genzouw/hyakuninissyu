@@ -39,6 +39,30 @@ updates:
           - "babel-jest"
           - "@vue/vue3-jest"
           - "@types/jest"
+    # Block major bumps while upstream packages cannot follow:
+    #   - Jest stack: @vue/vue3-jest@29.2.6 pins peer deps to jest 29.x /
+    #     babel-jest 29.x and is npm latest. See Issue #133.
+    #   - eslint / neostandard: neostandard@0.13.0 pins peer dep to
+    #     eslint ^9 and bundles @stylistic/eslint-plugin@2.11.0 which
+    #     crashes on eslint 10 (removed `sourceCode.isSpaceBetweenTokens`).
+    #     See closed PR #196.
+    # When upstream ships compatible releases, drop the corresponding
+    # entries below and let Dependabot resume major bumps.
+    ignore:
+      - dependency-name: "jest"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "jest-*"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "babel-jest"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@vue/vue3-jest"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@types/jest"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "neostandard"
+        update-types: ["version-update:semver-major"]
 
   # GitHub Actions
   - package-ecosystem: github-actions
