@@ -1,26 +1,25 @@
-const path = require('path')
+const path = require("path");
 
 module.exports = {
-  rootDir: path.resolve(__dirname, '../../'),
-  testEnvironment: 'jsdom',
-  moduleFileExtensions: ['js', 'json', 'vue'],
+  rootDir: path.resolve(__dirname, "../../"),
+  testEnvironment: "jsdom",
+  moduleFileExtensions: ["js", "json", "vue"],
   moduleNameMapper: {
-    '\\.(png|jpe?g|gif|svg|webp|mp3|wav|ogg|woff2?|ttf|otf|eot)$':
-      '<rootDir>/test/unit/__mocks__/fileMock.js',
-    '^@/(.*)$': '<rootDir>/src/$1',
+    "\\.(png|jpe?g|gif|svg|webp|mp3|wav|ogg|woff2?|ttf|otf|eot)$":
+      "<rootDir>/test/unit/__mocks__/fileMock.js",
+    "^@/(.*)$": "<rootDir>/src/$1",
   },
   transform: {
-    '^.+\\.js$': '<rootDir>/node_modules/babel-jest',
-    '.*\\.(vue)$': '<rootDir>/node_modules/@vue/vue3-jest',
+    "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+    ".*\\.(vue)$": "<rootDir>/node_modules/@vue/vue3-jest",
   },
-  testPathIgnorePatterns: ['<rootDir>/test/e2e'],
-  snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
-  setupFiles: ['<rootDir>/test/unit/setup'],
-  coverageDirectory: '<rootDir>/test/unit/coverage',
+  snapshotSerializers: ["<rootDir>/node_modules/jest-serializer-vue"],
+  setupFiles: ["<rootDir>/test/unit/setup"],
+  coverageDirectory: "<rootDir>/test/unit/coverage",
   collectCoverageFrom: [
-    'src/**/*.{js,vue}',
-    '!src/main.js',
-    '!src/router/index.js',
-    '!**/node_modules/**',
+    "src/**/*.{js,vue}",
+    "!src/main.js",
+    "!src/router/index.js",
+    "!**/node_modules/**",
   ],
-}
+};
