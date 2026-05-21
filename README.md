@@ -26,17 +26,20 @@ Ensure you have the following installed on your local machine:
 To get a local copy up and running, follow these simple steps:
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/genzouw/hyakuninissyu.git
    cd hyakuninissyu
    ```
 
 2. **Install dependencies:**
+
    ```bash
    npm install
    ```
 
 3. **Run the development server:**
+
    ```bash
    # serve with hot reload at localhost:8080
    npm run dev
@@ -52,8 +55,7 @@ In the project directory, you can run:
 - `npm run dev` - Starts the development server with hot-reload.
 - `npm run build` - Builds the app for production to the `dist` folder, with minification.
 - `npm run unit` - Runs unit tests using Jest.
-- `npm run e2e` - Runs end-to-end tests using Nightwatch.
-- `npm test` - Runs all tests (unit and e2e).
+- `npm test` - Alias of `npm run unit`.
 - `npm run lint` - Lints the codebase using ESLint.
 
 ## Deployment

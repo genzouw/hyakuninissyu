@@ -65,7 +65,7 @@ const router = createRouter({
       component: DailyChallenge,
     },
     {
-      path: '/daily-challenge-result/:score/:streak/:previousStreak',
+      path: '/daily-challenge-result/:score/:streak/:previousStreak/:newlyCollectedCount?',
       name: 'DailyChallengeResult',
       component: DailyChallengeResult,
     },

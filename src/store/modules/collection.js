@@ -1,5 +1,5 @@
 const state = {
-  collectedPoemIds: []
+  collectedPoemIds: [],
 }
 
 const mutations = {
@@ -10,22 +10,25 @@ const mutations = {
   },
   RESET_COLLECTED (state) {
     state.collectedPoemIds = []
-  }
+  },
 }
 
 const actions = {
-  addCollectedPoem ({ commit }, poemId) {
+  addCollectedPoem ({ commit, state }, poemId) {
+    const isNew = !state.collectedPoemIds.includes(poemId)
     commit('ADD_COLLECTED_POEM', poemId)
+    return isNew
   },
   resetCollected ({ commit }) {
     commit('RESET_COLLECTED')
-  }
+  },
 }
 
 const getters = {
-  collectedCount: state => state.collectedPoemIds.length,
-  collectedPoemIdSet: state => new Set(state.collectedPoemIds),
-  isCollected: (state, getters) => poemId => getters.collectedPoemIdSet.has(poemId)
+  collectedCount: (state) => state.collectedPoemIds.length,
+  collectedPoemIdSet: (state) => new Set(state.collectedPoemIds),
+  isCollected: (state, getters) => (poemId) =>
+    getters.collectedPoemIdSet.has(poemId),
 }
 
 export default {
@@ -33,5 +36,5 @@ export default {
   state,
   mutations,
   actions,
-  getters
+  getters,
 }
