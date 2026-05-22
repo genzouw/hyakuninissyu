@@ -13,8 +13,11 @@ Note: This project uses `bun` as the package manager and task runner, completely
 ## Architecture & Tech Stack
 
 - Frontend: Vue.js 3 (Options API & Composables), Vuex 4, Vue Router
-- Styling: Bootstrap 5 (Bootswatch Yeti theme) and @popperjs/core. Always use Bootstrap 5 utility classes (e.g., `ms-*`, `me-*`) instead of Bootstrap 4 deprecated classes.
+- Styling: Bootstrap 5 (Bootswatch Yeti theme), bootstrap-vue-next and @popperjs/core. Always use Bootstrap 5 utility classes (e.g., `ms-*`, `me-*`) instead of Bootstrap 4 deprecated classes.
 - Test Framework: Jest and @vue/test-utils. Tests typically use `shallowMount` and mock global properties within the `global.mocks` configuration.
+  - mounted フックでデータが上書きされる場合は、マウント後に `wrapper.vm` へ値を再代入してください。
+  - mounted フック実行前に状態を確定させる必要がある場合は、`shallowMount` の `data` オプションを使用してください。
+  - `wrapper.element.querySelector()` などのネイティブ DOM メソッドではなく、`wrapper.find()` や `wrapper.text()` などのライブラリ固有のメソッドを優先してください。
 - Deployment: Static content deployed to AWS S3 and CloudFront via GitHub Actions natively using Bun (`oven-sh/setup-bun`).
 
 ## Security Guidelines
