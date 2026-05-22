@@ -48,9 +48,6 @@ reviews:
         - 'enhancement'
         - 'bug'
 
-  auto_enrich:
-    enabled: true
-
   path_instructions:
     - path: 'src/**/*.{js,vue}'
       instructions: |
@@ -87,6 +84,10 @@ reviews:
     - '!**/*.tsbuildinfo'
 
   abort_on_close: true
+
+issue_enrichment:
+  auto_enrich:
+    enabled: true
 
 chat:
   auto_reply: true
