@@ -2,8 +2,11 @@
 # https://docs.coderabbit.ai/reference/configuration
 
 language: 'ja-JP'
-early_access: false
+early_access: true
 enable_free_tier: true
+
+knowledge_base:
+  opt_out: false
 
 reviews:
   # 個人運営だが、main マージ後に Cloud Run / Cloudflare Pages の本番環境へ
@@ -35,6 +38,18 @@ reviews:
     drafts: false
     base_branches:
       - main
+
+  planning:
+    enabled: true
+    auto_planning:
+      enabled: true
+      labels:
+        - 'feature'
+        - 'enhancement'
+        - 'bug'
+
+  auto_enrich:
+    enabled: true
 
   path_instructions:
     - path: 'src/**/*.{js,vue}'
@@ -75,6 +90,3 @@ reviews:
 
 chat:
   auto_reply: true
-
-knowledge_base:
-  opt_out: false
