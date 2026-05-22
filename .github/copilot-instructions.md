@@ -6,7 +6,7 @@ When assisting with code generation or answering questions about this repository
 
 - **Package Manager:** Bun (Always use `bun install`, `bun run dev`, `bun run unit`, `bun run lint`, `bun run build`). Never use `npm`.
 - **Framework:** Vue 3 (Options API and Composables), Vuex 4, Vue Router.
-- **Styling:** Bootstrap 5 (Bootswatch Yeti theme), bootstrap-vue-next.
+- **スタイリング:** Bootstrap 5（Bootswatch Yeti テーマ）、bootstrap-vue-next。
 - **Testing:** Jest and `@vue/test-utils` (prefer `shallowMount` and `global.mocks`).
   - mounted フックでデータが上書きされる場合は、マウント後に `wrapper.vm` へ値を再代入してください。
   - mounted フック実行前に状態を確定させる必要がある場合は、`shallowMount` の `data` オプションを使用してください。
