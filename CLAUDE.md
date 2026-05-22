@@ -28,5 +28,6 @@ Note: This project uses `bun` as the package manager and task runner, completely
 ## Code Conventions
 
 - Ensure any new UI components or modifications use Bootstrap 5 utility classes.
-- Text-to-speech (TTS) logic is centralized in the `useSpeech` composable (`src/composables/useSpeech.js`). Use its unified interface for `enableSpeak` state and the `speakText` method across components.
+- Text-to-speech (TTS) logic is centralized in the `useSpeech` composable (`src/composables/useSpeech.js`). Use its unified interface for `enableSpeak` state and the `speakText` method across components. `speechSynthesis.cancel()` を呼び出す際は、引数を渡さないでください。
+- モジュールスコープの定数に対して破壊的な変更を行わないでください（`map` とスプレッド演算子などを使用して新しいオブジェクトを作成してください）。
 - Use Japanese for pull request descriptions, source code comments, and documentation.

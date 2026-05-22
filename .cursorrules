@@ -26,6 +26,8 @@ A modern Vue.js 3 application for exploring and learning the Hyakunin Isshu.
    - All `<a>` tags with external links must have `target="_blank"` and `rel="noopener noreferrer"`.
    - Never hardcode or leak credentials, API keys, or internal URLs.
 4. **Composables:** Use the `useSpeech` composable (`src/composables/useSpeech.js`) for any text-to-speech (TTS) logic.
+   - `speechSynthesis.cancel()` を呼び出す際は、引数を渡さないでください。
+5. **Constants:** モジュールスコープの定数に対して破壊的な変更を行わないでください（`map` とスプレッド演算子などを使用して新しいオブジェクトを作成してください）。
 
 ## AI Assistant Instructions
 - Prioritize security and deployment stability.

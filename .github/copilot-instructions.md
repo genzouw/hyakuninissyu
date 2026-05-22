@@ -20,6 +20,8 @@ When assisting with code generation or answering questions about this repository
    - Do not generate code that logs or exposes credentials, API keys, or sensitive internal URLs.
 3. **Styling:** Use modern Bootstrap 5 utility classes (e.g., `ms-*`, `me-*`, `mb-3`) instead of legacy Bootstrap 4 classes.
 4. **Composables:** For any text-to-speech functionality, import and use the `useSpeech` composable from `src/composables/useSpeech.js`.
+   - `speechSynthesis.cancel()` を呼び出す際は、引数を渡さないでください。
+5. **Constants:** モジュールスコープの定数に対して破壊的な変更を行わないでください（`map` とスプレッド演算子などを使用して新しいオブジェクトを作成してください）。
 
 ## GitHub Actions
 
