@@ -87,3 +87,14 @@ typings/
 
 
 dist/
+
+# AI agents
+.claude/
+.cursor/
+.aider*
+.continue/
+
+# Secrets
+*.pem
+*.key
+*credentials*.json

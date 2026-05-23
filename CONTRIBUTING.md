@@ -72,11 +72,17 @@ We love pull requests! If you're ready to contribute code or documentation, plea
 To set up the project locally for development:
 
 1. Ensure you have Node.js (`>=18.18.0`) and npm (`>=9.0.0`) installed.
-2. Clone the repository and run `npm install`.
-3. Use `npm run dev` to start the local development server at `http://localhost:8080`.
-4. Run `npm run lint` to check for style issues.
-5. Run `npm run unit` to run unit tests.
-6. Run `npm run e2e` to run end-to-end tests.
+2. Ensure you have Python (`>=3.8`) and pip installed for pre-commit hooks.
+3. Clone the repository and run `npm install`.
+4. Set up pre-commit (requires Python) to ensure secrets are not committed:
+   ```bash
+   pip install pre-commit
+   pre-commit install
+   ```
+5. Use `npm run dev` to start the local development server at `http://localhost:8080`.
+6. Check for style issues with `npm run lint`.
+7. Execute unit tests using `npm run unit`.
+8. Perform end-to-end testing with `npm run e2e`.
 
 ## Code Style
 
