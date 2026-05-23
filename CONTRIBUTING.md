@@ -35,36 +35,48 @@ We love pull requests! If you're ready to contribute code or documentation, plea
 
 1. **Fork the repository** on GitHub.
 2. **Clone your fork** locally:
+
    ```bash
    git clone https://github.com/YOUR_USERNAME/hyakuninissyu.git
    cd hyakuninissyu
    ```
+
 3. **Add the upstream remote**:
+
    ```bash
    git remote add upstream https://github.com/genzouw/hyakuninissyu.git
    ```
+
 4. **Create a new branch** for your feature or bugfix. Use a descriptive name:
+
    ```bash
    git checkout -b feature/your-feature-name
    # or
    git checkout -b fix/your-bugfix-name
    ```
+
 5. **Install dependencies**:
+
    ```bash
    npm install
    ```
+
 6. **Make your changes** and ensure everything works locally by running the development server (`npm run dev`).
 7. **Write tests** for your changes if applicable.
 8. **Run tests and linting** to ensure your code meets our quality standards:
+
    ```bash
    npm run lint
    npm test
    ```
+
 9. **Commit your changes**. Please write clear and concise commit messages.
 10. **Push your branch** to your fork on GitHub:
+
     ```bash
     git push origin your-branch-name
     ```
+
 11. **Submit a Pull Request**. Go to the original repository and click "New pull request". Fill out the provided Pull Request template to explain your changes.
 
 ## Development Setup
@@ -75,10 +87,12 @@ To set up the project locally for development:
 2. Ensure you have Python (`>=3.8`) and pip installed for pre-commit hooks.
 3. Clone the repository and run `npm install`.
 4. Set up pre-commit (requires Python) to ensure secrets are not committed:
+
    ```bash
    pip install pre-commit
    pre-commit install
    ```
+
 5. Use `npm run dev` to start the local development server at `http://localhost:8080`.
 6. Check for style issues with `npm run lint`.
 7. Execute unit tests using `npm run unit`.
