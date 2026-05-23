@@ -18,6 +18,7 @@ PRやPush時に実行される第二の防御層です。
 - **仕組み**: GitHub Actionsによる継続的なスキャン。
   - `gitleaks.yml`: PR差分およびスケジュールでリポジトリ全体の履歴をスキャン。
   - `trivy.yml`: ファイルシステムのシークレットスキャン。
+  - `codeql.yml`: `security-extended` および `security-and-quality` クエリによる高度な脆弱性・コード品質の検知（一部のハードコードされた認証情報パターンも含む）。
 - **運用上の責任**: CIが落ちた場合、対象のコミットに含まれる漏洩疑いのコードを適切に修正し（必要であればシークレットをローテートし）、マージブロックを解消すること。
 
 ## 3. 定期監査と自動防御
@@ -26,7 +27,7 @@ PRやPush時に実行される第二の防御層です。
 
 - **仕組み**:
   - `codeql.yml`, `trivy.yml`, `gitleaks.yml` のスケジュール実行による監査。
-  - GitHub Secret Scanning と Push Protection（リポジトリの Settings → Security → Code security and analysis から有効化推奨）。
+  - GitHub Secret Scanning と Push Protection（リポジトリの Settings → Security → Code security and analysis から必ず有効化すること）。
 - **対応**: 過去の履歴に漏洩が検知された場合や、依存パッケージに脆弱性が発見された場合は、すみやかにセキュリティポリシー（`SECURITY.md`）に従って対処すること。
 
 ## 万が一漏洩してしまった場合
