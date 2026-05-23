@@ -1,0 +1,34 @@
+# Cursor Rules for Hyakunin Isshu
+
+## Project Overview
+A modern Vue.js 3 application for exploring and learning the Hyakunin Isshu.
+
+## Core Technologies
+- **Runtime & Package Manager:** Bun (>=1.0.0). **Do not use npm.**
+- **Frontend Framework:** Vue 3, Vuex 4, Vue Router.
+- **Styling:** Bootstrap 5 (Bootswatch Yeti), bootstrap-vue-next.
+- **Testing:** Jest, `@vue/test-utils` (use `shallowMount` and mock global properties).
+  - mounted フックでデータが上書きされる場合は、マウント後に `wrapper.vm` へ値を再代入してください。
+  - mounted フック実行前に状態を確定させる必要がある場合は、`shallowMount` の `data` オプションを使用してください。
+  - `wrapper.element.querySelector()` などのネイティブ DOM メソッドではなく、`wrapper.find()` や `wrapper.text()` などのライブラリ固有のメソッドを優先してください。
+
+## Key Commands
+- Install: `bun install`
+- Dev Server: `bun run dev`
+- Test: `bun run unit`
+- Lint: `bun run lint`
+- Build: `bun run build`
+
+## Coding Guidelines
+1. **Language:** Write pull request descriptions, code comments, and documentation in **Japanese**.
+2. **Styling:** Always use Bootstrap 5 utility classes (e.g., `ms-3`, `pe-2`). Do not use Bootstrap 4 classes.
+3. **Security:**
+   - All `<a>` tags with external links must have `target="_blank"` and `rel="noopener noreferrer"`.
+   - Never hardcode or leak credentials, API keys, or internal URLs.
+4. **Composables:** Use the `useSpeech` composable (`src/composables/useSpeech.js`) for any text-to-speech (TTS) logic.
+   - `speechSynthesis.cancel()` を呼び出す際は、引数を渡さないでください。
+5. **Constants:** モジュールスコープの定数に対して破壊的な変更を行わないでください（`map` とスプレッド演算子などを使用して新しいオブジェクトを作成してください）。
+
+## AI Assistant Instructions
+- Prioritize security and deployment stability.
+- Ensure GitHub Actions workflows use `oven-sh/setup-bun` for native Bun execution.
