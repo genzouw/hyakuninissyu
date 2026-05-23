@@ -18,8 +18,7 @@ This project provides an interactive and user-friendly interface to browse, read
 
 Ensure you have the following installed on your local machine:
 
-- **Node.js**: `>=18.18.0`
-- **npm**: `>=9.0.0`
+- **Bun**: `>=1.0.0`（Node.js/npm の代替）
 
 ## Installation & Setup
 
@@ -35,14 +34,14 @@ To get a local copy up and running, follow these simple steps:
 2. **Install dependencies:**
 
    ```bash
-   npm install
+   bun install
    ```
 
 3. **Run the development server:**
 
    ```bash
    # serve with hot reload at localhost:8080
-   npm run dev
+   bun run dev
    ```
 
 4. **Open your browser:**
@@ -52,11 +51,10 @@ To get a local copy up and running, follow these simple steps:
 
 In the project directory, you can run:
 
-- `npm run dev` - Starts the development server with hot-reload.
-- `npm run build` - Builds the app for production to the `dist` folder, with minification.
-- `npm run unit` - Runs unit tests using Jest.
-- `npm test` - Alias of `npm run unit`.
-- `npm run lint` - Lints the codebase using ESLint.
+- `bun run dev` - ホットリロード付きの開発サーバーを起動します。
+- `bun run build` - `dist` フォルダにミニファイ済みの本番用ビルドを生成します。
+- `bun run unit` - Jest を使用したユニットテストを実行します。
+- `bun run lint` - ESLint でコードベースをリンティングします。
 
 ## Deployment
 
