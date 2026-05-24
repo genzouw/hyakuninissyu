@@ -34,6 +34,19 @@ jobs:
           NODE_OPTIONS: --openssl-legacy-provider
         run: bun run build
 
+      - name: Start static server on :8080
+        run: |
+          bunx --bun serve dist -l 8080 &
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8080/ > /dev/null; then
+              echo "Server is up"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "Server did not start in time" >&2
+          exit 1
+
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@3e7e23fb74242897f95c0ba9cabad3d0227b9b18 # v12
         with:
