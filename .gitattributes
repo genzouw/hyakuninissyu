@@ -2,6 +2,7 @@
 *.pem -diff
 *.key -diff
 *.env* -diff
+.env.example diff
 *.tfstate -diff
 *.tfstate.* -diff
 *credentials*.json -diff
