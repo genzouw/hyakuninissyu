@@ -8,6 +8,7 @@
     "**/*.key": true,
     "**/*credentials*.json": true,
     "**/.env*": true,
+    "**/.env.example": false,
     "**/*.tfstate*": true
   },
   "files.exclude": {
@@ -19,6 +20,7 @@
     "**/*.key": true,
     "**/*credentials*.json": true,
     "**/.env*": true,
+    "**/.env.example": false,
     "**/*.tfstate*": true
   }
 }
