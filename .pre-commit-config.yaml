@@ -11,6 +11,10 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
+      - id: detect-aws-credentials
+        args: ["--allow-missing-credentials"]
+        name: detect aws credentials
+        description: Detects hardcoded AWS credentials
       - id: detect-private-key
         name: detect private key
         description: Detects the presence of private keys

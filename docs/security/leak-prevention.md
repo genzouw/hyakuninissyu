@@ -6,10 +6,13 @@
 
 開発者およびAIエージェントのローカル環境でのコミットを防ぐ第一の防御層です。
 
-- **仕組み**: `pre-commit` フックにより `gitleaks` および `detect-private-key` を実行。
+- **仕組み**: `pre-commit` フックにより `gitleaks`、`detect-private-key`、および `detect-aws-credentials` を実行。
 - **設定ファイル**: `.pre-commit-config.yaml`
 - **開発者の責任**: リポジトリをクローンしたのち、必ず `pre-commit install` を実行し、コミット時にフックが機能するようにすること。
-- **補完**: `.gitignore` にて各種シークレットファイルやAIエージェントの作業履歴を除外し、事故を根本から防止。
+- **補完**:
+  - `.gitignore` にて各種シークレットファイルやAIエージェントの作業履歴を除外し、事故を根本から防止。
+  - `.gitattributes` にてシークレット関連ファイルの diff 出力を無効化（`-diff`）し、レビュー時の意図しない露出を防止。
+  - `.vscode/settings.json` により、AI エージェント（Copilot / Cursor 等）のワークスペース走査からシークレットファイルを除外。
 
 ## 2. CI 検知（中央防御層）
 
