@@ -29,6 +29,15 @@ GitHub Actions ワークフローとしてレビューしてください:
 auto_description = true
 extra_instructions = "必ず日本語で記載してください。"
 
+[pr_code_suggestions]
+# AIによるコードの改善提案
+num_code_suggestions = 4
+extra_instructions = "セキュリティとパフォーマンスの向上に焦点を当ててください。必ず日本語でコメントしてください。"
+
+[pr_custom_labels]
+# 自動ラベリング機能
+enable = true
+
 [config]
 # 日本語設定
 custom_model_max_tokens = 8192
