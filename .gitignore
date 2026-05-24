@@ -98,3 +98,11 @@ dist/
 *.pem
 *.key
 *credentials*.json
+
+# Environment variables
+.env.*
+!.env.example
+
+# Infrastructure state
+*.tfstate
+*.tfstate.*

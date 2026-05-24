@@ -1,0 +1,24 @@
+{
+  "search.exclude": {
+    "**/.claude": true,
+    "**/.cursor": true,
+    "**/.aider*": true,
+    "**/.continue": true,
+    "**/*.pem": true,
+    "**/*.key": true,
+    "**/*credentials*.json": true,
+    "**/.env*": true,
+    "**/*.tfstate*": true
+  },
+  "files.exclude": {
+    "**/.claude": true,
+    "**/.cursor": true,
+    "**/.aider*": true,
+    "**/.continue": true,
+    "**/*.pem": true,
+    "**/*.key": true,
+    "**/*credentials*.json": true,
+    "**/.env*": true,
+    "**/*.tfstate*": true
+  }
+}

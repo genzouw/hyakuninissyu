@@ -1,0 +1,7 @@
+# 意図しない漏洩を防ぐため、機密ファイルのdiff出力を無効化
+*.pem -diff
+*.key -diff
+*.env* -diff
+*.tfstate -diff
+*.tfstate.* -diff
+*credentials*.json -diff
