@@ -1,0 +1,7 @@
+{
+  "cody.enabled": true,
+  "cody.serverEndpoint": "https://sourcegraph.com",
+  "cody.autocomplete.enabled": true,
+  "cody.commandCodeLenses": true,
+  "cody.useContext": "embeddings"
+}

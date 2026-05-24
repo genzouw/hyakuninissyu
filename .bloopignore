@@ -1,0 +1,27 @@
+# bloop ignore ファイル
+# .gitignore と同じフォーマットです
+
+node_modules/
+dist/
+build/
+coverage/
+.git/
+.github/
+.vscode/
+.idea/
+.bun/
+
+# ロックファイル
+bun.lock
+package-lock.json
+yarn.lock
+
+# ログファイル
+logs
+*.log
+
+# AI エージェントのディレクトリ
+.claude/
+.cursor/
+.aider*
+.continue/
