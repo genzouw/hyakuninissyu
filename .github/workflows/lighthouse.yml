@@ -36,7 +36,7 @@ jobs:
 
       - name: Start static server on :8080
         run: |
-          bunx --bun serve dist -l 8080 &
+          bunx --bun serve@14.2.6 dist -l 8080 &
           for _ in $(seq 1 30); do
             if curl -sf http://localhost:8080/ > /dev/null; then
               echo "Server is up"
