@@ -10,5 +10,6 @@
 # AI agent working directories
 .claude/** -diff
 .cursor/** -diff
+.aider* -diff
 .aider*/** -diff
 .continue/** -diff
