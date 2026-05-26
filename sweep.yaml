@@ -2,7 +2,7 @@
 # https://docs.sweep.dev/config
 
 # Branch generation settings
-branch: "sweep/{issue-number}-{issue-title}"
+branch: 'sweep/{issue-number}-{issue-title}'
 
 # Draft PRs by default to allow for CI checks and human review
 draft: true
@@ -11,14 +11,15 @@ draft: true
 description: "このプルリクエストは [Sweep AI](https://sweep.dev/) によって自動生成されました。\n\n修正内容や追加要件があればコメントで指示してください。"
 
 # Language constraint
-language: "日本語"
+language: '日本語'
 
 # Repository specific rules
 rules:
-  - "Vue 3 の Options API または Composables を使用してください。"
-  - "パッケージマネージャーには npm ではなく必ず bun (>=1.0.0) を使用してください。依存関係の追加は `bun add` を想定してください。"
-  - "UI のスタイリングには Bootstrap 5 のユーティリティクラス（ms-3, pe-2 など）を使用してください。Bootstrap 4 のクラスは使用禁止です。"
-  - "すべての外部リンク (<a> タグ) には必ず `target=\"_blank\"` と `rel=\"noopener noreferrer\"` を設定してセキュリティを確保してください。"
-  - "フロントエンドのテストには Jest と @vue/test-utils を使用し、可能な限り shallowMount を使用してください。DOM操作には wrapper.find() などのライブラリ専用メソッドを使用し、ネイティブDOMメソッドは避けてください。"
-  - "TTS (Text-to-Speech) 機能を使用する場合は、必ず src/composables/useSpeech.js の useSpeech を利用してください。"
-  - "ソースコードのコメントやコミットメッセージ、ドキュメントの記述はすべて日本語で行ってください。"
+  - 'Vue 3 の Options API または Composables を使用してください。'
+  - 'パッケージマネージャーには npm ではなく必ず bun (>=1.0.0) を使用してください。依存関係の追加は `bun add` を想定してください。'
+  - 'UI のスタイリングには Bootstrap 5 のユーティリティクラス（ms-3, pe-2 など）を使用してください。Bootstrap 4 のクラスは使用禁止です。'
+  - 'すべての外部リンク (<a> タグ) には必ず `target="_blank"` と `rel="noopener noreferrer"` を設定してセキュリティを確保してください。'
+  - 'フロントエンドのテストには Jest と @vue/test-utils を使用し、可能な限り shallowMount を使用してください。DOM操作には wrapper.find() などのライブラリ専用メソッドを使用し、ネイティブDOMメソッドは避けてください。'
+  - 'TTS (Text-to-Speech) 機能を使用する場合は、必ず src/composables/useSpeech.js の useSpeech を利用してください。また、Web Speech API を使用する際は、正しい動作を保証するために speechSynthesis.cancel() を引数なしで呼び出してください。'
+  - 'モジュールスコープの定数に対して破壊的な変更を行わないでください。配列やオブジェクトの変更には、スプレッド演算子や map() などの非破壊的な方法を使用してください。'
+  - 'ソースコードのコメントやコミットメッセージ、ドキュメントの記述はすべて日本語で行ってください。'
