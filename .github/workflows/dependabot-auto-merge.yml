@@ -13,7 +13,7 @@ jobs:
     permissions:
       contents: write # gh pr merge でのマージ実行に必要
       pull-requests: write # gh pr review でのレビュー承認に必要
-    if: github.actor == 'dependabot[bot]'
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
     steps:
       - name: Dependabot metadata
         id: metadata
