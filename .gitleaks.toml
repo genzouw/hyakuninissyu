@@ -1,0 +1,6 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "detect-secrets のベースラインファイルは hashed_secret（SHA1 ハッシュ値）を含むが実際のシークレットではないため除外"
+paths = [".secrets.baseline"]
