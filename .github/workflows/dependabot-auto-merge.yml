@@ -5,13 +5,14 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
   cancel-in-progress: false
 
-permissions:
-  contents: write
-  pull-requests: write
+permissions: {}
 
 jobs:
   dependabot:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # gh pr merge でのマージ実行に必要
+      pull-requests: write # gh pr review でのレビュー承認に必要
     if: github.actor == 'dependabot[bot]'
     steps:
       - name: Dependabot metadata
