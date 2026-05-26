@@ -1,0 +1,10 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "detect-secrets のベースラインファイルは hashed_secret（SHA1 ハッシュ値）を含むが実際のシークレットではないため除外"
+paths = ['''.secrets.baseline''']
+fingerprints = [
+  "adb4ae30dcb8b688e6066f83431629ddff07371d:.secrets.baseline:generic-api-key:130",
+  "adb4ae30dcb8b688e6066f83431629ddff07371d:.secrets.baseline:generic-api-key:139"
+]

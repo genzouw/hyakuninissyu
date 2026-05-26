@@ -18,3 +18,8 @@ repos:
       - id: detect-private-key
         name: detect private key
         description: Detects the presence of private keys
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
