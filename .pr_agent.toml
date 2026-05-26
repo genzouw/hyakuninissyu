@@ -44,6 +44,8 @@ extra_instructions = """
 Vue コンポーネントのテストを生成する際は、Jest と @vue/test-utils を使用してください。
 できるだけ `shallowMount` を使用し、グローバルプロパティ（$route, $router など）は `global.mocks` でモックしてください。
 DOM操作には `wrapper.find()` や `wrapper.text()` などのライブラリ専用メソッドを使用し、ネイティブDOMメソッドは使用しないでください。
+mounted ライフサイクルフック実行前の状態初期化には、mount/shallowMount の `data` オプションを使用してください。
+ただし、mounted フックのロジックでデータプロパティが上書きされる場合は、マウント後に `wrapper.vm` にテスト値を再代入してください。
 生成されるテストコードのコメントおよび説明はすべて日本語で記述してください。
 """
 
