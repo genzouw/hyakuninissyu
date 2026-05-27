@@ -2,22 +2,27 @@ name: Dependency Review
 
 on:
   pull_request:
-    branches:
-      - main
-      - master
+    branches: [main]
+
+concurrency:
+  group: dependency-review-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
   dependency-review:
+    name: Dependency Review
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v4.1.1
+        with:
+          persist-credentials: false
 
       - name: Dependency Review
-        uses: actions/dependency-review-action@v4
+        uses: actions/dependency-review-action@5a2ce3f5b92ee19cbb1541a4984c76d921601d7c # v4.3.4
         with:
           # オプションで深刻度の閾値を設定可能 (low, medium, high, critical)
           fail-on-severity: high
