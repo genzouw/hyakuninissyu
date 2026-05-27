@@ -32,4 +32,4 @@ A modern Vue.js 3 application for exploring and learning the Hyakunin Isshu.
 ## AI Assistant Instructions
 - Prioritize security and deployment stability.
 - Ensure GitHub Actions workflows use `oven-sh/setup-bun` for native Bun execution.
-- If security scanning tools like OSV-Scanner or Dependency Review Action report warnings or vulnerabilities, proactively analyze them and suggest or implement code changes/PRs to fix them.
+- If security scanning tools like OSV-Scanner or Dependency Review Action report warnings or vulnerabilities (or if their reports are provided by the user), proactively analyze them and suggest or implement code changes to fix them.
