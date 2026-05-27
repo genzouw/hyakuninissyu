@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - main
-      - master
   pull_request:
     branches:
       - main
-      - master
   schedule:
     - cron: '0 0 * * 0' # 毎週日曜日に実行
 
@@ -17,14 +15,14 @@ permissions:
 
 jobs:
   osv-scanner:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Run OSV-Scanner
-        uses: google/osv-scanner-action@v1.9.0
-        with:
-          # `--format=sarif` 等の出力指定が必要な場合はここで設定
-          # OSV-Scanner はデフォルトで package.json, bun.lock, package-lock.json などを自動検出します
-          args: --recursive .
+    # `google/osv-scanner-action` は composite/docker action ではなく
+    # reusable workflow として提供されているため、`jobs.<job>.uses` 経由で呼び出す。
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@v1.9.0
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    with:
+      scan-args: |-
+        --recursive
+        ./
