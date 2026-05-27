@@ -54,6 +54,7 @@ AIエージェントの作業ディレクトリ（`.claude/`, `.cursor/`, `.aide
 
 - Python: >= 3.8
 - パッケージマネージャー: pip
-  ```
+
+  ```bash
   pip install detect-secrets==1.5.0
   ```
