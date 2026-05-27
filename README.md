@@ -1,5 +1,7 @@
 # Hyakunin Isshu
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/9049becc8ca045f1a1cc880001280673)](https://app.codacy.com/gh/genzouw/hyakuninissyu?utm_source=github.com&utm_medium=referral&utm_content=genzouw/hyakuninissyu&utm_campaign=Badge_Grade)
+
 ![Build Status](https://github.com/genzouw/hyakuninissyu/workflows/Deploy/badge.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
