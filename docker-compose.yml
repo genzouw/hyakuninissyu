@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   web:
     build:
@@ -7,5 +7,4 @@ services:
       - $PWD/dist:/usr/local/apache2/htdocs
     restart: always
     ports:
-      - 10100:80
-
+      - 10100:8080
