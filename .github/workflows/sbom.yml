@@ -1,0 +1,40 @@
+name: SBOM Generation
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # 毎週月曜 06:00 JST (= 日曜 21:00 UTC) に定期実行
+    - cron: '15 21 * * 0'
+  workflow_dispatch:
+
+concurrency:
+  group: sbom-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write # 依存関係グラフへの書き込み (ghcr.io へのアップロードではなく repository 内の依存関係として登録するため)
+
+jobs:
+  generate-sbom:
+    name: Generate SBOM and upload to Dependency Graph
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          persist-credentials: false
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@df80a981bc6edbc4e220a492d3cbe9f5547a6e75 # v0.17.9
+        with:
+          path: ./
+          format: spdx-json
+          output-file: 'sbom.spdx.json'
+          dependency-snapshot: true
+
+      - name: Upload SBOM as artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: sbom
+          path: sbom.spdx.json
