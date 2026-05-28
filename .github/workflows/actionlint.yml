@@ -46,7 +46,7 @@ jobs:
       - name: Setup reviewdog
         uses: reviewdog/action-setup@3f401fc1eaff8796122d4060b0043ff3ebf0bfb0 # v1.3.0
         with:
-          reviewdog_version: latest
+          reviewdog_version: v0.20.2
 
       - name: Run actionlint with Reviewdog
         env:
