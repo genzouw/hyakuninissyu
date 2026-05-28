@@ -16,7 +16,7 @@
 ## 主要ディレクトリ
 - `src/`: Vue コンポーネント、コンポーザブル、Vuex ストア、ルーター設定
 - `static/`: 静的アセット（画像、サイトマップ、ファビコンなど）
-- `tests/`: Jest によるユニットテスト
+- `test/`: Jest によるユニットテスト
 - `.github/workflows/`: 自動化された CI/CD、AWS S3/CloudFront へのデプロイ、各種セキュリティスキャナー（Trivy, CodeQL, OSV-Scanner など）
 
 ## AIルールと設定
