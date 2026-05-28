@@ -44,7 +44,7 @@ jobs:
           echo "executable=/tmp/actionlint" >> "$GITHUB_OUTPUT"
 
       - name: Setup reviewdog
-        uses: reviewdog/action-setup@3f401fc1eaff8796122d4060b0043ff3ebf0bfb0 # v1.3.0
+        uses: reviewdog/action-setup@3f401fe1d58fe77e10d665ab713057375e39b887 # v1.3.0
         with:
           reviewdog_version: v0.20.2
 
