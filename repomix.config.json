@@ -1,0 +1,41 @@
+{
+  "output": {
+    "filePath": "repomix-output.xml",
+    "style": "xml",
+    "removeComments": false,
+    "removeEmptyLines": true,
+    "showLineNumbers": true
+  },
+  "include": [
+    "src/**/*",
+    "package.json",
+    "README.md",
+    "cody.json",
+    ".cursorrules",
+    ".clinerules",
+    ".windsurfrules",
+    ".github/copilot-instructions.md"
+  ],
+  "ignore": {
+    "useGitignore": true,
+    "useDefaultPatterns": true,
+    "customPatterns": [
+      "dist/",
+      "build/",
+      "coverage/",
+      "test/",
+      "docs/",
+      "static/",
+      "**/*.png",
+      "**/*.ico",
+      "**/*.lock",
+      "bun.lock",
+      "**/*.sarif",
+      ".secrets.baseline",
+      ".github/workflows/"
+    ]
+  },
+  "security": {
+    "enableSecurityCheck": true
+  }
+}

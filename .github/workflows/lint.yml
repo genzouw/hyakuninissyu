@@ -17,6 +17,9 @@ jobs:
   lint:
     name: ESLint (including Cyclomatic Complexity)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout repository
@@ -38,8 +41,15 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile --ignore-scripts
 
-      - name: Run ESLint
-        run: bun run lint
+      - name: Setup reviewdog
+        uses: reviewdog/action-setup@3f401fc1eaff8796122d4060b0043ff3ebf0bfb0 # v1.3.0
+        with:
+          reviewdog_version: latest
+
+      - name: Run ESLint with Reviewdog
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bun run lint | reviewdog -f=eslint -name="eslint" -reporter=github-pr-review
 
   build:
     name: Build (webpack production bundle)
