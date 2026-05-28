@@ -14,7 +14,8 @@
     ".cursorrules",
     ".clinerules",
     ".windsurfrules",
-    ".github/copilot-instructions.md"
+    ".github/copilot-instructions.md",
+    ".github/workflows/**"
   ],
   "ignore": {
     "useGitignore": true,
@@ -31,8 +32,7 @@
       "**/*.lock",
       "bun.lockb",
       "**/*.sarif",
-      ".secrets.baseline",
-      ".github/workflows/"
+      ".secrets.baseline"
     ]
   },
   "security": {
