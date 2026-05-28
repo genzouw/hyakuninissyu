@@ -26,7 +26,7 @@ jobs:
           persist-credentials: false
 
       - name: Generate SBOM
-        uses: anchore/sbom-action@f3242a00067683935266850fa9767228a07c458e # v0.17.9
+        uses: anchore/sbom-action@df80a981bc6edbc4e220a492d3cbe9f5547a6e75 # v0.17.9
         with:
           path: ./
           format: spdx-json
