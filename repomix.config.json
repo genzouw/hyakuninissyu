@@ -29,7 +29,7 @@
       "**/*.png",
       "**/*.ico",
       "**/*.lock",
-      "bun.lock",
+      "bun.lockb",
       "**/*.sarif",
       ".secrets.baseline",
       ".github/workflows/"
