@@ -1,0 +1,30 @@
+name: CodiumAI PR-Agent
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  issue_comment:
+    types: [created, edited]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  pr_agent:
+    name: Auto PR Review
+    runs-on: ubuntu-latest
+    if: ${{ github.event.sender.type != 'Bot' }}
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@v4
+
+      - name: PR-Agent アクションの実行
+        uses: Codium-ai/pr-agent@main
+        env:
+          # CodiumAI は公開リポジトリ（オープンソース）では無料で利用可能です。
+          # API キーを登録しなくても、無料枠の範囲内で動作します。
+          # GitHub トークンを使用して PR にコメントを追加します。
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }} # 任意: より高い制限が必要な場合に追加
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
