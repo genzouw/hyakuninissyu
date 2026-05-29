@@ -10,8 +10,16 @@ on:
   schedule:
     - cron: '0 0 * * 0' # 毎週日曜日に実行
 
+# reusable workflow（osv-scanner-reusable.yml）は内部で
+# `actions: read` / `security-events: write` を要求する。
+# トップレベルの permissions が `contents: read` のみだと、ジョブレベルで
+# `actions: read` / `security-events: write` を宣言してもワークフローレベルの
+# 上限により無効化され、起動時に startup_failure となるため、
+# 必要な権限をトップレベルで明示する。
 permissions:
+  actions: read
   contents: read
+  security-events: write
 
 jobs:
   osv-scanner:
