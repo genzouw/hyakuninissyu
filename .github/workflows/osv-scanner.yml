@@ -11,6 +11,11 @@ on:
 permissions:
   contents: read
 
+# 同一ブランチ / PR で OSV-Scanner が重複起動するのを抑止し、無駄な実行を削減
+concurrency:
+  group: osv-scanner-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   osv-scanner:
     name: OSV-Scanner
@@ -26,6 +31,7 @@ jobs:
           # プロジェクトのニーズに合わせて調整可能です
           results-file-name: osv-scanner-results.sarif
         continue-on-error: true # 最初に脆弱性が見つかった場合でも、他のチェックをパスさせます
+
 
       # (オプション) GitHub Advanced Security（有効な場合）に SARIF 結果をアップロードします
       # - name: SARIF ファイルのアップロード
