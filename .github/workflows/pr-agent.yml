@@ -6,16 +6,28 @@ on:
   issue_comment:
     types: [created, edited]
 
+# 最小権限とし、ジョブ側で必要な書込権限のみ追加する
 permissions:
   contents: read
-  pull-requests: write
-  issues: write
 
 jobs:
   pr_agent:
     name: Auto PR Review
     runs-on: ubuntu-latest
-    if: ${{ github.event.sender.type != 'Bot' }}
+    # 1) Bot 以外のイベントに限定
+    # 2) issue_comment は PR に紐づくコメントのみ対象（純粋な Issue では起動しない）
+    # 3) リポジトリの信頼済みアクター（OWNER / MEMBER / COLLABORATOR）のみに限定
+    if: >
+      github.event.sender.type != 'Bot' &&
+      (github.event_name != 'issue_comment' || github.event.issue.pull_request != null) &&
+      (github.event.sender.association == 'OWNER' ||
+       github.event.sender.association == 'MEMBER' ||
+       github.event.sender.association == 'COLLABORATOR')
+    # PR コメント投稿に必要な権限のみ付与
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
     steps:
       - name: リポジトリのチェックアウト
         uses: actions/checkout@v4
