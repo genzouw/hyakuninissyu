@@ -1,0 +1,44 @@
+name: OSV-Scanner
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '15 21 * * 0' # 毎週月曜 06:00 JST (= 日曜 21:00 UTC)
+
+permissions:
+  contents: read
+
+# 同一ブランチ / PR で OSV-Scanner が重複起動するのを抑止し、無駄な実行を削減
+concurrency:
+  group: osv-scanner-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  osv-scanner:
+    name: OSV-Scanner
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          # ランナーに認証情報を残さないようにし、credential 漏えい面を縮小
+          persist-credentials: false
+
+      - name: Run OSV-Scanner
+        uses: google/osv-scanner-action/osv-scanner-action@daa2c68f50d845057895a9c300e42478481c1d26 # v1.9.1
+        with:
+          # 明示的な依存関係に対する脆弱性のみを報告します
+          # プロジェクトのニーズに合わせて調整可能です
+          results-file-name: osv-scanner-results.sarif
+        continue-on-error: true # 最初に脆弱性が見つかった場合でも、他のチェックをパスさせます
+
+
+      # (オプション) GitHub Advanced Security（有効な場合）に SARIF 結果をアップロードします
+      # - name: SARIF ファイルのアップロード
+      #   uses: github/codeql-action/upload-sarif@v3
+      #   if: always()
+      #   with:
+      #     sarif_file: osv-scanner-results.sarif
