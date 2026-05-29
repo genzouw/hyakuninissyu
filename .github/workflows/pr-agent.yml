@@ -1,0 +1,50 @@
+name: CodiumAI PR-Agent
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  issue_comment:
+    types: [created, edited]
+
+# 最小権限とし、ジョブ側で必要な書込権限のみ追加する
+permissions:
+  contents: read
+
+# 同一 PR への更新やコメント連投で重複起動するのを抑止し、ノイズとコストを削減
+concurrency:
+  group: pr-agent-${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pr_agent:
+    name: Auto PR Review
+    runs-on: ubuntu-latest
+    # 1) Bot 以外のイベントに限定
+    # 2) issue_comment は PR に紐づくコメントのみ対象（純粋な Issue では起動しない）
+    # 3) リポジトリの信頼済みアクター（OWNER / MEMBER / COLLABORATOR）のみに限定
+    if: >
+      github.event.sender.type != 'Bot' &&
+      (github.event_name != 'issue_comment' || github.event.issue.pull_request != null) &&
+      (github.event.sender.association == 'OWNER' ||
+       github.event.sender.association == 'MEMBER' ||
+       github.event.sender.association == 'COLLABORATOR')
+    # PR コメント投稿に必要な権限のみ付与
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          # PR-Agent の後続ステップに git 操作は不要のため、認証情報を残さない
+          persist-credentials: false
+
+      - name: PR-Agent アクションの実行
+        uses: Codium-ai/pr-agent@0bd56c0508504c718cc03d504cd4ceb6725ba3c7 # v0.35.0
+        env:
+          # CodiumAI は公開リポジトリ（オープンソース）では無料で利用可能です。
+          # API キーを登録しなくても、無料枠の範囲内で動作します。
+          # GitHub トークンを使用して PR にコメントを追加します。
+          OPENAI_KEY: ${{ secrets.OPENAI_KEY }} # 任意: より高い制限が必要な場合に追加
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
