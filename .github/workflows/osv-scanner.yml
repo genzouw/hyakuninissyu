@@ -23,6 +23,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          # ランナーに認証情報を残さないようにし、credential 漏えい面を縮小
+          persist-credentials: false
 
       - name: Run OSV-Scanner
         uses: google/osv-scanner-action/osv-scanner-action@daa2c68f50d845057895a9c300e42478481c1d26 # v1.9.1
