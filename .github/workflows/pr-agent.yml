@@ -36,6 +36,9 @@ jobs:
     steps:
       - name: リポジトリのチェックアウト
         uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          # PR-Agent の後続ステップに git 操作は不要のため、認証情報を残さない
+          persist-credentials: false
 
       - name: PR-Agent アクションの実行
         uses: Codium-ai/pr-agent@0bd56c0508504c718cc03d504cd4ceb6725ba3c7 # v0.35.0
