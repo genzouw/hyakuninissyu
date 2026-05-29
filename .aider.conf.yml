@@ -1,8 +1,9 @@
 # Aider configuration
 # https://aider.chat/docs/config/aider_conf.html
-
-# Always use Japanese for communications and commit messages
-message: "常に日本語で返答し、ソースコードのコメントやコミットメッセージ、ドキュメントも日本語で記述してください。"
+#
+# 常時適用したい指示（システムプロンプト）は .aider.instruction.md に記述します。
+# `message:` を本ファイルに設定すると Aider が非インタラクティブモードで
+# 起動してしまい、通常のチャット利用ができなくなるため設定しません。
 
 # Enforce conventional commits
 commit: true

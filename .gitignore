@@ -92,6 +92,8 @@ dist/
 .claude/
 .cursor/
 .aider*
+!.aider.conf.yml
+!.aider.instruction.md
 .continue/
 
 # Secrets
