@@ -6,6 +6,7 @@
     "**/.continue": true,
     "**/.windsurf": true,
     "**/.cline": true,
+    "**/*-report.md": true,
     "**/*.pem": true,
     "**/*.key": true,
     "**/*credentials*.json": true,
