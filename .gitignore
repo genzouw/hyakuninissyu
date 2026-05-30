@@ -95,6 +95,9 @@ dist/
 !.aider.conf.yml
 !.aider.instruction.md
 .continue/
+.windsurf/
+.cline/
+*-report.md
 
 # Secrets
 *.pem

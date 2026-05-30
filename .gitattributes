@@ -13,3 +13,6 @@
 .aider* -diff
 .aider*/** -diff
 .continue/** -diff
+.windsurf/** -diff
+.cline/** -diff
+*-report.md -diff
