@@ -19,6 +19,7 @@
 PRやPush時に実行される第二の防御層です。
 
 - **仕組み**: GitHub Actionsによる継続的なスキャン。
+  - `pre-commit.yml`: ローカルでセットアップ漏れがあった場合や意図的な `--no-verify` によるバイパスを防ぐため、CI環境上でリポジトリ全体に対して `pre-commit` フックを強制実行します。
   - `gitleaks.yml`: PR差分およびスケジュールでリポジトリ全体の履歴をスキャン。
   - `trivy.yml`: ファイルシステムのシークレットスキャン。
   - `actionlint.yml`: GitHub Actions ワークフローの静的解析および `shellcheck` 連携によるシェルスクリプトの脆弱性（インジェクション等）検知。
