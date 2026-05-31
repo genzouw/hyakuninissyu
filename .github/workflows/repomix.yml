@@ -28,7 +28,7 @@ jobs:
           persist-credentials: false
 
       - name: Pack repository with Repomix
-        uses: yamadashy/repomix/.github/actions/repomix@main
+        uses: yamadashy/repomix/.github/actions/repomix@a7b93adfcdb11be923a9a092cceb1cb6739ef8e1 # v1.14.1
         with:
           output: repomix-output.xml
           style: xml
