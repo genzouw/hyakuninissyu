@@ -65,6 +65,7 @@ In the project directory, you can run:
 - **PR Agent (Qodo)**: AI を活用した自動コードレビューツールです。本リポジトリでは `.pr_agent.toml` で設定を管理しています。
   - **事前準備（手動設定）**: PR Agent（Qodo）を利用するためには、GitHub の公開リポジトリで無料で使える「Qodo GitHub App」を該当のGitHubアカウントまたはOrganizationにインストールする必要があります。
 - **CodeRabbit**: `.coderabbit.yaml` で設定されている、もうひとつのAIコードレビューアシスタントです。
+- **Repomix**: リポジトリ全体のソースコードをAIが読みやすい単一ファイル（XML形式）にパッケージングするツールです。`.github/workflows/repomix.yml` にて GitHub Actions として設定されており、生成されたファイル（`repomix-output.xml`）は Artifacts としてダウンロードでき、LLMのコンテキストとしてそのまま活用できます。
 
 ## Deployment
 
