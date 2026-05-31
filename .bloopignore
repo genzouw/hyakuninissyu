@@ -25,3 +25,4 @@ logs
 .cursor/
 .aider*
 .continue/
+repomix-output.*
