@@ -25,7 +25,7 @@ jobs:
           persist-credentials: false
 
       - name: Run TruffleHog (Verify only)
-        uses: trufflesecurity/trufflehog@main
+        uses: trufflesecurity/trufflehog@37b77001d0174ebec2fcca2bd83ff83a6d45a3ab # v3.95.3
         with:
           # --only-verified: プロバイダのAPIに対して有効性を検証し、実際に利用可能なシークレットのみを検知
           # --no-update: スキャン時のルール更新をスキップ（CI高速化）
