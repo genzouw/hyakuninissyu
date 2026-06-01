@@ -21,6 +21,8 @@ jobs:
   pack-repo:
     name: Pack repository with Repomix
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # ai-context ブランチへのプッシュに必要
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -38,3 +40,18 @@ jobs:
         with:
           name: repomix-output
           path: repomix-output.xml
+
+      - name: Prepare ai-context directory
+        run: |
+          mkdir -p public-context
+          cp repomix-output.xml public-context/
+
+      - name: Deploy to ai-context branch
+        if: github.event_name != 'pull_request'
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475c00e11fe70ba3 # v4.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public-context
+          publish_branch: ai-context
+          force_orphan: true
+          commit_message: 'chore: update repomix output [skip ci]'
