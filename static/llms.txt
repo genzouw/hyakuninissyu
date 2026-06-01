@@ -24,5 +24,9 @@
 - プロジェクトは自動化タスクのために PR-Agent (Qodo)、CodeRabbit、および Sweep AI を利用しています。設定ファイルは `.pr_agent.toml`、`.coderabbit.yaml`、および `sweep.yaml` です。
 - ローカルのAIアシスタント向けのコンテキストは、`.cursorrules`、`.windsurfrules`、`.clinerules`、および `cody.json` に設定されています。
 
+## フルコンテキスト
+AIアシスタントやクローラー向けに、プロジェクト全体のソースコードを含む完全なコンテキストを提供しています:
+[Full Context](/llms-full.txt)
+
 ## リポジトリ
 GitHub: [https://github.com/genzouw/hyakuninissyu](https://github.com/genzouw/hyakuninissyu)
