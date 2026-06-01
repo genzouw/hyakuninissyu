@@ -26,7 +26,7 @@
 
 ## フルコンテキスト
 AIアシスタントやクローラー向けに、プロジェクト全体のソースコードを含む完全なコンテキストを提供しています:
-[Full Context](/llms-full.txt)
+[Full Context](llms-full.txt)
 
 ## リポジトリ
 GitHub: [https://github.com/genzouw/hyakuninissyu](https://github.com/genzouw/hyakuninissyu)
