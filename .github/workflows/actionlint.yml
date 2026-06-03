@@ -56,5 +56,6 @@ jobs:
       - name: Run actionlint with Reviewdog
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STEPS_ACTIONLINT_OUTPUTS_EXECUTABLE: ${{ steps.actionlint.outputs.executable }}
         run: |
-          "${{ steps.actionlint.outputs.executable }}" -oneline | reviewdog -efm="%f:%l:%c: %m" -name="actionlint" -reporter=github-pr-review
+          "${STEPS_ACTIONLINT_OUTPUTS_EXECUTABLE}" -oneline | reviewdog -efm="%f:%l:%c: %m" -name="actionlint" -reporter=github-pr-review
