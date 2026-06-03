@@ -25,6 +25,7 @@ PRやPush時に実行される第二の防御層です。
   - `actionlint.yml`: GitHub Actions ワークフローの静的解析および `shellcheck` 連携によるシェルスクリプトの脆弱性（インジェクション等）検知。
   - `codeql.yml`: `security-extended` および `security-and-quality` クエリによる高度な脆弱性・コード品質の検知（一部のハードコードされた認証情報パターンも含む）。
   - `dependency-review.yml`: PRで新たに追加・更新される依存パッケージ（OSS）に既知の脆弱性が含まれていないかをスキャン。
+  - `trufflehog.yml`: PRおよびプッシュ時にアクティブなシークレット検証（プロバイダAPIへの有効性確認）を実行し、実際に利用可能なシークレットの混入をリアルタイムにブロック。
 - **運用上の責任**: CIが落ちた場合、対象のコミットに含まれる漏洩疑いのコードを適切に修正し（必要であればシークレットをローテートし）、マージブロックを解消すること。
 
 ## 3. 定期監査と自動防御
@@ -33,7 +34,7 @@ PRやPush時に実行される第二の防御層です。
 
 - **仕組み**:
   - `codeql.yml`, `trivy.yml`, `gitleaks.yml` のスケジュール実行による監査。
-  - `trufflehog.yml` によるアクティブなシークレット検証。プロバイダのAPIに対して有効性を検証し、実際に利用可能なシークレットのみを検知します。
+  - `trufflehog.yml` によるアクティブなシークレット検証。PR・Push時のリアルタイムブロックに加え、スケジュール実行でリポジトリ全履歴に対してもプロバイダのAPIへの有効性確認を実施します。
   - `sbom.yml` による SBOM (Software Bill of Materials) の自動生成と、GitHub Dependency Graph への依存関係の登録（リポジトリの Settings → Security → Code security and analysis から Dependency graph を有効化すること）。
   - GitHub Secret Scanning と Push Protection（リポジトリの Settings → Security → Code security and analysis から必ず有効化すること）。
 - **対応**: 過去の履歴に漏洩が検知された場合や、依存パッケージに脆弱性が発見された場合は、すみやかにセキュリティポリシー（`SECURITY.md`）に従って対処すること。
@@ -62,8 +63,3 @@ AIエージェントの作業ディレクトリ（`.claude/`, `.cursor/`, `.aide
   ```bash
   pip install detect-secrets==1.5.0
   ```
-
-### アクティブなシークレット検証の強化 (TruffleHog)
-
-TruffleHog を用いたアクティブなシークレット検証（有効なキーかどうかの検証）は、定期監査だけでなくプッシュおよびプルリクエスト時にも実行されます。
-これにより、実際に利用可能なシークレットが意図せずマージされることをリアルタイムにブロックし、より強固な漏洩防止を実現します。
