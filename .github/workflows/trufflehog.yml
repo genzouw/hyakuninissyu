@@ -1,6 +1,10 @@
 name: TruffleHog Secret Scan
 
 on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   schedule:
     # 毎週火曜 05:00 JST (= 月曜 20:00 UTC) に定期実行
     - cron: '0 20 * * 1'
@@ -27,6 +31,8 @@ jobs:
       - name: Run TruffleHog (Verify only)
         uses: trufflesecurity/trufflehog@37b77001d0174ebec2fcca2bd83ff83a6d45a3ab # v3.95.3
         with:
+          base: ${{ github.event_name == 'pull_request' && github.event.repository.default_branch || (github.event_name == 'push' && github.event.before || '') }}
+          head: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && github.sha || '' }}
           # --only-verified: プロバイダのAPIに対して有効性を検証し、実際に利用可能なシークレットのみを検知
           # --no-update: スキャン時のルール更新をスキップ（CI高速化）
           extra_args: --only-verified --no-update
