@@ -6,9 +6,10 @@
 
 開発者およびAIエージェントのローカル環境でのコミットを防ぐ第一の防御層です。
 
-- **仕組み**: `pre-commit` フックにより `gitleaks`、`detect-private-key`、および `detect-aws-credentials` を実行。
-- **設定ファイル**: `.pre-commit-config.yaml`
-- **開発者の責任**: リポジトリをクローンしたのち、必ず `pre-commit install` を実行し、コミット時にフックが機能するようにすること。
+- **仕組み**: Husky の `pre-commit` フック (`.husky/pre-commit`) により `pre-commit run` を呼び出し、`.pre-commit-config.yaml` で定義された `gitleaks`、`detect-private-key`、`detect-aws-credentials` などを包括的に実行します。
+- **設定ファイル**: `.pre-commit-config.yaml` および `.husky/pre-commit`
+- **開発者の責任**: リポジトリをクローンしたのち、必ず `pip install pre-commit detect-secrets==1.5.0` を実行し、ローカル環境で包括的なシークレット検知が機能するようにすること。
+- **マージ前の手動作業（推奨）**: GitHub Secret Scanning および Push Protection が有効化されていない場合は、リポジトリの Settings → Security → Code security and analysis から必ず有効化してください。
 - **補完**:
   - `.gitignore` にて各種シークレットファイルやAIエージェントの作業履歴を除外し、事故を根本から防止。
   - `.gitattributes` にてシークレット関連ファイルの diff 出力を無効化（`-diff`）し、レビュー時の意図しない露出を防止。
