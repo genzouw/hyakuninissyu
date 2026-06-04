@@ -3,7 +3,7 @@ npx lint-staged
 # pre-commitフレームワークがインストールされている場合は、包括的なシークレットスキャンを実行します
 if command -v pre-commit &> /dev/null; then
   echo "🔒 pre-commitフック（gitleaksやdetect-secretsを含む）を実行中..."
-  pre-commit run --hook-stage commit
+  pre-commit run --hook-stage commit || exit 1
 else
   echo "⚠️ pre-commitがローカルにインストールされていません。包括的なシークレットスキャンをスキップします。"
   echo "   包括的なセキュリティチェックを有効にするには、'pip install pre-commit detect-secrets==1.5.0' を実行してください。"
@@ -11,7 +11,7 @@ else
   # pre-commitがない場合でも、gitleaksが利用可能であれば直接実行するフォールバック
   if command -v gitleaks &> /dev/null; then
     echo "🔒 フォールバックのローカルgitleaksチェックを実行中..."
-    gitleaks protect --staged --verbose
+    gitleaks protect --staged --verbose || exit 1
   fi
 fi
 
