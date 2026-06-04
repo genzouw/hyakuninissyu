@@ -1,0 +1,40 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+# 同一 PR への複数回のプッシュで重複起動するのを防ぐ
+concurrency:
+  group: ai-code-review-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ai-review:
+    name: Auto AI Code Review (Gemini)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # 履歴の解析に必要
+          persist-credentials: false
+
+      # Google AI Studio で取得した無料の API キーを GitHub Secrets (GOOGLE_API_KEY) に設定する必要があります。
+      # 事前準備（手動設定）:
+      # 1. Google AI Studio (https://aistudio.google.com/) で API キーを生成します。無料で利用可能です。
+      # 2. 対象の GitHub リポジトリの Settings -> Secrets and variables -> Actions に移動します。
+      # 3. 'New repository secret' をクリックし、名前に `GOOGLE_API_KEY`、値に取得した API キーを設定します。
+      - name: Run AI Code Review
+        # サプライチェーン攻撃を防ぐため、特定のコミットハッシュ (v1.3.0) に固定します。
+        uses: zxcloli666/AI-Code-Review@e4c07fe82e4c70a3cf152773423f608a88e9497d # v1.3.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          OPENAI_API_BASE_URL: 'https://generativelanguage.googleapis.com/v1beta/openai/'
+          OPENAI_API_MODEL: 'gemini-2.5-pro'
+          REVIEW_LANGUAGE: 'ja'
+          MAX_CHUNK_SIZE: '12000'
