@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# 主要なAIクローラー (GEO - 生成AIエンジン最適化)
+User-agent: PerplexityBot
+Allow: /
+User-agent: GPTBot
+Allow: /
+User-agent: anthropic-ai
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+
+Sitemap: https://hyakuninissyu.genzouw.com/sitemap.xml
