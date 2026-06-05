@@ -93,7 +93,6 @@ describe('Badges.vue', () => {
 
     // mountBadges triggers mounted() -> loadUnlockedBadges()
     const wrapper = mountBadges()
-    wrapper.vm.loadUnlockedBadges()
 
     // Assert error was logged
     expect(consoleSpy).toHaveBeenCalledWith(
