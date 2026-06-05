@@ -11,6 +11,14 @@ repos:
       - id: check-yaml
       - id: end-of-file-fixer
       - id: trailing-whitespace
+      - id: check-added-large-files
+        args: ['--maxkb=5000']
+        name: check added large files
+        description: 巨大ファイル（DBダンプや非圧縮メディア等）の意図しないコミットを防止
+      - id: no-commit-to-branch
+        args: ['--branch', 'main', '--branch', 'master']
+        name: no commit to branch
+        description: main/masterブランチへの直接コミットを禁止し、CI/CDやレビューのバイパスを防止
       - id: detect-aws-credentials
         args: ["--allow-missing-credentials"]
         name: detect aws credentials

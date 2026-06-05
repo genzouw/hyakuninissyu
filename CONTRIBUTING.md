@@ -98,6 +98,17 @@ To set up the project locally for development:
 7. Execute unit tests using `npm run unit`.
 8. Perform end-to-end testing with `npm run e2e`.
 
+## セキュリティおよび漏洩防止 (Security and Leak Prevention)
+
+この公開リポジトリの安全性を確保するため、シークレット、認証情報、個人情報 (PII: DBダンプなど) の意図しない漏洩を防ぐ厳格なセキュリティ対策を実施しています。
+
+- **シークレットをコミットしないでください**: APIキー、パスワード、クラウドアカウントの認証情報などをハードコードしてはいけません。
+- **個人情報(PII)や大容量データをコミットしないでください**: テストデータ、データベースダンプ (`*.db`, `*.dump` など)、およびユーザー情報は絶対にコミットしてはいけません。
+- **コミット前検知 (Pre-commit checks)**: ローカルで `gitleaks` や `detect-secrets` などのツールを使用して、シークレットがステージングされるのを防ぎます。CIパイプラインでは、すべてのPRで多層的なチェック (CodeQL, Trivy, TruffleHog など) を実行します。
+- ピアレビューとCIの検証を強制するため、`main` または `master` ブランチへの直接コミットは pre-commit フックによってブロックされます。
+
+当リポジトリの多層防御と開発者の責任についての詳細は、[SECURITY.md](SECURITY.md) および [docs/security/leak-prevention.md](docs/security/leak-prevention.md) を確認してください。
+
 ## Code Style
 
 This project follows standard Vue.js and JavaScript conventions, enforced by ESLint. Please make sure to run `npm run lint` before submitting a pull request to ensure your code complies with our styling rules.
