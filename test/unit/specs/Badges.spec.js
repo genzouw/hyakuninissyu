@@ -1,4 +1,4 @@
-/* eslint-env jest */
+import { describe, it, expect, beforeEach, jest } from '@jest/globals'
 
 import { mount } from '@vue/test-utils'
 import { createStore as createVuexStore } from 'vuex'
