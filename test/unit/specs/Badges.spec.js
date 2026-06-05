@@ -99,12 +99,14 @@ describe('Badges.vue', () => {
       'Failed to parse unlockedBadgeIds from localStorage:',
       expect.any(Error)
     )
+    expect(consoleSpy).toHaveBeenCalledTimes(1)
 
     // Assert array is reset
     expect(wrapper.vm.unlockedBadgeIds).toEqual([])
 
     // Assert localStorage.removeItem was called
     expect(localStorageMock.removeItem).toHaveBeenCalledWith('unlockedBadgeIds')
+    expect(localStorageMock.removeItem).toHaveBeenCalledTimes(1)
 
     consoleSpy.mockRestore()
   })
