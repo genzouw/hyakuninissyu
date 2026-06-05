@@ -7,7 +7,7 @@ on:
   schedule:
     - cron: '30 2 * * 0'
   push:
-    branches: [ "main" ]
+    branches: ['main']
 
 permissions: read-all
 
@@ -22,26 +22,26 @@ jobs:
       actions: read
 
     steps:
-      - name: "リポジトリのチェックアウト"
+      - name: 'リポジトリのチェックアウト'
         uses: actions/checkout@v4
         with:
           persist-credentials: false
 
-      - name: "Scorecard による分析の実行"
-        uses: ossf/scorecard-action@v2.4.0
+      - name: 'Scorecard による分析の実行'
+        uses: ossf/scorecard-action@62b2cac7ed8198b15735ed49ab1e5cf35480ba46 # v2.4.0
         with:
           results_file: results.sarif
           results_format: sarif
           publish_results: true
 
-      - name: "アーティファクトのアップロード"
+      - name: 'アーティファクトのアップロード'
         uses: actions/upload-artifact@v4
         with:
           name: SARIF file
           path: results.sarif
           retention-days: 5
 
-      - name: "GitHub Code Scanning へのアップロード"
+      - name: 'GitHub Code Scanning へのアップロード'
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: results.sarif
