@@ -7,6 +7,17 @@
 *.tfstate.* -diff
 *credentials*.json -diff
 
+# Database dumps / Backups
+*.db -diff
+*.sqlite -diff
+*.sqlite3 -diff
+*.dump -diff
+*.bak -diff
+
+# Package manager configs
+.npmrc -diff
+.yarnrc -diff
+
 # AI agent working directories
 .claude/** -diff
 .cursor/** -diff
