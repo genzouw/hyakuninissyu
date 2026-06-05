@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, jest } from '@jest/globals'
+const { describe, it, expect, beforeEach } = globalThis
 
 import { mount } from '@vue/test-utils'
 import { createStore as createVuexStore } from 'vuex'
