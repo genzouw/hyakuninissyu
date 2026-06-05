@@ -15,7 +15,14 @@
     ".clinerules",
     ".windsurfrules",
     ".github/copilot-instructions.md",
-    ".github/workflows/**"
+    ".github/workflows/**",
+    ".coderabbit.yaml",
+    "sweep.yaml",
+    ".pr_agent.toml",
+    ".aider.conf.yml",
+    ".aider.instruction.md",
+    ".bloopignore",
+    "static/llms.txt"
   ],
   "ignore": {
     "useGitignore": true,
@@ -26,7 +33,6 @@
       "coverage/",
       "test/",
       "docs/",
-      "static/",
       "**/*.png",
       "**/*.ico",
       "**/*.lock",
