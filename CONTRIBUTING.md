@@ -107,7 +107,7 @@ To set up the project locally for development:
 - **コミット前検知 (Pre-commit checks)**: ローカルで `gitleaks` や `detect-secrets` などのツールを使用して、シークレットがステージングされるのを防ぎます。CIパイプラインでは、すべてのPRで多層的なチェック (CodeQL, Trivy, TruffleHog など) を実行します。
 - ピアレビューとCIの検証を強制するため、`main` または `master` ブランチへの直接コミットは pre-commit フックによってブロックされます。
 
-当リポジトリの多層防御と開発者の責任についての詳細は、[SECURITY.md](SECURITY.md) および [docs/security/leak-prevention.md](docs/security/leak-prevention.md) を確認してください。
+当リポジトリの多層防御と開発者の責任についての詳細は、[SECURITY.md](SECURITY.md) を確認してください。
 
 ## Code Style
 
