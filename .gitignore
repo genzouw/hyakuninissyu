@@ -108,6 +108,17 @@ dist/
 .env.*
 !.env.example
 
+# Package manager configs
+.npmrc
+.yarnrc
+
+# Database dumps / Backups
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+*.bak
+
 # Infrastructure state
 *.tfstate
 *.tfstate.*
