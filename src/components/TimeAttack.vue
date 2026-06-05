@@ -188,16 +188,14 @@ export default {
     },
     loadQuestion () {
       this.questionData = { ...this.questionList[this.currentQuestionIndex] }
-      const dummies = _.shuffle(
-        _.filter(
-          _.map(this.questionList, (v, k) => {
-            return v.answer
-          }),
-          (v) => {
-            return v !== this.questionData.answer
-          }
-        )
-      )
+      const dummyAnswers = this.questionList.reduce((acc, v) => {
+        if (v.answer !== this.questionData.answer) {
+          acc.push(v.answer)
+        }
+        return acc
+      }, [])
+      const dummies = _.shuffle(dummyAnswers)
+
       this.questionData.choices = [
         this.questionData.answer,
         dummies[0],
