@@ -33,7 +33,6 @@
       "coverage/",
       "test/",
       "docs/",
-      "static/",
       "**/*.png",
       "**/*.ico",
       "**/*.lock",
