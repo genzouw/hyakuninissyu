@@ -409,7 +409,7 @@ export default {
     simulateAIAnswer () {
       // AIの思考時間（ランダム遅延）
       const delay =
-        Math.random() * (this.aiDelayRange.max - this.aiDelayRange.min) +
+        this.getSecureRandom() * (this.aiDelayRange.max - this.aiDelayRange.min) +
         this.aiDelayRange.min
 
       // 【競合状態対策】現在のラウンドIDをキャプチャ
@@ -435,7 +435,7 @@ export default {
         this.aiAnswerTime = Date.now()
 
         // AIが正解するかどうかを判定
-        const willAnswerCorrectly = Math.random() < this.aiAccuracy
+        const willAnswerCorrectly = this.getSecureRandom() < this.aiAccuracy
 
         if (willAnswerCorrectly) {
           // AIが正解 → 即座にラウンド終了
@@ -491,6 +491,11 @@ export default {
         this.speak.text = this.currentQuestion.answer
         speechSynthesis.speak(this.speak)
       }
+    },
+    getSecureRandom () {
+      const array = new Uint32Array(1)
+      window.crypto.getRandomValues(array)
+      return array[0] / (0xffffffff + 1)
     },
     clickSpeakToggle () {
       this.enableSpeak = !this.enableSpeak
