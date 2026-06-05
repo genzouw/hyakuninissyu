@@ -1,3 +1,5 @@
+/* global describe, it, expect, beforeEach, jest */
+
 import { mount } from '@vue/test-utils'
 import { createStore as createVuexStore } from 'vuex'
 import { createBootstrap } from 'bootstrap-vue-next'
