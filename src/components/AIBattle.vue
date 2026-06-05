@@ -495,7 +495,7 @@ export default {
     },
     getSecureRandom () {
       const cryptoObj = window.crypto || window.msCrypto
-      if (cryptoObj && cryptoObj.getRandomValues) {
+      if (cryptoObj?.getRandomValues) {
         const array = new Uint32Array(1)
         cryptoObj.getRandomValues(array)
         return array[0] / (0xffffffff + 1)
