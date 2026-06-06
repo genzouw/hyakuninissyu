@@ -90,6 +90,7 @@ dist/
 
 # AI agents
 .claude/
+!.cursor/rules/
 .cursor/
 .aider*
 !.aider.conf.yml

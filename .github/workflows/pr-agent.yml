@@ -1,4 +1,4 @@
-name: CodiumAI PR-Agent
+name: Qodo Merge (formerly PR-Agent)
 
 on:
   pull_request:
@@ -12,11 +12,11 @@ permissions:
 
 # 同一 PR への更新やコメント連投で重複起動するのを抑止し、ノイズとコストを削減
 concurrency:
-  group: pr-agent-${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
+  group: qodo-merge-${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  pr_agent:
+  qodo_merge:
     name: Auto PR Review
     runs-on: ubuntu-latest
     # 1) Bot 以外のイベントに限定
@@ -35,16 +35,16 @@ jobs:
       issues: write
     steps:
       - name: リポジトリのチェックアウト
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        uses: actions/checkout@v4
         with:
-          # PR-Agent の後続ステップに git 操作は不要のため、認証情報を残さない
+          # Qodo Merge の後続ステップに git 操作は不要のため、認証情報を残さない
           persist-credentials: false
 
-      - name: PR-Agent アクションの実行
-        uses: The-PR-Agent/pr-agent@0bd56c0508504c718cc03d504cd4ceb6725ba3c7 # v0.35.0
+      - name: Qodo Merge (PR-Agent) アクションの実行
+        # Qodo Merge (旧 CodiumAI PR-Agent) の最新バージョンを使用
+        # PRのコメントにて `/review`, `/describe`, `/improve`, `/ask` などのコマンドを実行できます。
+        uses: qodo-ai/qodo-merge@v0.40.1 # 最新バージョンに近いものを指定
         env:
-          # CodiumAI は公開リポジトリ（オープンソース）では無料で利用可能です。
-          # API キーを登録しなくても、無料枠の範囲内で動作します。
+          # Qodo Merge (PR-Agent) は公開リポジトリ（オープンソース）では無料で利用可能です。
           # GitHub トークンを使用して PR にコメントを追加します。
-          OPENAI_KEY: ${{ secrets.OPENAI_KEY }} # 任意: より高い制限が必要な場合に追加
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
