@@ -253,7 +253,7 @@ export default {
       // カウントダウン
       countdown: 0,
       countdownInterval: null,
-      canAnswer: false // プレイヤーが回答可能かどうか
+      canAnswer: false, // プレイヤーが回答可能かどうか
     }
   },
   mounted () {
@@ -265,7 +265,7 @@ export default {
       const accuracyMap = {
         easy: 0.5, // 50% - 弱い
         normal: 0.75, // 75% - 普通
-        hard: 0.95 // 95% - 強い
+        hard: 0.95, // 95% - 強い
       }
       return accuracyMap[this.difficulty] || 0.75
     },
@@ -273,10 +273,10 @@ export default {
       const delayMap = {
         easy: { min: 4500, max: 7500 }, // 遅い（4.5〜7.5秒）
         normal: { min: 2250, max: 4500 }, // 普通（2.25〜4.5秒）
-        hard: { min: 750, max: 2250 } // 速い（0.75〜2.25秒）
+        hard: { min: 750, max: 2250 }, // 速い（0.75〜2.25秒）
       }
       return delayMap[this.difficulty] || { min: 2250, max: 4500 }
-    }
+    },
   },
   methods: {
     startGame () {
@@ -406,20 +406,11 @@ export default {
         }
       }
     },
-    getSecureRandom () {
-      // window.crypto が未定義の環境（SSR・テスト・古いブラウザ）では
-      // TypeError でクラッシュするため、Math.random() にフォールバックする
-      if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
-        const array = new Uint32Array(1)
-        window.crypto.getRandomValues(array)
-        return array[0] / (0xffffffff + 1)
-      }
-      return Math.random()
-    },
     simulateAIAnswer () {
       // AIの思考時間（ランダム遅延）
       const delay =
-        this.getSecureRandom() * (this.aiDelayRange.max - this.aiDelayRange.min) +
+        this.getSecureRandom() *
+          (this.aiDelayRange.max - this.aiDelayRange.min) +
         this.aiDelayRange.min
 
       // 【競合状態対策】現在のラウンドIDをキャプチャ
@@ -502,6 +493,16 @@ export default {
         speechSynthesis.speak(this.speak)
       }
     },
+    getSecureRandom () {
+      const cryptoObj = window.crypto || window.msCrypto
+      if (cryptoObj?.getRandomValues) {
+        const array = new Uint32Array(1)
+        cryptoObj.getRandomValues(array)
+        return array[0] / (0xffffffff + 1)
+      }
+      // CSPRNG が利用できない環境向けのフォールバック (古いブラウザやテスト環境での実行時エラーを防ぐ)
+      return Math.random()
+    },
     clickSpeakToggle () {
       this.enableSpeak = !this.enableSpeak
       this.speakQuestionIfEnabled()
@@ -510,10 +511,10 @@ export default {
       this.gameFinished = true
       // 結果画面に遷移
       this.$router.push({
-        path: `/ai-battle-result/${this.playerScore}/${this.aiScore}/${this.selectedQuestionCount}/${this.difficulty}`
+        path: `/ai-battle-result/${this.playerScore}/${this.aiScore}/${this.selectedQuestionCount}/${this.difficulty}`,
       })
-    }
-  }
+    },
+  },
 }
 </script>
 
