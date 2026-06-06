@@ -7,18 +7,20 @@
 # 問題が発生する。本ファイルでその偽陽性を抑制する。
 #
 # 抑制内容:
-# 1. テストコード全体: ESLint Flat Config 非対応起因の import/globals 誤検知
-#    (`@jest/globals` 由来) を回避するため `test/**` を除外する。
-# 2. JSHint ツール: ES5 モードで動作し、本プロジェクトが全面採用している
-#    ES2015+ 構文 (import/export, const, property shorthand) を一律
-#    "forbidden" と警告する。同等以上の検査は ESLint (CI: ESLint job) で
-#    実施済みのため、JSHint は無効化する。
-# 3. `src/constants/url.js`: 公開 Twitter シェア URL の percent-encoded
-#    クエリ文字列を "Potential secret found" と誤検知するため、当該
-#    ファイルのみ解析対象から除外する (内容は単一の文字列定数のみ)。
+# 1. テストコード全体 (`test/**`)
+#    ESLint Flat Config 非対応起因の import/globals 誤検知
+#    (`@jest/globals` 由来) を回避するため除外する。
+# 2. Vue Single File Component 全体 (`**/*.vue`)
+#    Codacy 内蔵の JSHint が <script> ブロックを ES5 モードで解析し、
+#    `import` / property shorthand 等の ES2015 構文を一律
+#    "ES2015 ... are forbidden" と警告する。Vue ファイルの JavaScript
+#    部分は CI の ESLint ジョブ (eslint-plugin-vue を含む Flat Config)
+#    で検証済みのため、Codacy 側で重複解析する必要はない。
+# 3. `src/constants/url.js`
+#    公開 Twitter シェア URL の percent-encoded クエリ文字列を
+#    "Potential secret found" と誤検知するため除外する。
+#    当該ファイルは単一の文字列定数のみで品質劣化リスクなし。
 exclude_paths:
   - 'test/**'
+  - '**/*.vue'
   - 'src/constants/url.js'
-engines:
-  jshint:
-    enabled: false
