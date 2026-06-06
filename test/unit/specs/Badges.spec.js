@@ -1,3 +1,5 @@
+import { describe, it, expect, beforeEach, jest } from '@jest/globals'
+
 import { mount } from '@vue/test-utils'
 import { createStore as createVuexStore } from 'vuex'
 import { createBootstrap } from 'bootstrap-vue-next'
@@ -8,9 +10,11 @@ import collectionModule from '@/store/modules/collection'
 const localStorageMock = {
   getItem: jest.fn(),
   setItem: jest.fn(),
+  removeItem: jest.fn(),
   clear: jest.fn(),
 }
 global.localStorage = localStorageMock
+Object.defineProperty(window, 'localStorage', { value: localStorageMock })
 
 function createStore (collectedPoemIds = []) {
   return createVuexStore({
@@ -33,6 +37,7 @@ describe('Badges.vue', () => {
   beforeEach(() => {
     localStorageMock.getItem.mockClear()
     localStorageMock.setItem.mockClear()
+    localStorageMock.removeItem.mockClear()
   })
 
   it('should render correct title', () => {
@@ -76,5 +81,35 @@ describe('Badges.vue', () => {
     const wrapper = mountBadges()
     wrapper.vm.rarityFilter = 'all'
     expect(wrapper.vm.filteredBadges.length).toBe(14)
+  })
+
+  it('should clear unlockedBadgeIds and localStorage if JSON.parse fails', () => {
+    // Suppress console.error for this test
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+
+    // Set invalid JSON ONLY for 'unlockedBadgeIds' to avoid affecting other components that might use localStorage
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'unlockedBadgeIds') return 'invalid-json'
+      return null
+    })
+
+    // mountBadges triggers mounted() -> loadUnlockedBadges()
+    const wrapper = mountBadges()
+
+    // Assert error was logged
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Failed to parse unlockedBadgeIds from localStorage:',
+      expect.any(Error)
+    )
+    expect(consoleSpy).toHaveBeenCalledTimes(1)
+
+    // Assert array is reset
+    expect(wrapper.vm.unlockedBadgeIds).toEqual([])
+
+    // Assert localStorage.removeItem was called
+    expect(localStorageMock.removeItem).toHaveBeenCalledWith('unlockedBadgeIds')
+    expect(localStorageMock.removeItem).toHaveBeenCalledTimes(1)
+
+    consoleSpy.mockRestore()
   })
 })

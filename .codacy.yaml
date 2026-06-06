@@ -1,0 +1,11 @@
+---
+# Codacy 解析設定 — テストコードは品質ゲートから除外する
+#
+# Codacy が ESLint v9 Flat Config (eslint.config.js) を読まないことで、
+# `@jest/globals` を使うテストファイルに対し
+# 「Dependency cannot be verified because no package.json file was found.」
+# 等の偽陽性 warning が発生していた問題への対処。
+# テストコードは本番ビルドに含まれず、ローカル/CI の jest と ESLint で
+# 別途検証されるため、Codacy の静的解析からは除外する。
+exclude_paths:
+  - 'test/**'
