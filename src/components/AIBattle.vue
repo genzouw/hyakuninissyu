@@ -407,9 +407,14 @@ export default {
       }
     },
     getSecureRandom () {
-      const array = new Uint32Array(1)
-      window.crypto.getRandomValues(array)
-      return array[0] / (0xffffffff + 1)
+      // window.crypto が未定義の環境（SSR・テスト・古いブラウザ）では
+      // TypeError でクラッシュするため、Math.random() にフォールバックする
+      if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
+        const array = new Uint32Array(1)
+        window.crypto.getRandomValues(array)
+        return array[0] / (0xffffffff + 1)
+      }
+      return Math.random()
     },
     simulateAIAnswer () {
       // AIの思考時間（ランダム遅延）
