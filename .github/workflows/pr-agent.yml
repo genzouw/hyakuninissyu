@@ -41,9 +41,11 @@ jobs:
           persist-credentials: false
 
       - name: Qodo Merge (PR-Agent) アクションの実行
-        # Qodo Merge (旧 CodiumAI PR-Agent) の最新バージョンを使用
+        # PR-Agent (The-PR-Agent/pr-agent) を使用。
+        # qodo-ai/qodo-merge リポジトリは存在しないため、後継メンテナの The-PR-Agent/pr-agent を参照する。
+        # third-party アクションは Codacy 等の SAST 要件に従い、フルコミット SHA で pin する。
         # PRのコメントにて `/review`, `/describe`, `/improve`, `/ask` などのコマンドを実行できます。
-        uses: qodo-ai/qodo-merge@v0.40.1 # 最新バージョンに近いものを指定
+        uses: The-PR-Agent/pr-agent@ffe1f89a4dafc7d8e88b9cf010a3233e30b49f43 # v0.36.0
         env:
           # Qodo Merge (PR-Agent) は公開リポジトリ（オープンソース）では無料で利用可能です。
           # GitHub トークンを使用して PR にコメントを追加します。
