@@ -29,6 +29,19 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
+        with:
+          bun-version: '1.3.14'
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --ignore-scripts
+
+      - name: Build and generate llms-full.txt
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
+        run: bun run build
+
       - name: Pack repository with Repomix
         uses: yamadashy/repomix/.github/actions/repomix@a7b93adfcdb11be923a9a092cceb1cb6739ef8e1 # v1.14.1
         with:
@@ -45,6 +58,14 @@ jobs:
         run: |
           mkdir -p public-context
           cp repomix-output.xml public-context/
+          # AIクローラーや検索エンジン(GEO)向けによりリッチなコンテキストを公開
+          if [ -f "dist/llms-full.txt" ]; then
+            cp dist/llms-full.txt public-context/
+          fi
+          # static/llms.txt も合わせて配置
+          if [ -f "static/llms.txt" ]; then
+            cp static/llms.txt public-context/
+          fi
 
       - name: Deploy to ai-context branch
         if: github.event_name != 'pull_request'
@@ -54,4 +75,4 @@ jobs:
           publish_dir: ./public-context
           publish_branch: ai-context
           force_orphan: true
-          commit_message: 'chore: update repomix output [skip ci]'
+          commit_message: 'chore: update repomix and AI context output [skip ci]'
