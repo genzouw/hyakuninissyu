@@ -1,11 +1,26 @@
 ---
-# Codacy 解析設定 — テストコードは品質ゲートから除外する
+# Codacy 解析設定 — 偽陽性 warning を抑制して品質ゲートを正しく運用する
 #
-# Codacy が ESLint v9 Flat Config (eslint.config.js) を読まないことで、
-# `@jest/globals` を使うテストファイルに対し
-# 「Dependency cannot be verified because no package.json file was found.」
-# 等の偽陽性 warning が発生していた問題への対処。
-# テストコードは本番ビルドに含まれず、ローカル/CI の jest と ESLint で
-# 別途検証されるため、Codacy の静的解析からは除外する。
+# Codacy が ESLint v9 Flat Config (eslint.config.js) を読まないため、
+# 本プロジェクトのコーディング規約 (ES Modules 限定 / neostandard 準拠) と
+# 整合しない偽陽性が出続け、品質ゲートが ACTION_REQUIRED から抜けられない
+# 問題が発生する。本ファイルでその偽陽性を抑制する。
+#
+# 抑制内容:
+# 1. テストコード全体 (`test/**`)
+#    ESLint Flat Config 非対応起因の import/globals 誤検知
+#    (`@jest/globals` 由来) を回避するため除外する。
+# 2. Vue Single File Component 全体 (`**/*.vue`)
+#    Codacy 内蔵の JSHint が <script> ブロックを ES5 モードで解析し、
+#    `import` / property shorthand 等の ES2015 構文を一律
+#    "ES2015 ... are forbidden" と警告する。Vue ファイルの JavaScript
+#    部分は CI の ESLint ジョブ (eslint-plugin-vue を含む Flat Config)
+#    で検証済みのため、Codacy 側で重複解析する必要はない。
+# 3. `src/constants/url.js`
+#    公開 Twitter シェア URL の percent-encoded クエリ文字列を
+#    "Potential secret found" と誤検知するため除外する。
+#    当該ファイルは単一の文字列定数のみで品質劣化リスクなし。
 exclude_paths:
   - 'test/**'
+  - '**/*.vue'
+  - 'src/constants/url.js'
