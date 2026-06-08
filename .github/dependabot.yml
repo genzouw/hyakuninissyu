@@ -84,3 +84,45 @@ updates:
       include: scope
     pull-request-branch-name:
       separator: /
+
+  # Docker dependencies
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 5
+    target-branch: main
+    reviewers:
+      - genzouw
+    labels:
+      - dependencies
+      - docker
+    commit-message:
+      prefix: chore
+      include: scope
+    pull-request-branch-name:
+      separator: /
+
+  # pip dependencies (used for pre-commit etc.)
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 5
+    target-branch: main
+    reviewers:
+      - genzouw
+    labels:
+      - dependencies
+      - pip
+    commit-message:
+      prefix: chore
+      include: scope
+    pull-request-branch-name:
+      separator: /
