@@ -12,7 +12,13 @@
     "**/*credentials*.json": true,
     "**/.env*": true,
     "**/.env.example": false,
-    "**/*.tfstate*": true
+    "**/*.tfstate*": true,
+    "**/.npmrc": true,
+    "**/.yarnrc": true,
+    "**/*.db": true,
+    "**/*.dump": true,
+    "**/*.bak": true,
+    "**/*.sqlite*": true
   },
   "files.exclude": {
     "**/.claude": true,
@@ -27,6 +33,12 @@
     "**/*credentials*.json": true,
     "**/.env*": true,
     "**/.env.example": false,
-    "**/*.tfstate*": true
+    "**/*.tfstate*": true,
+    "**/.npmrc": true,
+    "**/.yarnrc": true,
+    "**/*.db": true,
+    "**/*.dump": true,
+    "**/*.bak": true,
+    "**/*.sqlite*": true
   }
 }
