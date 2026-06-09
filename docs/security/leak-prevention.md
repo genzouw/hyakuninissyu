@@ -65,3 +65,10 @@ AIエージェントの作業ディレクトリ（`.claude/`, `.cursor/`, `.aide
   ```bash
   pip install detect-secrets==1.5.0
   ```
+
+### Dependabot による定期監査と自動アップデート
+
+Dependabot を用いて、定期的に利用パッケージのアップデートを確認・適用しています。
+
+- `.github/dependabot.yml` にて `npm`, `github-actions`, `docker` などの依存エコシステムを設定し、最新のパッケージ（特に脆弱性修正が含まれるバージョン）へ自動的に追従できるようにしています。
+- これにより、`docker` で利用するイメージや CI 上のアクション等の防衛層が、脆弱性修正を含む最新バージョンへ追従し、セキュリティ態勢を維持します。なお、シークレット検出パターン自体の更新は Dependabot の対象外であり、gitleaks や trufflehog 等のツールが担当します。
