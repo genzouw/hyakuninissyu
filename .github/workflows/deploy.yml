@@ -103,3 +103,13 @@ jobs:
           aws cloudfront create-invalidation \
             --distribution-id "${CLOUDFRONT_DISTRIBUTION_ID}" \
             --paths "/${S3_PREFIX}/*"
+
+  indexnow:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: IndexNow
+        uses: bojieyang/indexnow-action@v3
+        with:
+          sitemap-location: 'https://hyakuninissyu.genzouw.com/sitemap.xml'
+          key: ${{ secrets.INDEXNOW_KEY }}
