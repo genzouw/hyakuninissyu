@@ -122,7 +122,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: IndexNow
-        uses: bojieyang/indexnow-action@v3
+        uses: bojieyang/indexnow-action@38ddfbd93579a8a44c0dee662121bf9d51098f71 # v3
         with:
           sitemap-location: 'https://hyakuninissyu.genzouw.com/sitemap.xml'
           key: ${{ secrets.INDEXNOW_KEY }}
