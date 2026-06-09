@@ -80,6 +80,18 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
           aws-region: ${{ env.AWS_REGION }}
 
+      # IndexNow のキーファイルをデプロイ時に動的生成する。
+      # 公開リポジトリでキーファイルを直接コミットすると場所が露見するため、Secrets から生成する。
+      - name: Generate IndexNow key file
+        env:
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+        run: |
+          if [ -z "${INDEXNOW_KEY}" ]; then
+            echo "INDEXNOW_KEY secret is not set" >&2
+            exit 1
+          fi
+          printf '%s' "${INDEXNOW_KEY}" > "dist/${INDEXNOW_KEY}.txt"
+
       - name: Deploy to S3
         run: |
           aws s3 sync dist/ "s3://${S3_BUCKET}/${S3_PREFIX}/" \
