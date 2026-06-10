@@ -8,7 +8,7 @@
 
 - **仕組み**: Husky の `pre-commit` フック (`.husky/pre-commit`) により `pre-commit run` を呼び出し、`.pre-commit-config.yaml` で定義された `gitleaks`、`detect-private-key`、`detect-aws-credentials` などを包括的に実行します。
 - **設定ファイル**: `.pre-commit-config.yaml` および `.husky/pre-commit`
-- **開発者の責任**: リポジトリをクローンしたのち、必ず `pip install pre-commit detect-secrets==1.5.0` を実行し、ローカル環境で包括的なシークレット検知が機能するようにすること。
+- **開発者の責任**: リポジトリをクローンしたのち、必ず `pip install -r requirements.txt` を実行し、ローカル環境で包括的なシークレット検知が機能するようにすること。
 - **マージ前の手動作業（必須）**: GitHub Secret Scanning および Push Protection が有効化されていない場合は、リポジトリの Settings → Security → Code security and analysis から必ず有効化してください。
 - **補完**:
   - `.gitignore` にて各種シークレットファイルやAIエージェントの作業履歴を除外し、事故を根本から防止。
@@ -64,7 +64,7 @@ AIエージェントの作業ディレクトリ（`.claude/`, `.cursor/`, `.aide
 - パッケージマネージャー: pip
 
   ```bash
-  pip install detect-secrets==1.5.0
+  pip install -r requirements.txt
   ```
 
 ### Dependabot による定期監査と自動アップデート
@@ -73,3 +73,4 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 - `.github/dependabot.yml` にて `npm`, `github-actions`, `docker` などの依存エコシステムを設定し、最新のパッケージ（特に脆弱性修正が含まれるバージョン）へ自動的に追従できるようにしています。
 - これにより、`docker` で利用するイメージや CI 上のアクション等の防衛層が、脆弱性修正を含む最新バージョンへ追従し、セキュリティ態勢を維持します。なお、シークレット検出パターン自体の更新は Dependabot の対象外であり、gitleaks や trufflehog 等のツールが担当します。
+- また、`pip` を追加したことで、`pre-commit` や `detect-secrets` などのローカルおよび CI 上のシークレット検知ツールのバージョンアップにも自動追従できるようになります。
