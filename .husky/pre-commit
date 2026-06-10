@@ -6,7 +6,7 @@ if command -v pre-commit &> /dev/null; then
   pre-commit run --hook-stage commit || exit 1
 else
   echo "⚠️ pre-commitがローカルにインストールされていません。包括的なシークレットスキャンをスキップします。"
-  echo "   包括的なセキュリティチェックを有効にするには、'pip install pre-commit detect-secrets==1.5.0' を実行してください。"
+  echo "   包括的なセキュリティチェックを有効にするには、'pip install -r requirements.txt' を実行してください。"
 
   # pre-commitがない場合でも、gitleaksが利用可能であれば直接実行するフォールバック
   if command -v gitleaks &> /dev/null; then

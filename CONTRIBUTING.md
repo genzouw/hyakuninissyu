@@ -89,7 +89,7 @@ To set up the project locally for development:
 4. Set up pre-commit (requires Python) to ensure secrets are not committed:
 
    ```bash
-   pip install pre-commit
+   pip install -r requirements.txt
    pre-commit install
    ```
 
