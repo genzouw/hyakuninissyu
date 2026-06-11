@@ -1,0 +1,48 @@
+name: Claude PR Reviewer
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+  issue_comment:
+    types: [created, edited]
+
+# 最小権限とし、ジョブ側で必要な書込権限のみ追加する
+permissions:
+  contents: read
+
+# 同一 PR への更新やコメント連投で重複起動するのを抑止し、ノイズとコストを削減
+concurrency:
+  group: claude-pr-reviewer-${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    name: Auto PR Review with Claude
+    runs-on: ubuntu-latest
+    # 1) Bot 以外のイベントに限定
+    # 2) issue_comment は PR に紐づくコメントのみ対象（純粋な Issue では起動しない）
+    # 3) リポジトリの信頼済みアクター（OWNER / MEMBER / COLLABORATOR）のみに限定
+    if: >
+      github.event.sender.type != 'Bot' &&
+      (github.event_name != 'issue_comment' || github.event.issue.pull_request != null) &&
+      (github.event.sender.association == 'OWNER' ||
+       github.event.sender.association == 'MEMBER' ||
+       github.event.sender.association == 'COLLABORATOR')
+    # PR コメント投稿に必要な権限のみ付与
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Claude PR Review アクションの実行
+        # Claudeを利用したPRレビューを実行する最新のAIツール。
+        # 公開リポジトリ・プライベート問わず利用可能(API費用のみ)。
+        # セキュリティ要件に従いフルコミットSHAでピン留め
+        uses: drillan/claude-pr-reviewer@899167cc93677eb3b110bab286957ac0005f21a5 # v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
