@@ -31,3 +31,11 @@ repos:
     hooks:
       - id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
+  - repo: local
+    hooks:
+      - id: forbid-sensitive-files
+        name: forbid sensitive files and AI agent traces
+        entry: 意図しない機密ファイルまたはAIエージェントの作業履歴がステージングされています。
+        language: fail
+        files: '(?x)^(.*/?\.env.*|.*/?\.pem|.*/?\.key|.*credentials.*\.json|.*\.tfstate.*|.*\.db|.*\.sqlite.*|.*\.dump|.*\.bak|\.claude/.*|\.cursor/.*|\.aider.*|\.continue/.*|\.windsurf/.*|\.cline/.*|.*-report\.md)$'
+        exclude: '(?x)^(\.env\.example|\.aider\.conf\.yml|\.aider\.instruction\.md|\.cursor/rules/.*)$'
