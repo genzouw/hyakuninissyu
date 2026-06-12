@@ -10,5 +10,17 @@ User-agent: anthropic-ai
 Allow: /
 User-agent: OAI-SearchBot
 Allow: /
+User-agent: Claude-Web
+Allow: /
+User-agent: Google-Extended
+Allow: /
+User-agent: Amazonbot
+Allow: /
+User-agent: Applebot-Extended
+Allow: /
+User-agent: YouBot
+Allow: /
+User-agent: Cohere-ai
+Allow: /
 
 Sitemap: https://hyakuninissyu.genzouw.com/sitemap.xml

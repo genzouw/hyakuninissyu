@@ -1,0 +1,38 @@
+name: reviewdog (自動コードレビュー)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write # reviewdog が PR にコメントするために必要
+
+concurrency:
+  group: reviewdog-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  eslint:
+    name: ESLint による自動コードレビュー
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Bun のセットアップ
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: '1.2.14'
+
+      - name: 依存関係のインストール
+        run: bun install --frozen-lockfile --ignore-scripts
+
+      - name: reviewdog による ESLint の実行
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          eslint_flags: 'src/ test/'
