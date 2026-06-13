@@ -20,7 +20,7 @@ repos:
         name: no commit to branch
         description: main/masterブランチへの直接コミットを禁止し、CI/CDやレビューのバイパスを防止
       - id: detect-aws-credentials
-        args: ["--allow-missing-credentials"]
+        args: ['--allow-missing-credentials']
         name: detect aws credentials
         description: Detects hardcoded AWS credentials
       - id: detect-private-key
@@ -37,6 +37,6 @@ repos:
         name: forbid sensitive files
         entry: 'Cannot commit sensitive files'
         language: fail
-        files: '(?i)(^|/)(\.claude/.*|\.cursor/.*|\.aider/.*|\.continue/.*|\.windsurf/.*|\.cline/.*|.*-report\.md|\.env.*|\.yarnrc.*)$|\.(pem|key|tfstate|tfstate\..*|db|dump|bak|sqlite|sqlite3)$'
+        files: '(?i)(^|/)(\.claude/.*|\.cursor/.*|\.aider/.*|\.continue/.*|\.windsurf/.*|\.cline/.*|.*-report\.md|\.env.*|\.npmrc|\.yarnrc.*)$|\.(pem|key|tfstate|tfstate\..*|db|dump|bak|sqlite|sqlite3)$'
         exclude: '(?i)(^|/)(\.env\.example|\.aider\.conf\.yml|\.aider\.instruction\.md|\.cursor/rules/.*)$'
         description: 'AIエージェントの作業ディレクトリ、汎用的なシークレットファイル、パッケージマネージャー設定、データベースのダンプファイルのコミットをブロックします'
