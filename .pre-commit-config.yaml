@@ -31,3 +31,12 @@ repos:
     hooks:
       - id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
+  - repo: local
+    hooks:
+      - id: forbid-sensitive-files
+        name: forbid sensitive files
+        entry: 'Cannot commit sensitive files'
+        language: fail
+        files: '(?i)(^|/)(\.claude/.*|\.cursor/.*|\.aider/.*|\.continue/.*|\.windsurf/.*|\.cline/.*|.*-report\.md|\.env.*|\.yarnrc.*)$|\.(pem|key|tfstate|tfstate\..*|db|dump|bak|sqlite|sqlite3)$'
+        exclude: '(?i)(^|/)(\.env\.example|\.aider\.conf\.yml|\.aider\.instruction\.md|\.cursor/rules/.*)$'
+        description: 'AIエージェントの作業ディレクトリ、汎用的なシークレットファイル、パッケージマネージャー設定、データベースのダンプファイルのコミットをブロックします'
