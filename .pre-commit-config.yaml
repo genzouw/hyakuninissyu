@@ -31,3 +31,12 @@ repos:
     hooks:
       - id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
+  - repo: local
+    hooks:
+      - id: forbid-sensitive-files
+        name: forbid sensitive files
+        entry: 'シークレットやAI作業ディレクトリ等の機密ファイルはコミット禁止です'
+        language: fail
+        # .gitignore や .gitattributes と連動して意図しない漏洩を防止
+        files: '(?i)(/\.claude/|/\.cursor/|/\.aider.*/|/\.continue/|/\.windsurf/|/\.cline/|.*-report\.md$|\.pem$|\.key$|/\.env.*|\.tfstate.*|/\.yarnrc$|\.db$|\.dump$|\.bak$|\.sqlite.*$|^\.claude/|^\.cursor/|^\.aider.*/|^\.continue/|^\.windsurf/|^\.cline/|^\.env.*|^\.yarnrc$)'
+        exclude: '(?i)(/\.env\.example$|^\.env\.example$|/\.aider\.conf\.yml$|^\.aider\.conf\.yml$|/\.aider\.instruction\.md$|^\.aider\.instruction\.md$|/\.cursor/rules/.*|^\.cursor/rules/.*)'
