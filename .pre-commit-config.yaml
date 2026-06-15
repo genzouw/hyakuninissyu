@@ -20,7 +20,7 @@ repos:
         name: no commit to branch
         description: main/masterブランチへの直接コミットを禁止し、CI/CDやレビューのバイパスを防止
       - id: detect-aws-credentials
-        args: ["--allow-missing-credentials"]
+        args: ['--allow-missing-credentials']
         name: detect aws credentials
         description: Detects hardcoded AWS credentials
       - id: detect-private-key
@@ -34,9 +34,8 @@ repos:
   - repo: local
     hooks:
       - id: forbid-sensitive-files
-        name: forbid sensitive files
-        entry: 'シークレットやAI作業ディレクトリ等の機密ファイルはコミット禁止です'
+        name: forbid sensitive files and AI agent traces
+        entry: 意図しない機密ファイルまたはAIエージェントの作業履歴がステージングされています。
         language: fail
-        # .gitignore や .gitattributes と連動して意図しない漏洩を防止
-        files: '(?i)(/\.claude/|/\.cursor/|/\.aider.*/|/\.continue/|/\.windsurf/|/\.cline/|.*-report\.md$|\.pem$|\.key$|/\.env.*|\.tfstate.*|/\.yarnrc$|\.db$|\.dump$|\.bak$|\.sqlite.*$|^\.claude/|^\.cursor/|^\.aider.*/|^\.continue/|^\.windsurf/|^\.cline/|^\.env.*|^\.yarnrc$)'
-        exclude: '(?i)(/\.env\.example$|^\.env\.example$|/\.aider\.conf\.yml$|^\.aider\.conf\.yml$|/\.aider\.instruction\.md$|^\.aider\.instruction\.md$|/\.cursor/rules/.*|^\.cursor/rules/.*)'
+        files: '(?x)^((?:.*/)?\.env.*|(?:.*/)?\.pem|(?:.*/)?\.key|.*credentials.*\.json|.*\.tfstate.*|.*\.db|.*\.sqlite.*|.*\.dump|.*\.bak|(?:.*/)?\.claude/.*|(?:.*/)?\.cursor/.*|(?:.*/)?\.aider.*|(?:.*/)?\.continue/.*|(?:.*/)?\.windsurf/.*|(?:.*/)?\.cline/.*|.*-report\.md|(?:.*/)?\.yarnrc)$'
+        exclude: '(?x)^((?:.*/)?\.env\.example|(?:.*/)?\.aider\.conf\.yml|(?:.*/)?\.aider\.instruction\.md|(?:.*/)?\.cursor/rules/.*)$'
