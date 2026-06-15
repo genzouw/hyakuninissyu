@@ -34,9 +34,9 @@ repos:
   - repo: local
     hooks:
       - id: forbid-sensitive-files
-        name: forbid sensitive files
-        entry: 'Cannot commit sensitive files'
+        name: forbid sensitive files and AI agent traces
+        entry: 意図しない機密ファイルまたはAIエージェントの作業履歴がステージングされています。
         language: fail
-        files: '(?i)(^|/)(\.claude/.*|\.cursor/.*|\.aider/.*|\.continue/.*|\.windsurf/.*|\.cline/.*|.*-report\.md|\.env.*|\.npmrc|\.yarnrc.*)$|\.(pem|key|tfstate|tfstate\..*|db|dump|bak|sqlite|sqlite3)$'
-        exclude: '(?i)(^|/)(\.env\.example|\.aider\.conf\.yml|\.aider\.instruction\.md|\.cursor/rules/.*)$'
+        files: '(?x)^((?:.*/)?\.env.*|(?:.*/)?\.npmrc|(?:.*/)?\.yarnrc.*|(?:.*/)?\.pem|(?:.*/)?\.key|.*credentials.*\.json|.*\.tfstate.*|.*\.db|.*\.sqlite.*|.*\.dump|.*\.bak|(?:.*/)?\.claude/.*|(?:.*/)?\.cursor/.*|(?:.*/)?\.aider.*|(?:.*/)?\.continue/.*|(?:.*/)?\.windsurf/.*|(?:.*/)?\.cline/.*|.*-report\.md)$'
+        exclude: '(?x)^((?:.*/)?\.env\.example|(?:.*/)?\.aider\.conf\.yml|(?:.*/)?\.aider\.instruction\.md|(?:.*/)?\.cursor/rules/.*)$'
         description: 'AIエージェントの作業ディレクトリ、汎用的なシークレットファイル、パッケージマネージャー設定、データベースのダンプファイルのコミットをブロックします'

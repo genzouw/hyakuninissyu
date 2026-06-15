@@ -12,6 +12,7 @@
 - **開発者の責任**: リポジトリをクローンしたのち、必ず `pip install -r requirements.txt` を実行し、ローカル環境で包括的なシークレット検知が機能するようにすること。
 - **マージ前の手動作業（必須）**: GitHub Secret Scanning および Push Protection が有効化されていない場合は、リポジトリの Settings → Security → Code security and analysis から必ず有効化してください。
 - **補完**:
+  - `pre-commit` のローカルフック（`forbid-sensitive-files`）にて、`.env` ファイル、各種資格情報（`credentials`, `*.pem`, `*.tfstate`等）、およびAIエージェントの作業履歴（`.claude/`, `.cursor/`, `.aider*` 等）が誤ってステージングされることを明示的にブロックしています。
   - `.gitignore` にて各種シークレットファイルやAIエージェントの作業履歴を除外し、事故を根本から防止。
   - `.gitattributes` にてシークレット関連ファイルの diff 出力を無効化（`-diff`）し、レビュー時の意図しない露出を防止。
   - `.vscode/settings.json` により、AI エージェント（Copilot / Cursor 等）のワークスペース走査からシークレットファイル、パッケージマネージャーの設定ファイル (`.npmrc`, `.yarnrc*`（`.yarnrc.yml` を含む）)、およびデータベースのダンプファイル等 (`*.db`, `*.dump`, `*.bak`, `*.sqlite*`) を除外。
