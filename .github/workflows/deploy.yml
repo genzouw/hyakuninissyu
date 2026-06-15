@@ -120,9 +120,48 @@ jobs:
     needs: deploy
     permissions: {}
     runs-on: ubuntu-latest
+    env:
+      SITEMAP_URL: 'https://hyakuninissyu.genzouw.com/sitemap.xml'
+      INDEXNOW_HOST: 'hyakuninissyu.genzouw.com'
+      INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
     steps:
-      - name: IndexNow
-        uses: bojieyang/indexnow-action@38ddfbd93579a8a44c0dee662121bf9d51098f71 # v3.0.0
-        with:
-          sitemap-location: 'https://hyakuninissyu.genzouw.com/sitemap.xml'
-          key: ${{ secrets.INDEXNOW_KEY }}
+      # bojieyang/indexnow-action はリポジトリの Actions allow list 外のため、
+      # IndexNow API への直接呼び出しに置換している。
+      - name: Submit URLs to IndexNow API
+        run: |
+          set -euo pipefail
+          if [ -z "${INDEXNOW_KEY}" ]; then
+            echo "INDEXNOW_KEY secret is not set" >&2
+            exit 1
+          fi
+
+          # sitemap.xml を取得し <loc> 要素から URL リストを抽出
+          curl --fail --silent --show-error --location \
+            --retry 3 --retry-delay 5 --max-time 30 \
+            "${SITEMAP_URL}" -o /tmp/sitemap.xml
+          grep -oE '<loc>[^<]+</loc>' /tmp/sitemap.xml \
+            | sed -E 's|<loc>([^<]+)</loc>|\1|' > /tmp/urls.txt
+
+          if [ ! -s /tmp/urls.txt ]; then
+            echo "No URLs found in sitemap: ${SITEMAP_URL}" >&2
+            exit 1
+          fi
+
+          # IndexNow API へ JSON ペイロードで送信 (1 リクエストあたり最大 10000 URL)
+          jq -Rn \
+            --arg host "${INDEXNOW_HOST}" \
+            --arg key "${INDEXNOW_KEY}" \
+            --arg keyLocation "https://${INDEXNOW_HOST}/${INDEXNOW_KEY}.txt" \
+            --rawfile urls /tmp/urls.txt \
+            '{
+               host: $host,
+               key: $key,
+               keyLocation: $keyLocation,
+               urlList: ($urls | split("\n") | map(select(length > 0)))
+             }' > /tmp/payload.json
+
+          curl --fail --silent --show-error \
+            --retry 3 --retry-delay 5 --max-time 30 \
+            -X POST 'https://api.indexnow.org/IndexNow' \
+            -H 'Content-Type: application/json; charset=utf-8' \
+            --data-binary @/tmp/payload.json
