@@ -37,5 +37,6 @@ repos:
         name: forbid sensitive files and AI agent traces
         entry: 意図しない機密ファイルまたはAIエージェントの作業履歴がステージングされています。
         language: fail
-        files: '(?x)^((?:.*/)?\.env.*|(?:.*/)?\.pem|(?:.*/)?\.key|.*credentials.*\.json|.*\.tfstate.*|.*\.db|.*\.sqlite.*|.*\.dump|.*\.bak|(?:.*/)?\.claude/.*|(?:.*/)?\.cursor/.*|(?:.*/)?\.aider.*|(?:.*/)?\.continue/.*|(?:.*/)?\.windsurf/.*|(?:.*/)?\.cline/.*|.*-report\.md|(?:.*/)?\.yarnrc)$'
+        files: '(?x)^((?:.*/)?\.env.*|(?:.*/)?\.npmrc|(?:.*/)?\.yarnrc.*|(?:.*/)?\.pem|(?:.*/)?\.key|.*credentials.*\.json|.*\.tfstate.*|.*\.db|.*\.sqlite.*|.*\.dump|.*\.bak|(?:.*/)?\.claude/.*|(?:.*/)?\.cursor/.*|(?:.*/)?\.aider.*|(?:.*/)?\.continue/.*|(?:.*/)?\.windsurf/.*|(?:.*/)?\.cline/.*|.*-report\.md)$'
         exclude: '(?x)^((?:.*/)?\.env\.example|(?:.*/)?\.aider\.conf\.yml|(?:.*/)?\.aider\.instruction\.md|(?:.*/)?\.cursor/rules/.*)$'
+        description: 'AIエージェントの作業ディレクトリ、汎用的なシークレットファイル、パッケージマネージャー設定、データベースのダンプファイルのコミットをブロックします'
