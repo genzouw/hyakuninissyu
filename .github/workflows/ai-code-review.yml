@@ -28,13 +28,13 @@ jobs:
       pull-requests: write
     steps:
       - name: リポジトリのチェックアウト
-        uses: actions/checkout@v4
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           persist-credentials: false
           fetch-depth: 0
 
       - name: AI Code Review アクションの実行
-        uses: zxcloli666/AI-Code-Review@v1.3.0
+        uses: zxcloli666/AI-Code-Review@e4c07fe82e4c70a3cf152773423f608a88e9497d # v1.3.0
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
