@@ -5,10 +5,8 @@
 *.crt -diff
 *.p12 -diff
 *.pfx -diff
-id_rsa -diff
-id_rsa.* -diff
-id_ed25519 -diff
-id_ed25519.* -diff
+id_rsa* -diff
+id_ed25519* -diff
 *.env* -diff
 .env.example diff
 *.tfstate -diff
