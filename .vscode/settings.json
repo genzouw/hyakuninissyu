@@ -18,7 +18,14 @@
     "**/*.db": true,
     "**/*.dump": true,
     "**/*.bak": true,
-    "**/*.sqlite*": true
+    "**/*.sqlite*": true,
+    "**/*.cert": true,
+    "**/*.crt": true,
+    "**/*.p12": true,
+    "**/*.pfx": true,
+    "**/id_rsa*": true,
+    "**/id_ed25519*": true,
+    "**/*service-account*.json": true
   },
   "files.exclude": {
     "**/.claude": true,
@@ -39,6 +46,13 @@
     "**/*.db": true,
     "**/*.dump": true,
     "**/*.bak": true,
-    "**/*.sqlite*": true
+    "**/*.sqlite*": true,
+    "**/*.cert": true,
+    "**/*.crt": true,
+    "**/*.p12": true,
+    "**/*.pfx": true,
+    "**/id_rsa*": true,
+    "**/id_ed25519*": true,
+    "**/*service-account*.json": true
   }
 }

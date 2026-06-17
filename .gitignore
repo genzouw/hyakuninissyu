@@ -103,7 +103,16 @@ dist/
 # Secrets
 *.pem
 *.key
+*.cert
+*.crt
+*.p12
+*.pfx
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
 *credentials*.json
+*service-account*.json
 
 # Environment variables
 .env.*
