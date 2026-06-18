@@ -36,7 +36,6 @@
       "dist/",
       "build/",
       "coverage/",
-      "test/",
       "docs/",
       "**/*.png",
       "**/*.ico",
