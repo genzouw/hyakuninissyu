@@ -20,7 +20,24 @@
 #    公開 Twitter シェア URL の percent-encoded クエリ文字列を
 #    "Potential secret found" と誤検知するため除外する。
 #    当該ファイルは単一の文字列定数のみで品質劣化リスクなし。
+# 4. `AGENTS.md` / `docs/agents/jules-prompt.md`
+#    Codacy の AI ドキュメント解析が以下の偽陽性 / 設計意図に反する
+#    指摘を出し、品質ゲートを ACTION_REQUIRED から抜けられなくする
+#    ため除外する:
+#    - "Absolute rule without escape hatch":
+#      本ドキュメントは RFC 2119 に基づき MUST / MUST NOT で絶対ルールを
+#      規定する規範文書であり、escape hatch を入れることは設計意図に反する。
+#    - "Undefined acronym (MUST 等)":
+#      文書冒頭で RFC 2119 を明示参照しているため定義済みだが、
+#      Codacy が参照リンクを評価しない。OSS / OIDC / SHA / SAST / OSV / GA /
+#      TTS 等は業界一般用語で、用語集を都度添える設計ではない。
+#    - "Referenced file CONTRIBUTING.md not found":
+#      リポジトリルートに `CONTRIBUTING.md` が実在するが Codacy が誤検知。
+#    - "Mixed-language lines":
+#      本リポジトリのドキュメントは日本語ベース + 技術用語英語が規約。
 exclude_paths:
   - 'test/**'
   - '**/*.vue'
   - 'src/constants/url.js'
+  - 'AGENTS.md'
+  - 'docs/agents/jules-prompt.md'
