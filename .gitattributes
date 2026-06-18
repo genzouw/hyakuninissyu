@@ -1,11 +1,18 @@
 # 意図しない漏洩を防ぐため、機密ファイルのdiff出力を無効化
 *.pem -diff
 *.key -diff
+*.cert -diff
+*.crt -diff
+*.p12 -diff
+*.pfx -diff
+id_rsa* -diff
+id_ed25519* -diff
 *.env* -diff
 .env.example diff
 *.tfstate -diff
 *.tfstate.* -diff
 *credentials*.json -diff
+*service-account*.json -diff
 
 # Database dumps / Backups
 *.db -diff

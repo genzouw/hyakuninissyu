@@ -35,7 +35,7 @@ jobs:
       issues: write
     steps:
       - name: リポジトリのチェックアウト
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           # Qodo Merge の後続ステップに git 操作は不要のため、認証情報を残さない
           persist-credentials: false
