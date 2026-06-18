@@ -7,6 +7,7 @@
 開発者およびAIエージェントのローカル環境でのコミットを防ぐ第一の防御層です。
 
 - **仕組み**: Husky の `pre-commit` フック (`.husky/pre-commit`) により `pre-commit run` を呼び出し、`.pre-commit-config.yaml` で定義された `gitleaks`、`detect-private-key`、`detect-aws-credentials` などを包括的に実行します。
+  - 加えて、`.pre-commit-config.yaml` にカスタムローカルフック (`forbid-sensitive-files`) を導入し、`.env` ファイル、各種キーファイル (`*.pem`, `*.key`)、インフラ状態ファイル (`*.tfstate`)、各種証明書やSSH鍵（`*.cert`, `*.p12`, `id_rsa`等）、クラウドサービスアカウント（`*service-account*.json`）、パッケージマネージャー設定 (`.npmrc`, `.yarnrc*`)、DBダンプ (`*.db`, `*.dump`, `*.sqlite*`等)、および AI エージェントの作業ディレクトリ (`.claude/`, `.cursor/`, `.aider*/`等) などのステージング・コミットを明示的にブロックしています。
 - **設定ファイル**: `.pre-commit-config.yaml` および `.husky/pre-commit`
 - **開発者の責任**: リポジトリをクローンしたのち、必ず `pip install -r requirements.txt` を実行し、ローカル環境で包括的なシークレット検知が機能するようにすること。
 - **マージ前の手動作業（必須）**: GitHub Secret Scanning および Push Protection が有効化されていない場合は、リポジトリの Settings → Security → Code security and analysis から必ず有効化してください。
@@ -14,20 +15,21 @@
   - `pre-commit` のローカルフック（`forbid-sensitive-files`）にて、`.env` ファイル、各種資格情報（`credentials`, `*.pem`, `*.tfstate`等）、およびAIエージェントの作業履歴（`.claude/`, `.cursor/`, `.aider*` 等）が誤ってステージングされることを明示的にブロックしています。
   - `.gitignore` にて各種シークレットファイルやAIエージェントの作業履歴を除外し、事故を根本から防止。
   - `.gitattributes` にてシークレット関連ファイルの diff 出力を無効化（`-diff`）し、レビュー時の意図しない露出を防止。
-  - `.vscode/settings.json` により、AI エージェント（Copilot / Cursor 等）のワークスペース走査からシークレットファイル、パッケージマネージャーの設定ファイル (`.npmrc`, `.yarnrc*`（`.yarnrc.yml` を含む）)、およびデータベースのダンプファイル等 (`*.db`, `*.dump`, `*.bak`, `*.sqlite*`) を除外。
+  - `.vscode/settings.json` により、AI エージェント（Copilot / Cursor 等）のワークスペース走査からシークレットファイル、パッケージマネージャーの設定ファイル (`.npmrc`, `.yarnrc*`（`.yarnrc.yml` を含む）)、各種証明書・SSH鍵、クラウドサービスアカウント、およびデータベースのダンプファイル等 (`*.db`, `*.dump`, `*.bak`, `*.sqlite*`) を除外。
 
 ## 2. CI 検知（中央防御層）
 
 PRやPush時に実行される第二の防御層です。
 
 - **仕組み**: GitHub Actionsによる継続的なスキャン。
+  - **対象ブランチの拡張**: `pre-commit.yml`, `gitleaks.yml`, `trivy.yml`, `trufflehog.yml` といった主要なセキュリティスキャンワークフローは、`main` ブランチのみならず、**フィーチャーブランチを含むすべてのブランチ**（`**`）**へのプッシュ時**にも自動実行されるよう構成されています。これにより、PR作成前であってもシークレット漏洩や脆弱性を早期に検知・ブロックします。
   - `pre-commit.yml`: ローカルでセットアップ漏れがあった場合や意図的な `--no-verify` によるバイパスを防ぐため、CI環境上でリポジトリ全体に対して `pre-commit` フックを強制実行します。
-  - `gitleaks.yml`: PR差分およびスケジュールでリポジトリ全体の履歴をスキャン。
-  - `trivy.yml`: ファイルシステムのシークレットスキャン。
+  - `gitleaks.yml`: プッシュ時・PR差分およびスケジュールでリポジトリ全体の履歴をスキャン。
+  - `trivy.yml`: ファイルシステムおよび依存関係のシークレット・脆弱性スキャン。
   - `actionlint.yml`: GitHub Actions ワークフローの静的解析および `shellcheck` 連携によるシェルスクリプトの脆弱性（インジェクション等）検知。
   - `codeql.yml`: `security-extended` および `security-and-quality` クエリによる高度な脆弱性・コード品質の検知（一部のハードコードされた認証情報パターンも含む）。
   - `dependency-review.yml`: PRで新たに追加・更新される依存パッケージ（OSS）に既知の脆弱性が含まれていないかをスキャン。
-  - `trufflehog.yml`: PRおよびプッシュ時にアクティブなシークレット検証（プロバイダAPIへの有効性確認）を実行し、実際に利用可能なシークレットの混入をリアルタイムにブロック。
+  - `trufflehog.yml`: プッシュ時およびPR時にアクティブなシークレット検証（プロバイダAPIへの有効性確認）を実行し、実際に利用可能なシークレットの混入をリアルタイムにブロック。
 - **GitHub Actions 権限の最小化**: ワークフロー追加時はトップレベルの `permissions:` を最小化（デフォルトを `contents: read` または `{}` とし、不要な権限を持たせない）し、必要な書き込み権限はジョブレベルでのみ明示的に付与してください。
 - **運用上の責任**: CIが落ちた場合、対象のコミットに含まれる漏洩疑いのコードを適切に修正し（必要であればシークレットをローテートし）、マージブロックを解消すること。
 
@@ -75,3 +77,7 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 - `.github/dependabot.yml` にて `npm`, `github-actions`, `docker` などの依存エコシステムを設定し、最新のパッケージ（特に脆弱性修正が含まれるバージョン）へ自動的に追従できるようにしています。
 - これにより、`docker` で利用するイメージや CI 上のアクション等の防衛層が、脆弱性修正を含む最新バージョンへ追従し、セキュリティ態勢を維持します。なお、シークレット検出パターン自体の更新は Dependabot の対象外であり、gitleaks や trufflehog 等のツールが担当します。
 - また、`pip` を追加したことで、`pre-commit` や `detect-secrets` などのローカルおよび CI 上のシークレット検知ツールのバージョンアップにも自動追従できるようになります。
+
+### 新規追加: pre-commit ローカル防御フックの厳格化
+
+さらに、意図しない機密情報（AIの作業ディレクトリ、汎用的なシークレットファイル、パッケージマネージャーの設定ファイル、DBのダンプファイル等）の漏洩を未然に防ぐため、`.pre-commit-config.yaml` にてローカル専用のカスタムフック `forbid-sensitive-files` を追加しました。これにより、`.gitignore` や `.gitattributes` での漏れがあった場合でも、コミットの段階でステージングを自動的にブロックし、多層的な防御をより強固にしています。

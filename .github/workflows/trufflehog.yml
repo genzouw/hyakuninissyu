@@ -2,7 +2,7 @@ name: TruffleHog Secret Scan
 
 on:
   push:
-    branches: [main]
+    branches: ['**']
   pull_request:
     branches: [main]
   schedule:
@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: trufflehog-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -34,5 +34,5 @@ jobs:
           base: ${{ github.event_name == 'pull_request' && github.event.repository.default_branch || (github.event_name == 'push' && github.event.before || '') }}
           head: ${{ (github.event_name == 'pull_request' || github.event_name == 'push') && github.sha || '' }}
           # --only-verified: プロバイダのAPIに対して有効性を検証し、実際に利用可能なシークレットのみを検知
-          # --no-update: スキャン時のルール更新をスキップ（CI高速化）
-          extra_args: --only-verified --no-update
+          # NOTE: --no-update はアクション側がデフォルトで付与するため extra_args では指定しない
+          extra_args: --only-verified
