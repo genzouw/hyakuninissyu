@@ -13,12 +13,14 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write # 依存関係グラフへの書き込み (ghcr.io へのアップロードではなく repository 内の依存関係として登録するため)
+  contents: read
 
 jobs:
   generate-sbom:
     name: Generate SBOM and upload to Dependency Graph
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # 依存関係グラフへの書き込み (ghcr.io へのアップロードではなく repository 内の依存関係として登録するため)
     steps:
       - name: Checkout repository
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
