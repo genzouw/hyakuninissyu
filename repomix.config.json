@@ -22,7 +22,12 @@
     ".aider.conf.yml",
     ".aider.instruction.md",
     ".bloopignore",
-    "static/llms.txt"
+    "static/llms.txt",
+    "eslint.config.js",
+    ".pre-commit-config.yaml",
+    "repomix.config.json",
+    "commitlint.config.js",
+    "test/unit/jest.conf.js"
   ],
   "ignore": {
     "useGitignore": true,
