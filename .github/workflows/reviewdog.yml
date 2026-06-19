@@ -22,13 +22,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Bun のセットアップ
-        uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
-        with:
-          bun-version: '1.2.14'
-
-      - name: 依存関係のインストール
-        run: bun install --frozen-lockfile --ignore-scripts
+      - name: Setup Bun Environment
+        uses: ./.github/actions/setup-bun-env
 
       - name: reviewdog による ESLint の実行
         uses: reviewdog/action-eslint@556a3fdaf8b4201d4d74d406013386aa4f7dab96 # v1

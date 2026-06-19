@@ -27,7 +27,8 @@
     ".pre-commit-config.yaml",
     "repomix.config.json",
     "commitlint.config.js",
-    "test/unit/jest.conf.js"
+    "test/unit/jest.conf.js",
+    "docs/**/*"
   ],
   "ignore": {
     "useGitignore": true,
@@ -36,7 +37,6 @@
       "dist/",
       "build/",
       "coverage/",
-      "docs/",
       "**/*.png",
       "**/*.ico",
       "**/*.lock",
