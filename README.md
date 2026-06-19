@@ -62,9 +62,10 @@ In the project directory, you can run:
 
 - **ESLint & Jest**: GitHub Actions を介した自動リンティングとユニットテスト。
 - **Lighthouse CI**: 全てのプルリクエストに対して、パフォーマンス、アクセシビリティ、ベストプラクティス、SEO のスコアを計測します。
+- **AI Code Review**: 高度な静的解析とAIモデル（Gemini 2.5 Pro）を組み合わせた自動コードレビューツールです。`.github/workflows/ai-code-review.yml` で設定されています。PR上での自動レビューや、`/review` コメントによる手動トリガーが可能です。無料で利用できるGeminiのAPIを活用しています。
+  - **事前準備（手動設定）**: 本ツールを利用するためには、[Google AI Studio](https://aistudio.google.com/) にて無料で API キーを発行し、GitHub リポジトリの Secrets に `GOOGLE_API_KEY` として登録する必要があります。
 - **PR Agent (Qodo)**: AI を活用した自動コードレビューツールです。本リポジトリでは `.pr_agent.toml` で設定を管理しています。
   - **事前準備（手動設定）**: PR Agent（Qodo）を利用するためには、GitHub の公開リポジトリで無料で使える「Qodo GitHub App」を該当のGitHubアカウントまたはOrganizationにインストールする必要があります。
-- **Codeball**: AI を活用した PR の自動承認およびラベル付けツールです。`.github/workflows/codeball.yml` で設定されています。GitHub Action として動作し、AI の判定により安全な変更であれば自動承認を行います。
 - **IndexNow**: SEO および検索エンジンへのインデックス登録を高速化するためのアクションです。`.github/workflows/deploy.yml` 内に設定されています。
   - **事前準備（手動設定）**: IndexNow を利用するためには、API キーを生成してリポジトリの Secrets に `INDEXNOW_KEY` として登録する必要があります。
 - **CodeRabbit**: `.coderabbit.yaml` で設定されている、もうひとつのAIコードレビューアシスタントです。

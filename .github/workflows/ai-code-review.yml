@@ -1,0 +1,43 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ai-code-review-${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ai-review:
+    name: AI Code Review
+    runs-on: ubuntu-latest
+    if: >
+      github.event.sender.type != 'Bot' &&
+      (github.event_name == 'pull_request' ||
+       (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '/review') &&
+        (github.event.comment.author_association == 'OWNER' || github.event.comment.author_association == 'COLLABORATOR' || github.event.comment.author_association == 'MEMBER')))
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          fetch-depth: 0 # 履歴の分析のために重要
+          persist-credentials: false
+
+      - name: Run AI Code Review
+        uses: zxcloli666/AI-Code-Review@e4c07fe82e4c70a3cf152773423f608a88e9497d # v1.3.0
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          OPENAI_API_BASE_URL: 'https://generativelanguage.googleapis.com/v1beta/openai'
+          OPENAI_API_MODEL: 'gemini-2.5-pro'
+          MAX_CHUNK_SIZE: '12000'
+          REVIEW_LANGUAGE: 'ja'
