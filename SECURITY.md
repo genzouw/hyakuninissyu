@@ -65,3 +65,15 @@ GitHub 経由が難しい場合は以下に直接ご連絡ください。
 
 修正リリース後、合意の上で Advisory を公開し、報告者の名前 (希望時) を
 クレジットに記載します。
+
+## セキュリティ保護と漏洩防止機能 (Security and Leak Prevention)
+
+本リポジトリでは、意図しない認証情報やシークレットの流出を防ぐため、多層的なセキュリティチェックを導入しています。詳細は `docs/security/leak-prevention.md` を参照してください。
+
+リポジトリ管理者は、GitHub のネイティブ機能である **Secret Scanning** と **Push Protection** を有効化することが必須となっています。
+
+- **有効化手順**: リポジトリの `Settings` → `Security` → `Code security and analysis` から、以下の機能を有効（Enable）にしてください。
+  - **Secret scanning**
+  - **Push protection**
+
+これらの機能により、シークレットがハードコードされたコミットが GitHub にプッシュされる前に自動的にブロックされ、漏洩リスクが大幅に低減されます。
