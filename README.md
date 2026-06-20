@@ -89,3 +89,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) f
 ## Author
 
 - **genzouw** - [genzouw@gmail.com](mailto:genzouw@gmail.com)
+
+## セキュリティ報告窓口と漏洩防止 (Security Reporting and Leak Prevention)
+
+本リポジトリは公開リポジトリとして運用されるため、認証情報やシークレットの混入を厳格に防止しています。ローカルの `pre-commit` フックに加え、CI では GitHub Secret Scanning や Push Protection を含む多層的な防御を行っています。
+
+脆弱性を発見した場合や、漏洩の兆候を発見した場合は、Issue や Pull Request で公開せず、GitHub Private Vulnerability Reporting を通じて安全にご報告ください。詳細は [SECURITY.md](SECURITY.md) および [漏洩防止と多層防御の仕組み](docs/security/leak-prevention.md) を確認してください。

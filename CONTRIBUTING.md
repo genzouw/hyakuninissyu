@@ -114,3 +114,7 @@ To set up the project locally for development:
 This project follows standard Vue.js and JavaScript conventions, enforced by ESLint. Please make sure to run `npm run lint` before submitting a pull request to ensure your code complies with our styling rules.
 
 Thank you for your contributions!
+
+## 追加の注意事項: GitHub Secret Scanning と Push Protection
+
+本リポジトリでは GitHub ネイティブの **Push Protection** などの機能によって、シークレットを含むコミットのプッシュがサーバー側で直接拒否される場合があります。エラーメッセージが表示された場合は、必ずガイドラインに従い、シークレットをコミット履歴から取り除いてから再度プッシュしてください。
