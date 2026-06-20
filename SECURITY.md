@@ -70,7 +70,7 @@ GitHub 経由が難しい場合は以下に直接ご連絡ください。
 
 本リポジトリでは、意図しない認証情報やシークレットの流出を防ぐため、多層的なセキュリティチェックを導入しています。詳細は `docs/security/leak-prevention.md` を参照してください。
 
-リポジトリ管理者は、GitHub のネイティブ機能である **Secret Scanning** と **Push Protection** を有効化することを強く推奨します。
+リポジトリ管理者は、GitHub のネイティブ機能である **Secret Scanning** と **Push Protection** を有効化することが必須となっています。
 
 - **有効化手順**: リポジトリの `Settings` → `Security` → `Code security and analysis` から、以下の機能を有効（Enable）にしてください。
   - **Secret scanning**
