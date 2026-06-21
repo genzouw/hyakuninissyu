@@ -39,6 +39,7 @@ PRやPush時に実行される第二の防御層です。
 
 - **仕組み**:
   - `codeql.yml`, `trivy.yml`, `gitleaks.yml` のスケジュール実行による監査。
+  - `osv-scanner.yml` による OSS 脆弱性スキャン。検出された脆弱性は SARIF 形式で GitHub Code Scanning（Advanced Security）へアップロードされ、一元的に可視化・管理されます。
   - `trufflehog.yml` によるアクティブなシークレット検証。PR・Push時のリアルタイムブロックに加え、スケジュール実行でリポジトリ全履歴に対してもプロバイダのAPIへの有効性確認を実施します。
   - `sbom.yml` による SBOM (Software Bill of Materials) の自動生成と、GitHub Dependency Graph への依存関係の登録（リポジトリの Settings → Security → Code security and analysis から Dependency graph を有効化すること）。
   - GitHub Secret Scanning と Push Protection（リポジトリの Settings → Security → Code security and analysis から必ず有効化すること）。
