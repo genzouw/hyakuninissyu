@@ -34,6 +34,12 @@ repos:
     hooks:
       - id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.23.2
+    hooks:
+      - id: typos
+        name: typos (Spell Checker)
+        description: Detect spelling mistakes using typos
   - repo: local
     hooks:
       - id: forbid-sensitive-files
