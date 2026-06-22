@@ -31,7 +31,7 @@
     "@babel/core": "^7.24.0",
     "@babel/plugin-transform-modules-commonjs": "^7.24.0",
     "@babel/plugin-transform-runtime": "^7.24.0",
-    "@babel/preset-env": "^7.24.0",
+    "@babel/preset-env": "^8.0.2",
     "@babel/register": "^7.23.0",
     "@jest/globals": "^30.4.1",
     "@soda/friendly-errors-webpack-plugin": "^1.8.1",
