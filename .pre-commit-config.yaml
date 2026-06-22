@@ -10,7 +10,9 @@ repos:
     hooks:
       - id: check-yaml
       - id: end-of-file-fixer
+        exclude: '^patches/'
       - id: trailing-whitespace
+        exclude: '^patches/'
       - id: check-merge-conflict
         name: check merge conflict
         description: コンフリクトマーカーのコミットを防止
