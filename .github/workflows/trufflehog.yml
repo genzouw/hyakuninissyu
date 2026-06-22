@@ -4,7 +4,7 @@ on:
   push:
     branches: ['**']
   pull_request:
-    branches: [main]
+    branches: ['**']
   schedule:
     # 毎週火曜 05:00 JST (= 月曜 20:00 UTC) に定期実行
     - cron: '0 20 * * 1'
