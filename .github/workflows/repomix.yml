@@ -75,6 +75,10 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to deploy; skipping commit/push."
+            exit 0
+          fi
           git commit -q -m 'chore: update repomix and AI context output [skip ci]'
           git push -q --force \
             "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
