@@ -1,0 +1,20 @@
+diff --git a/lib/process.js b/lib/process.js
+index 6e4dbdb0b2ae8715be83d767a3df7cfd4cbdc4a1..92a813f554b616468d7893e7faf8f23b6a5b0063 100644
+--- a/lib/process.js
++++ b/lib/process.js
+@@ -1,5 +1,5 @@
+ const { parse, compileTemplate, compileScript } = require('@vue/compiler-sfc')
+-const { transform } = require('@babel/core')
++const { transformSync } = require('@babel/core')
+ const babelTransformer = require('babel-jest').default
+ 
+ const typescriptTransformer = require('./transformers/typescript')
+@@ -135,7 +135,7 @@ function processTemplate(descriptor, filename, config) {
+   }
+ 
+   // babel
+-  const babelify = transform(result.code, {
++  const babelify = transformSync(result.code, {
+     filename: 'file.js',
+     presets: ['@babel/preset-env']
+   })
