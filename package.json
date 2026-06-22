@@ -14,7 +14,7 @@
     "build": "NODE_OPTIONS=--openssl-legacy-provider node build/build.mjs && bun run repomix --style markdown --output dist/llms-full.txt"
   },
   "dependencies": {
-    "@babel/runtime": "^7.24.0",
+    "@babel/runtime": "^8.0.0",
     "@popperjs/core": "^2.11.8",
     "@unhead/vue": "^3.1.0",
     "bootstrap": "^5.3.8",
@@ -28,11 +28,11 @@
     "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.24.0",
-    "@babel/plugin-transform-modules-commonjs": "^7.24.0",
-    "@babel/plugin-transform-runtime": "^7.24.0",
+    "@babel/core": "^8.0.1",
+    "@babel/plugin-transform-modules-commonjs": "^8.0.1",
+    "@babel/plugin-transform-runtime": "^8.0.1",
     "@babel/preset-env": "^8.0.2",
-    "@babel/register": "^7.23.0",
+    "@babel/register": "^8.0.1",
     "@jest/globals": "^30.4.1",
     "@soda/friendly-errors-webpack-plugin": "^1.8.1",
     "@vue/compiler-sfc": "^3.5.34",
@@ -85,5 +85,11 @@
     "> 1%",
     "last 2 versions",
     "not ie <= 8"
-  ]
+  ],
+  "patchedDependencies": {
+    "@vue/vue3-jest@29.2.6": "patches/@vue%2Fvue3-jest@29.2.6.patch"
+  },
+  "overrides": {
+    "ws": "^8.21.0"
+  }
 }
