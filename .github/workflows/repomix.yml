@@ -37,11 +37,10 @@ jobs:
           NODE_OPTIONS: --openssl-legacy-provider
         run: bun run build
 
+      # yamadashy/repomix の Action はリポジトリの Actions allow list 外のため、
+      # devDependency としてインストール済みの repomix CLI を直接実行する。
       - name: Pack repository with Repomix
-        uses: yamadashy/repomix/.github/actions/repomix@a7b93adfcdb11be923a9a092cceb1cb6739ef8e1 # v1.14.1
-        with:
-          output: repomix-output.xml
-          style: xml
+        run: bun run repomix --output repomix-output.xml --style xml
 
       - name: Upload Repomix output
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -62,12 +61,25 @@ jobs:
             cp static/llms.txt public-context/
           fi
 
+      # peaceiris/actions-gh-pages はリポジトリの Actions allow list 外のため、
+      # git による orphan ブランチへの強制 push に置換している (force_orphan 相当)。
       - name: Deploy to ai-context branch
         if: github.event_name != 'pull_request'
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475c00e11fe70ba3 # v4.0.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public-context
-          publish_branch: ai-context
-          force_orphan: true
-          commit_message: 'chore: update repomix and AI context output [skip ci]'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          cd public-context
+          git init -q
+          git checkout -q --orphan ai-context
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to deploy; skipping commit/push."
+            exit 0
+          fi
+          git commit -q -m 'chore: update repomix and AI context output [skip ci]'
+          git push -q --force \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+            ai-context:ai-context
