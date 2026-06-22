@@ -14,7 +14,7 @@
     "build": "NODE_OPTIONS=--openssl-legacy-provider node build/build.mjs && bun run repomix --style markdown --output dist/llms-full.txt"
   },
   "dependencies": {
-    "@babel/runtime": "^7.24.0",
+    "@babel/runtime": "^8.0.0",
     "@popperjs/core": "^2.11.8",
     "@unhead/vue": "^3.1.0",
     "bootstrap": "^5.3.8",
