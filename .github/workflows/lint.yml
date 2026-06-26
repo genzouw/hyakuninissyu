@@ -24,6 +24,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+      checks: write
 
     steps:
       - name: Checkout repository
@@ -47,6 +48,8 @@ jobs:
   build:
     name: Build (webpack production bundle)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -65,6 +68,8 @@ jobs:
   unit:
     name: Unit tests (jest)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
