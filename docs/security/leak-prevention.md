@@ -30,7 +30,7 @@ PRやPush時に実行される第二の防御層です。
   - `codeql.yml`: `security-extended` および `security-and-quality` クエリによる高度な脆弱性・コード品質の検知（一部のハードコードされた認証情報パターンも含む）。
   - `dependency-review.yml`: PRで新たに追加・更新される依存パッケージ（OSS）に既知の脆弱性が含まれていないかをスキャン。
   - `trufflehog.yml`: プッシュ時およびPR時にアクティブなシークレット検証（プロバイダAPIへの有効性確認）を実行し、実際に利用可能なシークレットの混入をリアルタイムにブロック。
-- **GitHub Actions 権限の最小化**: ワークフローのトップレベル `permissions:` は最小化（デフォルトを `contents: read` または `{}` とし、不要な権限を持たせない）し、必要な書き込み権限（`security-events: write`, `issues: write`, `pull-requests: write`, `checks: write`など）はジョブレベルでのみ明示的に付与してブラストラジアス（被害範囲）を最小化しています。特にCIワークフロー（`lint.yml` や `reviewdog.yml` 等）では、ステップに必要な権限のみを厳密に割り当てています。
+- **GitHub Actions 権限の最小化**: ワークフローのトップレベル `permissions:` は最小化（デフォルトを `contents: read` または `{}` とし、不要な権限を持たせない）し、必要な書き込み権限（`security-events: write`, `issues: write`, `pull-requests: write`, `checks: write`など）はジョブレベルでのみ明示的に付与してブラストラジアス（被害範囲）を最小化しています。特にCIワークフロー（`lint.yml` や `reviewdog.yml` 等）では、各ジョブに必要な権限のみを厳密に割り当てています。
 - **運用上の責任**: CIが落ちた場合、対象のコミットに含まれる漏洩疑いのコードを適切に修正し（必要であればシークレットをローテートし）、マージブロックを解消すること。
 
 ## 3. 定期監査と自動防御
