@@ -2,9 +2,9 @@ name: 'CodeQL Advanced Security'
 
 on:
   push:
-    branches: ['main']
+    branches: ['**']
   pull_request:
-    branches: ['main']
+    branches: ['**']
   schedule:
     - cron: '30 2 * * 0'
 

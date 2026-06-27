@@ -2,9 +2,9 @@ name: OSV-Scanner
 
 on:
   pull_request:
-    branches: [main]
+    branches: ['**']
   push:
-    branches: [main]
+    branches: ['**']
   schedule:
     - cron: '15 21 * * 0' # 毎週月曜 06:00 JST (= 日曜 21:00 UTC)
 
