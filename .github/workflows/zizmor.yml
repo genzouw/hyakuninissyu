@@ -2,9 +2,9 @@ name: zizmor
 
 on:
   push:
-    branches: ['main']
+    branches: ['**']
   pull_request:
-    branches: ['main']
+    branches: ['**']
 
 concurrency:
   group: zizmor-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
