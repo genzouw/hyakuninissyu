@@ -24,6 +24,8 @@ id_ed25519* -diff
 # Package manager configs
 .npmrc -diff
 .yarnrc -diff
+.bunfig.toml -diff
+bunfig.toml -diff
 
 # AI agent working directories
 .claude/** -diff

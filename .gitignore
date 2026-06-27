@@ -119,6 +119,8 @@ id_ed25519*
 # Package manager configs
 .npmrc
 .yarnrc
+.bunfig.toml
+bunfig.toml
 
 # Database dumps / Backups
 *.db
