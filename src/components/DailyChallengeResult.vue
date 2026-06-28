@@ -135,7 +135,7 @@ export default {
 
 .result-card {
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 20%);
 }
 
 .bg-gradient-gold {
@@ -151,7 +151,7 @@ export default {
 }
 
 .score-display {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgb(255 255 255 / 20%);
   padding: 30px;
   border-radius: 10px;
   margin: 20px auto;
@@ -172,7 +172,7 @@ export default {
 }
 
 .perfect-bonus {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgb(255 255 255 / 30%);
   padding: 20px;
   border-radius: 10px;
   animation: pulse 2s infinite;
@@ -183,13 +183,14 @@ export default {
   100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.05);
   }
 }
 
 .streak-display {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgb(255 255 255 / 20%);
   padding: 20px;
   border-radius: 10px;
 }

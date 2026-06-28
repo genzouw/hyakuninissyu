@@ -235,12 +235,12 @@ export default {
 
 .badge-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgb(0 0 0 / 20%);
 }
 
 .badge-card.unlocked {
   border-color: #28a745;
-  background: linear-gradient(135deg, #ffffff 0%, #e8f5e9 100%);
+  background: linear-gradient(135deg, #fff 0%, #e8f5e9 100%);
 }
 
 .badge-card.locked {

@@ -112,12 +112,15 @@ export default {
 body > #app {
   padding: 0;
 }
+
 .dropdown-item {
   color: white;
 }
+
 .dropdown-item:hover {
   color: black;
 }
+
 div.container-fluid {
   margin-bottom: 3em;
 }

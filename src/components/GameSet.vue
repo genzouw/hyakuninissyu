@@ -80,6 +80,7 @@ export default {
   text-align: center;
   font-size: 150%;
 }
+
 .result .score {
   font-size: 200%;
 }

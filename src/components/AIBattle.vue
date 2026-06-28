@@ -529,7 +529,7 @@ export default {
   min-height: 80px;
   font-size: 1.1rem;
   white-space: normal;
-  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .card-header h2,
@@ -550,6 +550,7 @@ export default {
     transform: scale(1);
     opacity: 1;
   }
+
   50% {
     transform: scale(1.05);
     opacity: 0.9;
