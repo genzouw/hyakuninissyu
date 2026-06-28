@@ -32,7 +32,7 @@ PRやPush時に実行される第二の防御層です。
   - `dependency-review.yml`: PRで新たに追加・更新される依存パッケージ（OSS）に既知の脆弱性が含まれていないかをスキャン。
   - `osv-scanner.yml`: OSS 依存パッケージの既知脆弱性（OSV データベース照合）をスキャン。「3. 定期監査と自動防御」のスケジュール実行に加え、本拡張によりプッシュ時・PR時の CI 検知としても動作し、検出結果を SARIF 形式で GitHub Code Scanning へアップロードします（ジョブレベルで `security-events: write` を付与）。
   - `trufflehog.yml`: プッシュ時およびPR時にアクティブなシークレット検証（プロバイダAPIへの有効性確認）を実行し、実際に利用可能なシークレットの混入をリアルタイムにブロック。
-- **GitHub Actions 権限の最小化**: ワークフローのトップレベル `permissions:` は最小化（デフォルトを `contents: read` または `{}` とし、不要な権限を持たせない）し、必要な書き込み権限（`security-events: write`, `issues: write`, `pull-requests: write`, `checks: write`など）はジョブレベルでのみ明示的に付与してブラストラジアス（被害範囲）を最小化しています。特にCIワークフロー（`lint.yml` や `reviewdog.yml` 等）では、各ジョブに必要な権限のみを厳密に割り当てています。
+- **GitHub Actions 権限の最小化**: ワークフローのトップレベル `permissions:` は最小化（デフォルトを `contents: read` または `{}` とし、不要な権限を持たせない）し、必要な書き込み・読み取り権限（`security-events: write`, `issues: write`, `pull-requests: write`, `pull-requests: read`, `checks: write`など）はジョブレベルでのみ明示的に付与してブラストラジアス（被害範囲）を最小化しています。すべてのワークフローにおいて Principle of Least Privilege が徹底されています（例外として OSSF Scorecard は `read-all` を許容）。特にCIワークフロー（`lint.yml` や `reviewdog.yml` 等）では、各ジョブに必要な権限のみを厳密に割り当てています。
 - **運用上の責任**: CIが落ちた場合、対象のコミットに含まれる漏洩疑いのコードを適切に修正し（必要であればシークレットをローテートし）、マージブロックを解消すること。
 
 ## 3. 定期監査と自動防御
