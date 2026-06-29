@@ -191,6 +191,7 @@ export default {
 
 .quiz-start-page {
   text-align: center;
+
   /* background: linear-gradient(to bottom right, #f7ff9194, #f7ff91b8); */
 }
 
@@ -199,7 +200,7 @@ export default {
   padding: 10px 0 10px 10px;
   background: #e2e2e2;
   margin: 10px 0 10px 10px;
-  color: #000000;
+  color: #000;
   border-radius: 20px;
   margin-bottom: 0.25em;
 }
@@ -208,7 +209,7 @@ export default {
   background-color: pink;
 }
 
-.choiced:after {
+.choiced::after {
   content: ' ×';
   color: red;
   font-weight: bold;
@@ -223,7 +224,7 @@ export default {
   background-color: lightgreen;
 }
 
-.correct.choiced:after {
+.correct.choiced::after {
   content: ' ○';
   color: blue;
   font-weight: bold;

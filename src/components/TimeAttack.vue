@@ -231,7 +231,7 @@ export default {
   padding: 10px 0 10px 10px;
   background: #e2e2e2;
   margin: 10px 0 10px 10px;
-  color: #000000;
+  color: #000;
   border-radius: 20px;
   margin-bottom: 0.25em;
 }
@@ -240,7 +240,7 @@ export default {
   background-color: pink;
 }
 
-.choiced:after {
+.choiced::after {
   content: ' ×';
   color: red;
   font-weight: bold;
@@ -255,14 +255,14 @@ export default {
   background-color: lightgreen;
 }
 
-.correct.choiced:after {
+.correct.choiced::after {
   content: ' ○';
   color: blue;
   font-weight: bold;
 }
 
 .card {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
 }
 
 .display-4 {
