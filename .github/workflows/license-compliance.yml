@@ -1,0 +1,38 @@
+name: License Compliance
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
+  schedule:
+    - cron: '30 20 * * 0' # 毎週月曜 05:30 JST
+
+concurrency:
+  group: license-compliance-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  license_check:
+    name: Check License Compliance
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Setup Bun Environment
+        uses: ./.github/actions/setup-bun-env
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Check Licenses using license-checker
+        run: |
+          bun x license-checker --summary --failOn 'GPL-1.0-only;GPL-1.0-or-later;GPL-2.0-only;GPL-2.0-or-later;GPL-3.0-only;GPL-3.0-or-later;AGPL-1.0-only;AGPL-1.0-or-later;AGPL-3.0-only;AGPL-3.0-or-later'
