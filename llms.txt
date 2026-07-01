@@ -1,0 +1,32 @@
+# 百人一首
+
+> 百人一首を学び、楽しむためのモダンな Vue.js アプリケーション。
+
+## 概要
+このプロジェクトは、日本の古典文学である「百人一首」を閲覧し、読み解き、理解するためのインタラクティブでユーザーフレンドリーなインターフェースを提供します。また、最新の生成AIによる自動化ツール、自動コードレビュー、CI/CDパイプラインの検証およびプロトタイプとしての役割も持っています。
+
+## 技術スタック
+- フロントエンド: Vue 3 (Options API および Composables)
+- 状態管理: Vuex 4
+- ルーティング: Vue Router
+- UI: Bootstrap 5 (Bootswatch Yeti)
+- ツール: Bun (>=1.0.0), Webpack
+- テスト: Jest, @vue/test-utils
+
+## 主要ディレクトリ
+- `src/`: Vue コンポーネント、コンポーザブル、Vuex ストア、ルーター設定
+- `static/`: 静的アセット（画像、サイトマップ、ファビコンなど）
+- `test/`: Jest によるユニットテスト
+- `.github/workflows/`: 自動化された CI/CD、AWS S3/CloudFront へのデプロイ、各種セキュリティスキャナー（Trivy, CodeQL, OSV-Scanner など）
+
+## AIルールと設定
+- このリポジトリでは、すべてのプルリクエスト、コミットメッセージ、ソースコードのコメント、およびドキュメントを日本語で記述することが義務付けられています。
+- プロジェクトは自動化タスクのために PR-Agent (Qodo)、CodeRabbit、および Sweep AI を利用しています。設定ファイルは `.pr_agent.toml`、`.coderabbit.yaml`、および `sweep.yaml` です。
+- ローカルのAIアシスタント向けのコンテキストは、`.cursorrules`、`.windsurfrules`、`.clinerules`、および `cody.json` に設定されています。
+
+## フルコンテキスト
+AIアシスタントやクローラー向けに、プロジェクト全体のソースコードを含む完全なコンテキストを提供しています:
+[Full Context](llms-full.txt)
+
+## リポジトリ
+GitHub: [https://github.com/genzouw/hyakuninissyu](https://github.com/genzouw/hyakuninissyu)
