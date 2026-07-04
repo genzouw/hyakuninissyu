@@ -1,0 +1,22 @@
+{
+  "$schema": "https://unpkg.com/knip@3/schema-jsonc.json",
+  "project": ["src/**/*.js", "src/**/*.vue"],
+  "ignoreDependencies": [
+    "repomix",
+    "stylelint-config-standard-scss",
+    "css-minimizer-webpack-plugin",
+    "mini-css-extract-plugin",
+    "terser-webpack-plugin"
+  ],
+  "ignoreBinaries": [
+    "GPL-1.0-or-later",
+    "GPL-2.0-only",
+    "GPL-2.0-or-later",
+    "GPL-3.0-only",
+    "GPL-3.0-or-later",
+    "AGPL-1.0-only",
+    "AGPL-1.0-or-later",
+    "AGPL-3.0-only",
+    "AGPL-3.0-or-later"
+  ]
+}
