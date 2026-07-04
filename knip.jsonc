@@ -8,4 +8,5 @@
     "mini-css-extract-plugin",
     "terser-webpack-plugin",
   ],
+  "ignoreBinaries": ["/^(A?GPL)-\\d+\\.\\d+-(only|or-later)$/"],
 }
