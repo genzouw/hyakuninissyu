@@ -67,7 +67,6 @@
 | AI コードレビュー       | [CodeRabbit](https://github.com/apps/coderabbitai) (`.coderabbit.yaml`)                                             | プルリクエストの AI レビュー                                          |
 | AI コードレビュー       | [Qodo Merge (旧 PR-Agent)](https://github.com/apps/qodo-merge) (`.pr_agent.toml`, `.github/workflows/pr-agent.yml`) | PR スコアリング / 自動要約 / `/review` 等のコメントコマンド           |
 | LLM コンテキスト生成    | Repomix (`.github/workflows/repomix.yml`, `repomix.config.json`, `static/llms.txt`)                                 | `llms.txt` 規格の XML / Markdown 自動生成と `ai-context` ブランチ公開 |
-| 静的解析                | [Codacy](https://www.codacy.com/) (`.codacy.yaml`)                                                                  | 静的コード解析 (公開リポジトリ向け無料プラン)                         |
 | セキュリティスキャン    | CodeQL (`.github/workflows/codeql.yml`)                                                                             | GitHub 公式の SAST                                                    |
 | セキュリティスキャン    | Gitleaks (`.github/workflows/gitleaks.yml`, `.gitleaks.toml`)                                                       | コミット内シークレット検知                                            |
 | セキュリティスキャン    | TruffleHog (`.github/workflows/trufflehog.yml`)                                                                     | コミット履歴のシークレット検知                                        |
