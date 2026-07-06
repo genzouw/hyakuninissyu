@@ -1,0 +1,74 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ai-code-review-${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ai-review:
+    name: AI Code Review
+    runs-on: ubuntu-latest
+    if: >
+      github.event.sender.type != 'Bot' &&
+      (github.event_name == 'pull_request' ||
+       (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '/review') &&
+        (github.event.comment.author_association == 'OWNER' || github.event.comment.author_association == 'COLLABORATOR' || github.event.comment.author_association == 'MEMBER')))
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      GEMINI_REVIEW_ENABLED: ${{ secrets.GOOGLE_API_KEY != '' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          fetch-depth: 0 # 履歴の分析のために重要
+          persist-credentials: false
+
+      - name: Run AI Code Review
+        # キー未設定時はレビューをスキップする（ジョブは成功扱い）
+        if: env.GEMINI_REVIEW_ENABLED == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+        run: |
+          python3 - << 'EOF'
+          import os, json, subprocess, urllib.request
+
+          pr_number = os.environ['PR_NUMBER']
+          google_api_key = os.environ['GOOGLE_API_KEY']
+
+          diff = subprocess.check_output(['gh', 'pr', 'diff', pr_number], text=True)[:12000]
+
+          payload = {
+              "contents": [{
+                  "parts": [{
+                      "text": f"以下のコード差分をレビューしてください。問題点、改善提案、セキュリティリスクを日本語で指摘してください。\n\n{diff}"
+                  }]
+              }]
+          }
+          req = urllib.request.Request(
+              f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key={google_api_key}",
+              data=json.dumps(payload).encode(),
+              headers={"Content-Type": "application/json"},
+              method="POST"
+          )
+          with urllib.request.urlopen(req) as resp:
+              result = json.loads(resp.read())
+
+          review = result["candidates"][0]["content"]["parts"][0]["text"]
+          subprocess.run(
+              ['gh', 'pr', 'comment', pr_number, '--body', f'## AI Code Review (Gemini)\n\n{review}'],
+              check=True
+          )
+          EOF
