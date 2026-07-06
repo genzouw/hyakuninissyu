@@ -42,7 +42,11 @@ jobs:
           import os, json, subprocess, urllib.request
 
           pr_number = os.environ['PR_NUMBER']
-          google_api_key = os.environ['GOOGLE_API_KEY']
+          google_api_key = os.environ.get('GOOGLE_API_KEY', '')
+
+          if not google_api_key:
+              print("GOOGLE_API_KEY が設定されていないため、AI コードレビューをスキップします。")
+              exit(0)
 
           diff = subprocess.check_output(['gh', 'pr', 'diff', pr_number], text=True)[:12000]
 
