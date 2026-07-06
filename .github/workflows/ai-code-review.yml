@@ -25,6 +25,8 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+    env:
+      GEMINI_REVIEW_ENABLED: ${{ secrets.GOOGLE_API_KEY != '' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -33,13 +35,40 @@ jobs:
           persist-credentials: false
 
       - name: Run AI Code Review
-        # zxcloli666/AI-Code-Review はリポジトリの Actions allow list への登録が必要。
-        # 未登録の場合 startup_failure が発生するため、リポジトリ設定を確認すること。
-        uses: zxcloli666/AI-Code-Review@e4c07fe82e4c70a3cf152773423f608a88e9497d # v1.3.0
-        with:
+        # キー未設定時はレビューをスキップする（ジョブは成功扱い）
+        if: env.GEMINI_REVIEW_ENABLED == 'true'
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          OPENAI_API_BASE_URL: 'https://generativelanguage.googleapis.com/v1beta/openai'
-          OPENAI_API_MODEL: 'gemini-2.5-pro'
-          MAX_CHUNK_SIZE: '12000'
-          REVIEW_LANGUAGE: 'ja'
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
+        run: |
+          python3 - << 'EOF'
+          import os, json, subprocess, urllib.request
+
+          pr_number = os.environ['PR_NUMBER']
+          google_api_key = os.environ['GOOGLE_API_KEY']
+
+          diff = subprocess.check_output(['gh', 'pr', 'diff', pr_number], text=True)[:12000]
+
+          payload = {
+              "contents": [{
+                  "parts": [{
+                      "text": f"以下のコード差分をレビューしてください。問題点、改善提案、セキュリティリスクを日本語で指摘してください。\n\n{diff}"
+                  }]
+              }]
+          }
+          req = urllib.request.Request(
+              f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key={google_api_key}",
+              data=json.dumps(payload).encode(),
+              headers={"Content-Type": "application/json"},
+              method="POST"
+          )
+          with urllib.request.urlopen(req) as resp:
+              result = json.loads(resp.read())
+
+          review = result["candidates"][0]["content"]["parts"][0]["text"]
+          subprocess.run(
+              ['gh', 'pr', 'comment', pr_number, '--body', f'## AI Code Review (Gemini)\n\n{review}'],
+              check=True
+          )
+          EOF
