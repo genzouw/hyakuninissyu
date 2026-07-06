@@ -1,7 +1,6 @@
 'use strict';
 
-// この設定ファイルは CommonJS (require/const/spread) が必須のため、
-// Codacy の静的解析対象から除外している (.codacy.yml の exclude_paths を参照)。
+// この設定ファイルは CommonJS (require/const/spread) が必須。
 const neostandard = require('neostandard');
 const pluginVue = require('eslint-plugin-vue');
 const vueParser = require('vue-eslint-parser');
