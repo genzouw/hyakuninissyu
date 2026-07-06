@@ -7,7 +7,7 @@
  * @param {Date} date - 変換する日付オブジェクト
  * @returns {string} YYYY-MM-DD形式の日付文字列
  */
-export function dateToYMD (date) {
+function dateToYMD (date) {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
   const day = String(date.getDate()).padStart(2, '0')
