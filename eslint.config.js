@@ -1,9 +1,13 @@
 'use strict';
 
+// この設定ファイルは CommonJS (require/const/spread) が必須のため、
+// Codacy の静的解析対象から除外している (.codacy.yml の exclude_paths を参照)。
 const neostandard = require('neostandard');
 const pluginVue = require('eslint-plugin-vue');
 const vueParser = require('vue-eslint-parser');
 const globals = require('globals');
+const pluginSecurity = require('eslint-plugin-security');
+const pluginVueA11y = require('eslint-plugin-vuejs-accessibility');
 
 module.exports = [
   {
@@ -18,7 +22,9 @@ module.exports = [
 
   ...neostandard(),
 
+  pluginSecurity.configs.recommended,
   ...pluginVue.configs['flat/essential'],
+  ...pluginVueA11y.configs['flat/recommended'],
 
   {
     files: ['**/*.{js,vue}'],
@@ -36,6 +42,10 @@ module.exports = [
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
       complexity: ['error', { max: 10 }],
       'vue/multi-word-component-names': 'off',
+      'vuejs-accessibility/label-has-for': 'warn',
+      'vuejs-accessibility/click-events-have-key-events': 'warn',
+      'vuejs-accessibility/no-static-element-interactions': 'warn',
+      'vuejs-accessibility/media-has-caption': 'warn',
     },
   },
 
