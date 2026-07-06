@@ -35,9 +35,16 @@
 #      リポジトリルートに `CONTRIBUTING.md` が実在するが Codacy が誤検知。
 #    - "Mixed-language lines":
 #      本リポジトリのドキュメントは日本語ベース + 技術用語英語が規約。
+# 5. `eslint.config.js`
+#    ESLint Flat Config は CommonJS (require/const/spread) が必須のファイルで
+#    あり、Codacy 既定の ES5 前提パターン (es-x / @typescript-eslint の
+#    no-var-requires / Biome の noUndeclaredDependencies) が誤検知を出すため
+#    除外する。このファイル自体はリポジトリの ESLint 設定 (ignores: '*.js')
+#    でも解析対象外。
 exclude_paths:
   - 'test/**'
   - '**/*.vue'
   - 'src/constants/url.js'
   - 'AGENTS.md'
   - 'docs/agents/jules-prompt.md'
+  - 'eslint.config.js'
