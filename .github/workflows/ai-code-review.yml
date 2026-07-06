@@ -25,6 +25,8 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+    env:
+      GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
     steps:
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -33,9 +35,10 @@ jobs:
           persist-credentials: false
 
       - name: Run AI Code Review
+        # GOOGLE_API_KEY 未設定時はレビューをスキップする（ジョブは成功扱い）
+        if: env.GOOGLE_API_KEY != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           PR_NUMBER: ${{ github.event.pull_request.number || github.event.issue.number }}
         run: |
           python3 - << 'EOF'
