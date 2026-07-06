@@ -6,3 +6,4 @@ exclude_paths:
   # Codacy 側の ES5 前提の既定パターンによる誤検知が発生するため解析対象から除外する。
   # このファイル自体はリポジトリの ESLint 設定 (ignores: '*.js') でも解析対象外。
   - 'eslint.config.js'
+  - '**/eslint.config.js'
