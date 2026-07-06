@@ -1,0 +1,8 @@
+# Codacy 静的解析の設定
+# https://docs.codacy.com/repositories-configure/codacy-configuration-file/
+---
+exclude_paths:
+  # ESLint フラット設定ファイルは CommonJS (require/const/spread) が必須であり、
+  # Codacy 側の ES5 前提の既定パターンによる誤検知が発生するため解析対象から除外する。
+  # このファイル自体はリポジトリの ESLint 設定 (ignores: '*.js') でも解析対象外。
+  - 'eslint.config.js'
