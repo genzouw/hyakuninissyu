@@ -25,6 +25,8 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
+    env:
+      GEMINI_REVIEW_ENABLED: ${{ secrets.GOOGLE_API_KEY != '' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -33,6 +35,8 @@ jobs:
           persist-credentials: false
 
       - name: Run AI Code Review
+        # キー未設定時はレビューをスキップする（ジョブは成功扱い）
+        if: env.GEMINI_REVIEW_ENABLED == 'true'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
@@ -43,10 +47,6 @@ jobs:
 
           pr_number = os.environ['PR_NUMBER']
           google_api_key = os.environ['GOOGLE_API_KEY']
-
-          if not google_api_key:
-              print("GOOGLE_API_KEY is not set, skipping AI review")
-              exit(0)
 
           diff = subprocess.check_output(['gh', 'pr', 'diff', pr_number], text=True)[:12000]
 
