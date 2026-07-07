@@ -11,6 +11,7 @@ on:
       - master
   schedule:
     - cron: '0 0 * * 0' # 毎週日曜日に実行
+  workflow_dispatch: {}
 
 concurrency:
   group: lychee-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
