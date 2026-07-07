@@ -10,7 +10,7 @@ on:
       - '.github/workflows/**'
       - '.github/actionlint*'
   pull_request:
-    branches: [main, master]
+    branches: ['**']
     paths:
       - '.github/workflows/**'
       - '.github/actionlint*'
