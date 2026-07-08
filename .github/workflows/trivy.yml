@@ -6,7 +6,7 @@ name: Trivy Scan
 # 必須チェック (context: "trivy / Trivy filesystem scan") のため paths フィルタ禁止。
 on:
   push:
-    branches: [main, master]
+    branches: ['**']
   pull_request:
     branches: ['**']
   schedule:

@@ -5,7 +5,7 @@ name: actionlint
 # 参照 SHA の更新は Dependabot (github-actions ecosystem) が自動で PR を出す。
 on:
   push:
-    branches: [main, master]
+    branches: ['**']
     paths:
       - '.github/workflows/**'
       - '.github/actionlint*'
