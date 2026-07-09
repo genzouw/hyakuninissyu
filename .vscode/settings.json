@@ -58,7 +58,6 @@
     "**/*.pfx": true,
     "**/id_rsa*": true,
     "**/id_ed25519*": true,
-    "**/*service-account*.json": true,
-    "**/*.log": true
+    "**/*service-account*.json": true
   }
 }
