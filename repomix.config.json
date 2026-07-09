@@ -4,7 +4,8 @@
     "style": "xml",
     "removeComments": false,
     "removeEmptyLines": true,
-    "showLineNumbers": true
+    "showLineNumbers": true,
+    "instructionFilePath": "CLAUDE.md"
   },
   "include": [
     "src/**/*",
