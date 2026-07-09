@@ -36,3 +36,4 @@ bunfig.toml -diff
 .windsurf/** -diff
 .cline/** -diff
 *-report.md -diff
+*.log -diff
