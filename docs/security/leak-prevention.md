@@ -7,7 +7,7 @@
 開発者およびAIエージェントのローカル環境でのコミットを防ぐ第一の防御層です。
 
 - **仕組み**: Husky の `pre-commit` フック (`.husky/pre-commit`) により `pre-commit run` を呼び出し、`.pre-commit-config.yaml` で定義された `gitleaks`、`detect-private-key`、`detect-aws-credentials` などを包括的に実行します。
-  - 加えて、`.pre-commit-config.yaml` にカスタムローカルフック (`forbid-sensitive-files`) を導入し、`.env` ファイル、各種キーファイル (`*.pem`, `*.key`)、インフラ状態ファイル (`*.tfstate`)、各種証明書やSSH鍵（`*.cert`, `*.p12`, `id_rsa`等）、クラウドサービスアカウント（`*service-account*.json`）、パッケージマネージャー設定 (`.npmrc`, `.yarnrc*`, `.bunfig.toml`, `bunfig.toml`)、DBダンプ (`*.db`, `*.dump`, `*.sqlite*`等)、および AI エージェントの作業ディレクトリ (`.claude/`, `.cursor/`, `.aider*/`等) などのステージング・コミットを明示的にブロックしています。
+  - 加えて、`.pre-commit-config.yaml` にカスタムローカルフック (`forbid-sensitive-files`) を導入し、`.env` ファイル、各種キーファイル (`*.pem`, `*.key`)、インフラ状態ファイル (`*.tfstate`)、各種証明書やSSH鍵（`*.cert`, `*.p12`, `id_rsa`等）、クラウドサービスアカウント（`*service-account*.json`）、パッケージマネージャー設定 (`.npmrc`, `.yarnrc*`, `.bunfig.toml`, `bunfig.toml`)、DBダンプ (`*.db`, `*.dump`, `*.sqlite*`等)、作業ログ・デバッグ出力等のログファイル（`*.log`）、および AI エージェントの作業ディレクトリ (`.claude/`, `.cursor/`, `.aider*/`等) などのステージング・コミットを明示的にブロックしています。
 - **設定ファイル**: `.pre-commit-config.yaml` および `.husky/pre-commit`
 - **開発者の責任**: リポジトリをクローンしたのち、必ず `pip install -r requirements.txt` を実行し、ローカル環境で包括的なシークレット検知が機能するようにすること。
 - **マージ前の手動作業（必須）**: GitHub Secret Scanning および Push Protection が有効化されていない場合は、リポジトリの Settings → Security → Code security and analysis から必ず有効化してください。
@@ -22,7 +22,7 @@
 PRやPush時に実行される第二の防御層です。
 
 - **仕組み**: GitHub Actionsによる継続的なスキャン。
-  - **対象ブランチの拡張**: `pre-commit.yml`, `gitleaks.yml`, `trivy.yml`, `trufflehog.yml`, `codeql.yml`, `osv-scanner.yml`, `actionlint.yml`, `zizmor.yml` といった主要なセキュリティスキャンワークフローは、**デフォルトブランチへのプッシュ時**および**すべてのブランチ（`main` ブランチを含む）へのプルリクエスト時**（ワイルドカード `**` を使用）に自動実行されるよう構成されています。これにより、デフォルトブランチ以外の開発作業であっても、プルリクエストの段階でシークレット漏洩や脆弱性を確実に検知・ブロックしつつ、プッシュ時の無駄な重複実行によるCIリソースの消費を防いでいます。なお `actionlint.yml` のみ `paths` フィルタ（`.github/workflows/**` 等）を併用しているため、対象ブランチは拡張されていますが、実行されるのは GitHub Actions 関連ファイルが変更されたプッシュ／PR に限られます。
+  - **対象ブランチの拡張**: `pre-commit.yml`, `gitleaks.yml`, `trivy.yml`, `trufflehog.yml`, `codeql.yml`, `osv-scanner.yml`, `actionlint.yml`, `zizmor.yml` といった主要なセキュリティスキャンワークフローは、**デフォルトブランチを含むすべてのブランチ（ワイルドカード `**` を使用）へのプッシュ時およびプルリクエスト時**に自動実行されるよう構成されています。これにより、プルリクエスト作成前のフィーチャーブランチの段階からシークレット漏洩や脆弱性を確実に検知・ブロックします。なお `actionlint.yml` のみ `paths` フィルタ（`.github/workflows/**` 等）を併用しているため、対象ブランチは全ブランチですが、実行されるのは GitHub Actions 関連ファイルが変更されたプッシュ／PR に限られます。
   - `pre-commit.yml`: ローカルでセットアップ漏れがあった場合や意図的な `--no-verify` によるバイパスを防ぐため、CI環境上でリポジトリ全体に対して `pre-commit` フックを強制実行します。
   - `gitleaks.yml`: プッシュ時・PR差分およびスケジュールでリポジトリ全体の履歴をスキャン。
   - `trivy.yml`: ファイルシステムおよび依存関係のシークレット・脆弱性スキャン。
@@ -84,7 +84,7 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 ### 新規追加: pre-commit ローカル防御フックの厳格化
 
-さらに、意図しない機密情報（AIの作業ディレクトリ、汎用的なシークレットファイル、パッケージマネージャーの設定ファイル、DBのダンプファイル等）の漏洩を未然に防ぐため、`.pre-commit-config.yaml` にてローカル専用のカスタムフック `forbid-sensitive-files` を追加しました。これにより、`.gitignore` や `.gitattributes` での漏れがあった場合でも、コミットの段階でステージングを自動的にブロックし、多層的な防御をより強固にしています。
+さらに、意図しない機密情報（AIの作業ディレクトリ、汎用的なシークレットファイル、パッケージマネージャーの設定ファイル、DBのダンプファイル、`*.log`ファイル等の作業ログ）の漏洩を未然に防ぐため、`.pre-commit-config.yaml` にてローカル専用のカスタムフック `forbid-sensitive-files` を追加・強化しました。これにより、`.gitignore` や `.gitattributes` での漏れがあった場合でも、コミットの段階でステージングを自動的にブロックし、多層的な防御をより強固にしています。
 
 ### ライセンスコンプライアンス監査
 
