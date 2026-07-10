@@ -7,7 +7,7 @@
 開発者およびAIエージェントのローカル環境でのコミットを防ぐ第一の防御層です。
 
 - **仕組み**: Husky の `pre-commit` フック (`.husky/pre-commit`) により `pre-commit run` を呼び出し、`.pre-commit-config.yaml` で定義された `gitleaks`、`detect-private-key`、`detect-aws-credentials` などを包括的に実行します。
-  - 加えて、`.pre-commit-config.yaml` にカスタムローカルフック (`forbid-sensitive-files`) を導入し、`.env` ファイル、各種キーファイル (`*.pem`, `*.key`)、インフラ状態ファイル (`*.tfstate`)、各種証明書やSSH鍵（`*.cert`, `*.p12`, `id_rsa`等）、クラウドサービスアカウント（`*service-account*.json`）、パッケージマネージャー設定 (`.npmrc`, `.yarnrc*`, `.bunfig.toml`, `bunfig.toml`)、DBダンプ (`*.db`, `*.dump`, `*.sqlite*`等)、作業ログ・デバッグ出力等のログファイル（`*.log`）、および AI エージェントの作業ディレクトリ (`.claude/`, `.cursor/`, `.aider*/`等) などのステージング・コミットを明示的にブロックしています。
+  - 加えて、`.pre-commit-config.yaml` にカスタムローカルフック (`forbid-sensitive-files`) を導入し、`.env` ファイル、各種キーファイル (`*.pem`, `*.key`)、インフラ状態ファイル (`*.tfstate`, `*.tfvars`, `*.auto.tfvars`)、各種証明書やSSH鍵（`*.cert`, `*.p12`, `id_rsa`等）、クラウドサービスアカウント（`*service-account*.json`）、各種クラウド構成ディレクトリ (`.aws/`, `.kube/`, `.gcp/`, `.azure/`)、パッケージマネージャー設定 (`.npmrc`, `.yarnrc*`, `.bunfig.toml`, `bunfig.toml`)、DBダンプ (`*.db`, `*.dump`, `*.sqlite*`等)、作業ログ・デバッグ出力等のログファイル（`*.log`）、および AI エージェントの作業ディレクトリ (`.claude/`, `.cursor/`, `.aider*/`, `.roo/` 等) などのステージング・コミットを明示的にブロックしています。
 - **設定ファイル**: `.pre-commit-config.yaml` および `.husky/pre-commit`
 - **開発者の責任**: リポジトリをクローンしたのち、必ず `pip install -r requirements.txt` を実行し、ローカル環境で包括的なシークレット検知が機能するようにすること。
 - **マージ前の手動作業（必須）**: GitHub Secret Scanning および Push Protection が有効化されていない場合は、リポジトリの Settings → Security → Code security and analysis から必ず有効化してください。
@@ -15,7 +15,7 @@
   - `pre-commit` のローカルフック（`forbid-sensitive-files`）にて、`.env` ファイル、各種資格情報（`credentials`, `*.pem`, `*.tfstate`等）、およびAIエージェントの作業履歴（`.claude/`, `.cursor/`, `.aider*` 等）が誤ってステージングされることを明示的にブロックしています。
   - `.gitignore` にて各種シークレットファイルやAIエージェントの作業履歴を除外し、事故を根本から防止。
   - `.gitattributes` にてシークレット関連ファイルの diff 出力を無効化（`-diff`）し、レビュー時の意図しない露出を防止。
-  - `.vscode/settings.json` により、AI エージェント（Copilot / Cursor 等）のワークスペース走査からシークレットファイル、パッケージマネージャーの設定ファイル (`.npmrc`, `.yarnrc*`（`.yarnrc.yml` を含む）, `.bunfig.toml`, `bunfig.toml`)、各種証明書・SSH鍵、クラウドサービスアカウント、およびデータベースのダンプファイル等 (`*.db`, `*.dump`, `*.bak`, `*.sqlite*`) を除外。
+  - `.vscode/settings.json` により、AI エージェント（Copilot / Cursor 等）のワークスペース走査からシークレットファイル、パッケージマネージャーの設定ファイル (`.npmrc`, `.yarnrc*`（`.yarnrc.yml` を含む）, `.bunfig.toml`, `bunfig.toml`)、各種証明書・SSH鍵、クラウドサービスアカウント、各種クラウド構成ディレクトリやIaC変数、およびデータベースのダンプファイル等 (`*.db`, `*.dump`, `*.bak`, `*.sqlite*`) を除外。
 
 ## 2. CI 検知（中央防御層）
 
