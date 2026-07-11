@@ -35,5 +35,15 @@ bunfig.toml -diff
 .continue/** -diff
 .windsurf/** -diff
 .cline/** -diff
+.roo/** -diff
 *-report.md -diff
 *.log -diff
+
+# Cloud configs
+.aws/** -diff
+.kube/** -diff
+.gcp/** -diff
+.azure/** -diff
+
+# IaC variables
+*.tfvars -diff
