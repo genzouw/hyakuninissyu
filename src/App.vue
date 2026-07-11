@@ -5,8 +5,7 @@
       class="navbar navbar-expand-lg navbar-dark bg-primary mb-3"
     >
       <router-link class="navbar-brand" to="/"
-        >ひゃくにんいっしゅをおぼえよう</router-link
-      >
+        >ひゃくにんいっしゅをおぼえよう</router-link>
     </b-navbar>
 
     <div class="container-fluid">
@@ -23,15 +22,13 @@
           data-size="large"
           data-text="ひゃくにんいっしゅをおぼえよう"
           data-url="https://hyakuninissyu.genzouw.com"
-          >シェア</a
-        >
+          >シェア</a>
         <a
           href="https://twitter.com/genzouw"
           class="twitter-follow-button"
           data-size="large"
           data-show-count="false"
-          >@genzouw をふぉろー</a
-        >
+          >@genzouw をふぉろー</a>
       </div>
     </footer>
   </div>

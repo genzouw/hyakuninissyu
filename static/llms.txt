@@ -19,6 +19,8 @@ This file provides context about the project for AI assistants and LLMs, formatt
 
 - [Full Codebase Context (Markdown)](/llms-full.txt): 全ソースコードを含む完全なコンテキスト
 - [Full Codebase Context (XML)](https://raw.githubusercontent.com/genzouw/hyakuninissyu/ai-context/repomix-output.xml): AIエージェント向けの XML フォーマット
+- [SECURITY.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/SECURITY.md): セキュリティポリシーと機密情報漏洩防止のためのガイドライン
+- [CONTRIBUTING.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/CONTRIBUTING.md): コントリビューションガイド
 
 ## AIコーディング規約 (AI Coding Guidelines)
 本プロジェクトでAIアシスタントがコーディングやレビューを行う際の重要なルールです。
