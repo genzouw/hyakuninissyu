@@ -6,6 +6,7 @@
     "**/.continue": true,
     "**/.windsurf": true,
     "**/.cline": true,
+    "**/.roo": true,
     "**/*-report.md": true,
     "**/*.pem": true,
     "**/*.key": true,
@@ -13,6 +14,8 @@
     "**/.env*": true,
     "**/.env.example": false,
     "**/*.tfstate*": true,
+    "**/*.tfvars": true,
+    "**/*.auto.tfvars": true,
     "**/.npmrc": true,
     "**/.yarnrc*": true,
     "**/.bunfig.toml": true,
@@ -28,7 +31,11 @@
     "**/id_rsa*": true,
     "**/id_ed25519*": true,
     "**/*service-account*.json": true,
-    "**/*.log": true
+    "**/*.log": true,
+    "**/.aws": true,
+    "**/.kube": true,
+    "**/.gcp": true,
+    "**/.azure": true
   },
   "files.exclude": {
     "**/.claude": true,
@@ -37,6 +44,7 @@
     "**/.continue": true,
     "**/.windsurf": true,
     "**/.cline": true,
+    "**/.roo": true,
     "**/*-report.md": true,
     "**/*.pem": true,
     "**/*.key": true,
@@ -44,6 +52,8 @@
     "**/.env*": true,
     "**/.env.example": false,
     "**/*.tfstate*": true,
+    "**/*.tfvars": true,
+    "**/*.auto.tfvars": true,
     "**/.npmrc": true,
     "**/.yarnrc*": true,
     "**/.bunfig.toml": true,
@@ -58,6 +68,10 @@
     "**/*.pfx": true,
     "**/id_rsa*": true,
     "**/id_ed25519*": true,
-    "**/*service-account*.json": true
+    "**/*service-account*.json": true,
+    "**/.aws": true,
+    "**/.kube": true,
+    "**/.gcp": true,
+    "**/.azure": true
   }
 }

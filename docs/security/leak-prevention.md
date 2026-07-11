@@ -92,3 +92,11 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 - `.github/workflows/license-compliance.yml` にて、`license-checker` を利用して予期せぬ商用利用不可ライセンス（GPL 等）が混入していないかを確認します。
 - このスキャンは、PR時、プッシュ時、およびスケジュールトリガーにより自動で実行され、法務リスクの低減に寄与します。
+
+### 新規追加: クラウド構成ファイルと IaC 変数の漏洩防止強化
+
+各種クラウドプロバイダの設定ディレクトリ（`.aws/`, `.kube/`, `.gcp/`, `.azure/`）や、Terraform 等の IaC ツールで利用される変数ファイル（`*.tfvars`, `*.auto.tfvars`）について、`.gitignore`, `.gitattributes`（`-diff`）, および `.vscode/settings.json` での除外設定を強化しました。さらに、`.pre-commit-config.yaml` のローカル専用カスタムフック `forbid-sensitive-files` においてもこれらのファイルのステージングをブロックするように設定しており、意図しないインフラ情報や認証情報の流出をより強固に防いでいます。
+
+### AIエージェントコンテキストの漏洩防止の追加
+
+新たに利用される AI エージェントの作業ディレクトリ（`.roo/` 等）についても、他のツールと同様に `.gitignore`, `.gitattributes`, `.vscode/settings.json`, および `.pre-commit-config.yaml` を用いて、意図しないステージングや diff 出力を防ぐ設定を追加しました。
