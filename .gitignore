@@ -98,6 +98,7 @@ dist/
 .continue/
 .windsurf/
 .cline/
+.roo/
 *-report.md
 
 # Secrets
@@ -133,3 +134,12 @@ bunfig.toml
 *.tfstate
 *.tfstate.*
 repomix-output.*
+
+# Cloud configs
+.aws/
+.kube/
+.gcp/
+.azure/
+
+# IaC variables
+*.tfvars
