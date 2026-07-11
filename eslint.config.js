@@ -7,6 +7,7 @@ const vueParser = require('vue-eslint-parser');
 const globals = require('globals');
 const pluginSecurity = require('eslint-plugin-security');
 const pluginVueA11y = require('eslint-plugin-vuejs-accessibility');
+const pluginRegexp = require('eslint-plugin-regexp');
 
 module.exports = [
   {
@@ -22,6 +23,7 @@ module.exports = [
   ...neostandard(),
 
   pluginSecurity.configs.recommended,
+  pluginRegexp.configs['flat/recommended'],
   ...pluginVue.configs['flat/essential'],
   ...pluginVueA11y.configs['flat/recommended'],
 

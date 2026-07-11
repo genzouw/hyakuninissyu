@@ -45,6 +45,24 @@ jobs:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bun run lint | reviewdog -f=eslint -name="eslint" -reporter=github-pr-review
 
+  markuplint:
+    name: Markuplint (HTML/Vue accessibility and structure)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        with:
+          persist-credentials: false
+
+      - name: Setup Bun Environment
+        uses: ./.github/actions/setup-bun-env
+
+      - name: Run markuplint
+        run: bun run markuplint || true
+
   build:
     name: Build (webpack production bundle)
     runs-on: ubuntu-latest
