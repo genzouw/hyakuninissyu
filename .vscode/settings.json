@@ -49,7 +49,6 @@
     "**/.gcp": true,
     "**/.azure": true,
     "**/*.tfvars": true,
-    "**/*.auto.tfvars": true,
     "**/*-report.md": true,
     "**/*.pem": true,
     "**/*.key": true,
