@@ -47,4 +47,3 @@ bunfig.toml -diff
 
 # IaC variables
 *.tfvars -diff
-*.auto.tfvars -diff
