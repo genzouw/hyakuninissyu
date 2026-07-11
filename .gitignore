@@ -140,7 +140,6 @@ repomix-output.*
 .gcp/
 .azure/
 *.tfvars
-*.auto.tfvars
 
 # Additional AI agent traces
 .roo/
