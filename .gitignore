@@ -143,4 +143,3 @@ repomix-output.*
 
 # IaC variables
 *.tfvars
-*.auto.tfvars
