@@ -135,11 +135,9 @@ bunfig.toml
 *.tfstate.*
 repomix-output.*
 
-# Cloud configs
+# Cloud config directories and IaC variables (Security/Leak Prevention)
 .aws/
 .kube/
 .gcp/
 .azure/
-
-# IaC variables
 *.tfvars
