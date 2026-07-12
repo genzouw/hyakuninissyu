@@ -98,6 +98,7 @@ dist/
 .continue/
 .windsurf/
 .cline/
+.roo/
 *-report.md
 
 # Secrets
@@ -140,6 +141,3 @@ repomix-output.*
 .gcp/
 .azure/
 *.tfvars
-
-# Additional AI agent traces
-.roo/

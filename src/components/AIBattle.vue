@@ -182,8 +182,7 @@
                   >
                     {{ choice }}
                     <span v-if="index === winnerAnswerIndex"
-                      >（{{ winner === 'player' ? 'あなた' : 'AI' }}）</span
-                    >
+                      >（{{ winner === 'player' ? 'あなた' : 'AI' }}）</span>
                   </button>
                 </div>
               </div>

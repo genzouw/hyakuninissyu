@@ -1,0 +1,19 @@
+{
+  "parser": {
+    ".vue$": "@markuplint/vue-parser"
+  },
+  "extends": [
+    "markuplint:recommended"
+  ],
+  "rules": {
+    "node-name": false,
+    "require-accessible-name": false,
+    "ineffective-attr": false,
+    "case-sensitive-attr-name": false,
+    "invalid-attr": false,
+    "required-attr": false,
+    "required-element": false,
+    "heading-levels": false,
+    "label-has-control": false
+  }
+}

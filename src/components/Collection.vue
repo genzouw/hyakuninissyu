@@ -86,8 +86,7 @@
                 <small class="text-muted" v-else>？？？</small>
               </p>
               <span v-if="isCollected(poem.id)" class="badge bg-success"
-                >習得済み</span
-              >
+                >習得済み</span>
               <span v-else class="badge bg-secondary">未習得</span>
             </div>
           </div>

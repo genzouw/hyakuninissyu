@@ -14,8 +14,7 @@
             <label
               for="countOfQuestions"
               class="col-4 col-form-label col-form-label-lg"
-              >もんだいのかず</label
-            >
+              >もんだいのかず</label>
             <div class="col-4">
               <Field
                 id="countOfQuestions"
@@ -29,8 +28,7 @@
               />
             </div>
             <label class="col-4 col-form-label col-form-label-lg"
-              >もん</label
-            >
+              >もん</label>
           </div>
         </div>
 

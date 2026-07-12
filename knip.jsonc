@@ -7,6 +7,7 @@
     "css-minimizer-webpack-plugin",
     "mini-css-extract-plugin",
     "terser-webpack-plugin",
+    "@markuplint/vue-parser",
   ],
   "ignoreBinaries": [
     "GPL-1.0-or-later",
