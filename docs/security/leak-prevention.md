@@ -32,7 +32,11 @@ PRやPush時に実行される第二の防御層です。
   - `dependency-review.yml`: PRで新たに追加・更新される依存パッケージ（OSS）に既知の脆弱性が含まれていないかをスキャン。
   - `osv-scanner.yml`: OSS 依存パッケージの既知脆弱性（OSV データベース照合）をスキャン。「3. 定期監査と自動防御」のスケジュール実行に加え、本拡張によりプッシュ時・PR時の CI 検知としても動作し、検出結果を SARIF 形式で GitHub Code Scanning へアップロードします（ジョブレベルで `security-events: write` を付与）。
   - `trufflehog.yml`: プッシュ時およびPR時にアクティブなシークレット検証（プロバイダAPIへの有効性確認）を実行し、実際に利用可能なシークレットの混入をリアルタイムにブロック。
-- **GitHub Actions 権限の最小化**: ワークフローのトップレベル `permissions:` は最小化（デフォルトを `contents: read` または `{}` とし、不要な権限を持たせない）し、必要な書き込み・読み取り権限（`security-events: write`, `issues: write`, `pull-requests: write`, `pull-requests: read`, `checks: write`, `actions: read`など）はジョブレベルでのみ明示的に付与してブラストラジアス（被害範囲）を最小化しています（なお、GitHub Actions の権限はワークフローレベルまたはジョブレベルでのみ設定可能であり、ステップレベルでは設定できません）。`gitleaks.yml`、`trivy.yml`、`zizmor.yml` 等の CI セキュリティスキャンワークフローを含め、すべてのワークフローにおいて Principle of Least Privilege が徹底されています（例外として OSSF Scorecard は `read-all` を許容）。各ジョブに必要な権限のみを厳密に割り当てています。
+- **GitHub Actions 権限の最小化**: すべてのワークフローにおいて Principle of Least Privilege（最小権限の原則）を徹底し、ブラストラジアス（被害範囲）を最小化しています。
+  - **トップレベル権限の最小化**: ワークフローのトップレベル `permissions:` は最小化（デフォルトを `contents: read` または `{}` とし、不要な権限を持たせない）しています。
+  - **ジョブレベルでの権限付与**: 必要な書き込み・読み取り権限（`security-events: write`, `issues: write`, `pull-requests: write`, `pull-requests: read`, `checks: write`, `actions: read` など）は、各ジョブレベルでのみ明示的に付与しています。
+  - **対象ワークフロー**: `gitleaks.yml`、`trivy.yml`、`zizmor.yml` などの CI セキュリティスキャンワークフローを含め、各ジョブに必要な権限のみを厳密に割り当てています（例外として OSSF Scorecard は `read-all` を許容）。
+  - **設定レベルの制限**: なお、GitHub Actions の権限はワークフローレベルまたはジョブレベルでのみ設定可能であり、ステップレベルでは設定できません。
 - **pull_request_target の使用禁止（フォークPRからの漏洩防止）**: フォーク元から悪意あるコードが送られた際、`pull_request_target` トリガーはフォークからのPRであってもベースリポジトリのシークレットにアクセスできてしまうため、漏洩の定番経路となります。本リポジトリでは原則として `pull_request_target` の使用を禁止し、安全な `pull_request` トリガーを使用することで、フォークPRからの意図しないシークレット流出を防ぎます。
 - **運用上の責任**: CIが落ちた場合、対象のコミットに含まれる漏洩疑いのコードを適切に修正し（必要であればシークレットをローテートし）、マージブロックを解消すること。
 
