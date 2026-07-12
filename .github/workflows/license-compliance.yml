@@ -9,7 +9,7 @@ on:
     - cron: '30 20 * * 0' # 毎週月曜 05:30 JST
 
 concurrency:
-  group: license-compliance-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
