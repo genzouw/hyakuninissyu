@@ -11,7 +11,11 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: pr-conflict-notify-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  # このワークフローは push(main) / schedule / workflow_dispatch のみが起点で
+  # PR コンテキストを持たないため concurrency group は実質固定される。
+  # cancel-in-progress: true にすると schedule 実行中の通知処理が
+  # push によってキャンセルされ、コンフリクト通知を取りこぼす可能性があるため false を維持する。
   cancel-in-progress: false
 
 permissions:

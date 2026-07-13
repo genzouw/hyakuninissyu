@@ -13,7 +13,7 @@ permissions:
 
 # 同一ブランチ / PR で OSV-Scanner が重複起動するのを抑止し、無駄な実行を削減
 concurrency:
-  group: osv-scanner-${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
