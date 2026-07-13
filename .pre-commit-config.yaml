@@ -36,6 +36,15 @@ repos:
     hooks:
       - id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
+  - repo: https://github.com/trufflesecurity/trufflehog
+    rev: v3.88.11
+    hooks:
+      - id: trufflehog
+        name: TruffleHog
+        description: Detect secrets in your data with TruffleHog.
+        entry: trufflehog git file://. --since-commit HEAD --results=verified --fail
+        language: golang
+        pass_filenames: false
   - repo: https://github.com/crate-ci/typos
     rev: v1.47.2
     hooks:
