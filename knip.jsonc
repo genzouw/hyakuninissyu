@@ -8,6 +8,8 @@
     "mini-css-extract-plugin",
     "terser-webpack-plugin",
     "@markuplint/vue-parser",
+    "textlint-filter-rule-comments",
+    "textlint-rule-preset-ja-spacing",
   ],
   "ignoreBinaries": [
     "GPL-1.0-or-later",
