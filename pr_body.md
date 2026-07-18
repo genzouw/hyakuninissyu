@@ -29,7 +29,7 @@
 
 ## マージ後の確認手順
 
-- [ ] 次の push / PR で導入した workflow (hadolint, lighthouse等) が green になることを確認。
+- [ ] 次の push / PR で導入した workflow (hadolint, lighthouse 等) が green になることを確認。
 
 ## ロールバック手順
 
