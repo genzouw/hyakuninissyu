@@ -19,6 +19,8 @@ permissions:
 
 jobs:
   trufflehog:
+    permissions:
+      contents: read
     name: Active Secret Verification
     runs-on: ubuntu-latest
     steps:

@@ -15,6 +15,8 @@ permissions:
 
 jobs:
   pre-commit:
+    permissions:
+      contents: read
     name: Run pre-commit
     runs-on: ubuntu-latest
     steps:
