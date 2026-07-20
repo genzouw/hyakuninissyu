@@ -83,7 +83,7 @@ We love pull requests! If you're ready to contribute code or documentation, plea
 
 To set up the project locally for development:
 
-1. Ensure you have Bun (`>=1.0.0`) installed.
+1. Ensure you have Bun (`>=1.0.0`) and Node.js (`>=22.0.0`) installed.
 2. Ensure you have Python (`>=3.8`) and pip installed for pre-commit hooks.
 3. Clone the repository and run `bun install`.
 4. Set up pre-commit (requires Python) to ensure secrets are not committed:
