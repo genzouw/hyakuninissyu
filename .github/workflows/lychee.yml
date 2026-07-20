@@ -32,10 +32,20 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install lychee
+        env:
+          LYCHEE_VERSION: lychee-v0.24.2
+          LYCHEE_ASSET: lychee-x86_64-unknown-linux-gnu.tar.gz
+        run: |
+          set -euo pipefail
+          curl -sSfLO "https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/${LYCHEE_ASSET}"
+          curl -sSfLO "https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/${LYCHEE_ASSET}.sha256"
+          sha256sum -c "${LYCHEE_ASSET}.sha256"
+          tar -xzf "${LYCHEE_ASSET}" lychee
+          sudo mv lychee /usr/local/bin/lychee
+
       - name: Run Lychee
-        uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411 # v2.8.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: --verbose --no-progress --exclude-path 'node_modules' --exclude-path 'dist' './**/*.md' './**/*.html' './**/*.vue'
-          fail: true
+        run: |
+          lychee --verbose --no-progress --exclude-path 'node_modules' --exclude-path 'dist' './**/*.md' './**/*.html' './**/*.vue'
