@@ -41,7 +41,7 @@ jobs:
           curl -sSfLO "https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/${LYCHEE_ASSET}"
           curl -sSfLO "https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/${LYCHEE_ASSET}.sha256"
           sha256sum -c "${LYCHEE_ASSET}.sha256"
-          tar -xzf "${LYCHEE_ASSET}" lychee
+          tar -xzf "${LYCHEE_ASSET}" --strip-components=1
           sudo mv lychee /usr/local/bin/lychee
 
       - name: Run Lychee
