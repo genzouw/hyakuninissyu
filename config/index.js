@@ -60,8 +60,8 @@ module.exports = {
 
     // Run the build command with an extra argument to
     // View the bundle analyzer report after build finishes:
-    // `bun run build --report`
+    // REPORT=true bun run build
     // Set to `true` or `false` to always turn it on or off
-    bundleAnalyzerReport: process.env.npm_config_report,
+    bundleAnalyzerReport: process.env.npm_config_report || process.env.REPORT,
   },
 };
