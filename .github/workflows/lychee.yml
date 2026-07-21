@@ -38,14 +38,23 @@ jobs:
           LYCHEE_ASSET: lychee-x86_64-unknown-linux-gnu.tar.gz
         run: |
           set -euo pipefail
-          curl -sSfLO "https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/${LYCHEE_ASSET}"
-          curl -sSfLO "https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/${LYCHEE_ASSET}.sha256"
-          sha256sum -c "${LYCHEE_ASSET}.sha256"
-          tar -xzf "${LYCHEE_ASSET}" --strip-components=1
-          sudo mv lychee /usr/local/bin/lychee
+          workdir="$(mktemp -d)"
+          curl -sSfLo "${workdir}/${LYCHEE_ASSET}" "https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/${LYCHEE_ASSET}"
+          curl -sSfLo "${workdir}/${LYCHEE_ASSET}.sha256" "https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/${LYCHEE_ASSET}.sha256"
+          (cd "${workdir}" && sha256sum -c "${LYCHEE_ASSET}.sha256")
+          # tarball には README.md や docs/*.md も同梱されており、リポジトリ直下に展開すると
+          # lychee 自身のドキュメント（存在しない assets/yes.svg 等へのリンクを含む）が
+          # リンクチェック対象に混入してしまうため、リポジトリ外の一時ディレクトリに展開する。
+          tar -xzf "${workdir}/${LYCHEE_ASSET}" --strip-components=1 -C "${workdir}"
+          sudo mv "${workdir}/lychee" /usr/local/bin/lychee
+          rm -rf "${workdir}"
 
       - name: Run Lychee
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          lychee --verbose --no-progress --exclude-path 'node_modules' --exclude-path 'dist' './**/*.md' './**/*.html' './**/*.vue'
+          lychee --verbose --no-progress \
+            --exclude-path 'node_modules' \
+            --exclude-path 'dist' \
+            --exclude 'https://hyakuninissyu\.genzouw\.com/hyakunin_issyu\.png' \
+            './**/*.md' './**/*.html' './**/*.vue'
