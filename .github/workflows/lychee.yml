@@ -54,6 +54,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           lychee --verbose --no-progress \
+            --root-dir './static' \
             --exclude-path 'node_modules' \
             --exclude-path 'dist' \
             --exclude 'https://hyakuninissyu\.genzouw\.com/hyakunin_issyu\.png' \
