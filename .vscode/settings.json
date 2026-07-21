@@ -34,7 +34,9 @@
     "**/.aws": true,
     "**/.kube": true,
     "**/.gcp": true,
-    "**/.azure": true
+    "**/.azure": true,
+    "**/.vercel": true,
+    "**/.netlify": true
   },
   "files.exclude": {
     "**/.claude": true,
@@ -70,6 +72,8 @@
     "**/.aws": true,
     "**/.kube": true,
     "**/.gcp": true,
-    "**/.azure": true
+    "**/.azure": true,
+    "**/.vercel": true,
+    "**/.netlify": true
   }
 }

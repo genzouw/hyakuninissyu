@@ -140,4 +140,6 @@ repomix-output.*
 .kube/
 .gcp/
 .azure/
+.vercel/
+.netlify/
 *.tfvars
