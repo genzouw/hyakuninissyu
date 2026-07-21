@@ -62,6 +62,7 @@ module.exports = {
     // View the bundle analyzer report after build finishes:
     // 以下を実行してください: REPORT=true bun run build
     // Set to `true` or `false` to always turn it on or off
-    bundleAnalyzerReport: process.env.npm_config_report || process.env.REPORT,
+    bundleAnalyzerReport:
+      (process.env.npm_config_report ?? process.env.REPORT) === 'true',
   },
 };
