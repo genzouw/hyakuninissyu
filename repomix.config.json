@@ -16,6 +16,7 @@
     ".clinerules",
     ".windsurfrules",
     ".github/copilot-instructions.md",
+    ".github/actions/**",
     ".github/workflows/**",
     ".coderabbit.yaml",
     "sweep.yaml",
@@ -29,7 +30,8 @@
     "repomix.config.json",
     "commitlint.config.js",
     "test/unit/jest.conf.js",
-    "docs/**/*"
+    "docs/**/*",
+    ".claude/rules/project.md"
   ],
   "ignore": {
     "useGitignore": true,
