@@ -11,6 +11,9 @@
     "**/*.pem": true,
     "**/*.key": true,
     "**/*credentials*.json": true,
+    "**/http-client.env.json": true,
+    "**/postman_environment.json": true,
+    "**/insomnia_*.json": true,
     "**/.env*": true,
     "**/.env.example": false,
     "**/*.tfstate*": true,
@@ -37,6 +40,9 @@
     "**/.azure": true
   },
   "files.exclude": {
+    "**/http-client.env.json": true,
+    "**/postman_environment.json": true,
+    "**/insomnia_*.json": true,
     "**/.claude": true,
     "**/.cursor": true,
     "**/.aider*": true,

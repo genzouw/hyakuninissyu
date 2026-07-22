@@ -14,6 +14,11 @@ id_ed25519* -diff
 *credentials*.json -diff
 *service-account*.json -diff
 
+# API client environments
+http-client.env.json -diff
+postman_environment.json -diff
+insomnia_*.json -diff
+
 # Database dumps / Backups
 *.db -diff
 *.sqlite -diff
