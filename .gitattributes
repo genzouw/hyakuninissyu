@@ -44,6 +44,8 @@ bunfig.toml -diff
 .kube/** -diff
 .gcp/** -diff
 .azure/** -diff
+.vercel/** -diff
+.netlify/** -diff
 
 # IaC variables
 *.tfvars -diff
