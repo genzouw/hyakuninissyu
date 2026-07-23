@@ -33,8 +33,7 @@
     "repomix.config.json",
     "commitlint.config.js",
     "test/unit/jest.conf.js",
-    "docs/**/*",
-    ".claude/rules/project.md"
+    "docs/**/*"
   ],
   "ignore": {
     "useGitignore": true,
