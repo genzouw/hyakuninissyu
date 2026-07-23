@@ -37,7 +37,9 @@
     "**/.aws": true,
     "**/.kube": true,
     "**/.gcp": true,
-    "**/.azure": true
+    "**/.azure": true,
+    "**/.vercel": true,
+    "**/.netlify": true
   },
   "files.exclude": {
     "**/http-client.env.json": true,
@@ -76,6 +78,8 @@
     "**/.aws": true,
     "**/.kube": true,
     "**/.gcp": true,
-    "**/.azure": true
+    "**/.azure": true,
+    "**/.vercel": true,
+    "**/.netlify": true
   }
 }
