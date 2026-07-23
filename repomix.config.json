@@ -19,6 +19,7 @@
     ".clinerules",
     ".windsurfrules",
     ".github/copilot-instructions.md",
+    ".github/actions/**",
     ".github/workflows/**",
     ".coderabbit.yaml",
     "sweep.yaml",
