@@ -1,6 +1,6 @@
 # Hyakunin Isshu
 
-![Build Status](https://github.com/genzouw/hyakuninissyu/workflows/Deploy/badge.svg)
+![Build Status](https://github.com/genzouw/hyakuninissyu/actions/workflows/deploy.yml/badge.svg)
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 A modern Vue.js application for exploring and learning the **Hyakunin Isshu** (One Hundred Poets, One Poem Each).

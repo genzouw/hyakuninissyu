@@ -32,10 +32,30 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Install lychee
+        env:
+          LYCHEE_VERSION: lychee-v0.24.2
+          LYCHEE_ASSET: lychee-x86_64-unknown-linux-gnu.tar.gz
+        run: |
+          set -euo pipefail
+          workdir="$(mktemp -d)"
+          curl -sSfLo "${workdir}/${LYCHEE_ASSET}" "https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/${LYCHEE_ASSET}"
+          curl -sSfLo "${workdir}/${LYCHEE_ASSET}.sha256" "https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/${LYCHEE_ASSET}.sha256"
+          (cd "${workdir}" && sha256sum -c "${LYCHEE_ASSET}.sha256")
+          # tarball には README.md や docs/*.md も同梱されており、リポジトリ直下に展開すると
+          # lychee 自身のドキュメント（存在しない assets/yes.svg 等へのリンクを含む）が
+          # リンクチェック対象に混入してしまうため、リポジトリ外の一時ディレクトリに展開する。
+          tar -xzf "${workdir}/${LYCHEE_ASSET}" --strip-components=1 -C "${workdir}"
+          sudo mv "${workdir}/lychee" /usr/local/bin/lychee
+          rm -rf "${workdir}"
+
       - name: Run Lychee
-        uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411 # v2.8.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          args: --verbose --no-progress --exclude-path 'node_modules' --exclude-path 'dist' './**/*.md' './**/*.html' './**/*.vue'
-          fail: true
+        run: |
+          lychee --verbose --no-progress \
+            --root-dir './static' \
+            --exclude-path 'node_modules' \
+            --exclude-path 'dist' \
+            --exclude 'https://hyakuninissyu\.genzouw\.com/hyakunin_issyu\.png' \
+            './**/*.md' './**/*.html' './**/*.vue'

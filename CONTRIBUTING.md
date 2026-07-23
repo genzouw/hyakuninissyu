@@ -58,16 +58,16 @@ We love pull requests! If you're ready to contribute code or documentation, plea
 5. **Install dependencies**:
 
    ```bash
-   npm install
+   bun install
    ```
 
-6. **Make your changes** and ensure everything works locally by running the development server (`npm run dev`).
+6. **Make your changes** and ensure everything works locally by running the development server (`bun run dev`).
 7. **Write tests** for your changes if applicable.
 8. **Run tests and linting** to ensure your code meets our quality standards:
 
    ```bash
-   npm run lint
-   npm test
+   bun run lint
+   bun run unit
    ```
 
 9. **Commit your changes**. Please write clear and concise commit messages.
@@ -83,9 +83,9 @@ We love pull requests! If you're ready to contribute code or documentation, plea
 
 To set up the project locally for development:
 
-1. Ensure you have Node.js (`>=18.18.0`) and npm (`>=9.0.0`) installed.
+1. Ensure you have Bun (`>=1.0.0`) and Node.js (`>=22.0.0`) installed.
 2. Ensure you have Python (`>=3.8`) and pip installed for pre-commit hooks.
-3. Clone the repository and run `npm install`.
+3. Clone the repository and run `bun install`.
 4. Set up pre-commit (requires Python) to ensure secrets are not committed:
 
    ```bash
@@ -93,10 +93,10 @@ To set up the project locally for development:
    pre-commit install
    ```
 
-5. Use `npm run dev` to start the local development server at `http://localhost:8080`.
-6. Check for style issues with `npm run lint`.
-7. Execute unit tests using `npm run unit`.
-8. Perform end-to-end testing with `npm run e2e`.
+5. Use `bun run dev` to start the local development server at `http://localhost:8080`.
+6. Check for style issues with `bun run lint`.
+7. Execute unit tests using `bun run unit`.
+8. Perform end-to-end testing with `bun run e2e`.
 
 ## セキュリティおよび漏洩防止 (Security and Leak Prevention)
 
@@ -111,7 +111,7 @@ To set up the project locally for development:
 
 ## Code Style
 
-This project follows standard Vue.js and JavaScript conventions, enforced by ESLint. Please make sure to run `npm run lint` before submitting a pull request to ensure your code complies with our styling rules.
+This project follows standard Vue.js and JavaScript conventions, enforced by ESLint. Please make sure to run `bun run lint` before submitting a pull request to ensure your code complies with our styling rules.
 
 Thank you for your contributions!
 
