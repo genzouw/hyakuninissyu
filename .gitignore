@@ -117,6 +117,11 @@ id_ed25519*
 .env.*
 !.env.example
 
+# API client environments
+http-client.env.json
+postman_environment.json
+insomnia_*.json
+
 # Package manager configs
 .npmrc
 .yarnrc

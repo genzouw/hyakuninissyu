@@ -52,6 +52,6 @@ repos:
         name: forbid sensitive files and AI agent traces
         entry: 意図しない機密ファイルまたはAIエージェントの作業履歴がステージングされています。
         language: fail
-        files: '(?i)((^|/)(\.env[^/]*|\.npmrc|\.yarnrc[^/]*|\.?bunfig\.toml$|\.claude/|\.cursor/|\.aider|\.continue/|\.windsurf/|\.cline/|\.roo/|\.aws/|\.kube/|\.gcp/|\.azure/|\.vercel/|\.netlify/)|(^|/)[^/]*credentials[^/]*\.json|(^|/)[^/]*service-account[^/]*\.json|(^|/)id_rsa[^/]*|(^|/)id_ed25519[^/]*|(^|/)(claude|cursor|aider|continue|windsurf|cline|copilot|gemini)-report\.md|\.(tfstate|tfvars|db|dump|bak|pem|key|cert|crt|p12|pfx|log)$|\.sqlite)'
+        files: '(?i)((^|/)(\.env[^/]*|\.npmrc|\.yarnrc[^/]*|\.?bunfig\.toml$|\.claude/|\.cursor/|\.aider|\.continue/|\.windsurf/|\.cline/|\.roo/|\.aws/|\.kube/|\.gcp/|\.azure/|\.vercel/|\.netlify/)|(^|/)[^/]*credentials[^/]*\.json|(^|/)[^/]*service-account[^/]*\.json|(^|/)http-client\.env\.json$|(^|/)postman_environment\.json$|(^|/)insomnia_.*\.json$|(^|/)id_rsa[^/]*|(^|/)id_ed25519[^/]*|(^|/)(claude|cursor|aider|continue|windsurf|cline|copilot|gemini)-report\.md|\.(tfstate|tfvars|db|dump|bak|pem|key|cert|crt|p12|pfx|log)$|\.sqlite)'
         exclude: '(?i)(^|/)(\.env\.example$|\.aider\.conf\.yml$|\.aider\.instruction\.md$|\.cursor/rules/.*)'
-        description: 'AIエージェントの作業ディレクトリ、汎用的なシークレットファイル、パッケージマネージャー設定、データベースのダンプファイルのコミットをブロックします'
+        description: 'AIエージェントの作業ディレクトリ、汎用的なシークレットファイル（APIクライアント環境設定を含む）、パッケージマネージャー設定、データベースのダンプファイルのコミットをブロックします'
