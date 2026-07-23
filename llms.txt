@@ -1,0 +1,33 @@
+# 百人一首 (Hyakunin Isshu)
+
+> 百人一首を学び、楽しむためのモダンな Vue.js アプリケーション。
+
+This file provides context about the project for AI assistants and LLMs, formatted according to the llms.txt standard.
+
+## 概要 (Project Overview)
+このプロジェクトは、日本の古典文学である「百人一首」を閲覧し、読み解き、理解するためのインタラクティブでユーザーフレンドリーなインターフェースを提供します。
+また、最新の生成AIによる自動化ツール、自動コードレビュー、CI/CDパイプラインの検証およびプロトタイプとしての役割も持っています。
+
+## 技術スタック (Technical Stack)
+- **フロントエンド**: Vue 3 (Options API & Composables), Vue Router, Vuex 4
+- **UIフレームワーク**: Bootstrap 5 (Bootswatch Yeti), bootstrap-vue-next
+- **ランタイム / パッケージマネージャ**: Bun (>= 1.0.0)
+- **テスト**: Jest, @vue/test-utils
+
+## AIコンテキストファイル (Context Files)
+リポジトリの全容をAIに把握させるため、Repomix を用いて生成されたコンテキストファイルを公開しています。
+
+- [Full Codebase Context (Markdown)](/llms-full.txt): 全ソースコードを含む完全なコンテキスト
+- [Full Codebase Context (XML)](https://raw.githubusercontent.com/genzouw/hyakuninissyu/ai-context/repomix-output.xml): AIエージェント向けの XML フォーマット
+- [SECURITY.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/SECURITY.md): セキュリティポリシーと機密情報漏洩防止のためのガイドライン
+- [CONTRIBUTING.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/CONTRIBUTING.md): コントリビューションガイド
+- [CLAUDE.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/CLAUDE.md): AIエージェント共通のコーディング規約
+- [.github/copilot-instructions.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/.github/copilot-instructions.md): GitHub Copilot 向けの指示
+
+## AIコーディング規約 (AI Coding Guidelines)
+本プロジェクトでAIアシスタントがコーディングやレビューを行う際の重要なルールです。
+- 詳細な指示はリポジトリ内の `CLAUDE.md` および `.cursorrules` を必ず参照してください。
+- すべてのコードコメント、PR説明文、ドキュメントは**日本語**で記述する必要があります。
+- パッケージマネージャは必ず `bun` を使用し、`npm` や `yarn` は使用しないでください。
+- セキュリティ保護のため、APIキーなどのシークレット情報をハードコードしないでください。
+- 外部URL (`<a target="_blank">`) には必ず `rel="noopener noreferrer"` を付与してください。
