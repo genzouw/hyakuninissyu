@@ -41,6 +41,11 @@ bunfig.toml -diff
 .windsurf/** -diff
 .cline/** -diff
 .roo/** -diff
+.copilot/** -diff
+.codeium/** -diff
+.zeal/** -diff
+.cody/** -diff
+.tabnine/** -diff
 *-report.md -diff
 *.log -diff
 
