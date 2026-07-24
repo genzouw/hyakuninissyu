@@ -148,3 +148,8 @@ repomix-output.*
 .vercel/
 .netlify/
 *.tfvars
+.copilot/
+.codeium/
+.zeal/
+.cody/
+.tabnine/
