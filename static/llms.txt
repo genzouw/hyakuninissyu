@@ -28,6 +28,9 @@ This file provides context about the project for AI assistants and LLMs, formatt
 本プロジェクトでAIアシスタントがコーディングやレビューを行う際の重要なルールです。
 - 詳細な指示はリポジトリ内の `CLAUDE.md` および `.cursorrules` を必ず参照してください。
 - すべてのコードコメント、PR説明文、ドキュメントは**日本語**で記述する必要があります。
-- パッケージマネージャは必ず `bun` を使用し、`npm` や `yarn` は使用しないでください。
+- パッケージマネージャは必ず `bun` を使用し、`npm` や `yarn` は使用しないでください。ローカル実行と検証は `bun install` -> `bun run lint` -> `bun run unit` -> `bun run build` の順に行ってください。
 - セキュリティ保護のため、APIキーなどのシークレット情報をハードコードしないでください。
 - 外部URL (`<a target="_blank">`) には必ず `rel="noopener noreferrer"` を付与してください。
+- Vue Router のルーティングパラメータはクエリストリングではなく、パスに直接埋め込んでください (例: `/playing/:countOfQuestions`)。
+- Webpack の起動 (dev, build) には必ず `NODE_OPTIONS=--openssl-legacy-provider` を指定してください。
+- `localStorage` に新しいキーを追加する場合は、既存のキー (`dailyChallengeLastCompleted`, `dailyChallengeStreak`, `collectedPoemIds`) と衝突しないようにしてください。
