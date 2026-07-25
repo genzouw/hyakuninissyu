@@ -16,6 +16,7 @@
     "SECURITY.md",
     "cody.json",
     ".cursorrules",
+    ".cursor/rules/**",
     ".clinerules",
     ".windsurfrules",
     ".github/copilot-instructions.md",
