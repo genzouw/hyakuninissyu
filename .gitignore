@@ -99,6 +99,10 @@ dist/
 .windsurf/
 .cline/
 .roo/
+.copilot/
+.codeium/
+.cody/
+.tabnine/
 *-report.md
 
 # Secrets
