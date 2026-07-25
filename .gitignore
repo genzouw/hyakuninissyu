@@ -103,6 +103,7 @@ dist/
 .codeium/
 .cody/
 .tabnine/
+.zeal/
 *-report.md
 
 # Secrets
@@ -152,3 +153,4 @@ repomix-output.*
 .vercel/
 .netlify/
 *.tfvars
+*.auto.tfvars
