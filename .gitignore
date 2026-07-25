@@ -99,6 +99,10 @@ dist/
 .windsurf/
 .cline/
 .roo/
+.copilot/
+.codeium/
+.cody/
+.tabnine/
 *-report.md
 
 # Secrets
@@ -148,8 +152,3 @@ repomix-output.*
 .vercel/
 .netlify/
 *.tfvars
-.copilot/
-.codeium/
-.zeal/
-.cody/
-.tabnine/
