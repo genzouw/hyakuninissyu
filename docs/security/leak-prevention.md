@@ -30,7 +30,7 @@ PR や Push 時に実行される第二の防御層です。
   - `actionlint.yml`: GitHub Actions ワークフローの静的解析および `shellcheck` 連携によるシェルスクリプトの脆弱性（インジェクション等）検知。
   - `zizmor.yml`: GitHub Actions ワークフローに特化したセキュリティ静的解析ツール。`actionlint` よりも踏み込んだ設定ミス（過剰な `permissions`、認証情報の永続化、信頼できない入力の利用など）を検知し、結果を SARIF 形式で GitHub Code Scanning へアップロードします（ジョブレベルで `security-events: write` を付与）。
   - `codeql.yml`: `security-extended` および `security-and-quality` クエリによる高度な脆弱性・コード品質の検知（一部のハードコードされた認証情報パターンも含む）。
-  - `dependency-review.yml`: PR で新たに追加・更新される依存パッケージ（OSS）に既知の脆弱性が含まれていないかをスキャン。
+  - `dependency-review.yml`: PR で新たに追加・更新される依存パッケージ（OSS）に既知の脆弱性が含まれていないかをスキャン。このワークフローはすべてのプルリクエストに対して実行されます。
   - `osv-scanner.yml`: OSS 依存パッケージの既知脆弱性（OSV データベース照合）をスキャン。「3. 定期監査と自動防御」のスケジュール実行に加え、本拡張によりプッシュ時・PR 時の CI 検知としても動作し、検出結果を SARIF 形式で GitHub Code Scanning へアップロードします（ジョブレベルで `security-events: write` を付与）。
   - `trufflehog.yml`: プッシュ時および PR 時にアクティブなシークレット検証（プロバイダ API への有効性確認）を実行し、実際に利用可能なシークレットの混入をリアルタイムにブロック。
 - **GitHub Actions 権限の最小化**: すべてのワークフローにおいて Principle of Least Privilege（最小権限の原則）を徹底し、ブラストラジアス（被害範囲）を最小化しています。
