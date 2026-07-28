@@ -45,6 +45,7 @@ bunfig.toml -diff
 .codeium/** -diff
 .cody/** -diff
 .tabnine/** -diff
+.zeal/** -diff
 *-report.md -diff
 *.log -diff
 
