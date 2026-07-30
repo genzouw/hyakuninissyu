@@ -34,7 +34,9 @@
     "repomix.config.json",
     "commitlint.config.js",
     "test/unit/jest.conf.js",
-    "docs/**/*"
+    "docs/**/*",
+    ".github/PULL_REQUEST_TEMPLATE.md",
+    ".github/CODEOWNERS"
   ],
   "ignore": {
     "useGitignore": true,

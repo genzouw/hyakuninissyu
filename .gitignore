@@ -152,3 +152,4 @@ repomix-output.*
 .vercel/
 .netlify/
 *.tfvars
+venv/
