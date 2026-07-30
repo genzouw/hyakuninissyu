@@ -101,6 +101,7 @@ dist/
 .roo/
 .copilot/
 .codeium/
+.zeal/
 .cody/
 .tabnine/
 *-report.md
@@ -138,11 +139,15 @@ bunfig.toml
 *.sqlite3
 *.dump
 *.bak
+*.sql
 
 # Infrastructure state
 *.tfstate
 *.tfstate.*
 repomix-output.*
+
+# HTTP archives
+*.har
 
 # Cloud config directories and IaC variables (Security/Leak Prevention)
 .aws/
@@ -152,3 +157,4 @@ repomix-output.*
 .vercel/
 .netlify/
 *.tfvars
+*.auto.tfvars
