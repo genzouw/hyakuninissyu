@@ -27,7 +27,7 @@ insomnia_*.json -diff
 *.bak -diff
 *.sql -diff
 
-# HTTP archives
+# HTTPアーカイブファイル
 *.har -diff
 
 # Package manager configs

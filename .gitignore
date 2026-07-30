@@ -146,7 +146,7 @@ bunfig.toml
 *.tfstate.*
 repomix-output.*
 
-# HTTP archives
+# HTTPアーカイブファイル
 *.har
 
 # Cloud config directories and IaC variables (Security/Leak Prevention)
