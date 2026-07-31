@@ -25,6 +25,10 @@ insomnia_*.json -diff
 *.sqlite3 -diff
 *.dump -diff
 *.bak -diff
+*.sql -diff
+
+# HTTPアーカイブファイル
+*.har -diff
 
 # Package manager configs
 .npmrc -diff
@@ -43,6 +47,7 @@ bunfig.toml -diff
 .roo/** -diff
 .copilot/** -diff
 .codeium/** -diff
+.zeal/** -diff
 .cody/** -diff
 .tabnine/** -diff
 .zeal/** -diff

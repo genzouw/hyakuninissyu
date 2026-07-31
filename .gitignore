@@ -101,6 +101,7 @@ dist/
 .roo/
 .copilot/
 .codeium/
+.zeal/
 .cody/
 .tabnine/
 .zeal/
@@ -139,11 +140,15 @@ bunfig.toml
 *.sqlite3
 *.dump
 *.bak
+*.sql
 
 # Infrastructure state
 *.tfstate
 *.tfstate.*
 repomix-output.*
+
+# HTTPアーカイブファイル
+*.har
 
 # Cloud config directories and IaC variables (Security/Leak Prevention)
 .aws/
