@@ -7,7 +7,7 @@
 開発者および AI エージェントのローカル環境でのコミットを防ぐ第一の防御層です。
 
 - **仕組み**: Husky の `pre-commit` フック (`.husky/pre-commit`) により `pre-commit run` を呼び出し、`.pre-commit-config.yaml` で定義された `gitleaks`、`trufflehog`、`detect-private-key`、`detect-aws-credentials` などを包括的に実行します。
-  - 加えて、`.pre-commit-config.yaml` にカスタムローカルフック (`forbid-sensitive-files`) を導入し、`.env` ファイル、各種キーファイル (`*.pem`, `*.key`)、インフラ状態ファイル (`*.tfstate`, `*.tfvars`)、各種証明書や SSH 鍵（`*.cert`, `*.p12`, `id_rsa`等）、クラウドサービスアカウント（`*service-account*.json`）、各種クラウド構成ディレクトリ (`.aws/`, `.kube/`, `.gcp/`, `.azure/`, `.vercel/`, `.netlify/`)、パッケージマネージャー設定 (`.npmrc`, `.yarnrc*`, `.bunfig.toml`, `bunfig.toml`)、DB ダンプ (`*.db`, `*.dump`, `*.sqlite*`等)、作業ログ・デバッグ出力等のログファイル（`*.log`）、および AI エージェントの作業ディレクトリ (`.claude/`, `.cursor/`, `.aider*/`, `.roo/` 等) などのステージング・コミットを明示的にブロックしています。
+  - 加えて、`.pre-commit-config.yaml` にカスタムローカルフック (`forbid-sensitive-files`) を導入し、`.env` ファイル、各種キーファイル (`*.pem`, `*.key`)、インフラ状態ファイル (`*.tfstate`, `*.tfvars`, `*.auto.tfvars`)、各種証明書や SSH 鍵（`*.cert`, `*.p12`, `id_rsa`等）、クラウドサービスアカウント（`*service-account*.json`）、各種クラウド構成ディレクトリ (`.aws/`, `.kube/`, `.gcp/`, `.azure/`, `.vercel/`, `.netlify/`)、パッケージマネージャー設定 (`.npmrc`, `.yarnrc*`, `.bunfig.toml`, `bunfig.toml`)、DB ダンプ (`*.db`, `*.dump`, `*.sqlite*`, `*.sql`等)、HTTP Archive (`*.har`)、作業ログ・デバッグ出力等のログファイル（`*.log`）、および AI エージェントの作業ディレクトリ (`.claude/`, `.cursor/`, `.aider*/`, `.roo/`, `.zeal/` 等) などのステージング・コミットを明示的にブロックしています。
 - **設定ファイル**: `.pre-commit-config.yaml` および `.husky/pre-commit`
 - **開発者の責任**: リポジトリをクローンしたのち、Python 仮想環境（例: `python3 -m venv venv && source venv/bin/activate`）を利用して `pip install -r requirements.txt` および `pre-commit install` を実行し、ローカル環境で包括的なシークレット検知が機能するようにすること。システム依存関係の競合を避けるため、仮想環境の利用を推奨します。
 - **マージ前の手動作業（必須）**: GitHub Secret Scanning および Push Protection が有効化されていない場合は、リポジトリの Settings → Security → Code security and analysis から必ず有効化してください。
@@ -16,7 +16,7 @@
   - `pre-commit` のローカルフック（`forbid-sensitive-files`）にて、`.env` ファイル、各種資格情報（`credentials`, `*.pem`, `*.tfstate`等）、API クライアント環境設定ファイル（`http-client.env.json`, `postman_environment.json`, `insomnia_*.json`）、および AI エージェントの作業履歴（`.claude/`, `.cursor/`, `.aider*` 等）が誤ってステージングされることを明示的にブロックしています。
   - `.gitignore` にて各種シークレットファイルや AI エージェントの作業履歴を除外し、事故を根本から防止。
   - `.gitattributes` にてシークレット関連ファイルの diff 出力を無効化（`-diff`）し、レビュー時の意図しない露出を防止。
-  - `.vscode/settings.json` により、AI エージェント（Copilot / Cursor 等）のワークスペース走査からシークレットファイル、パッケージマネージャーの設定ファイル (`.npmrc`, `.yarnrc*`（`.yarnrc.yml` を含む）, `.bunfig.toml`, `bunfig.toml`)、各種証明書・SSH 鍵、クラウドサービスアカウント、各種クラウド構成ディレクトリや IaC 変数、およびデータベースのダンプファイル等 (`*.db`, `*.dump`, `*.bak`, `*.sqlite*`) を除外。
+  - `.vscode/settings.json` により、AI エージェント（Copilot / Cursor 等）のワークスペース走査からシークレットファイル、パッケージマネージャーの設定ファイル (`.npmrc`, `.yarnrc*`（`.yarnrc.yml` を含む）, `.bunfig.toml`, `bunfig.toml`)、各種証明書・SSH 鍵、クラウドサービスアカウント、各種クラウド構成ディレクトリや IaC 変数 (`*.tfvars`, `*.auto.tfvars`)、およびデータベースのダンプファイル等 (`*.db`, `*.dump`, `*.bak`, `*.sqlite*`, `*.sql`)、HTTP Archive (`*.har`) を除外。
 
 ## 2. CI 検知（中央防御層）
 
@@ -59,7 +59,7 @@ PR や Push 時に実行される第二の防御層です。
 
 ### AIエージェントコンテキストの漏洩防止について
 
-AI エージェントの作業ディレクトリ（`.claude/`, `.cursor/`, `.aider*/`, `.continue/`, `.windsurf/`, `.cline/` など）は、`.gitignore` で除外されていることに加え、万が一ステージングされた場合でも `.gitattributes` によって diff 出力が無効化（`-diff`）されています。これにより、PR レビュー等の過程でエージェントが保持しているシークレットやプロンプト履歴が意図せず露出することを防ぎます。
+AI エージェントの作業ディレクトリ（`.claude/`, `.cursor/`, `.aider*/`, `.continue/`, `.windsurf/`, `.cline/`, `.zeal/` など）は、`.gitignore` で除外されていることに加え、万が一ステージングされた場合でも `.gitattributes` によって diff 出力が無効化（`-diff`）されています。これにより、PR レビュー等の過程でエージェントが保持しているシークレットやプロンプト履歴が意図せず露出することを防ぎます。
 さらに、`.vscode/settings.json` を通じて各種 AI アシスタントのワークスペース走査対象からこれらと特定のファイル群（DB ダンプファイルなど）を除外することで、意図しないコンテキストのインジェストや AI 経由の漏洩を未然に防止しています。
 
 ### detect-secrets によるベースライン管理
@@ -105,8 +105,8 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 ### 新規追加: クラウド構成ファイルと IaC 変数の漏洩防止強化
 
-各種クラウドプロバイダやホスティングプラットフォームの設定ディレクトリ（`.aws/`, `.kube/`, `.gcp/`, `.azure/`, `.vercel/`, `.netlify/`）や、Terraform 等の IaC ツールで利用される変数ファイル（`*.tfvars`）について、`.gitignore`, `.gitattributes`（`-diff`）, および `.vscode/settings.json` での除外設定を強化しました。さらに、`.pre-commit-config.yaml` のローカル専用カスタムフック `forbid-sensitive-files` においてもこれらのファイルのステージングをブロックするように設定しており、意図しないインフラ情報や認証情報の流出をより強固に防いでいます。
+各種クラウドプロバイダやホスティングプラットフォームの設定ディレクトリ（`.aws/`, `.kube/`, `.gcp/`, `.azure/`, `.vercel/`, `.netlify/`）や、Terraform 等の IaC ツールで利用される変数ファイル（`*.tfvars`, `*.auto.tfvars`）について、`.gitignore`, `.gitattributes`（`-diff`）, および `.vscode/settings.json` での除外設定を強化しました。さらに、`.pre-commit-config.yaml` のローカル専用カスタムフック `forbid-sensitive-files` においてもこれらのファイルのステージングをブロックするように設定しており、意図しないインフラ情報や認証情報の流出をより強固に防いでいます。
 
 ### AIエージェントコンテキストの漏洩防止の追加
 
-新たに利用される AI エージェントの作業ディレクトリ（`.roo/` 等）についても、他のツールと同様に `.gitignore`, `.gitattributes`, `.vscode/settings.json`, および `.pre-commit-config.yaml` を用いて、意図しないステージングや diff 出力を防ぐ設定を追加しました。
+新たに利用される AI エージェントの作業ディレクトリ（`.roo/`, `.zeal/` 等）についても、他のツールと同様に `.gitignore`, `.gitattributes`, `.vscode/settings.json`, および `.pre-commit-config.yaml` を用いて、意図しないステージングや diff 出力を防ぐ設定を追加しました。
