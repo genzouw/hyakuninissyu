@@ -158,3 +158,4 @@ repomix-output.*
 .netlify/
 *.tfvars
 *.auto.tfvars
+venv/
