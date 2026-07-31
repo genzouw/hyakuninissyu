@@ -23,7 +23,7 @@
 PR や Push 時に実行される第二の防御層です。
 
 - **仕組み**: GitHub Actions による継続的なスキャン。
-  - **対象ブランチの拡張**: `pre-commit.yml`, `gitleaks.yml`, `trivy.yml`, `trufflehog.yml`, `codeql.yml`, `osv-scanner.yml`, `actionlint.yml`, `zizmor.yml`, および `dependency-review.yml` といった主要なセキュリティスキャンワークフローは、**すべてのブランチ（ワイルドカード `**` を使用）へのプルリクエスト時（および対応ツールはプッシュ時）**に自動実行されるよう構成されています。これにより、プルリクエスト作成前のフィーチャーブランチの段階からシークレット漏洩や脆弱性を確実に検知・ブロックします。なお `actionlint.yml` のみ `paths` フィルタ（`.github/workflows/**` 等）を併用しているため、実行されるのは GitHub Actions 関連ファイルが変更されたプッシュ／PR に限られます。
+  - **対象ブランチの拡張**: `pre-commit.yml`, `gitleaks.yml`, `trivy.yml`, `trufflehog.yml`, `codeql.yml`, `osv-scanner.yml`, `actionlint.yml`, `zizmor.yml`, および `dependency-review.yml` といった主要なセキュリティスキャンワークフローは、**すべてのブランチ（ワイルドカード `**` を使用）へのプルリクエスト時**に自動実行されるよう構成されています。これにより、フィーチャーブランチから作成されたプルリクエストでもシークレット漏洩や脆弱性を確実に検知・ブロックします。なお `pre-commit.yml`, `gitleaks.yml`, `trivy.yml`, `trufflehog.yml`, `codeql.yml`, `osv-scanner.yml`, `actionlint.yml`, `zizmor.yml` は `push` トリガーも併せ持つため、プルリクエスト作成前のフィーチャーブランチへの push 時点でも検知が働きます。一方 `dependency-review.yml` は `pull_request` トリガーのみで構成されているため、検知はプルリクエスト作成後に限られます。また `actionlint.yml` のみ `paths` フィルタ（`.github/workflows/**` 等）を併用しているため、実行されるのは GitHub Actions 関連ファイルが変更されたプッシュ／PR に限られます。
   - `pre-commit.yml`: ローカルでセットアップ漏れがあった場合や意図的な `--no-verify` によるバイパスを防ぐため、CI 環境上でリポジトリ全体に対して `pre-commit` フックを強制実行します。
   - `gitleaks.yml`: プッシュ時・PR 差分およびスケジュールでリポジトリ全体の履歴をスキャン。
   - `trivy.yml`: ファイルシステムおよび依存関係のシークレット・脆弱性スキャン。
