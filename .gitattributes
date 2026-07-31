@@ -25,6 +25,10 @@ insomnia_*.json -diff
 *.sqlite3 -diff
 *.dump -diff
 *.bak -diff
+*.sql -diff
+
+# HTTPアーカイブファイル
+*.har -diff
 
 # Package manager configs
 .npmrc -diff
@@ -45,6 +49,7 @@ bunfig.toml -diff
 .codeium/** -diff
 .cody/** -diff
 .tabnine/** -diff
+**/.zeal/** -diff
 *-report.md -diff
 *.log -diff
 
@@ -58,3 +63,4 @@ bunfig.toml -diff
 
 # IaC variables
 *.tfvars -diff
+*.auto.tfvars -diff
