@@ -7,7 +7,7 @@
 開発者および AI エージェントのローカル環境でのコミットを防ぐ第一の防御層です。
 
 - **仕組み**: Husky の `pre-commit` フック (`.husky/pre-commit`) により `pre-commit run` を呼び出し、`.pre-commit-config.yaml` で定義された `gitleaks`、`trufflehog`、`detect-private-key`、`detect-aws-credentials` などを包括的に実行します。
-  - 加えて、`.pre-commit-config.yaml` にカスタムローカルフック (`forbid-sensitive-files`) を導入し、`.env` ファイル、各種キーファイル (`*.pem`, `*.key`)、インフラ状態ファイル (`*.tfstate`, `*.tfvars`)、各種証明書や SSH 鍵（`*.cert`, `*.p12`, `id_rsa`等）、クラウドサービスアカウント（`*service-account*.json`）、各種クラウド構成ディレクトリ (`.aws/`, `.kube/`, `.gcp/`, `.azure/`, `.vercel/`, `.netlify/`)、パッケージマネージャー設定 (`.npmrc`, `.yarnrc*`, `.bunfig.toml`, `bunfig.toml`)、DB ダンプ (`*.db`, `*.dump`, `*.sqlite*`等)、作業ログ・デバッグ出力等のログファイル（`*.log`）、および AI エージェントの作業ディレクトリ (`.claude/`, `.cursor/`, `.aider*/`, `.roo/` 等) などのステージング・コミットを明示的にブロックしています。
+  - 加えて、`.pre-commit-config.yaml` にカスタムローカルフック (`forbid-sensitive-files`) を導入し、`.env` ファイル、各種キーファイル (`*.pem`, `*.key`)、インフラ状態ファイル (`*.tfstate`, `*.tfvars`, `*.auto.tfvars`)、各種証明書や SSH 鍵（`*.cert`, `*.p12`, `id_rsa`等）、クラウドサービスアカウント（`*service-account*.json`）、各種クラウド構成ディレクトリ (`.aws/`, `.kube/`, `.gcp/`, `.azure/`, `.vercel/`, `.netlify/`)、パッケージマネージャー設定 (`.npmrc`, `.yarnrc*`, `.bunfig.toml`, `bunfig.toml`)、DB ダンプ (`*.db`, `*.dump`, `*.sqlite*`, `*.sql`等)、HTTP Archive (`*.har`)、作業ログ・デバッグ出力等のログファイル（`*.log`）、および AI エージェントの作業ディレクトリ (`.claude/`, `.cursor/`, `.aider*/`, `.roo/`, `.zeal/` 等) などのステージング・コミットを明示的にブロックしています。
 - **設定ファイル**: `.pre-commit-config.yaml` および `.husky/pre-commit`
 - **開発者の責任**: リポジトリをクローンしたのち、Python 仮想環境（例: `python3 -m venv venv && source venv/bin/activate`）を利用して `pip install -r requirements.txt` および `pre-commit install` を実行し、ローカル環境で包括的なシークレット検知が機能するようにすること。システム依存関係の競合を避けるため、仮想環境の利用を推奨します。
 - **マージ前の手動作業（必須）**: GitHub Secret Scanning および Push Protection が有効化されていない場合は、リポジトリの Settings → Security → Code security and analysis から必ず有効化してください。
@@ -16,14 +16,14 @@
   - `pre-commit` のローカルフック（`forbid-sensitive-files`）にて、`.env` ファイル、各種資格情報（`credentials`, `*.pem`, `*.tfstate`等）、API クライアント環境設定ファイル（`http-client.env.json`, `postman_environment.json`, `insomnia_*.json`）、および AI エージェントの作業履歴（`.claude/`, `.cursor/`, `.aider*` 等）が誤ってステージングされることを明示的にブロックしています。
   - `.gitignore` にて各種シークレットファイルや AI エージェントの作業履歴を除外し、事故を根本から防止。
   - `.gitattributes` にてシークレット関連ファイルの diff 出力を無効化（`-diff`）し、レビュー時の意図しない露出を防止。
-  - `.vscode/settings.json` により、AI エージェント（Copilot / Cursor 等）のワークスペース走査からシークレットファイル、パッケージマネージャーの設定ファイル (`.npmrc`, `.yarnrc*`（`.yarnrc.yml` を含む）, `.bunfig.toml`, `bunfig.toml`)、各種証明書・SSH 鍵、クラウドサービスアカウント、各種クラウド構成ディレクトリや IaC 変数、およびデータベースのダンプファイル等 (`*.db`, `*.dump`, `*.bak`, `*.sqlite*`) を除外。
+  - `.vscode/settings.json` により、AI エージェント（Copilot / Cursor 等）のワークスペース走査からシークレットファイル、パッケージマネージャーの設定ファイル (`.npmrc`, `.yarnrc*`（`.yarnrc.yml` を含む）, `.bunfig.toml`, `bunfig.toml`)、各種証明書・SSH 鍵、クラウドサービスアカウント、各種クラウド構成ディレクトリや IaC 変数 (`*.tfvars`, `*.auto.tfvars`)、およびデータベースのダンプファイル等 (`*.db`, `*.dump`, `*.bak`, `*.sqlite*`, `*.sql`)、HTTP Archive (`*.har`) を除外。
 
 ## 2. CI 検知（中央防御層）
 
 PR や Push 時に実行される第二の防御層です。
 
 - **仕組み**: GitHub Actions による継続的なスキャン。
-  - **対象ブランチの拡張**: `pre-commit.yml`, `gitleaks.yml`, `trivy.yml`, `trufflehog.yml`, `codeql.yml`, `osv-scanner.yml`, `actionlint.yml`, `zizmor.yml` といった主要なセキュリティスキャンワークフローは、**デフォルトブランチを含むすべてのブランチ（ワイルドカード `**` を使用）へのプッシュ時およびプルリクエスト時**に自動実行されるよう構成されています。これにより、プルリクエスト作成前のフィーチャーブランチの段階からシークレット漏洩や脆弱性を確実に検知・ブロックします。なお `actionlint.yml` のみ `paths` フィルタ（`.github/workflows/**` 等）を併用しているため、対象ブランチは全ブランチですが、実行されるのは GitHub Actions 関連ファイルが変更されたプッシュ／PR に限られます。
+  - **対象ブランチの拡張**: `pre-commit.yml`, `gitleaks.yml`, `trivy.yml`, `trufflehog.yml`, `codeql.yml`, `osv-scanner.yml`, `actionlint.yml`, `zizmor.yml`, および `dependency-review.yml` といった主要なセキュリティスキャンワークフローは、**すべてのブランチ（ワイルドカード `**` を使用）へのプルリクエスト時**に自動実行されるよう構成されています。これにより、フィーチャーブランチから作成されたプルリクエストでもシークレット漏洩や脆弱性を確実に検知・ブロックします。なお `pre-commit.yml`, `gitleaks.yml`, `trivy.yml`, `trufflehog.yml`, `codeql.yml`, `osv-scanner.yml`, `actionlint.yml`, `zizmor.yml` は `push` トリガーも併せ持つため、プルリクエスト作成前のフィーチャーブランチへの push 時点でも検知が働きます。一方 `dependency-review.yml` は `pull_request` トリガーのみで構成されているため、検知はプルリクエスト作成後に限られます。また `actionlint.yml` のみ `paths` フィルタ（`.github/workflows/**` 等）を併用しているため、実行されるのは GitHub Actions 関連ファイルが変更されたプッシュ／PR に限られます。
   - `pre-commit.yml`: ローカルでセットアップ漏れがあった場合や意図的な `--no-verify` によるバイパスを防ぐため、CI 環境上でリポジトリ全体に対して `pre-commit` フックを強制実行します。
   - `gitleaks.yml`: プッシュ時・PR 差分およびスケジュールでリポジトリ全体の履歴をスキャン。
   - `trivy.yml`: ファイルシステムおよび依存関係のシークレット・脆弱性スキャン。
@@ -36,7 +36,7 @@ PR や Push 時に実行される第二の防御層です。
 - **GitHub Actions 権限の最小化**: すべてのワークフローにおいて Principle of Least Privilege（最小権限の原則）を徹底し、ブラストラジアス（被害範囲）を最小化しています。
   - **トップレベル権限の最小化**: ワークフローのトップレベル `permissions:` は最小化（デフォルトを `contents: read` または `{}` とし、不要な権限を持たせない）しています。
   - **ジョブレベルでの権限付与**: 必要な書き込み・読み取り権限（`security-events: write`, `issues: write`, `pull-requests: write`, `pull-requests: read`, `checks: write`, `actions: read` など）は、各ジョブレベルでのみ明示的に付与しています。さらに、明示的な書き込み権限が不要なジョブであっても、`contents: read` 等の最小限の権限を明示的に定義することで、暗黙的な権限の継承や意図しない動作を防いでいます。
-  - **対象ワークフロー**: `hadolint.yml`, `lighthouse.yml`, `markdownlint.yml`, `pre-commit.yml`, `shellcheck.yml`, `trufflehog.yml` をはじめとする全ての CI セキュリティスキャンワークフローにおいて、各ジョブに必要な権限のみを厳密に割り当てています（例外として OSSF Scorecard は `read-all` を許容）。
+  - **対象ワークフロー**: `hadolint.yml`, `lighthouse.yml`, `markdownlint.yml`, `pre-commit.yml`, `shellcheck.yml`, `trufflehog.yml`, `dependency-review.yml`, `actionlint.yml` をはじめとする全ての CI セキュリティスキャンワークフローにおいて、各ジョブに必要な権限のみを厳密に割り当てています（例外として OSSF Scorecard は `read-all` を許容）。
   - **設定レベルの制限**: なお、GitHub Actions の権限はワークフローレベルまたはジョブレベルでのみ設定可能であり、ステップレベルでは設定できません。
 - **pull_request_target の使用禁止（フォークPRからの漏洩防止）**: フォーク元から悪意あるコードが送られた際、`pull_request_target` トリガーはフォークからの PR であってもベースリポジトリのシークレットにアクセスできてしまうため、漏洩の定番経路となります。本リポジトリでは原則として `pull_request_target` の使用を禁止し、安全な `pull_request` トリガーを使用することで、フォーク PR からの意図しないシークレット流出を防ぎます。
 - **運用上の責任**: CI が落ちた場合、対象のコミットに含まれる漏洩疑いのコードを適切に修正し（必要であればシークレットをローテートし）、マージブロックを解消すること。
@@ -59,7 +59,7 @@ PR や Push 時に実行される第二の防御層です。
 
 ### AIエージェントコンテキストの漏洩防止について
 
-AI エージェントの作業ディレクトリ（`.claude/`, `.cursor/`, `.aider*/`, `.continue/`, `.windsurf/`, `.cline/` など）は、`.gitignore` で除外されていることに加え、万が一ステージングされた場合でも `.gitattributes` によって diff 出力が無効化（`-diff`）されています。これにより、PR レビュー等の過程でエージェントが保持しているシークレットやプロンプト履歴が意図せず露出することを防ぎます。
+AI エージェントの作業ディレクトリ（`.claude/`, `.cursor/`, `.aider*/`, `.continue/`, `.windsurf/`, `.cline/`, `.zeal/` など）は、`.gitignore` で除外されていることに加え、万が一ステージングされた場合でも `.gitattributes` によって diff 出力が無効化（`-diff`）されています。これにより、PR レビュー等の過程でエージェントが保持しているシークレットやプロンプト履歴が意図せず露出することを防ぎます。
 さらに、`.vscode/settings.json` を通じて各種 AI アシスタントのワークスペース走査対象からこれらと特定のファイル群（DB ダンプファイルなど）を除外することで、意図しないコンテキストのインジェストや AI 経由の漏洩を未然に防止しています。
 
 ### detect-secrets によるベースライン管理
@@ -105,8 +105,8 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 ### 新規追加: クラウド構成ファイルと IaC 変数の漏洩防止強化
 
-各種クラウドプロバイダやホスティングプラットフォームの設定ディレクトリ（`.aws/`, `.kube/`, `.gcp/`, `.azure/`, `.vercel/`, `.netlify/`）や、Terraform 等の IaC ツールで利用される変数ファイル（`*.tfvars`）について、`.gitignore`, `.gitattributes`（`-diff`）, および `.vscode/settings.json` での除外設定を強化しました。さらに、`.pre-commit-config.yaml` のローカル専用カスタムフック `forbid-sensitive-files` においてもこれらのファイルのステージングをブロックするように設定しており、意図しないインフラ情報や認証情報の流出をより強固に防いでいます。
+各種クラウドプロバイダやホスティングプラットフォームの設定ディレクトリ（`.aws/`, `.kube/`, `.gcp/`, `.azure/`, `.vercel/`, `.netlify/`）や、Terraform 等の IaC ツールで利用される変数ファイル（`*.tfvars`, `*.auto.tfvars`）について、`.gitignore`, `.gitattributes`（`-diff`）, および `.vscode/settings.json` での除外設定を強化しました。さらに、`.pre-commit-config.yaml` のローカル専用カスタムフック `forbid-sensitive-files` においてもこれらのファイルのステージングをブロックするように設定しており、意図しないインフラ情報や認証情報の流出をより強固に防いでいます。
 
 ### AIエージェントコンテキストの漏洩防止の追加
 
-新たに利用される AI エージェントの作業ディレクトリ（`.roo/` 等）についても、他のツールと同様に `.gitignore`, `.gitattributes`, `.vscode/settings.json`, および `.pre-commit-config.yaml` を用いて、意図しないステージングや diff 出力を防ぐ設定を追加しました。
+新たに利用される AI エージェントの作業ディレクトリ（`.roo/`, `.zeal/` 等）についても、他のツールと同様に `.gitignore`, `.gitattributes`, `.vscode/settings.json`, および `.pre-commit-config.yaml` を用いて、意図しないステージングや diff 出力を防ぐ設定を追加しました。
