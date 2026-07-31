@@ -53,7 +53,7 @@ jobs:
       - name: Setup reviewdog
         uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
         with:
-          reviewdog_version: v0.20.2
+          reviewdog_version: v0.21.0
 
       - name: Run Stylelint with Reviewdog
         env:
@@ -82,7 +82,7 @@ jobs:
       - name: Setup reviewdog
         uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
         with:
-          reviewdog_version: v0.20.2
+          reviewdog_version: v0.21.0
 
       - name: Run Textlint with Reviewdog
         env:
