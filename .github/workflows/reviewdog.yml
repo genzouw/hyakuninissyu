@@ -15,6 +15,7 @@ jobs:
   eslint:
     name: ESLint による自動コードレビュー
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
       pull-requests: write
@@ -28,16 +29,24 @@ jobs:
       - name: Setup Bun Environment
         uses: ./.github/actions/setup-bun-env
 
-      - name: reviewdog による ESLint の実行
-        uses: reviewdog/action-eslint@556a3fdaf8b4201d4d74d406013386aa4f7dab96 # v1
+      - name: Setup reviewdog
+        uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          eslint_flags: 'src/ test/'
+          reviewdog_version: v0.21.0
+
+      - name: Run ESLint with Reviewdog
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -o pipefail
+          bun x eslint -f stylish "src/" "test/" \
+            | reviewdog -f=eslint -name="eslint" -reporter=github-pr-review -fail-on-error
 
   stylelint:
     name: Stylelint による自動コードレビュー
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
       pull-requests: write
@@ -67,6 +76,7 @@ jobs:
   textlint:
     name: Textlint による自動コードレビュー
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
       pull-requests: write

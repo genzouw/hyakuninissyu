@@ -21,6 +21,7 @@ jobs:
   lint:
     name: ESLint (including Cyclomatic Complexity)
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
 
@@ -39,6 +40,7 @@ jobs:
   markuplint:
     name: Markuplint (HTML/Vue accessibility and structure)
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
 
@@ -57,6 +59,7 @@ jobs:
   build:
     name: Build (webpack production bundle)
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
 
@@ -77,6 +80,7 @@ jobs:
   unit:
     name: Unit tests (jest)
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
 
