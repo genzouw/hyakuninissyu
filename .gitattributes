@@ -14,7 +14,7 @@ id_ed25519* -diff
 *credentials*.json -diff
 *service-account*.json -diff
 
-# Network and Git credentials
+# ネットワーク・Git 認証情報
 .git-credentials -diff
 .netrc -diff
 _netrc -diff
