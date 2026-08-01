@@ -122,6 +122,11 @@ id_ed25519*
 .env.*
 !.env.example
 
+# Network and Git credentials
+.git-credentials
+.netrc
+_netrc
+
 # API client environments
 http-client.env.json
 postman_environment.json
