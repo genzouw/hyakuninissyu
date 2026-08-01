@@ -41,7 +41,7 @@ jobs:
         run: |
           set -o pipefail
           bun x eslint -f stylish "src/" "test/" \
-            | reviewdog -f=eslint -name="eslint" -reporter=github-pr-review -fail-on-error
+            | reviewdog -f=eslint -name="eslint" -reporter=github-pr-review -fail-level=any
 
   stylelint:
     name: Stylelint による自動コードレビュー
@@ -71,7 +71,7 @@ jobs:
         run: |
           set -o pipefail
           bun x stylelint "src/**/*.vue" \
-            | reviewdog -f=stylelint -name="stylelint" -reporter=github-pr-review -fail-on-error
+            | reviewdog -f=stylelint -name="stylelint" -reporter=github-pr-review -fail-level=any
 
   textlint:
     name: Textlint による自動コードレビュー
