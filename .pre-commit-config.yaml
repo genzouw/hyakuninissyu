@@ -48,6 +48,13 @@ repos:
         description: Detect spelling mistakes using typos
   - repo: local
     hooks:
+      - id: forbid-pull-request-target
+        name: forbid pull_request_target in GitHub Actions
+        entry: 'pull_request_target'
+        language: pygrep
+        files: '^\.github/workflows/.*\.ya?ml$'
+        args: ['-i']
+        description: 'フォークPRからのシークレット漏洩を防ぐため、pull_request_target の使用は禁止されています。pull_request を使用してください。'
       - id: forbid-sensitive-files
         name: forbid sensitive files and AI agent traces
         entry: 意図しない機密ファイルまたはAIエージェントの作業履歴がステージングされています。
