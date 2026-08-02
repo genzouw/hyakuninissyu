@@ -50,7 +50,7 @@
 ### 1.3 MAY — 採用してよい構成
 
 - **MAY**: GitHub Marketplace の「公開 OSS リポジトリ向け完全無料プラン」で提供される Action / App。
-- **MAY**: GitHub App の「公開 OSS リポジトリ向け完全無料枠」で、API キーの登録が不要なもの (例: CodeRabbit / Qodo Merge / Gemini Code Assist の OSS 無料枠)。
+- **MAY**: GitHub App の「公開 OSS リポジトリ向け完全無料枠」で、API キーの登録が不要なもの (例: CodeRabbit / Qodo Merge の OSS 無料枠)。
 - **MAY**: 完全無料で配布されている GitHub Action (Marketplace 登録の有無は問わない)。
 - **MAY**: ローカル LLM (Ollama / llama.cpp 等) を GitHub-hosted runner 上で動作させる、Secrets 不要の自動化。
 - **MAY**: リポジトリ内で完結する Shell スクリプト / Bun スクリプト / Make ターゲット (外部 SaaS 連携を伴わないもの)。
@@ -89,7 +89,7 @@
 
 特に以下の領域は既に十分に網羅されているため、新規追加の PR は不要です。
 
-- **AI コードレビュー / AI コード補助**: CodeRabbit / Qodo Merge / Gemini Code Assist の 3 系統が稼働中。Gemini / OpenAI / Claude 等の API キーを使う追加 AI コードレビュー Action は **MUST NOT**。
+- **AI コードレビュー / AI コード補助**: CodeRabbit / Qodo Merge の 2 系統が稼働中。Gemini / OpenAI / Claude 等の API キーを使う追加 AI コードレビュー Action は **MUST NOT**。
 - **シークレット検知**: Gitleaks / TruffleHog / pre-commit + detect-secrets の 3 重化で十分。GitGuardian 等の追加 SaaS は不要。
 - **依存脆弱性スキャン**: Trivy / OSV-Scanner / Dependency Review / Dependabot の 4 重化で十分。Snyk 等の追加 SaaS は不要。
 
