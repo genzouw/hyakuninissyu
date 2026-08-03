@@ -6,7 +6,7 @@
 
 開発者および AI エージェントのローカル環境でのコミットを防ぐ第一の防御層です。
 
-- **仕組み**: Husky の `pre-commit` フック (`.husky/pre-commit`) により `pre-commit run` を呼び出し、`.pre-commit-config.yaml` で定義された `gitleaks`、`trufflehog`、`detect-private-key`、`detect-aws-credentials` などを包括的に実行します。
+- **仕組み**: Husky の `pre-commit` フック (`.husky/pre-commit`) により `pre-commit run` を呼び出し、`.pre-commit-config.yaml` で定義された `gitleaks`、`trufflehog`、`detect-private-key`、`detect-aws-credentials`、`actionlint` などを包括的に実行します。
   - 加えて、`.pre-commit-config.yaml` にカスタムローカルフック (`forbid-sensitive-files`) を導入し、`.env` ファイル、各種キーファイル (`*.pem`, `*.key`)、インフラ状態ファイル (`*.tfstate`, `*.tfvars`, `*.auto.tfvars`)、各種証明書や SSH 鍵（`*.cert`, `*.p12`, `id_rsa`等）、クラウドサービスアカウント（`*service-account*.json`）、各種クラウド構成ディレクトリ (`.aws/`, `.kube/`, `.gcp/`, `.azure/`, `.vercel/`, `.netlify/`)、パッケージマネージャー設定 (`.npmrc`, `.yarnrc*`, `.bunfig.toml`, `bunfig.toml`)、DB ダンプ (`*.db`, `*.dump`, `*.sqlite*`, `*.sql`等)、HTTP Archive (`*.har`)、作業ログ・デバッグ出力等のログファイル（`*.log`）、および AI エージェントの作業ディレクトリ (`.claude/`, `.cursor/`, `.aider*/`, `.roo/`, `.zeal/` 等) などのステージング・コミットを明示的にブロックしています。
 - **設定ファイル**: `.pre-commit-config.yaml` および `.husky/pre-commit`
 - **開発者の責任**: リポジトリをクローンしたのち、Python 仮想環境（例: `python3 -m venv venv && source venv/bin/activate`）を利用して `pip install -r requirements.txt` および `pre-commit install` を実行し、ローカル環境で包括的なシークレット検知が機能するようにすること。システム依存関係の競合を避けるため、仮想環境の利用を推奨します。
@@ -14,6 +14,7 @@
 - **補完**:
   - `pre-commit` にて `trufflehog` フックを動作させ、プロバイダの API に到達可能な「アクティブなシークレット」のローカル環境でのコミットを防止します（正規表現ベースの `gitleaks` を補完する仕組みです）。
   - `pre-commit` のローカルフック（`forbid-sensitive-files`）にて、`.env` ファイル、各種資格情報（`credentials`, `*.pem`, `*.tfstate`等）、API クライアント環境設定ファイル（`http-client.env.json`, `postman_environment.json`, `insomnia_*.json`）、および AI エージェントの作業履歴（`.claude/`, `.cursor/`, `.aider*` 等）が誤ってステージングされることを明示的にブロックしています。
+  - `actionlint` をローカルフックとして導入し、GitHub Actions ワークフローの設定ミス（`pull_request_target` の不適切な使用やシェルインジェクションなど）をコミット前に検出して未然に防ぎます。
   - `.gitignore` にて各種シークレットファイルや AI エージェントの作業履歴を除外し、事故を根本から防止。
   - `.gitattributes` にてシークレット関連ファイルの diff 出力を無効化（`-diff`）し、レビュー時の意図しない露出を防止。
   - `.vscode/settings.json` により、AI エージェント（Copilot / Cursor 等）のワークスペース走査からシークレットファイル、パッケージマネージャーの設定ファイル (`.npmrc`, `.yarnrc*`（`.yarnrc.yml` を含む）, `.bunfig.toml`, `bunfig.toml`)、各種証明書・SSH 鍵、クラウドサービスアカウント、各種クラウド構成ディレクトリや IaC 変数 (`*.tfvars`, `*.auto.tfvars`)、およびデータベースのダンプファイル等 (`*.db`, `*.dump`, `*.bak`, `*.sqlite*`, `*.sql`)、HTTP Archive (`*.har`) を除外。
