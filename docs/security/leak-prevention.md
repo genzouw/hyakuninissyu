@@ -14,7 +14,7 @@
 - **補完**:
   - `pre-commit` にて `trufflehog` フックを動作させ、プロバイダの API に到達可能な「アクティブなシークレット」のローカル環境でのコミットを防止します（正規表現ベースの `gitleaks` を補完する仕組みです）。
   - `pre-commit` のローカルフック（`forbid-sensitive-files`）にて、`.env` ファイル、各種資格情報（`credentials`, `*.pem`, `*.tfstate`等）、API クライアント環境設定ファイル（`http-client.env.json`, `postman_environment.json`, `insomnia_*.json`）、および AI エージェントの作業履歴（`.claude/`, `.cursor/`, `.aider*` 等）が誤ってステージングされることを明示的にブロックしています。
-  - `actionlint` をローカルフックとして導入し、GitHub Actions ワークフローの設定ミス（`pull_request_target` の不適切な使用やシェルインジェクションなど）をコミット前に検出して未然に防ぎます。
+  - `actionlint` をローカルフックとして導入し、GitHub Actions ワークフローの構文エラーや式の誤り、シェルインジェクションのリスクなどをコミット前に検出して未然に防ぎます（`pull_request_target` の使用禁止は、ローカルフック `forbid-pull-request-target` および CI の `zizmor.yml` が担当します）。
   - `.gitignore` にて各種シークレットファイルや AI エージェントの作業履歴を除外し、事故を根本から防止。
   - `.gitattributes` にてシークレット関連ファイルの diff 出力を無効化（`-diff`）し、レビュー時の意図しない露出を防止。
   - `.vscode/settings.json` により、AI エージェント（Copilot / Cursor 等）のワークスペース走査からシークレットファイル、パッケージマネージャーの設定ファイル (`.npmrc`, `.yarnrc*`（`.yarnrc.yml` を含む）, `.bunfig.toml`, `bunfig.toml`)、各種証明書・SSH 鍵、クラウドサービスアカウント、各種クラウド構成ディレクトリや IaC 変数 (`*.tfvars`, `*.auto.tfvars`)、およびデータベースのダンプファイル等 (`*.db`, `*.dump`, `*.bak`, `*.sqlite*`, `*.sql`)、HTTP Archive (`*.har`) を除外。
