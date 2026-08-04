@@ -118,3 +118,7 @@ Thank you for your contributions!
 ## 追加の注意事項: GitHub Secret Scanning と Push Protection
 
 本リポジトリでは GitHub ネイティブの **Push Protection** などの機能によって、シークレットを含むコミットのプッシュがサーバー側で直接拒否される場合があります。エラーメッセージが表示された場合は、必ずガイドラインに従い、シークレットをコミット履歴から取り除いてから再度プッシュしてください。
+
+開発者・メンテナは、意図しない認証情報やシークレットの流出をサーバーサイドで未然に防ぐため、必ずリポジトリの `Settings` → `Security` → `Code security and analysis` から **Secret scanning** と **Push protection** が有効 (Enable) になっていることを定期的に確認してください。
+
+また、CI 上の TruffleHog および Gitleaks は、**現在有効なシークレットだけでなく、無効化済み・ローテート済みのシークレットパターンもすべて検知してブロックするよう厳格に設定**されています。ダミー値を使用する場合でも、実際のシークレットと見なされる高エントロピーな文字列は避けてください。
