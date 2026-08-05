@@ -54,6 +54,13 @@ PR や Push 時に実行される第二の防御層です。
   - GitHub Secret Scanning と Push Protection（リポジトリの Settings → Security → Code security and analysis から必ず有効化すること）。
 - **対応**: 過去の履歴に漏洩が検知された場合や、依存パッケージに脆弱性が発見された場合は、すみやかにセキュリティポリシー（`SECURITY.md`）に従って対処すること。
 
+### pre-commit ローカル防御フックの自動最新化
+
+ローカルおよび CI 環境で動作する `pre-commit` フック（`gitleaks` や `trufflehog` など）のシークレット検知ルールを常に最新状態に保つため、定期的な自動更新メカニズムを導入しています。
+
+- `.github/workflows/pre-commit-autoupdate.yml` により、定期的に `pre-commit autoupdate` が実行され、`.pre-commit-config.yaml` に定義されている各種フックのリビジョンを最新に更新する Pull Request が自動作成されます。
+- これにより、新たなシークレットパターンへの対応漏れを防ぎ、CI とローカル環境間のバージョン乖離（ドリフト）を解消します。
+
 ## 万が一漏洩してしまった場合
 
 シークレットがプッシュされてしまった場合は、**該当のシークレットを直ちに無効化（ローテート）してください**。コミット履歴からの削除（force push 等）だけでは、すでにサードパーティに漏洩しているリスクを排除できません。その後、本ドキュメントや防御設定のギャップを埋める改善を検討してください。
