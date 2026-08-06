@@ -10,13 +10,18 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  # 固定ブランチ chore/pre-commit-autoupdate を更新する単一リソースのため、
+  # github.ref に依らず固定キーとし、異なる ref からの同時実行も直列化する。
+  group: ${{ github.workflow }}
   # schedule 実行中に workflow_dispatch がキャンセルすると自動更新サイクルを
   # 取りこぼす可能性があるため false を維持する（pr_conflict_notify.yml と同方針）。
   cancel-in-progress: false
 
 jobs:
   auto-update:
+    # workflow_dispatch は任意 ref から起動できるが、更新対象・PR base は
+    # 常に main を前提としているため、main 以外からの実行は行わない。
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: write
