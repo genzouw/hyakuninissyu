@@ -49,7 +49,6 @@
       "**/*.ico",
       "**/*.lock",
       "bun.lockb",
-      "bun.lock",
       "**/*.sarif",
       ".secrets.baseline"
     ]
