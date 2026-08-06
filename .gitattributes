@@ -41,7 +41,7 @@ insomnia_*.json -diff
 .bunfig.toml -diff
 bunfig.toml -diff
 
-# IDE workspaces and OS files
+# IDEワークスペースおよびOSファイル
 .idea/** -diff
 .vscode/launch.json -diff
 .DS_Store -diff

@@ -88,7 +88,7 @@ typings/
 
 dist/
 
-# IDE workspaces and OS files (Security/Leak Prevention)
+# IDEワークスペースおよびOSファイル（セキュリティ/漏洩防止）
 .idea/
 .vscode/launch.json
 .DS_Store
