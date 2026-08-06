@@ -11,7 +11,9 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # schedule 実行中に workflow_dispatch がキャンセルすると自動更新サイクルを
+  # 取りこぼす可能性があるため false を維持する（pr_conflict_notify.yml と同方針）。
+  cancel-in-progress: false
 
 jobs:
   auto-update:
@@ -42,8 +44,8 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: chore/pre-commit-autoupdate
-          title: "chore(security): 🔒 自動更新: pre-commit hooks のアップデート"
-          commit-message: "chore(security): 🔒 pre-commit autoupdate を実行してフックを最新化"
+          title: 'chore(security): 🔒 自動更新: pre-commit hooks のアップデート'
+          commit-message: 'chore(security): 🔒 pre-commit autoupdate を実行してフックを最新化'
           body: |
             ## 背景
 
