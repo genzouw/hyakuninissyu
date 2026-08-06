@@ -90,7 +90,7 @@ dist/
 
 # IDEワークスペースおよびOSファイル（セキュリティ/漏洩防止）
 .idea/
-.vscode/launch.json
+**/.vscode/launch.json
 .DS_Store
 
 # AI agents
