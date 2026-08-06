@@ -34,3 +34,11 @@ This file provides context about the project for AI assistants and LLMs, formatt
 - Vue Router のルーティングパラメータはクエリストリングではなく、パスに直接埋め込んでください (例: `/playing/:countOfQuestions`)。
 - Webpack の起動 (dev, build) には必ず `NODE_OPTIONS=--openssl-legacy-provider` を指定してください。
 - `localStorage` に新しいキーを追加する場合は、既存のキー (`dailyChallengeLastCompleted`, `dailyChallengeStreak`, `collectedPoemIds`) と衝突しないようにしてください。
+
+## Optional
+ローカル実行と検証のためのコマンドライン (Command Line Instructions):
+- インストール (Install): `bun install`
+- 開発サーバー起動 (Dev Server): `bun run dev`
+- Lint (Linting): `bun run lint`
+- ユニットテスト (Unit Tests): `bun run unit`
+- 本番ビルド (Build): `bun run build`

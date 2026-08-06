@@ -12,7 +12,7 @@
     "test": "bun run unit",
     "lint": "eslint src test/unit && stylelint \"src/**/*.vue\"",
     "markuplint": "markuplint \"src/**/*.vue\"",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider node build/build.mjs && bun run repomix --style markdown --output dist/llms-full.txt",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider node build/build.mjs && bun run repomix --style markdown --output dist/llms-full.txt --quiet",
     "knip": "knip",
     "textlint": "textlint \"**/*.md\"",
     "prepare": "husky"
