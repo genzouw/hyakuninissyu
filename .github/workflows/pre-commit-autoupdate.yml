@@ -1,0 +1,89 @@
+name: Auto-update pre-commit hooks
+
+on:
+  schedule:
+    # 毎週月曜 06:00 JST (= 日曜 21:00 UTC) に定期実行
+    - cron: '0 21 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  # 固定ブランチ chore/pre-commit-autoupdate を更新する単一リソースのため、
+  # github.ref に依らず固定キーとし、異なる ref からの同時実行も直列化する。
+  group: ${{ github.workflow }}
+  # schedule 実行中に workflow_dispatch がキャンセルすると自動更新サイクルを
+  # 取りこぼす可能性があるため false を維持する（pr_conflict_notify.yml と同方針）。
+  cancel-in-progress: false
+
+jobs:
+  auto-update:
+    # workflow_dispatch は任意 ref から起動できるが、更新対象・PR base は
+    # 常に main を前提としているため、main 以外からの実行は行わない。
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install pre-commit
+        run: pip install -r requirements.txt
+
+      - name: Run pre-commit autoupdate
+        run: pre-commit autoupdate
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@5e914681df9dc83aa4e4905692ca88beb2f9e91f # v7.0.5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: chore/pre-commit-autoupdate
+          title: 'chore(security): 🔒 自動更新: pre-commit hooks のアップデート'
+          commit-message: 'chore(security): 🔒 pre-commit autoupdate を実行してフックを最新化'
+          body: |
+            ## 背景
+
+            `.pre-commit-config.yaml` で定義されているローカル防御層（gitleaks, trufflehog 等）の検知ルールを最新化するため、`pre-commit autoupdate` を実行しました。
+
+            ## 変更内容
+
+            - pre-commit hooks のバージョン更新
+
+            ## 検知漏れリスクと補完策
+
+            - 検知できないケース: メジャーアップデートによる破壊的変更がある場合
+            - 補完策: PR の CI チェック（pre-commit.yml 等）で検証
+
+            ## マージ前に必要な手動作業（チェックリスト）
+
+            レビュアーは PR をマージする前に必ず以下を実施してください。
+
+            - [ ] CI（`pre-commit.yml` 等）がパスしていることを確認
+            - [ ] 破壊的変更がないか変更内容を確認
+
+            ## マージ後の確認手順
+
+            - [ ] ローカルで `pre-commit install` を再実行するか、次のコミットで自動的に新しいバージョンが使われることを確認
+
+            ## ロールバック手順
+
+            問題が出た場合は、この PR を Revert してください。
+
+            ## 参考情報
+
+            - 公式ドキュメント: https://pre-commit.com/#pre-commit-autoupdate
+          labels: |
+            security
+            dependencies
+          delete-branch: true
