@@ -4,7 +4,7 @@
 
 ## 現状認識（事前調査結果のサマリー）
 
-- 既存防御策: `pre-commit` (gitleaks, detect-secrets, trufflehog)、CI 上の各種脆弱性スキャン (trivy, codeql, osv-scanner)、AI作業ディレクトリのコミットブロックが導入済み。
+- 既存防御策: `pre-commit` (gitleaks, detect-secrets, trufflehog)、CI 上の各種脆弱性スキャン (trivy, codeql, osv-scanner)、AI 作業ディレクトリのコミットブロックが導入済み。
 - 未カバー領域: `.idea/`、`.vscode/launch.json`、`.DS_Store` といった IDE ワークスペースや OS 依存ファイルのブロック設定。
 - 直近の漏洩リスク兆候: 現在のところ Git history への混入は確認されていませんが、潜在的な漏洩ベクトルとして残存しています。
 
