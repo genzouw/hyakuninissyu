@@ -88,6 +88,11 @@ typings/
 
 dist/
 
+# IDE workspaces and OS files (Security/Leak Prevention)
+.idea/
+.vscode/launch.json
+.DS_Store
+
 # AI agents
 .claude/
 !.cursor/rules/

@@ -1,5 +1,8 @@
 {
   "search.exclude": {
+    "**/.idea": true,
+    "**/.vscode/launch.json": true,
+    "**/.DS_Store": true,
     "**/.claude": true,
     "**/.cursor": true,
     "**/.aider*": true,
@@ -54,6 +57,9 @@
     "**/.netlify": true
   },
   "files.exclude": {
+    "**/.idea": true,
+    "**/.vscode/launch.json": true,
+    "**/.DS_Store": true,
     "**/http-client.env.json": true,
     "**/postman_environment.json": true,
     "**/insomnia_*.json": true,
