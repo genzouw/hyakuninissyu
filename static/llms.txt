@@ -36,9 +36,9 @@ This file provides context about the project for AI assistants and LLMs, formatt
 - `localStorage` に新しいキーを追加する場合は、既存のキー (`dailyChallengeLastCompleted`, `dailyChallengeStreak`, `collectedPoemIds`) と衝突しないようにしてください。
 
 ## Optional
-ローカル実行と検証のためのコマンドライン (Command Line Instructions):
-- インストール (Install): `bun install`
-- 開発サーバー起動 (Dev Server): `bun run dev`
-- Lint (Linting): `bun run lint`
-- ユニットテスト (Unit Tests): `bun run unit`
-- 本番ビルド (Build): `bun run build`
+ローカル実行と検証のためのコマンドライン:
+- [インストール](https://github.com/genzouw/hyakuninissyu/blob/main/package.json): `bun install`
+- [開発サーバー起動](https://github.com/genzouw/hyakuninissyu/blob/main/package.json#L9): `bun run dev`
+- [静的解析](https://github.com/genzouw/hyakuninissyu/blob/main/package.json#L13): `bun run lint`
+- [ユニットテスト](https://github.com/genzouw/hyakuninissyu/blob/main/package.json#L11): `bun run unit`
+- [本番ビルド](https://github.com/genzouw/hyakuninissyu/blob/main/package.json#L15): `bun run build`
