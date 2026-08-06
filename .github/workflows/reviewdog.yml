@@ -102,3 +102,53 @@ jobs:
           set -o pipefail
           bun x textlint -f checkstyle "**/*.md" \
             | reviewdog -f=checkstyle -name="textlint" -reporter=github-pr-review -fail-on-error || true
+
+  markuplint:
+    name: Markuplint による自動コードレビュー
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Bun Environment
+        uses: ./.github/actions/setup-bun-env
+
+      - name: Setup reviewdog
+        uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
+        with:
+          reviewdog_version: v0.21.0
+
+      - name: Run Markuplint with Reviewdog
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          markuplint_json="$(mktemp)"
+
+          # markuplint は違反を検出すると非ゼロ終了しうる。pipefail でジョブ全体が
+          # 失敗しないよう、出力を一時ファイルへ退避して終了コードを切り離す。
+          markuplint_exit=0
+          bun x markuplint -f JSON "src/**/*.vue" > "${markuplint_json}" || markuplint_exit=$?
+
+          # JSON として妥当でない場合は markuplint 自体の実行エラーとみなし、ジョブへ伝播させる。
+          if ! jq -e 'type == "array"' "${markuplint_json}" > /dev/null 2>&1; then
+            echo "::error::markuplint の JSON 出力が不正です (exit code: ${markuplint_exit})"
+            cat "${markuplint_json}"
+            exit 1
+          fi
+
+          # markuplint の filePath は絶対パスのため、reviewdog が PR の差分と突き合わせられるよう
+          # リポジトリルートからの相対パスへ変換する。
+          # reviewdog の実行エラー・API エラーはそのままジョブへ伝播させる。
+          jq -r --arg root "${GITHUB_WORKSPACE}/" \
+            '.[] | "\(.filePath | ltrimstr($root)):\(.line):\(.col): \(.message) (\(.ruleId))"' \
+            "${markuplint_json}" \
+            | reviewdog -efm="%f:%l:%c: %m" -name="markuplint" -reporter=github-pr-review -fail-level=none
