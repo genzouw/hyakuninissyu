@@ -41,6 +41,11 @@ insomnia_*.json -diff
 .bunfig.toml -diff
 bunfig.toml -diff
 
+# IDEワークスペースおよびOSファイル
+**/.idea/** -diff
+**/.vscode/launch.json -diff
+.DS_Store -diff
+
 # AI agent working directories
 .claude/** -diff
 .cursor/** -diff

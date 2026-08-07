@@ -1,40 +1,39 @@
 ## 背景
 
-（事前調査で把握した現状と、検出されたギャップを 5-8 行で）
-事前調査において、本リポジトリの既存防御策として `gitleaks` や `trufflehog` といったスキャンツールがすでに導入されており、トップレベルでの `permissions: contents: read` は概ね設定されていることが確認できました。しかし、一部のワークフロー (`hadolint.yml`, `lighthouse.yml`, `markdownlint.yml`, `pre-commit.yml`, `shellcheck.yml`, `trufflehog.yml`) ではジョブレベルで `permissions` が明示的に設定されていませんでした。Principle of Least Privilege（最小権限の原則）を徹底するためには、ワークフローレベルだけでなく、個々のジョブレベルにおいても必要最小限の権限（`contents: read`等）を明示することが推奨されます。
+事前調査の結果、本リポジトリは `gitleaks`、`trufflehog`、`actionlint`、`trivy` など多数の CI 検知・ローカル防御（`forbid-sensitive-files` 含む）を備え、極めて堅牢なセキュリティ体制が構築されていることを確認しました。一方で、ローカル開発環境の IDE 固有設定ファイル (`.idea/`, `.vscode/launch.json`) や OS 自動生成ファイル (`.DS_Store`) については、明示的なステージング・ブロックや diff 出力無効化の対象から漏れているという僅かなギャップが見つかりました。これらのファイルは開発者のローカル環境変数や一時的なクレデンシャルを含みやすく、意図せずコミットされるリスクがあります。
 
 ## 現状認識（事前調査結果のサマリー）
 
-- 既存防御策: `gitleaks.yml`, `codeql.yml`, `trivy.yml` 等多数のセキュリティワークフローが導入済み。
-- 未カバー領域: `hadolint.yml` 等の一部ワークフローで、ジョブレベルの `permissions` 明示が欠落。
-- 直近の漏洩リスク兆候: `.env` が git history に存在しないこと等を確認。実害はないものの、ジョブレベルでの権限暗黙継承による意図せぬ権限行使リスクが残存。
+- 既存防御策: `pre-commit` (gitleaks, detect-secrets, trufflehog)、CI 上の各種脆弱性スキャン (trivy, codeql, osv-scanner)、AI 作業ディレクトリのコミットブロックが導入済み。
+- 未カバー領域: `.idea/`、`.vscode/launch.json`、`.DS_Store` といった IDE ワークスペースや OS 依存ファイルのブロック設定。
+- 直近の漏洩リスク兆候: 現在のところ Git history への混入は確認されていませんが、潜在的な漏洩ベクトルとして残存しています。
 
 ## このPRで導入・強化するもの
 
-- 対象: 既存の `.github/workflows/hadolint.yml` 他 5 件のワークフロー、および `docs/security/leak-prevention.md`。
-- ツール名とバージョン: GitHub Actions の permissions 設定（ネイティブ機能）。
-- 期待される効果: 全てのジョブにおいて実行権限を最小限に制限することで、悪意のある変更やアクションの脆弱性を突かれた場合の被害範囲（ブラストラジアス）を極小化する。
+- 対象: `.pre-commit-config.yaml` のローカルフック (`forbid-sensitive-files`) の拡張、および `.gitignore`, `.gitattributes`, `.vscode/settings.json` の除外設定強化。
+- ツール名とバージョン: 既存の `pre-commit` カスタムフックおよび Git/VS Code ネイティブ機能。
+- 期待される効果: IDE のワークスペース設定ファイルや OS 自動生成ファイルが誤ってステージング・コミットされることをローカル環境で未然にブロックし、diff 上の露出も防止します。
 
 ## 検知漏れリスクと補完策
 
-- 検知できないケース: 万が一 GitHub Actions ランナー自体が侵害された場合など。
-- 補完策: 本 PR での最小権限の徹底に加え、`scorecard.yml` などの既存ワークフローを通じて継続的に構成の健全性を監視・評価。
+- 検知できないケース: 今回追加したパターン以外の未知の IDE 設定ファイルや、拡張子が通常と異なるテスト用のシークレット。
+- 補完策: 既存の `gitleaks` や `trufflehog`（事前設定済み）のパターンマッチ、および GitHub Secret Scanning による多層防御で補完されます。
 
 ## マージ前に必要な手動作業（チェックリスト）
 
-レビュアーは PR をマージする前に必ず以下を実施してください。
-本 PR の CI は手動作業完了を前提に通る設計です。
+本 PR の CI は手動作業完了を前提に通る設計です（本件は設定の追加のみであり、追加の手動設定は不要です）。
 
-- [ ] GitHub repo settings → Actions → General の "Workflow permissions" が "Read repository contents and packages permissions" に設定されていることを確認。
+- [x] （特になし）既存の pre-commit や Secret Scanning 設定が維持されていることを確認。
 
 ## マージ後の確認手順
 
-- [ ] 次の push / PR で導入した workflow (hadolint, lighthouse 等) が green になることを確認。
+- [ ] 次の push / PR で導入したワークフローが green になることを確認。
+- [ ] 開発者各自のローカルで `.idea/` や `.vscode/launch.json` がステージングできず、ブロックされることを確認。
 
 ## ロールバック手順
 
-万が一権限不足で CI が失敗した場合、影響のあるジョブから `permissions` ブロックを削除（または必要な権限を明示的に追加）してリバートしてください。
+設定による副作用（正当な設定ファイルがコミットできない等）が発生した場合は、`.pre-commit-config.yaml`、`.gitignore`、`.gitattributes`、`.vscode/settings.json` の変更を Revert してください。
 
 ## 参考情報
 
-- 公式ドキュメント: https://docs.github.com/ja/actions/security-guides/security-hardening-for-github-actions
+- 直近の関連 PR / Issue: なし（セキュリティ向上策の一環として実施）
