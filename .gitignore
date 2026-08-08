@@ -94,7 +94,8 @@ dist/
 .DS_Store
 
 # AI agents
-.claude/
+.claude/*
+!.claude/rules/
 !.cursor/rules/
 .cursor/*
 .aider*
