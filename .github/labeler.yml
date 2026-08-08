@@ -1,21 +1,24 @@
 frontend:
-  - any:
-      - 'src/**/*'
-      - 'build/**/*'
-      - 'config/**/*'
-      - 'static/**/*'
-      - 'test/**/*'
-      - 'package.json'
-      - 'eslint.config.js'
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/**/*'
+          - 'build/**/*'
+          - 'config/**/*'
+          - 'static/**/*'
+          - 'test/**/*'
+          - 'package.json'
+          - 'eslint.config.js'
 
 ci:
-  - any:
-      - '.github/workflows/**/*'
-      - '.github/actions/**/*'
-      - '.pre-commit-config.yaml'
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/workflows/**/*'
+          - '.github/actions/**/*'
+          - '.pre-commit-config.yaml'
 
 documentation:
-  - any:
-      - '*.md'
-      - 'docs/**/*'
-      - 'static/llms.txt'
+  - changed-files:
+      - any-glob-to-any-file:
+          - '*.md'
+          - 'docs/**/*'
+          - 'static/llms.txt'
