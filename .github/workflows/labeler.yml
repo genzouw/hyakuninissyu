@@ -1,7 +1,9 @@
 name: 'Pull Request Labeler'
 
 on:
-  pull_request_target:
+  # フォークPRからのシークレット漏洩リスクを避けるため、
+  # リポジトリ全体の方針として `pull_request` トリガーのみを使用する。
+  pull_request:
     types: [opened, synchronize, reopened]
 
 concurrency:
