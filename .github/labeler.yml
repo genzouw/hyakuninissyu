@@ -19,6 +19,6 @@ ci:
 documentation:
   - changed-files:
       - any-glob-to-any-file:
-          - '*.md'
+          - '**/*.md'
           - 'docs/**/*'
           - 'static/llms.txt'
