@@ -14,6 +14,8 @@
     "AGENTS.md",
     "CONTRIBUTING.md",
     "SECURITY.md",
+    "CLAUDE.md",
+    ".claude/rules/**",
     "cody.json",
     ".cursorrules",
     ".cursor/rules/**",
@@ -48,6 +50,7 @@
       "**/*.png",
       "**/*.ico",
       "**/*.lock",
+      "bun.lock",
       "bun.lockb",
       "**/*.sarif",
       ".secrets.baseline"
