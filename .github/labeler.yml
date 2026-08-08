@@ -1,0 +1,25 @@
+frontend:
+  - changed-files:
+      - any-glob-to-any-file:
+          - 'src/**/*'
+          - 'build/**/*'
+          - 'config/**/*'
+          - 'static/**/*'
+          - 'test/**/*'
+          - 'package.json'
+          - 'eslint.config.js'
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.github/workflows/**/*'
+          - '.github/actions/**/*'
+          - '.github/*.yml'
+          - '.pre-commit-config.yaml'
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - '**/*.md'
+          - 'docs/**/*'
+          - 'static/llms.txt'
