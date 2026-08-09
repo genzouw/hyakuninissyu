@@ -32,6 +32,8 @@ GitHub App の有効化、Marketplace App のインストール、ブランチ�
 (※手動セットアップが不要な場合は「特になし」と記載してください)
 -->
 
+- [ ] (必須) リポジトリの `Settings` → `Security` → `Code security and analysis` から、**Secret scanning** と **Push protection** が有効 (Enable) になっていることを確認・有効化しましたか？
+
 ## 6. 想定リスクとロールバック手順
 
 <!--

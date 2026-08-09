@@ -7,6 +7,7 @@
 開発者および AI エージェントのローカル環境でのコミットを防ぐ第一の防御層です。
 
 - **仕組み**: Husky の `pre-commit` フック (`.husky/pre-commit`) により `pre-commit run` を呼び出し、`.pre-commit-config.yaml` で定義された `gitleaks`、`trufflehog`、`detect-private-key`、`detect-aws-credentials`、`actionlint` などを包括的に実行します。
+  - `gitleaks` は `.gitleaks.toml` の拡張設定により、シークレットだけでなく個人情報（PII: 運用者やテストユーザーのメールアドレス等）のコミットも検知・ブロックします。
   - 加えて、`.pre-commit-config.yaml` にカスタムローカルフック (`forbid-sensitive-files`) を導入し、`.env` ファイル、各種キーファイル (`*.pem`, `*.key`)、インフラ状態ファイル (`*.tfstate`, `*.tfvars`, `*.auto.tfvars`)、各種証明書や SSH 鍵（`*.cert`, `*.p12`, `id_rsa`等）、クラウドサービスアカウント（`*service-account*.json`）、各種クラウド構成ディレクトリ (`.aws/`, `.kube/`, `.gcp/`, `.azure/`, `.vercel/`, `.netlify/`)、パッケージマネージャー設定 (`.npmrc`, `.yarnrc*`, `.bunfig.toml`, `bunfig.toml`)、DB ダンプ (`*.db`, `*.dump`, `*.sqlite*`, `*.sql`等)、HTTP Archive (`*.har`)、作業ログ・デバッグ出力等のログファイル（`*.log`）、および AI エージェントの作業ディレクトリ (`.claude/`, `.cursor/`, `.aider*/`, `.roo/`, `.zeal/` 等) などのステージング・コミットを明示的にブロックしています。
 - **設定ファイル**: `.pre-commit-config.yaml` および `.husky/pre-commit`
 - **開発者の責任**: リポジトリをクローンしたのち、Python 仮想環境（例: `python3 -m venv venv && source venv/bin/activate`）を利用して `pip install -r requirements.txt` および `pre-commit install` を実行し、ローカル環境で包括的なシークレット検知が機能するようにすること。システム依存関係の競合を避けるため、仮想環境の利用を推奨します。

@@ -1,6 +1,22 @@
 [extend]
 useDefault = true
 
+[[rules]]
+id = "pii-email"
+description = "Personal Identifiable Information: Email Address"
+regex = '''(?i)([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})'''
+secretGroup = 1
+entropy = 0.0
+
+[rules.allowlist]
+description = "Ignore dummy or CI-related email addresses"
+regexes = [
+    '''(?i)@example\.com''',
+    '''(?i)@test\.com''',
+    '''(?i)github-actions.*@github\.com''',
+    '''(?i)dependabot.*@github\.com''',
+]
+
 [allowlist]
 description = "detect-secrets のベースラインファイルは hashed_secret（SHA1 ハッシュ値）を含むが実際のシークレットではないため除外"
 paths = ['''.secrets.baseline''']
