@@ -9,12 +9,12 @@ secretGroup = 1
 entropy = 0.0
 
 [rules.allowlist]
-description = "Ignore dummy or CI-related email addresses"
+description = "Ignore known CI bot email addresses, the maintainer's intentionally published contact address (exact match only, to prevent bypass via subdomain/suffix tricks e.g. user@test.com.evil), and bun patch-file path references (e.g. patches/@scope%2Fpkg@1.2.3.patch) that the email regex misidentifies as addresses"
 regexes = [
-    '''(?i)@example\.com''',
-    '''(?i)@test\.com''',
-    '''(?i)github-actions.*@github\.com''',
-    '''(?i)dependabot.*@github\.com''',
+    '''(?i)^genzouw@gmail\.com$''',
+    '''(?i)^github-actions\[bot\]@users\.noreply\.github\.com$''',
+    '''(?i)^dependabot\[bot\]@users\.noreply\.github\.com$''',
+    '''(?i)\.patch$''',
 ]
 
 [allowlist]
