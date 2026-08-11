@@ -1,10 +1,26 @@
 [extend]
 useDefault = true
 
+[[rules]]
+id = "pii-email"
+description = "Detect Personal Identifiable Information (PII) - Email Address"
+# 正規表現でメールアドレスを検知
+regex = '''(?i)([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})'''
+secretGroup = 1
+entropy = 0.0
+
 [allowlist]
-description = "detect-secrets のベースラインファイルは hashed_secret（SHA1 ハッシュ値）を含むが実際のシークレットではないため除外"
+description = "detect-secrets のベースラインファイルは hashed_secret（SHA1 ハッシュ値）を含むが実際のシークレットではないため除外。また、公開済みメールアドレスやダミーデータ等を除外する。"
 paths = ['''.secrets.baseline''']
 fingerprints = [
   "adb4ae30dcb8b688e6066f83431629ddff07371d:.secrets.baseline:generic-api-key:130",
   "adb4ae30dcb8b688e6066f83431629ddff07371d:.secrets.baseline:generic-api-key:139"
+]
+regexes = [
+  '''(?i)genzouw@gmail\.com''',
+  '''(?i)dummy@example\.com''',
+  '''(?i)test@example\.com''',
+  '''(?i)[a-zA-Z0-9._%+-]+@users\.noreply\.github\.com''',
+  # vue%2Fvue3-jest のパッチファイル名がメールアドレスに誤認されるのを防ぐ
+  '''(?i)vue%2Fvue3-jest@[0-9.]+\.patch'''
 ]
