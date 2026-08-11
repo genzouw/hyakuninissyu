@@ -22,6 +22,8 @@
               <a
                 class="twitter-share-button"
                 :href="TWITTER_SHARE_URL"
+                target="_blank"
+                rel="noopener noreferrer"
                 data-size="large"
                 data-text="ひゃくにんいっしゅをおぼえよう"
                 data-url="https://hyakuninissyu.genzouw.com"
