@@ -7,6 +7,10 @@
 開発者および AI エージェントのローカル環境でのコミットを防ぐ第一の防御層です。
 
 - **仕組み**: Husky の `pre-commit` フック (`.husky/pre-commit`) により `pre-commit run` を呼び出し、`.pre-commit-config.yaml` で定義された `gitleaks`、`trufflehog`、`detect-private-key`、`detect-aws-credentials`、`actionlint` などを包括的に実行します。
+  - `gitleaks` は `.gitleaks.toml` の拡張設定により、シークレットだけでなく個人情報（PII: 運用者やテストユーザーのメールアドレス等）のコミットも検知・ブロックします。ただし `pii-email` ルールには以下の検知範囲の限界があります。
+    - **許可リストの対象**: `genzouw@gmail.com`（メンテナが README/SECURITY/package.json に意図的に公開している連絡先）、CI Bot のコミッターアドレス（`github-actions[bot]@users.noreply.github.com`, `dependabot[bot]@users.noreply.github.com`）、および `bun` のパッチファイルパス（`patches/@scope%2Fpkg@version.patch` 等、メールアドレスと誤認識される文字列）は、完全一致の正規表現で許可リスト化されており検知対象外です。
+    - **検知できない場合がある値**: 難読化された値（例: 全角文字への置換、`[at]` 等への置換、Base64 エンコード）や、正規表現のパターンに一致しない特殊な形式の PII は検知できません。
+    - **GitHub Secret Scanning との併用**: `gitleaks` は正規表現ベースの検知であり完全性を保証しないため、シークレットについては GitHub Secret Scanning（上記「マージ前の手動作業」参照）を併用し、多層防御としてください。`gitleaks` は PII 検知の**一助**であり、完全なカバレッジを保証するものではありません。
   - 加えて、`.pre-commit-config.yaml` にカスタムローカルフック (`forbid-sensitive-files`) を導入し、`.env` ファイル、各種キーファイル (`*.pem`, `*.key`)、インフラ状態ファイル (`*.tfstate`, `*.tfvars`, `*.auto.tfvars`)、各種証明書や SSH 鍵（`*.cert`, `*.p12`, `id_rsa`等）、クラウドサービスアカウント（`*service-account*.json`）、各種クラウド構成ディレクトリ (`.aws/`, `.kube/`, `.gcp/`, `.azure/`, `.vercel/`, `.netlify/`)、パッケージマネージャー設定 (`.npmrc`, `.yarnrc*`, `.bunfig.toml`, `bunfig.toml`)、DB ダンプ (`*.db`, `*.dump`, `*.sqlite*`, `*.sql`等)、HTTP Archive (`*.har`)、作業ログ・デバッグ出力等のログファイル（`*.log`）、および AI エージェントの作業ディレクトリ (`.claude/`, `.cursor/`, `.aider*/`, `.roo/`, `.zeal/` 等) などのステージング・コミットを明示的にブロックしています。
 - **設定ファイル**: `.pre-commit-config.yaml` および `.husky/pre-commit`
 - **開発者の責任**: リポジトリをクローンしたのち、Python 仮想環境（例: `python3 -m venv venv && source venv/bin/activate`）を利用して `pip install -r requirements.txt` および `pre-commit install` を実行し、ローカル環境で包括的なシークレット検知が機能するようにすること。システム依存関係の競合を避けるため、仮想環境の利用を推奨します。

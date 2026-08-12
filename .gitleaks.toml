@@ -20,9 +20,13 @@ regexes = [
   '''(?i)^dummy@example\.com$''',
   '''(?i)^test@example\.com$''',
   '''(?i)^github-actions\[bot\]@users\.noreply\.github\.com$''',
+  '''(?i)^dependabot\[bot\]@users\.noreply\.github\.com$''',
   # docs/security/leak-prevention.md の過去コミット（eddaccac）で bun パッチファイル名の誤検知例として
   # 記載した文字列。実在のメールアドレスではなくドキュメント上の例示であり、git 履歴に残り続けるため許可リスト化。
-  '''(?i)^scope%2Fpkg@version\.patch$'''
+  # `patches/@scope%2Fpkg@version.patch` からは、走査の起点により
+  # `scope%2Fpkg@version.patch` / `pkg@version.patch` のいずれの部分文字列も切り出されうるため両方を許可する。
+  '''(?i)^scope%2Fpkg@version\.patch$''',
+  '''(?i)^pkg@version\.patch$'''
 ]
 
 [allowlist]
