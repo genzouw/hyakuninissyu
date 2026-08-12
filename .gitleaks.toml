@@ -10,16 +10,19 @@ regex = '''(?i)([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]*[A-Za-z][A-Za-z0-9.-]*\.[A-Za-z]
 secretGroup = 1
 entropy = 0.0
 
-[allowlist]
-description = "detect-secrets のベースラインファイルは hashed_secret（SHA1 ハッシュ値）を含むが実際のシークレットではないため除外。また、公開済みメールアドレスやダミーデータ等を除外する。"
-paths = ['''.secrets.baseline''']
-fingerprints = [
-  "adb4ae30dcb8b688e6066f83431629ddff07371d:.secrets.baseline:generic-api-key:130",
-  "adb4ae30dcb8b688e6066f83431629ddff07371d:.secrets.baseline:generic-api-key:139"
-]
+[[rules.allowlists]]
+description = "公開済みメールアドレスやダミーデータ、CI で使用する GitHub Actions bot のメールアドレスを pii-email ルールに限定して除外する（トップレベルの [allowlist] にすると全ルールに適用され、通常の GitHub ユーザーアドレスまで検知対象外になってしまうため）。"
 regexes = [
   '''(?i)genzouw@gmail\.com''',
   '''(?i)dummy@example\.com''',
   '''(?i)test@example\.com''',
-  '''(?i)[a-zA-Z0-9._%+-]+@users\.noreply\.github\.com'''
+  '''(?i)github-actions\[bot\]@users\.noreply\.github\.com'''
+]
+
+[allowlist]
+description = "detect-secrets のベースラインファイルは hashed_secret（SHA1 ハッシュ値）を含むが実際のシークレットではないため除外。"
+paths = ['''.secrets.baseline''']
+fingerprints = [
+  "adb4ae30dcb8b688e6066f83431629ddff07371d:.secrets.baseline:generic-api-key:130",
+  "adb4ae30dcb8b688e6066f83431629ddff07371d:.secrets.baseline:generic-api-key:139"
 ]
