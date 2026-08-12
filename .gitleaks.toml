@@ -1,8 +1,32 @@
 [extend]
 useDefault = true
 
+[[rules]]
+id = "pii-email"
+description = "個人を特定できる情報 (PII) - メールアドレスを検知する"
+# 正規表現でメールアドレスを検知（ドメイン部に最低1文字のアルファベットを要求し、
+# Bun のパッチファイル名（例: 29.2.6.patch）等の数値のみドメインを誤検知しないようにする）
+regex = '''(?i)([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]*[A-Za-z][A-Za-z0-9.-]*\.[A-Za-z]{2,})'''
+secretGroup = 1
+entropy = 0.0
+
+[[rules.allowlists]]
+description = "公開済みメールアドレスやダミーデータ、CI で使用する GitHub Actions bot のメールアドレスを pii-email ルールに限定して除外する（トップレベルの [allowlist] にすると全ルールに適用され、通常の GitHub ユーザーアドレスまで検知対象外になってしまうため）。"
+# gitleaks の allowlist regexes は未アンカーだと検知対象（secretGroup で切り出した文字列）に対する
+# 部分一致となり、`xgenzouw@gmail.com` や `alice+genzouw@gmail.com` のような別アドレスまで
+# 除外されてしまう。誤って除外しないよう、各パターンは必ず `^` と `$` で完全一致に固定する。
+regexes = [
+  '''(?i)^genzouw@gmail\.com$''',
+  '''(?i)^dummy@example\.com$''',
+  '''(?i)^test@example\.com$''',
+  '''(?i)^github-actions\[bot\]@users\.noreply\.github\.com$''',
+  # docs/security/leak-prevention.md の過去コミット（eddaccac）で bun パッチファイル名の誤検知例として
+  # 記載した文字列。実在のメールアドレスではなくドキュメント上の例示であり、git 履歴に残り続けるため許可リスト化。
+  '''(?i)^scope%2Fpkg@version\.patch$'''
+]
+
 [allowlist]
-description = "detect-secrets のベースラインファイルは hashed_secret（SHA1 ハッシュ値）を含むが実際のシークレットではないため除外"
+description = "detect-secrets のベースラインファイルは hashed_secret（SHA1 ハッシュ値）を含むが実際のシークレットではないため除外。"
 paths = ['''.secrets.baseline''']
 fingerprints = [
   "adb4ae30dcb8b688e6066f83431629ddff07371d:.secrets.baseline:generic-api-key:130",
