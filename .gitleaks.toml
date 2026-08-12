@@ -3,7 +3,7 @@ useDefault = true
 
 [[rules]]
 id = "pii-email"
-description = "Detect Personal Identifiable Information (PII) - Email Address"
+description = "個人を特定できる情報 (PII) - メールアドレスを検知する"
 # 正規表現でメールアドレスを検知
 regex = '''(?i)([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})'''
 secretGroup = 1
