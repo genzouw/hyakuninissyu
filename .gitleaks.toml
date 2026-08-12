@@ -4,8 +4,9 @@ useDefault = true
 [[rules]]
 id = "pii-email"
 description = "個人を特定できる情報 (PII) - メールアドレスを検知する"
-# 正規表現でメールアドレスを検知
-regex = '''(?i)([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,})'''
+# 正規表現でメールアドレスを検知（ドメイン部に最低1文字のアルファベットを要求し、
+# Bun のパッチファイル名（例: 29.2.6.patch）等の数値のみドメインを誤検知しないようにする）
+regex = '''(?i)([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]*[A-Za-z][A-Za-z0-9.-]*\.[A-Za-z]{2,})'''
 secretGroup = 1
 entropy = 0.0
 
@@ -20,7 +21,5 @@ regexes = [
   '''(?i)genzouw@gmail\.com''',
   '''(?i)dummy@example\.com''',
   '''(?i)test@example\.com''',
-  '''(?i)[a-zA-Z0-9._%+-]+@users\.noreply\.github\.com''',
-  # vue%2Fvue3-jest のパッチファイル名がメールアドレスに誤認されるのを防ぐ
-  '''(?i)vue%2Fvue3-jest@[0-9.]+\.patch'''
+  '''(?i)[a-zA-Z0-9._%+-]+@users\.noreply\.github\.com'''
 ]
