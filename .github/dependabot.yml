@@ -31,6 +31,13 @@ updates:
     # left main with babel-jest@30 + babel-core@6 silently broken before
     # PR #127. CI does not run `npm run unit`, so an individual bump
     # would not be detected. Group them so updates only land together.
+    # The stylelint stack has the same problem. stylelint-config-standard-vue
+    # v2 moved every shared config (postcss-html, stylelint-config-html,
+    # stylelint-config-recommended-vue, ...) from dependencies to
+    # peerDependencies, and .stylelintrc.json extends stylelint-config-html
+    # directly. Bumping them one at a time leaves an unsatisfied peer no
+    # matter which PR lands first, which is exactly what happened with
+    # PR #402 / #403 / #406. Group them so they only land together.
     groups:
       jest-stack:
         patterns:
@@ -39,6 +46,11 @@ updates:
           - 'babel-jest'
           - '@vue/vue3-jest'
           - '@types/jest'
+      stylelint-stack:
+        patterns:
+          - 'stylelint'
+          - 'stylelint-config-*'
+          - 'postcss-html'
     # Block major bumps while upstream packages cannot follow:
     #   - Jest stack: @vue/vue3-jest@29.2.6 pins peer deps to jest 29.x /
     #     babel-jest 29.x and is npm latest. See Issue #133.
@@ -87,7 +99,7 @@ updates:
     groups:
       github-actions:
         patterns:
-          - "*"
+          - '*'
 
   # Docker dependencies
   - package-ecosystem: docker
@@ -112,7 +124,7 @@ updates:
     groups:
       docker:
         patterns:
-          - "*"
+          - '*'
 
   # Python / pip dependencies (for pre-commit hooks etc.)
   - package-ecosystem: pip
@@ -137,4 +149,4 @@ updates:
     groups:
       pip:
         patterns:
-          - "*"
+          - '*'
