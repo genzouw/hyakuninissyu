@@ -55,12 +55,12 @@ repos:
       - id: actionlint
         name: actionlint (GitHub Actions Static Analysis)
         description: Detect workflow syntax errors, expression mistakes, and script injection risks (pull_request_target usage is blocked separately by the forbid-pull-request-target hook and zizmor.yml)
-  - repo: https://github.com/woodruffw/zizmor-pre-commit
+  - repo: https://github.com/zizmorcore/zizmor-pre-commit
     rev: v1.29.0
     hooks:
       - id: zizmor
         name: zizmor (GitHub Actions Security Static Analysis)
-        description: Detect security misconfigurations in GitHub Actions workflows
+        description: Detect security misconfigurations in GitHub Actions workflows, dependabot.yml and composite actions (actionlint がカバーする構文・式チェックではなく、permissions 過剰・template injection・依存更新ポリシー等を担当)
   - repo: local
     hooks:
       - id: forbid-pull-request-target
