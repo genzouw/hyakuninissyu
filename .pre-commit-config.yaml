@@ -56,7 +56,7 @@ repos:
         name: actionlint (GitHub Actions Static Analysis)
         description: Detect workflow syntax errors, expression mistakes, and script injection risks (pull_request_target usage is blocked separately by the forbid-pull-request-target hook and zizmor.yml)
   - repo: https://github.com/woodruffw/zizmor-pre-commit
-    rev: v1.9.0
+    rev: v1.29.0
     hooks:
       - id: zizmor
         name: zizmor (GitHub Actions Security Static Analysis)

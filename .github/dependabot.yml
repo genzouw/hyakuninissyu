@@ -75,6 +75,8 @@ updates:
         update-types: ['version-update:semver-major']
       - dependency-name: 'neostandard'
         update-types: ['version-update:semver-major']
+    cooldown:
+      default-days: 7
 
   # GitHub Actions
   - package-ecosystem: github-actions
@@ -100,6 +102,8 @@ updates:
       github-actions:
         patterns:
           - '*'
+    cooldown:
+      default-days: 7
 
   # Docker dependencies
   - package-ecosystem: docker
@@ -125,6 +129,8 @@ updates:
       docker:
         patterns:
           - '*'
+    cooldown:
+      default-days: 7
 
   # Python / pip dependencies (for pre-commit hooks etc.)
   - package-ecosystem: pip
@@ -150,3 +156,5 @@ updates:
       pip:
         patterns:
           - '*'
+    cooldown:
+      default-days: 7
