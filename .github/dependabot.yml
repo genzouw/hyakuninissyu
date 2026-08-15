@@ -75,6 +75,13 @@ updates:
         update-types: ['version-update:semver-major']
       - dependency-name: 'neostandard'
         update-types: ['version-update:semver-major']
+    # 侵害されたリリースがコミュニティに検知されるまでの猶予を取るため、
+    # GitHub 既定の 3 日から 7 日へ引き上げる (zizmor の dependabot-cooldown
+    # 監査の既定閾値に合わせた値)。セキュリティ更新は cooldown の対象外で
+    # 即時 PR が出るため、脆弱性対応が遅れることはない。このファイル内の
+    # 他の cooldown 設定も同じ理由による (npm セクションを参照)。
+    cooldown:
+      default-days: 7
 
   # GitHub Actions
   - package-ecosystem: github-actions
@@ -100,6 +107,9 @@ updates:
       github-actions:
         patterns:
           - '*'
+    # cooldown 設定の理由は npm セクション（本ファイル冒頭）を参照。
+    cooldown:
+      default-days: 7
 
   # Docker dependencies
   - package-ecosystem: docker
@@ -125,6 +135,9 @@ updates:
       docker:
         patterns:
           - '*'
+    # cooldown 設定の理由は npm セクション（本ファイル冒頭）を参照。
+    cooldown:
+      default-days: 7
 
   # Python / pip dependencies (for pre-commit hooks etc.)
   - package-ecosystem: pip
@@ -150,3 +163,6 @@ updates:
       pip:
         patterns:
           - '*'
+    # cooldown 設定の理由は npm セクション（本ファイル冒頭）を参照。
+    cooldown:
+      default-days: 7
