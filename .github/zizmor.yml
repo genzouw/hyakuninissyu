@@ -1,0 +1,11 @@
+# CI (.github/workflows/zizmor.yml が呼び出す genzouw/ci-workflows の
+# zizmor.yml) とローカルの pre-commit フック (.pre-commit-config.yaml の
+# zizmor) は、どちらも実行時にリポジトリ内のこのファイルを自動的に読み込む
+# (探索順: .github/zizmor.yml -> .github/zizmor.yaml -> zizmor.yml ->
+# zizmor.yaml)。監査ルールの有効・無効や重要度の調整が将来的に必要になった
+# 場合は、CI とローカルの設定が乖離しないよう、必ずこのファイル一箇所に
+# 集約すること。
+#
+# 現時点では既定のルールセット・重要度をそのまま採用しており、個別の上書き
+# は行っていない。
+rules: {}
