@@ -152,6 +152,16 @@ bunfig.toml
 *.bak
 *.sql
 
+# PII Data exports and editor temp files
+*.csv
+*.tsv
+*.xls
+*.xlsx
+*.jsonl
+*.swp
+*.swo
+*~
+
 # Infrastructure state
 *.tfstate
 *.tfstate.*
