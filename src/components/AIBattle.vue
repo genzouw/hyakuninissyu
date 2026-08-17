@@ -211,8 +211,13 @@
 <script>
 import _ from 'underscore'
 import poems from '@/data/poems'
+import { useSpeech } from '@/composables/useSpeech'
 
 export default {
+  setup () {
+    const { enableSpeak, toggleSpeak, speakText, cancelSpeech } = useSpeech()
+    return { enableSpeak, toggleSpeak, speakText, cancelSpeech }
+  },
   data () {
     return {
       // ゲーム設定
@@ -245,19 +250,11 @@ export default {
       aiTimeout: null,
       currentRoundId: 0, // 各問題に一意のIDを割り当てて競合を防ぐ
 
-      // 音声読み上げ
-      speak: new SpeechSynthesisUtterance(),
-      enableSpeak: true,
-
       // カウントダウン
       countdown: 0,
       countdownInterval: null,
       canAnswer: false, // プレイヤーが回答可能かどうか
     }
-  },
-  mounted () {
-    this.speak.pitch = 1
-    this.speak.lang = 'ja-JP'
   },
   computed: {
     aiAccuracy () {
@@ -479,18 +476,10 @@ export default {
       this.loadQuestion()
     },
     speakQuestionIfEnabled () {
-      if (this.enableSpeak) {
-        speechSynthesis.cancel(this.speak)
-        this.speak.text = this.currentQuestion.question
-        speechSynthesis.speak(this.speak)
-      }
+      this.speakText(this.currentQuestion.question)
     },
     speakAnswer () {
-      if (this.enableSpeak) {
-        speechSynthesis.cancel(this.speak)
-        this.speak.text = this.currentQuestion.answer
-        speechSynthesis.speak(this.speak)
-      }
+      this.speakText(this.currentQuestion.answer)
     },
     getSecureRandom () {
       const cryptoObj = window.crypto || window.msCrypto
@@ -503,7 +492,7 @@ export default {
       return Math.random()
     },
     clickSpeakToggle () {
-      this.enableSpeak = !this.enableSpeak
+      this.toggleSpeak()
       this.speakQuestionIfEnabled()
     },
     finishGame () {

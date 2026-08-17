@@ -81,8 +81,13 @@
 <script>
 import _ from 'underscore'
 import poems from '@/data/poems'
+import { useSpeech } from '@/composables/useSpeech'
 
 export default {
+  setup () {
+    const { enableSpeak, toggleSpeak, speakText, cancelSpeech } = useSpeech()
+    return { enableSpeak, toggleSpeak, speakText, cancelSpeech }
+  },
   data () {
     return {
       currentQuestionIndex: 0,
@@ -95,15 +100,10 @@ export default {
       },
       choice: null,
       thinking: false,
-      questionList: [],
-      speak: new SpeechSynthesisUtterance(),
-      enableSpeak: true
+      questionList: []
     }
   },
   mounted () {
-    this.speak.pitch = 1
-    this.speak.lang = 'ja-JP'
-
     this.countOfQuestions = this.$route.params.countOfQuestions
     this.questionList = _.shuffle(poems)
     this.loadQuestion()
@@ -115,11 +115,7 @@ export default {
     clickAnswer () {
       this.thinking = false
 
-      if (this.enableSpeak) {
-        speechSynthesis.cancel(this.speak)
-        this.speak.text = this.questionData.answer
-        speechSynthesis.speak(this.speak)
-      }
+      this.speakText(this.questionData.answer)
 
       // 正解したら
       if (this.questionData.answer === this.choice) {
@@ -168,16 +164,12 @@ export default {
       this.speakQuestionIfEnabled()
     },
     clickSpeakToggle () {
-      this.enableSpeak = !this.enableSpeak
+      this.toggleSpeak()
 
       this.speakQuestionIfEnabled()
     },
     speakQuestionIfEnabled () {
-      if (this.enableSpeak) {
-        speechSynthesis.cancel(this.speak)
-        this.speak.text = this.questionData.question
-        speechSynthesis.speak(this.speak)
-      }
+      this.speakText(this.questionData.question)
     }
   }
 }

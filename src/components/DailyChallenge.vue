@@ -138,9 +138,14 @@ import {
   markTodaysChallengeCompleted,
   getTimeUntilNextChallenge,
 } from '@/utils/dailyChallenge'
+import { useSpeech } from '@/composables/useSpeech'
 
 export default {
   name: 'DailyChallenge',
+  setup () {
+    const { enableSpeak, toggleSpeak, speakText, cancelSpeech } = useSpeech()
+    return { enableSpeak, toggleSpeak, speakText, cancelSpeech }
+  },
   data () {
     return {
       alreadyCompleted: false,
@@ -162,14 +167,9 @@ export default {
         seconds: 0,
       },
       countdownInterval: null,
-      speak: new SpeechSynthesisUtterance(),
-      enableSpeak: true,
     }
   },
   mounted () {
-    this.speak.pitch = 1
-    this.speak.lang = 'ja-JP'
-
     // 既にクリア済みかチェック
     if (isTodaysChallengeCompleted()) {
       this.alreadyCompleted = true
@@ -273,18 +273,12 @@ export default {
       this.countdown = getTimeUntilNextChallenge()
     },
     clickSpeakToggle () {
-      this.enableSpeak = !this.enableSpeak
+      this.toggleSpeak()
 
       this.speakQuestionIfEnabled()
     },
     speakQuestionIfEnabled () {
       this.speakText(this.questionData.question)
-    },
-    speakText (text) {
-      if (!this.enableSpeak) return
-      speechSynthesis.cancel()
-      this.speak.text = text
-      speechSynthesis.speak(this.speak)
     },
   },
 }

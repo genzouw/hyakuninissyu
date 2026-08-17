@@ -101,8 +101,13 @@
 import _ from 'underscore'
 import { mapGetters, mapActions } from 'vuex'
 import poems from '@/data/poems'
+import { useSpeech } from '@/composables/useSpeech'
 
 export default {
+  setup () {
+    const { enableSpeak, toggleSpeak, speakText, cancelSpeech } = useSpeech()
+    return { enableSpeak, toggleSpeak, speakText, cancelSpeech }
+  },
   data () {
     return {
       currentQuestionIndex: 0,
@@ -114,9 +119,7 @@ export default {
       },
       choice: null,
       thinking: false,
-      questionList: [],
-      speak: new SpeechSynthesisUtterance(),
-      enableSpeak: true
+      questionList: []
     }
   },
   computed: {
@@ -130,9 +133,6 @@ export default {
     }
   },
   mounted () {
-    this.speak.pitch = 1
-    this.speak.lang = 'ja-JP'
-
     // 全100首をシャッフルして使用
     this.questionList = _.shuffle(poems)
 
@@ -149,11 +149,7 @@ export default {
     clickAnswer () {
       this.thinking = false
 
-      if (this.enableSpeak) {
-        speechSynthesis.cancel(this.speak)
-        this.speak.text = this.questionData.answer
-        speechSynthesis.speak(this.speak)
-      }
+      this.speakText(this.questionData.answer)
 
       // 正解したら
       if (this.questionData.answer === this.choice) {
@@ -209,16 +205,12 @@ export default {
       this.speakQuestionIfEnabled()
     },
     clickSpeakToggle () {
-      this.enableSpeak = !this.enableSpeak
+      this.toggleSpeak()
 
       this.speakQuestionIfEnabled()
     },
     speakQuestionIfEnabled () {
-      if (this.enableSpeak) {
-        speechSynthesis.cancel(this.speak)
-        this.speak.text = this.questionData.question
-        speechSynthesis.speak(this.speak)
-      }
+      this.speakText(this.questionData.question)
     }
   }
 }
