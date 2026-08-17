@@ -7,12 +7,15 @@ export function useSpeech () {
   speak.pitch = 1
   speak.lang = 'ja-JP'
 
-  const toggleSpeak = () => {
-    enableSpeak.value = !enableSpeak.value
-  }
-
   const cancelSpeech = () => {
     window.speechSynthesis.cancel()
+  }
+
+  const toggleSpeak = () => {
+    enableSpeak.value = !enableSpeak.value
+    if (!enableSpeak.value) {
+      cancelSpeech()
+    }
   }
 
   const speakText = (text) => {
@@ -26,6 +29,6 @@ export function useSpeech () {
     enableSpeak,
     toggleSpeak,
     cancelSpeech,
-    speakText
+    speakText,
   }
 }
