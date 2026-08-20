@@ -88,10 +88,13 @@ typings/
 
 dist/
 
-# IDEワークスペースおよびOSファイル（セキュリティ/漏洩防止）
+# IDEワークスペース、OSファイルおよびエディタ一時ファイル（セキュリティ/漏洩防止）
 .idea/
 **/.vscode/launch.json
 .DS_Store
+*.swp
+*.swo
+*~
 
 # AI agents
 .claude/*
@@ -144,13 +147,18 @@ insomnia_*.json
 .bunfig.toml
 bunfig.toml
 
-# Database dumps / Backups
+# Database dumps / Backups / PII exports
 *.db
 *.sqlite
 *.sqlite3
 *.dump
 *.bak
 *.sql
+*.csv
+*.tsv
+*.xls
+*.xlsx
+*.jsonl
 
 # Infrastructure state
 *.tfstate
