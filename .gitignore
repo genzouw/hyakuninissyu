@@ -161,16 +161,6 @@ bunfig.toml
 *.jsonl
 *.ndjson
 
-# PII Data exports and editor temp files
-*.csv
-*.tsv
-*.xls
-*.xlsx
-*.jsonl
-*.swp
-*.swo
-*~
-
 # Infrastructure state
 *.tfstate
 *.tfstate.*
