@@ -39,16 +39,6 @@ insomnia_*.json -diff
 *.jsonl -diff
 *.ndjson -diff
 
-# PII Data exports and editor temp files
-*.csv -diff
-*.tsv -diff
-*.xls -diff
-*.xlsx -diff
-*.jsonl -diff
-*.swp -diff
-*.swo -diff
-*~ -diff
-
 # HTTPアーカイブファイル
 *.har -diff
 
