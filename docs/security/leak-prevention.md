@@ -109,7 +109,7 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 ### 新規追加: pre-commit ローカル防御フックの厳格化
 
-さらに、意図しない機密情報（AI の作業ディレクトリ、汎用的なシークレットファイル、パッケージマネージャーの設定ファイル、DB のダンプファイル、PII データのエクスポートファイル (`*.csv`, `*.tsv`, `*.xls`, `*.xlsx`, `*.jsonl`)、`*.log`ファイル等の作業ログ）の漏洩を未然に防ぐため、`.pre-commit-config.yaml` にてローカル定義のカスタムフック `forbid-sensitive-files` を追加・強化しました（`repo: local` はフックの定義形式を示すもので、実行自体は `.github/workflows/pre-commit.yml` の `pre-commit run --all-files` により CI 上でも行われます）。これにより、`.gitignore` や `.gitattributes` での漏れがあった場合でも、コミットの段階でステージングを自動的にブロックし、多層的な防御をより強固にしています。
+さらに、意図しない機密情報（AI の作業ディレクトリ、汎用的なシークレットファイル、パッケージマネージャーの設定ファイル、DB のダンプファイル、PII データのエクスポートファイル (`*.csv`, `*.tsv`, `*.xls`, `*.xlsx`, `*.xlsm`, `*.jsonl`, `*.ndjson`)、`*.log`ファイル等の作業ログ）の漏洩を未然に防ぐため、`.pre-commit-config.yaml` にてローカル定義のカスタムフック `forbid-sensitive-files` を追加・強化しました（`repo: local` はフックの定義形式を示すもので、実行自体は `.github/workflows/pre-commit.yml` の `pre-commit run --all-files` により CI 上でも行われます）。これにより、`.gitignore` や `.gitattributes` での漏れがあった場合でも、コミットの段階でステージングを自動的にブロックし、多層的な防御をより強固にしています。
 
 ### ライセンスコンプライアンス監査
 

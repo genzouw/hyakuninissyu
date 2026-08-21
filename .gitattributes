@@ -35,7 +35,9 @@ insomnia_*.json -diff
 *.tsv -diff
 *.xls -diff
 *.xlsx -diff
+*.xlsm -diff
 *.jsonl -diff
+*.ndjson -diff
 
 # HTTPアーカイブファイル
 *.har -diff

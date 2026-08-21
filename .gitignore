@@ -157,7 +157,9 @@ bunfig.toml
 *.tsv
 *.xls
 *.xlsx
+*.xlsm
 *.jsonl
+*.ndjson
 
 # Infrastructure state
 *.tfstate
