@@ -143,8 +143,8 @@ import { useSpeech } from '@/composables/useSpeech'
 export default {
   name: 'DailyChallenge',
   setup () {
-    const { enableSpeak, toggleSpeak, speakText, cancelSpeech } = useSpeech()
-    return { enableSpeak, toggleSpeak, speakText, cancelSpeech }
+    const { enableSpeak, toggleSpeak, speakText } = useSpeech()
+    return { enableSpeak, toggleSpeak, speakText }
   },
   data () {
     return {

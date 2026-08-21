@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { onUnmounted, ref } from 'vue'
 
 const SPEECH_PITCH = 1
 const SPEECH_LANG = 'ja-JP'
@@ -38,11 +38,16 @@ export function useSpeech () {
     window.speechSynthesis.speak(utterance)
   }
 
+  // speechSynthesis はグローバルなため、読み上げ中に画面遷移すると音声が鳴り続ける。
+  // 後始末を呼び出し側に配ると各コンポーネントで同じ忘れ方をするので、composable 側で閉じる。
+  onUnmounted(() => {
+    cancelSpeech()
+  })
+
   return {
     isSupported,
     enableSpeak,
     toggleSpeak,
-    cancelSpeech,
     speakText,
   }
 }
