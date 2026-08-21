@@ -92,8 +92,7 @@ dist/
 .idea/
 **/.vscode/launch.json
 .DS_Store
-*.swp
-*.swo
+*.sw[a-p]
 *~
 
 # AI agents

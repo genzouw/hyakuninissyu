@@ -50,8 +50,7 @@ bunfig.toml -diff
 **/.idea/** -diff
 **/.vscode/launch.json -diff
 .DS_Store -diff
-*.swp -diff
-*.swo -diff
+*.sw[a-p] -diff
 *~ -diff
 
 # AI agent working directories
