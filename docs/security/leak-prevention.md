@@ -111,6 +111,14 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 さらに、意図しない機密情報（AI の作業ディレクトリ、汎用的なシークレットファイル、パッケージマネージャーの設定ファイル、DB のダンプファイル、PII データのエクスポートファイル (`*.csv`, `*.tsv`, `*.xls`, `*.xlsx`, `*.xlsm`, `*.jsonl`, `*.ndjson`)、`*.log`ファイル等の作業ログ）の漏洩を未然に防ぐため、`.pre-commit-config.yaml` にてローカル定義のカスタムフック `forbid-sensitive-files` を追加・強化しました（`repo: local` はフックの定義形式を示すもので、実行自体は `.github/workflows/pre-commit.yml` の `pre-commit run --all-files` により CI 上でも行われます）。これにより、`.gitignore` や `.gitattributes` での漏れがあった場合でも、コミットの段階でステージングを自動的にブロックし、多層的な防御をより強固にしています。
 
+#### 正当なフィクスチャをコミットしたい場合の手順
+
+`*.csv` / `*.tsv` / `*.jsonl` / `*.ndjson` は、テスト用フィクスチャとして正当にコミットしたいケースがあります。このとき **`git add -f` は回避手段になりません**。`git add -f` が無効化するのは `.gitignore` だけで、`pre-commit` はステージング済みのファイルに対して走るため、`files` にマッチした時点でフックは必ず失敗します。
+
+また `git commit --no-verify` は `gitleaks` / `detect-secrets` / `zizmor` を含む**全フックを丸ごと飛ばす**操作であり、最も危険な逃げ道になるため使用しないでください。
+
+正しい手順は、`.pre-commit-config.yaml` の `forbid-sensitive-files` フックの `exclude` に許可パスを追加することです。PII を含まないことを確認したフィクスチャに限り、`test/fixtures/` 配下の `*.csv` / `*.tsv` / `*.jsonl` / `*.ndjson` をあらかじめ許可済みとしています。これ以外のパスを許可する場合は、`exclude` に明示的なパスを追加してレビューを受けてください。
+
 ### ライセンスコンプライアンス監査
 
 定期的な監査の一環として、利用している依存パッケージ（OSS）のライセンスコンプライアンス監査を導入しています。
