@@ -24,13 +24,20 @@ http-client.env.json -diff
 postman_environment.json -diff
 insomnia_*.json -diff
 
-# Database dumps / Backups
+# Database dumps / Backups / PII exports
 *.db -diff
 *.sqlite -diff
 *.sqlite3 -diff
 *.dump -diff
 *.bak -diff
 *.sql -diff
+*.csv -diff
+*.tsv -diff
+*.xls -diff
+*.xlsx -diff
+*.xlsm -diff
+*.jsonl -diff
+*.ndjson -diff
 
 # PII Data exports and editor temp files
 *.csv -diff
@@ -51,10 +58,12 @@ insomnia_*.json -diff
 .bunfig.toml -diff
 bunfig.toml -diff
 
-# IDEワークスペースおよびOSファイル
+# IDEワークスペース、OSファイルおよびエディタ一時ファイル
 **/.idea/** -diff
 **/.vscode/launch.json -diff
 .DS_Store -diff
+*.sw[a-p] -diff
+*~ -diff
 
 # AI agent working directories
 .claude/** -diff
