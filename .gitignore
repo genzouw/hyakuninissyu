@@ -96,6 +96,9 @@ dist/
 *~
 
 # AI agents
+.bolt/
+.lovable/
+.devin/
 .claude/*
 !.claude/rules/
 !.cursor/rules/
@@ -144,6 +147,9 @@ postman_environment.json
 insomnia_*.json
 
 # Package manager configs
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 .npmrc
 .yarnrc
 .bunfig.toml

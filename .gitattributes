@@ -43,6 +43,9 @@ insomnia_*.json -diff
 *.har -diff
 
 # Package manager configs
+package-lock.json -diff
+yarn.lock -diff
+pnpm-lock.yaml -diff
 .npmrc -diff
 .yarnrc -diff
 .bunfig.toml -diff
@@ -56,6 +59,9 @@ bunfig.toml -diff
 *~ -diff
 
 # AI agent working directories
+**/.bolt/** -diff
+**/.lovable/** -diff
+**/.devin/** -diff
 .claude/** -diff
 .cursor/** -diff
 .aider* -diff
