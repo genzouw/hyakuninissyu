@@ -57,7 +57,9 @@ bunfig.toml -diff
 
 # AI agent working directories
 .claude/** -diff
+.claude/rules/** diff
 .cursor/** -diff
+.cursor/rules/** diff
 .aider* -diff
 .aider*/** -diff
 .continue/** -diff
