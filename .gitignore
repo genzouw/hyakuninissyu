@@ -147,9 +147,6 @@ postman_environment.json
 insomnia_*.json
 
 # Package manager configs
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
 .npmrc
 .yarnrc
 .bunfig.toml

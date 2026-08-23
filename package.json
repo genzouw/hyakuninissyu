@@ -6,6 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "preinstall": "npx only-allow bun",
     "dev": "NODE_OPTIONS=--openssl-legacy-provider webpack-dev-server --progress --config build/webpack.dev.conf.js",
     "start": "bun run dev",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
