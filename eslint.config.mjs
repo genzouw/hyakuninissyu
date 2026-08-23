@@ -1,15 +1,12 @@
-'use strict';
+import neostandard from 'neostandard';
+import pluginVue from 'eslint-plugin-vue';
+import vueParser from 'vue-eslint-parser';
+import globals from 'globals';
+import pluginSecurity from 'eslint-plugin-security';
+import pluginVueA11y from 'eslint-plugin-vuejs-accessibility';
+import pluginRegexp from 'eslint-plugin-regexp';
 
-// この設定ファイルは CommonJS (require/const/spread) が必須。
-const neostandard = require('neostandard');
-const pluginVue = require('eslint-plugin-vue');
-const vueParser = require('vue-eslint-parser');
-const globals = require('globals');
-const pluginSecurity = require('eslint-plugin-security');
-const pluginVueA11y = require('eslint-plugin-vuejs-accessibility');
-const pluginRegexp = require('eslint-plugin-regexp');
-
-module.exports = [
+export default [
   {
     ignores: [
       'build/**',
