@@ -138,6 +138,6 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 新たに利用される AI エージェントの作業ディレクトリ（`.bolt/`, `.lovable/`, `.devin/`, `.roo/`, `.zeal/` 等）についても、他のツールと同様に `.gitignore`, `.gitattributes`, `.vscode/settings.json`, および `.pre-commit-config.yaml` を用いて、意図しないステージングや diff 出力を防ぐ設定を追加しました。
 
-### 異種パッケージマネージャのロックファイルのブロック
+### 新規追加: 異種パッケージマネージャーのロックファイルの混入防止
 
-本プロジェクトは Bun 専業リポジトリであるため、npm, yarn, pnpm によって生成されるロックファイル（`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`）のコミットを未然に防ぐローカルカスタムフック `forbid-foreign-lockfiles` を `.pre-commit-config.yaml` に追加しました。これにより、誤ったパッケージマネージャの使用による依存関係の混乱や、意図しないローカル設定（内部レジストリ URL やトークンなど）の流出を含むサプライチェーンのリスクを防止します。
+プロジェクトの標準パッケージマネージャー (Bun) 以外の異種ロックファイル (`package-lock.json`, `npm-shrinkwrap.json`, `yarn.lock`, `pnpm-lock.yaml`, `pnpm-lock.yml`) について、コミットをブロックする `forbid-foreign-lockfiles` カスタムローカルフックを `.pre-commit-config.yaml` に追加しました。なお、これらを `.gitignore` に登録すると、フックが検知する前に追跡対象から外れて実質的に無効化されてしまうため、あえて `.gitignore` には登録していません。生成そのものは `package.json` の `preinstall` スクリプト (`bunx only-allow bun`) で抑止しています。
