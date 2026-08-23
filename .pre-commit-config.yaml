@@ -124,9 +124,9 @@ repos:
       - id: forbid-foreign-lockfiles
         name: forbid foreign lockfiles
         entry: >-
-          bash -c 'found=$(ls -1 package-lock.json npm-shrinkwrap.json yarn.lock pnpm-lock.yaml pnpm-lock.yml 2>/dev/null);
+          bash -c 'found=$(ls -1 package-lock.json npm-shrinkwrap.json yarn.lock pnpm-lock.yaml pnpm-lock.yml 2>/dev/null; [ -d .yarn ] && echo .yarn/; ls -1 .pnp.cjs .pnp.loader.mjs 2>/dev/null);
           [ -z "$found" ] || { echo "Bun 専業リポジトリです。別のパッケージマネージャーで install した痕跡がワークツリーに残っています:"; echo "$found"; exit 1; }'
         language: system
         pass_filenames: false
         always_run: true
-        description: 'プロジェクトの標準パッケージマネージャー (Bun) 以外のロックファイルがワークツリーに存在しないか検査します（.gitignore で除外されステージングされない場合でも誤用に気づけるよう、staged file ではなくワークツリーの実体を検査します）'
+        description: 'プロジェクトの標準パッケージマネージャー (Bun) 以外のロックファイルや Yarn Berry の副産物 (.yarn/, .pnp.*) がワークツリーに存在しないか検査します（.gitignore で除外されステージングされない場合でも誤用に気づけるよう、staged file ではなくワークツリーの実体を検査します）'
