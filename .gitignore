@@ -96,6 +96,9 @@ dist/
 *~
 
 # AI agents
+.bolt/
+.lovable/
+.devin/
 .claude/*
 !.claude/rules/
 !.cursor/rules/

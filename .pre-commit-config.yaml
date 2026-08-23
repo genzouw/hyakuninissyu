@@ -81,6 +81,9 @@ repos:
               \.npmrc |
               \.yarnrc[^/]* |
               \.?bunfig\.toml$ |
+              \.bolt/ |
+              \.lovable/ |
+              \.devin/ |
               \.claude/ |
               \.cursor/ |
               \.aider |
@@ -113,7 +116,7 @@ repos:
             (^|/)insomnia_.*\.json$ |
             (^|/)id_rsa[^/]* |
             (^|/)id_ed25519[^/]* |
-            (^|/)(claude|cursor|aider|continue|windsurf|cline|copilot|codeium|cody|tabnine|zeal|gemini)-report\.md |
+            (^|/)(claude|cursor|aider|continue|windsurf|cline|copilot|codeium|cody|tabnine|zeal|gemini|bolt|lovable|devin)-report\.md |
             \.(
               tfstate |
               tfvars |
@@ -153,3 +156,9 @@ repos:
             ^test/fixtures/.*\.(csv|tsv|jsonl|ndjson)$
           )
         description: 'AIエージェントの作業ディレクトリ、汎用的なシークレットファイル（APIクライアント環境設定を含む）、パッケージマネージャー設定、データベース・PIIデータのエクスポートファイル、IDE固有設定ファイルおよびOS自動生成・エディタ一時ファイルのコミットをブロックします'
+      - id: forbid-foreign-lockfiles
+        name: forbid foreign lockfiles
+        entry: 'Bun 以外のパッケージマネージャーのロックファイルがステージングされています。'
+        language: fail
+        files: '(?i)(^|/)(package-lock\.json|npm-shrinkwrap\.json|yarn\.lock|pnpm-lock\.ya?ml)$'
+        description: 'プロジェクトの標準パッケージマネージャー (Bun) 以外のロックファイルのコミットをブロックします'
