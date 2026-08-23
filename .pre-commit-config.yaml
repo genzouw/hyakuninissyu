@@ -125,5 +125,5 @@ repos:
         name: forbid foreign lockfiles
         entry: 'Bun 以外のパッケージマネージャーのロックファイルがステージングされています。'
         language: fail
-        files: '(?i)(^|/)(package-lock\.json|yarn\.lock|pnpm-lock\.yaml)$'
+        files: '(?i)(^|/)(package-lock\.json|npm-shrinkwrap\.json|yarn\.lock|pnpm-lock\.ya?ml)$'
         description: 'プロジェクトの標準パッケージマネージャー (Bun) 以外のロックファイルのコミットをブロックします'
