@@ -62,22 +62,22 @@ bunfig.toml -diff
 *~ -diff
 
 # AI agent working directories
-.bolt/** -diff
-.lovable/** -diff
-.devin/** -diff
-.gemini/** -diff
-.claude/** -diff
-.cursor/** -diff
+**/.bolt/** -diff
+**/.lovable/** -diff
+**/.devin/** -diff
+**/.gemini/** -diff
+**/.claude/** -diff
+**/.cursor/** -diff
 .aider* -diff
-.aider*/** -diff
-.continue/** -diff
-.windsurf/** -diff
-.cline/** -diff
-.roo/** -diff
-.copilot/** -diff
-.codeium/** -diff
-.cody/** -diff
-.tabnine/** -diff
+**/.aider*/** -diff
+**/.continue/** -diff
+**/.windsurf/** -diff
+**/.cline/** -diff
+**/.roo/** -diff
+**/.copilot/** -diff
+**/.codeium/** -diff
+**/.cody/** -diff
+**/.tabnine/** -diff
 **/.zeal/** -diff
 *-report.md -diff
 *.log -diff
