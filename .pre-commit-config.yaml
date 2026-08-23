@@ -84,6 +84,7 @@ repos:
               | \.bolt/
               | \.lovable/
               | \.devin/
+              | \.gemini/
               | \.claude/
               | \.cursor/
               | \.aider

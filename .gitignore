@@ -99,6 +99,7 @@ dist/
 .bolt/
 .lovable/
 .devin/
+.gemini/
 .claude/*
 !.claude/rules/
 !.cursor/rules/

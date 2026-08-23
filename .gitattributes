@@ -65,6 +65,7 @@ bunfig.toml -diff
 .bolt/** -diff
 .lovable/** -diff
 .devin/** -diff
+.gemini/** -diff
 .claude/** -diff
 .cursor/** -diff
 .aider* -diff
