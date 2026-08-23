@@ -31,3 +31,5 @@ Note: This project uses `bun` as the package manager and task runner, completely
 - 音声合成（TTS）のロジックは `useSpeech` コンポーザブル（`src/composables/useSpeech.js`）に集約されています。各コンポーネントでは、その統一インターフェース（`enableSpeak` 状態と `speakText` メソッド）を使用してください。`speechSynthesis.cancel()` を呼び出す際は、引数を渡さないでください。
 - モジュールスコープの定数に対して破壊的な変更を行わないでください（`map` とスプレッド演算子などを使用して新しいオブジェクトを作成してください）。
 - Use Japanese for pull request descriptions, source code comments, and documentation.
+
+@.claude/rules/project.md
