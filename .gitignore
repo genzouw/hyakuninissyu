@@ -146,11 +146,14 @@ http-client.env.json
 postman_environment.json
 insomnia_*.json
 
-# Package manager configs
+# Package manager configs and foreign lockfiles
 .npmrc
 .yarnrc
 .bunfig.toml
 bunfig.toml
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
 # Database dumps / Backups / PII exports
 *.db
