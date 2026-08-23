@@ -1,33 +1,33 @@
-# Hyakunin Isshu - Project Specific Rules
+# 百人一首 (Hyakunin Isshu) - プロジェクト固有ルール
 
-## Strict Free-Tier Only Policy
+## 完全無料枠のみを使用する方針
 
-- The project CI/CD must exclusively use services and tools that are completely free for public OSS repositories.
-- Paid plans, licenses, trials, seat-based billing, and usage-based/pay-as-you-go API tokens are strictly forbidden.
-- Never add LLM provider API keys (e.g. `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`) to GitHub Secrets.
-- Include manual pre-merge setup steps in PRs only when the change actually requires them, to enable free tiers or avoid paid plans.
+- プロジェクトの CI/CD では、公開 OSS リポジトリ向けに完全無料で利用可能なサービス・ツールのみを使用してください。
+- 有料プラン、ライセンス、トライアル、シート課金、従量課金（Pay-as-you-go）の API トークンは厳禁です。
+- LLM プロバイダの API キー（例: `GEMINI_API_KEY`, `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`）を GitHub Secrets に登録しないでください。
+- 手動セットアップ手順は、変更が実際にそれを必要とする場合（無料枠の有効化や有料プラン回避のため）のみ、PR に記載してください。
 
-## Package Manager
+## パッケージマネージャー
 
-- **Bun** is the exclusive package manager. Never use `npm`, `yarn`, or `pnpm`.
-- GitHub Actions must use `oven-sh/setup-bun` instead of `actions/setup-node`.
-- Use `bun x` instead of `npx`.
+- **Bun** を唯一のパッケージマネージャーとして使用してください。`npm` / `yarn` / `pnpm` は使用しないでください。
+- GitHub Actions では `actions/setup-node` ではなく `oven-sh/setup-bun` を使用してください。
+- `npx` の代わりに `bun x` を使用してください。
 
-## Tech Stack & Styling
+## 技術スタックとスタイリング
 
-- Use **Bootstrap 5** utility classes (`ms-*`, `me-*`, etc.). Legacy Bootstrap 4 classes (`ml-*`, `mr-*`) are prohibited.
-- Text-to-Speech (TTS) must exclusively use `src/composables/useSpeech.js`. Do not implement TTS elsewhere, and do not pass arguments to `speechSynthesis.cancel()`.
-- Use Vue 3, Vue Router, Vuex 4. Route parameters should be path-based (e.g. `/playing/:countOfQuestions`).
-- External links (`<a target="_blank">`) must include `rel="noopener noreferrer"`.
+- **Bootstrap 5** のユーティリティクラス（`ms-*`, `me-*` など）を使用してください。Bootstrap 4 の非推奨クラス（`ml-*`, `mr-*`）は禁止です。
+- 音声合成（TTS）は `src/composables/useSpeech.js` のみを使用してください。他の箇所で TTS を実装せず、`speechSynthesis.cancel()` を呼び出す際は引数を渡さないでください。
+- Vue 3, Vue Router, Vuex 4 を使用してください。ルートパラメータはパスベース（例: `/playing/:countOfQuestions`）にしてください。
+- 外部リンク（`<a target="_blank">`）には `rel="noopener noreferrer"` を必ず付与してください。
 
-## CI/CD and GitHub Actions Security
+## CI/CD と GitHub Actions のセキュリティ
 
-- Workflows must follow the Principle of Least Privilege. Top-level `permissions` should be minimized, and individual jobs must explicitly declare required permissions.
-- Do not use `pull_request_target` triggers; use `pull_request` instead to prevent secret leaks from forks.
-- Always run `bun run build` with `NODE_OPTIONS=--openssl-legacy-provider`.
-- Do not override `concurrency` setting with `cancel-in-progress: true` in deployment workflows (e.g., `deploy.yml`).
+- ワークフローは最小権限の原則に従ってください。トップレベルの `permissions` は最小限にし、各ジョブで必要な権限を明示的に宣言してください。
+- `pull_request_target` トリガーは使用せず、`pull_request` を使用してください（フォーク PR からのシークレット漏洩防止）。
+- `bun run build` の実行時は必ず `NODE_OPTIONS=--openssl-legacy-provider` を指定してください。
+- デプロイ用ワークフロー（例: `deploy.yml`）では `concurrency` 設定を `cancel-in-progress: true` で上書きしないでください。
 
-## Conventions
+## コーディング規約
 
-- Use Japanese for pull request descriptions, source code comments, and commit messages.
-- Commit messages must follow Conventional Commits (e.g., `chore(security):`).
+- プルリクエストの説明文、ソースコードのコメント、ドキュメント、コミットメッセージは日本語で記述してください。
+- コミットメッセージは Conventional Commits（例: `chore(security):`）に従ってください。
