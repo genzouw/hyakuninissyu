@@ -136,4 +136,4 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 ### AIエージェントコンテキストの漏洩防止の追加
 
-新たに利用される AI エージェントの作業ディレクトリ（`.roo/`, `.zeal/` 等）についても、他のツールと同様に `.gitignore`, `.gitattributes`, `.vscode/settings.json`, および `.pre-commit-config.yaml` を用いて、意図しないステージングや diff 出力を防ぐ設定を追加しました。
+新たに利用される AI エージェントの作業ディレクトリ（`.roo/`, `.zeal/`, `.bolt/`, `.lovable/`, `.devin/` 等）についても、他のツールと同様に `.gitignore`, `.gitattributes`, `.vscode/settings.json`, および `.pre-commit-config.yaml` を用いて、意図しないステージングや diff 出力を防ぐ設定を追加しました。

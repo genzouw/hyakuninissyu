@@ -93,6 +93,9 @@ repos:
               | \.cody/
               | \.tabnine/
               | \.zeal/
+              | \.bolt/
+              | \.lovable/
+              | \.devin/
               | \.aws/
               | \.kube/
               | \.gcp/

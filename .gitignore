@@ -112,6 +112,9 @@ dist/
 .cody/
 .tabnine/
 .zeal/
+.bolt/
+.lovable/
+.devin/
 *-report.md
 
 # PR 作成用の作業ファイル（PR 説明は GitHub 側が正。二重管理を避けるため追跡しない）
