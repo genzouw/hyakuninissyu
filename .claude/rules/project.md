@@ -24,7 +24,7 @@
 
 - ワークフローは最小権限の原則に従ってください。トップレベルの `permissions` は最小限にし、各ジョブで必要な権限を明示的に宣言してください。
 - `pull_request_target` トリガーは使用せず、`pull_request` を使用してください（フォーク PR からのシークレット漏洩防止）。
-- `bun run build` の実行時は必ず `NODE_OPTIONS=--openssl-legacy-provider` を指定してください。
+- webpack の起動には `NODE_OPTIONS=--openssl-legacy-provider` が必須です。`bun run build` / `bun run dev` は `package.json` 側で設定済みのため追加指定は不要ですが、CI で webpack を直接起動するステップを新設する場合は明示してください。
 - デプロイ用ワークフロー（例: `deploy.yml`）では `concurrency` 設定を `cancel-in-progress: true` で上書きしないでください。
 
 ## コーディング規約
