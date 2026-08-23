@@ -84,6 +84,7 @@ repos:
               | \.bolt/
               | \.lovable/
               | \.devin/
+              | \.gemini/
               | \.claude/
               | \.cursor/
               | \.aider
@@ -123,7 +124,10 @@ repos:
         description: 'AIエージェントの作業ディレクトリ、汎用的なシークレットファイル（APIクライアント環境設定を含む）、パッケージマネージャー設定、データベース・PIIデータのエクスポートファイル、IDE固有設定ファイルおよびOS自動生成・エディタ一時ファイルのコミットをブロックします'
       - id: forbid-foreign-lockfiles
         name: forbid foreign lockfiles
-        entry: 'Bun 以外のパッケージマネージャーのロックファイルがステージングされています。'
-        language: fail
-        files: '(?i)(^|/)(package-lock\.json|npm-shrinkwrap\.json|yarn\.lock|pnpm-lock\.ya?ml)$'
-        description: 'プロジェクトの標準パッケージマネージャー (Bun) 以外のロックファイルのコミットをブロックします'
+        entry: >-
+          bash -c 'found=$(ls -1 package-lock.json npm-shrinkwrap.json yarn.lock pnpm-lock.yaml pnpm-lock.yml 2>/dev/null; [ -d .yarn ] && echo .yarn/; ls -1 .pnp.cjs .pnp.loader.mjs 2>/dev/null);
+          [ -z "$found" ] || { echo "Bun 専業リポジトリです。別のパッケージマネージャーで install した痕跡がワークツリーに残っています:"; echo "$found"; exit 1; }'
+        language: system
+        pass_filenames: false
+        always_run: true
+        description: 'プロジェクトの標準パッケージマネージャー (Bun) 以外のロックファイルや Yarn Berry の副産物 (.yarn/, .pnp.*) がワークツリーに存在しないか検査します（.gitignore で除外されステージングされない場合でも誤用に気づけるよう、staged file ではなくワークツリーの実体を検査します）'

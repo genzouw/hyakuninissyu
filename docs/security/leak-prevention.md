@@ -140,4 +140,4 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 ### 新規追加: 異種パッケージマネージャーのロックファイルの混入防止
 
-プロジェクトの標準パッケージマネージャー (Bun) 以外の異種ロックファイル (`package-lock.json`, `npm-shrinkwrap.json`, `yarn.lock`, `pnpm-lock.yaml`, `pnpm-lock.yml`) について、コミットをブロックする `forbid-foreign-lockfiles` カスタムローカルフックを `.pre-commit-config.yaml` に追加しました。なお、これらを `.gitignore` に登録すると、フックが検知する前に追跡対象から外れて実質的に無効化されてしまうため、あえて `.gitignore` には登録していません。生成そのものは `package.json` の `preinstall` スクリプト (`bunx only-allow bun`) で抑止しています。
+プロジェクトの標準パッケージマネージャー (Bun) 以外の異種ロックファイル (`package-lock.json`, `npm-shrinkwrap.json`, `yarn.lock`, `pnpm-lock.yaml`, `pnpm-lock.yml`) および Yarn Berry の副産物 (`.yarn/`, `.pnp.*`) は `.gitignore` で追跡対象から除外しつつ、`forbid-foreign-lockfiles` カスタムローカルフック (`.pre-commit-config.yaml`) がワークツリー上の実体の有無を毎回検査します。ステージ済みファイルではなくワークツリーを直接検査するため、`.gitignore` によってこれらのファイルがステージされない状態でも、誤って別のパッケージマネージャーで install した痕跡が残っていればコミットをブロックできます。生成そのものは `package.json` の `preinstall` スクリプト (`bunx only-allow bun`) で抑止しています。
