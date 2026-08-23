@@ -140,4 +140,4 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 ### 異種パッケージマネージャのロックファイルのブロック
 
-本プロジェクトは Bun 専業リポジトリであるため、npm, yarn, pnpm によって生成されるロックファイル（`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`）のコミットを未然に防ぐローカルカスタムフック `forbid-foreign-lockfiles` を `.pre-commit-config.yaml` に追加しました。これにより、誤ったパッケージマネージャの使用による依存関係の混乱や、意図しないローカル設定（内部レジストリURLやトークンなど）の流出を含むサプライチェーンのリスクを防止します。
+本プロジェクトは Bun 専業リポジトリであるため、npm, yarn, pnpm によって生成されるロックファイル（`package-lock.json`, `yarn.lock`, `pnpm-lock.yaml`）のコミットを未然に防ぐローカルカスタムフック `forbid-foreign-lockfiles` を `.pre-commit-config.yaml` に追加しました。これにより、誤ったパッケージマネージャの使用による依存関係の混乱や、意図しないローカル設定（内部レジストリ URL やトークンなど）の流出を含むサプライチェーンのリスクを防止します。
