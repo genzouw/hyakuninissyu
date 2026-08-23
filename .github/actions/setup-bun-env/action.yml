@@ -17,7 +17,9 @@ runs:
     - name: Cache bun dependencies
       uses: actions/cache@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
       with:
-        path: ~/.bun/install/cache
+        path: |
+          ~/.bun/install/cache
+          node_modules
         key: ${{ runner.os }}-bun-${{ inputs.bun-version }}-${{ hashFiles('**/bun.lock', '**/bun.lockb') }}
         restore-keys: |
           ${{ runner.os }}-bun-
