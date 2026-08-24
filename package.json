@@ -23,7 +23,7 @@
     "@popperjs/core": "^2.11.8",
     "@unhead/vue": "^3.1.0",
     "bootstrap": "^5.3.8",
-    "bootstrap-vue-next": "^0.45.3",
+    "bootstrap-vue-next": "^0.46.1",
     "underscore": "^1.13.8",
     "vee-validate": "^4.15.1",
     "vue": "^3.5.34",
