@@ -67,7 +67,9 @@ bunfig.toml -diff
 **/.devin/** -diff
 **/.gemini/** -diff
 **/.claude/** -diff
+**/.claude/rules/**/*.md diff
 **/.cursor/** -diff
+**/.cursor/rules/**/*.mdc diff
 .aider* -diff
 **/.aider*/** -diff
 **/.continue/** -diff
