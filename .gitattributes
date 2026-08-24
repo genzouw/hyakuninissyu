@@ -81,9 +81,6 @@ bunfig.toml -diff
 **/.cody/** -diff
 **/.tabnine/** -diff
 **/.zeal/** -diff
-.bolt/** -diff
-.lovable/** -diff
-.devin/** -diff
 *-report.md -diff
 *.log -diff
 
