@@ -96,6 +96,10 @@ dist/
 *~
 
 # AI agents
+.bolt/
+.lovable/
+.devin/
+.gemini/
 .claude/*
 !.claude/rules/
 !.cursor/rules/
@@ -143,11 +147,17 @@ http-client.env.json
 postman_environment.json
 insomnia_*.json
 
-# Package manager configs
+# Package manager configs and foreign lockfiles
 .npmrc
 .yarnrc
 .bunfig.toml
 bunfig.toml
+package-lock.json
+npm-shrinkwrap.json
+yarn.lock
+pnpm-lock.yaml
+.yarn/
+.pnp.*
 
 # Database dumps / Backups / PII exports
 *.db

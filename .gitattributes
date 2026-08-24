@@ -42,7 +42,13 @@ insomnia_*.json -diff
 # HTTPアーカイブファイル
 *.har -diff
 
-# Package manager configs
+# Package manager configs（ロックファイルは機密情報ではないため、事故調査でdiffを
+# 読めるようにしつつ、GitHub上ではデフォルト折りたたみにする）
+package-lock.json linguist-generated=true
+npm-shrinkwrap.json linguist-generated=true
+yarn.lock linguist-generated=true
+pnpm-lock.yaml linguist-generated=true
+pnpm-lock.yml linguist-generated=true
 .npmrc -diff
 .yarnrc -diff
 .bunfig.toml -diff
@@ -56,18 +62,24 @@ bunfig.toml -diff
 *~ -diff
 
 # AI agent working directories
-.claude/** -diff
-.cursor/** -diff
+**/.bolt/** -diff
+**/.lovable/** -diff
+**/.devin/** -diff
+**/.gemini/** -diff
+**/.claude/** -diff
+**/.claude/rules/**/*.md diff
+**/.cursor/** -diff
+**/.cursor/rules/**/*.mdc diff
 .aider* -diff
-.aider*/** -diff
-.continue/** -diff
-.windsurf/** -diff
-.cline/** -diff
-.roo/** -diff
-.copilot/** -diff
-.codeium/** -diff
-.cody/** -diff
-.tabnine/** -diff
+**/.aider*/** -diff
+**/.continue/** -diff
+**/.windsurf/** -diff
+**/.cline/** -diff
+**/.roo/** -diff
+**/.copilot/** -diff
+**/.codeium/** -diff
+**/.cody/** -diff
+**/.tabnine/** -diff
 **/.zeal/** -diff
 *-report.md -diff
 *.log -diff
