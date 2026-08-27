@@ -32,8 +32,6 @@ jobs:
 
       - name: Run TruffleHog (All Secrets)
         uses: trufflesecurity/trufflehog@bcfcf73aaf4759d4dadc2783177c245a02792318 # v3.97.0
-        with:
-          base: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event_name == 'push' && github.event.before || '') }}
-          head: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || (github.event_name == 'push' && github.sha || '') }}
-          # NOTE: --no-update はアクション側がデフォルトで付与するため extra_args では指定しない
-          # --only-verified は削除し、未検証・無効化済みのシークレットも含めて全てブロックするよう厳格化
+        # NOTE: --no-update はアクション側がデフォルトで付与するため extra_args では指定しない
+        # --only-verified は削除し、未検証・無効化済みのシークレットも含めて全てブロックするよう厳格化
+        # base, head を指定しないことで、push / PR 時にもリポジトリ全履歴・全ファイルをスキャンするようカバレッジを拡張
