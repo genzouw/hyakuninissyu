@@ -61,3 +61,16 @@ jobs:
           base: ''
           head: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
           extra_args: --exclude-detectors=GoogleGeminiAPIKey
+
+      # 上記ステップは GoogleGeminiAPIKey 検出器を除外している。この除外は誤検知の原因と
+      # なった過去コミットだけでなく、これから積まれる新規コミットにも一律に適用されるため、
+      # PR で新たに混入した AIzaSy... 形式のシークレットの検知力が純減してしまう。
+      # そのため PR 実行時のみ、差分レンジ（PR の base〜head）を全検出器（除外なし）で
+      # 再スキャンする。誤検知の原因コミット 57d12b2 は通常の PR の base より前に存在する
+      # ため、この補完ステップで再び誤検知することはない。
+      - name: Run TruffleHog (PR diff, all detectors)
+        if: github.event_name == 'pull_request'
+        uses: trufflesecurity/trufflehog@bcfcf73aaf4759d4dadc2783177c245a02792318 # v3.97.0
+        with:
+          base: ${{ github.event.pull_request.base.sha }}
+          head: ${{ github.event.pull_request.head.sha }}
