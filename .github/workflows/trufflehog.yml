@@ -30,7 +30,8 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Run TruffleHog (All Secrets)
+      - name: Run TruffleHog (All Secrets, Push/PR)
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
         uses: trufflesecurity/trufflehog@bcfcf73aaf4759d4dadc2783177c245a02792318 # v3.97.0
         # NOTE: --no-update はアクション側がデフォルトで付与するため extra_args では指定しない
         # --only-verified は削除し、未検証・無効化済みのシークレットも含めて全てブロックするよう厳格化
@@ -60,6 +61,25 @@ jobs:
         with:
           base: ''
           head: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          extra_args: --exclude-detectors=GoogleGeminiAPIKey
+
+      # schedule/workflow_dispatch では base/head を渡さない。head に単一のコミット SHA を
+      # 渡すと、アクション側は常に「BASE/HEAD 明示パス」に入り、その ref のみを走査対象と
+      # した単一ブランチの走査に縮退してしまう（実行ログの chunks/bytes 比較で確認済み。
+      # schedule 実行時のほうが常に走査量が多かった）。base/head を両方とも省略/空にした
+      # 場合のみ、アクション側は schedule/workflow_dispatch 用のフォールバック（base/head
+      # を空文字列のまま docker 実行に渡す）を使うため、このステップは分離し、
+      # with: に base/head を一切指定しない。
+      #
+      # NOTE: GitHub Actions の三項演算子的な書き方
+      # `github.event_name == 'schedule' && '' || <fallback>` は使わない。GitHub Actions の
+      # 式では空文字列 '' は falsy として扱われるため、&& の結果である '' が || の左辺に来ると
+      # 常に <fallback> 側へ流れてしまい、意図通りに空文字列を返せない（このステップを分離
+      # した理由そのもの）。
+      - name: Run TruffleHog (All Secrets, Schedule/Dispatch)
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+        uses: trufflesecurity/trufflehog@bcfcf73aaf4759d4dadc2783177c245a02792318 # v3.97.0
+        with:
           extra_args: --exclude-detectors=GoogleGeminiAPIKey
 
       # 上記ステップは GoogleGeminiAPIKey 検出器を除外している。この除外は誤検知の原因と
