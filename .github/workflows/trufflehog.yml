@@ -39,6 +39,16 @@ jobs:
         # そのため base: '' を明示しつつ head にコミットSHAを指定し、
         # push / PR いずれのイベントでもリポジトリ全履歴をスキャンするようにする
         # （公式ドキュメントの "Advanced Usage: Scan entire branch" 相当の構成）
+        #
+        # exclude-detectors=GoogleGeminiAPIKey について:
+        # main の全履歴スキャンにより、コミット 57d12b2（Firebase 資格情報を
+        # 履歴から抹消した際のセキュリティ対応コミット）のコミットメッセージに
+        # 監査目的で記載された、既に GCP 側で無効化済みの Firebase Web API key
+        # （AIzaSy... 形式）が GoogleGeminiAPIKey 検出器に誤検知される。
+        # Firebase Web API key は Gemini API key と同じ AIzaSy... 形式を共有するため
+        # 検出器側で区別できない。本プロジェクトは Gemini API キーを CI シークレットとして
+        # 使用しない方針（.claude/rules/project.md）のため、実害なく安全に除外できる。
         with:
           base: ''
           head: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          extra_args: --exclude-detectors=GoogleGeminiAPIKey
