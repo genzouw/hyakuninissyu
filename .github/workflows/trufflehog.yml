@@ -34,4 +34,11 @@ jobs:
         uses: trufflesecurity/trufflehog@bcfcf73aaf4759d4dadc2783177c245a02792318 # v3.97.0
         # NOTE: --no-update はアクション側がデフォルトで付与するため extra_args では指定しない
         # --only-verified は削除し、未検証・無効化済みのシークレットも含めて全てブロックするよう厳格化
-        # base, head を指定しないことで、push / PR 時にもリポジトリ全履歴・全ファイルをスキャンするようカバレッジを拡張
+        # base, head を省略した場合、アクション側で push は before→after、PR は base.sha→head.sha
+        # の差分レンジが自動設定され、過去コミットの検知は保証されない。
+        # そのため base: '' を明示しつつ head にコミットSHAを指定し、
+        # push / PR いずれのイベントでもリポジトリ全履歴をスキャンするようにする
+        # （公式ドキュメントの "Advanced Usage: Scan entire branch" 相当の構成）
+        with:
+          base: ''
+          head: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
