@@ -48,6 +48,15 @@ jobs:
         # Firebase Web API key は Gemini API key と同じ AIzaSy... 形式を共有するため
         # 検出器側で区別できない。本プロジェクトは Gemini API キーを CI シークレットとして
         # 使用しない方針（.claude/rules/project.md）のため、実害なく安全に除外できる。
+        #
+        # 補足（検出器を狭める代替案について）: TruffleHog の --exclude-detectors は
+        # 検出器単位でしか除外できず、特定の値のみを除外する CLI オプションは存在しない。
+        # また該当値はコミットメッセージ内に存在するため、行番号を持つ走査対象（ファイル）
+        # にのみ適用可能な trufflehog:ignore コメントでも除外できない（実機検証で確認済み）。
+        # そのため、実在する AIzaSy... 形式キーがソースファイルへ混入した場合は、
+        # gitleaks.yml の gcp-api-key ルール（.gitleaks.toml の useDefault=true で有効）
+        # および GitHub Secret Scanning が代替の検出手段として機能する
+        # （詳細は docs/security/leak-prevention.md を参照）。
         with:
           base: ''
           head: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
