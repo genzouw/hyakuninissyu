@@ -6,14 +6,8 @@ name: actionlint
 on:
   push:
     branches: ['**']
-    paths:
-      - '.github/workflows/**'
-      - '.github/actionlint*'
   pull_request:
     branches: ['**']
-    paths:
-      - '.github/workflows/**'
-      - '.github/actionlint*'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
