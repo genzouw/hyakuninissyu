@@ -33,6 +33,13 @@ jobs:
       - name: Run TruffleHog (All Secrets, Push/PR)
         if: github.event_name == 'push' || github.event_name == 'pull_request'
         uses: trufflesecurity/trufflehog@bcfcf73aaf4759d4dadc2783177c245a02792318 # v3.97.0
+        # NOTE: このコミットSHA固定はアクション本体（ワークフロー実行ロジック）のみを対象と
+        # する。version 入力を省略しているため、実際にスキャンを行う Docker イメージ
+        # （ghcr.io/trufflesecurity/trufflehog）は latest タグのまま運用しており、
+        # スキャナ本体のバージョンはアクションのSHA固定とは独立している。これは、
+        # シークレット検出パターンの鮮度を優先するための意図的な選択である
+        # （Dependabot の docker エコシステムは /web のみを対象としており、この
+        # イメージタグの更新は追従しない）。
         # NOTE: --no-update はアクション側がデフォルトで付与するため extra_args では指定しない
         # --only-verified は削除し、未検証・無効化済みのシークレットも含めて全てブロックするよう厳格化
         # base, head を省略した場合、アクション側で push は before→after、PR は base.sha→head.sha
