@@ -40,7 +40,8 @@ PR や Push 時に実行される第二の防御層です。
   - `codeql.yml`: `security-extended` および `security-and-quality` クエリによる高度な脆弱性・コード品質の検知（一部のハードコードされた認証情報パターンも含む）。
   - `dependency-review.yml`: PR で新たに追加・更新される依存パッケージ（OSS）に既知の脆弱性が含まれていないかをスキャン。このワークフローはすべてのプルリクエストに対して実行されます。
   - `osv-scanner.yml`: OSS 依存パッケージの既知脆弱性（OSV データベース照合）をスキャン。「3. 定期監査と自動防御」のスケジュール実行に加え、本拡張によりプッシュ時・PR 時の CI 検知としても動作し、検出結果を SARIF 形式で GitHub Code Scanning へアップロードします（ジョブレベルで `security-events: write` を付与）。
-  - `trufflehog.yml`: プッシュ時および PR 時にシークレット検証を実行し、無効化済み・ローテート済みのシークレットも含めたあらゆるシークレットパターンの混入をリアルタイムにブロック。`base`と`head`を省略した場合、アクション側で push は差分コミットのみ、PR はベース〜ヘッドの差分レンジのみが自動的にスキャン対象となり過去コミットの検知は保証されないため、`base: ''` を明示しつつ `head` にコミット SHA を指定することで、毎回の CI 実行時にリポジトリ全履歴および全ファイルの包括的なシークレットスキャンを実施するように拡張されています。
+  - `trufflehog.yml`: プッシュ時および PR 時にシークレット検証を実行し、無効化済み・ローテート済みのシークレットも含めた大部分のシークレットパターンの混入をリアルタイムにブロック（例外は後述）。`base`と`head`を省略した場合、アクション側で push は差分コミットのみ、PR はベース〜ヘッドの差分レンジのみが自動的にスキャン対象となり過去コミットの検知は保証されないため、`base: ''` を明示しつつ `head` にコミット SHA を指定することで、毎回の CI 実行時にリポジトリ全履歴および全ファイルの包括的なシークレットスキャンを実施するように拡張されています。
+    - **既知の例外（`GoogleGeminiAPIKey` 検出器の除外）**: `trufflehog.yml` の `extra_args` では `--exclude-detectors=GoogleGeminiAPIKey` を指定しています。これは、履歴書き換えコミット `57d12b2`（Firebase 資格情報を履歴から抹消した際のセキュリティ対応コミット）のコミットメッセージに監査目的で記載された、既に GCP 側で無効化済みの Firebase Web API key（`AIzaSy...` 形式）を誤検知するためです。Firebase Web API key は Gemini API key と同じ `AIzaSy...` 形式を共有するため検出器側で区別できません。本プロジェクトは Gemini API キーを CI シークレットとして使用しない方針（`.claude/rules/project.md`）のため実害なく除外できますが、この除外により **実在する `AIzaSy...` 形式キーがソースファイルへ混入した場合の TruffleHog 経由の検知は行われません**。この形式のキーについては、`gitleaks.yml`（`.gitleaks.toml` の `useDefault=true` により有効化されている `gcp-api-key` ルール）および GitHub Secret Scanning が代替の検出手段として機能します。
 - **GitHub Actions 権限の最小化**: すべてのワークフローにおいて Principle of Least Privilege（最小権限の原則）を徹底し、ブラストラジアス（被害範囲）を最小化しています。
   - **トップレベル権限の最小化**: ワークフローのトップレベル `permissions:` は最小化（デフォルトを `contents: read` または `{}` とし、不要な権限を持たせない）しています。
   - **ジョブレベルでの権限付与**: 必要な書き込み・読み取り権限（`security-events: write`, `issues: write`, `pull-requests: write`, `pull-requests: read`, `checks: write`, `actions: read` など）は、各ジョブレベルでのみ明示的に付与しています。さらに、明示的な書き込み権限が不要なジョブであっても、`contents: read` 等の最小限の権限を明示的に定義することで、暗黙的な権限の継承や意図しない動作を防いでいます。
@@ -56,7 +57,7 @@ PR や Push 時に実行される第二の防御層です。
 - **仕組み**:
   - `codeql.yml`, `trivy.yml`, `gitleaks.yml` のスケジュール実行による監査。
   - `osv-scanner.yml` による OSS 脆弱性スキャン。検出された脆弱性は SARIF 形式で GitHub Code Scanning（Advanced Security）へアップロードされ、一元的に可視化・管理されます。
-  - `trufflehog.yml` による包括的なシークレット検証。PR・Push 時のリアルタイムブロックも含め、毎回リポジトリ全履歴に対してシークレット検証を実施します（スケジュール実行時も同様）。
+  - `trufflehog.yml` による包括的なシークレット検証（`GoogleGeminiAPIKey` 検出器を除く。除外理由と代替検査は「2. CI 検知」を参照）。PR・Push 時のリアルタイムブロックも含め、毎回リポジトリ全履歴に対してシークレット検証を実施します（スケジュール実行時も同様）。
   - `sbom.yml` による SBOM (Software Bill of Materials) の自動生成と、GitHub Dependency Graph への依存関係の登録（リポジトリの Settings → Security → Code security and analysis から Dependency graph を有効化すること）。
   - GitHub Secret Scanning と Push Protection（リポジトリの Settings → Security → Code security and analysis から必ず有効化すること）。
 - **対応**: 過去の履歴に漏洩が検知された場合や、依存パッケージに脆弱性が発見された場合は、すみやかにセキュリティポリシー（`SECURITY.md`）に従って対処すること。
