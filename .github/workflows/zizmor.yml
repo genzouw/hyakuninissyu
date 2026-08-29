@@ -9,6 +9,9 @@ on:
     branches: ['**']
   pull_request:
     branches: ['**']
+  schedule:
+    # 毎週月曜 06:30 JST (= 日曜 21:30 UTC) に定期実行
+    - cron: '30 21 * * 0'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
