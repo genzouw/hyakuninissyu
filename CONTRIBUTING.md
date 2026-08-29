@@ -129,7 +129,8 @@ Thank you for your contributions!
 
 - LLM プロバイダの API キー (`GEMINI_API_KEY` / `GOOGLE_API_KEY` / `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` 等) や従量課金の検索 API キー (`TAVILY_API_KEY` / `EXA_API_KEY` 等) を GitHub Secrets に登録し、CI から呼び出す構成の追加は **禁止** です。
 - 「無料枠に収まる前提」での従量課金 API 利用も禁止です。レート制限超過で課金が始まる構造そのものを禁止しています。
-- 有料プラン / 有料トライアル / クレジットカード登録を必要とするサービスの導入も禁止です。
+- 課金可能な OpenAI 互換エンドポイント経由 (`OPENAI_API_BASE_URL` を Gemini や DeepSeek 等に向けるパターン) の利用も同様に禁止です。
+- 有料プラン / 有料ライセンス / 有料トライアル / シート課金 / クレジットカード登録を必要とするサービスの導入も禁止です。
 - 開発者個人のローカル環境で、自分の負担で AI ツールを使うことは問題ありません。禁止しているのは CI/CD への組み込みです。
 
 このポリシーに反する Pull Request は、内容の良し悪しにかかわらずクローズされます。例外を検討したい場合は PR ではなく Issue で提案してください。
