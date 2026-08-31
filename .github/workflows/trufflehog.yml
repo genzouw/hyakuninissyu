@@ -30,10 +30,62 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Run TruffleHog (All Secrets)
+      - name: Run TruffleHog (All Secrets, Push/PR)
+        if: github.event_name == 'push' || github.event_name == 'pull_request'
+        uses: trufflesecurity/trufflehog@20652fbbdefffcdaa493a5bf57ab2ac6b1db715b # v3.97.1
+        # NOTE: このコミットSHA固定はアクション本体（ワークフロー実行ロジック）のみを対象と
+        # する。version 入力を省略しているため、実際にスキャンを行う Docker イメージ
+        # （ghcr.io/trufflesecurity/trufflehog）は latest タグのまま運用しており、
+        # スキャナ本体のバージョンはアクションのSHA固定とは独立している。これは、
+        # シークレット検出パターンの鮮度を優先するための意図的な選択である
+        # （Dependabot の docker エコシステムは /web のみを対象としており、この
+        # イメージタグの更新は追従しない）。
+        # NOTE: --no-update はアクション側がデフォルトで付与するため extra_args では指定しない
+        # --only-verified は削除し、未検証・無効化済みのシークレットも含めて全てブロックするよう厳格化
+        # base, head を省略した場合、アクション側で push は before→after、PR は base.sha→head.sha
+        # の差分レンジが自動設定され、過去コミットの検知は保証されない。
+        # そのため base: '' を明示しつつ head にコミットSHAを指定し、
+        # push / PR いずれのイベントでもリポジトリ全履歴をスキャンするようにする
+        # （公式ドキュメントの "Advanced Usage: Scan entire branch" 相当の構成）
+        #
+        # exclude-detectors=GoogleGeminiAPIKey について: 除外理由（コミット 57d12b2 の
+        # コミットメッセージ由来の誤検知）・影響範囲・代替検査手段（gitleaks / GitHub
+        # Secret Scanning）・PR実行時の補完ステップとの関係は、二重管理を避けるため
+        # docs/security/leak-prevention.md の「2. CI 検知」に一元化している。
+        # 詳細はそちらを参照すること（本コメントでは繰り返さない）。
+        with:
+          base: ''
+          head: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          extra_args: --exclude-detectors=GoogleGeminiAPIKey
+
+      # schedule/workflow_dispatch では base/head を渡さない。head に単一のコミット SHA を
+      # 渡すと、アクション側は常に「BASE/HEAD 明示パス」に入り、その ref のみを走査対象と
+      # した単一ブランチの走査に縮退してしまう（実行ログの chunks/bytes 比較で確認済み。
+      # schedule 実行時のほうが常に走査量が多かった）。base/head を両方とも省略/空にした
+      # 場合のみ、アクション側は schedule/workflow_dispatch 用のフォールバック（base/head
+      # を空文字列のまま docker 実行に渡す）を使うため、このステップは分離し、
+      # with: に base/head を一切指定しない。
+      #
+      # NOTE: GitHub Actions の三項演算子的な書き方
+      # `github.event_name == 'schedule' && '' || <fallback>` は使わない。GitHub Actions の
+      # 式では空文字列 '' は falsy として扱われるため、&& の結果である '' が || の左辺に来ると
+      # 常に <fallback> 側へ流れてしまい、意図通りに空文字列を返せない（このステップを分離
+      # した理由そのもの）。
+      - name: Run TruffleHog (All Secrets, Schedule/Dispatch)
+        if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         uses: trufflesecurity/trufflehog@20652fbbdefffcdaa493a5bf57ab2ac6b1db715b # v3.97.1
         with:
-          base: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || (github.event_name == 'push' && github.event.before || '') }}
-          head: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || (github.event_name == 'push' && github.sha || '') }}
-          # NOTE: --no-update はアクション側がデフォルトで付与するため extra_args では指定しない
-          # --only-verified は削除し、未検証・無効化済みのシークレットも含めて全てブロックするよう厳格化
+          extra_args: --exclude-detectors=GoogleGeminiAPIKey
+
+      # 上記ステップは GoogleGeminiAPIKey 検出器を除外している。この除外は誤検知の原因と
+      # なった過去コミットだけでなく、これから積まれる新規コミットにも一律に適用されるため、
+      # PR で新たに混入した AIzaSy... 形式のシークレットの検知力が純減してしまう。
+      # そのため PR 実行時のみ、差分レンジ（PR の base〜head）を全検出器（除外なし）で
+      # 再スキャンする。誤検知の原因コミット 57d12b2 は通常の PR の base より前に存在する
+      # ため、この補完ステップで再び誤検知することはない。
+      - name: Run TruffleHog (PR diff, all detectors)
+        if: github.event_name == 'pull_request'
+        uses: trufflesecurity/trufflehog@20652fbbdefffcdaa493a5bf57ab2ac6b1db715b # v3.97.1
+        with:
+          base: ${{ github.event.pull_request.base.sha }}
+          head: ${{ github.event.pull_request.head.sha }}
