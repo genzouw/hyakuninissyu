@@ -45,7 +45,7 @@ jobs:
         # qodo-ai/qodo-merge リポジトリは存在しないため、後継メンテナの The-PR-Agent/pr-agent を参照する。
         # third-party アクションは Codacy 等の SAST 要件に従い、フルコミット SHA で pin する。
         # PRのコメントにて `/review`, `/describe`, `/improve`, `/ask` などのコマンドを実行できます。
-        uses: The-PR-Agent/pr-agent@f6af7d77554ff8d26adffded077e6461329e92fa # v0.42.0
+        uses: The-PR-Agent/pr-agent@4ebd5c5333c6ef21509e7304d27969eb825e6f22 # v0.43.0
         env:
           # Qodo Merge (PR-Agent) は公開リポジトリ（オープンソース）では無料で利用可能です。
           # GitHub トークンを使用して PR にコメントを追加します。
