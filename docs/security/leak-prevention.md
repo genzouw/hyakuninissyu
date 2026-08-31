@@ -58,6 +58,7 @@ PR や Push 時に実行される第二の防御層です。
   - `codeql.yml`, `trivy.yml`, `gitleaks.yml` のスケジュール実行による監査。
   - `zizmor.yml`, `actionlint.yml` のスケジュール実行による GitHub Actions ワークフロー設定の定期監査（ツールのルール更新に伴う新たな設定ミスの自動検知）。
   - `osv-scanner.yml` による OSS 脆弱性スキャン。検出された脆弱性は SARIF 形式で GitHub Code Scanning（Advanced Security）へアップロードされ、一元的に可視化・管理されます。
+  - `pre-commit.yml` のスケジュール実行による、`detect-secrets` やカスタムフック（`forbid-sensitive-files`, `forbid-pull-request-target`等）を用いた定期監査。これにより、ルールの自動更新後に現在のツリーにある既存ファイルに新たな違反がないかを継続的に確認します（過去のコミット履歴のスキャンは `gitleaks.yml` および `trufflehog.yml` が担当します）。
   - `trufflehog.yml` による包括的なシークレット検証（`GoogleGeminiAPIKey` 検出器を除く。除外理由と代替検査は「2. CI 検知」を参照）。PR・Push 時のリアルタイムブロックも含め、毎回リポジトリ全履歴に対してシークレット検証を実施します（スケジュール／手動実行時は既定のフォールバックによる走査となる点が異なります。詳細は「2. CI 検知」を参照）。
   - `sbom.yml` による SBOM (Software Bill of Materials) の自動生成と、GitHub Dependency Graph への依存関係の登録（リポジトリの Settings → Security → Code security and analysis から Dependency graph を有効化すること）。
   - GitHub Secret Scanning と Push Protection（リポジトリの Settings → Security → Code security and analysis から必ず有効化すること）。
