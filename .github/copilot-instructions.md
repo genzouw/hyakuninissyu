@@ -1,5 +1,20 @@
 # GitHub Copilot Instructions for Hyakunin Isshu
 
+## 最重要原則: 完全無料の SaaS・AI・ツールのみを利用する (MUST)
+
+本リポジトリは公開 OSS です。CI/CD および自動化ワークフローに組み込んでよいのは、**公開 OSS リポジトリで完全無料 (課金が一切発生しない) な SaaS / AI / ツールのみ** です。
+
+- **禁止**: LLM プロバイダの API キーを GitHub Secrets に登録し、CI から呼び出す構成の追加。
+  `GEMINI_API_KEY` / `GOOGLE_API_KEY` / `OPENAI_API_KEY` / `ANTHROPIC_API_KEY` / `CLAUDE_API_KEY` / `MISTRAL_API_KEY` / `GROQ_API_KEY` / `DEEPSEEK_API_KEY` / `PERPLEXITY_API_KEY` などが該当します。
+- **禁止**: 従量課金の検索 API (`TAVILY_API_KEY` / `EXA_API_KEY` / `SERPAPI_KEY` 等) の CI 組み込み。
+- **禁止**:「無料枠に収まる前提」での従量課金 API 利用。レート制限超過で課金が始まる構造そのものを禁止します。
+- **禁止**: 課金可能な OpenAI 互換エンドポイント経由 (`OPENAI_API_BASE_URL` を Gemini や DeepSeek 等に向けるパターン) の利用。鍵の名称ではなく「課金可能な API へ繋がる鍵を登録する行為」自体を禁止します。
+- **禁止**: 有料プラン / 有料ライセンス / 有料トライアル / シート課金 / クレジットカード登録を必要とするサービスの導入、およびオーナーへの新規 Secret 登録依頼。
+- **許可**: 公開 OSS 向けに完全無料の GitHub Action / GitHub App、Secrets 不要のローカル LLM、リポジトリ内で完結するスクリプト。
+- **許可**: 開発者個人のローカル環境で自分の負担で AI ツールを使うこと。禁止しているのは CI/CD への組み込みです。
+
+判断に迷ったら PR を作らず Issue でオーナー (@genzouw) に相談してください。詳細は [`AGENTS.md`](../AGENTS.md) を参照してください。
+
 When assisting with code generation or answering questions about this repository, please adhere to the following guidelines:
 
 ## Technology Stack
