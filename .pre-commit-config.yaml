@@ -45,7 +45,7 @@ repos:
       - id: trufflehog
         name: trufflehog (Secret Detection)
         description: CIと同期し、全てのシークレット（無効化済み含む）をブロック
-        entry: bash -c 'trufflehog git file://. --since-commit HEAD --fail --exclude-detectors=GoogleGeminiAPIKey'
+        entry: trufflehog git file://. --since-commit HEAD --fail --trust-local-git-config --exclude-detectors=GoogleGeminiAPIKey
   - repo: https://github.com/crate-ci/typos
     rev: v1.47.2
     hooks:
