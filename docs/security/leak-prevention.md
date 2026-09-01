@@ -16,7 +16,7 @@
 - **開発者の責任**: リポジトリをクローンしたのち、Python 仮想環境（例: `python3 -m venv venv && source venv/bin/activate`）を利用して `pip install -r requirements.txt` および `pre-commit install` を実行し、ローカル環境で包括的なシークレット検知が機能するようにすること。システム依存関係の競合を避けるため、仮想環境の利用を推奨します。
 - **マージ前の手動作業（必須）**: GitHub Secret Scanning および Push Protection が有効化されていない場合は、リポジトリの Settings → Security → Code security and analysis から必ず有効化してください。
 - **補完**:
-  - `pre-commit` にて `trufflehog` フックを動作させ、プロバイダの API に到達可能な「アクティブなシークレット」のローカル環境でのコミットを防止します（正規表現ベースの `gitleaks` を補完する仕組みです）。
+  - `pre-commit` にて `trufflehog` フックを動作させ、シークレットのローカル環境でのコミットを防止します（正規表現ベースの `gitleaks` を補完する仕組みです）。デフォルトの `--results=verified` オプションを削除することで、無効化・ローテート済みのシークレットも含めて全てブロックし、CI のポリシー（`--only-verified` の省略）と厳密に同期しています。また CI と同様に `GoogleGeminiAPIKey` を除外し、過剰なブロックを防ぎつつ多層防御を維持しています。
   - `pre-commit` のローカルフック（`forbid-sensitive-files`）にて、`.env` ファイル、各種資格情報（`credentials`, `*.pem`, `*.tfstate`等）、API クライアント環境設定ファイル（`http-client.env.json`, `postman_environment.json`, `insomnia_*.json`）、および AI エージェントの作業履歴（`.claude/`, `.cursor/`, `.aider*` 等）が誤ってステージングされることを明示的にブロックしています。
   - カスタムの `gitleaks` ルール（`.gitleaks.toml`）を導入し、シークレットに加えて PII（個人情報: メールアドレス等）のコミットを明示的に検知・ブロックしています。既知の公開メールアドレスやダミーデータ、CI 関連メールアドレスは Allowlist で安全に除外されます。
   - `actionlint` をローカルフックとして導入し、GitHub Actions ワークフローの構文エラーや式の誤り、シェルインジェクションのリスクなどをコミット前に検出して未然に防ぎます（`pull_request_target` の使用禁止は、ローカルフック `forbid-pull-request-target` および CI の `zizmor.yml` が担当します）。
