@@ -53,9 +53,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # NOTE: 本番サイトの証明書期限切れ (TLSハンドシェイク失敗) の応急対応として、
+          # 元は画像URL単体だった除外パターンをドメイン全体に広げている。この状態が続くと
+          # 本番サイトへのリンク切れを恒久的に検知できなくなるため、証明書更新後は
+          # 元の画像URL単体スコープ（.../hyakunin_issyu.png）に戻すこと。
+          # 追跡: https://github.com/genzouw/hyakuninissyu/issues/441
           lychee --verbose --no-progress \
             --root-dir './static' \
             --exclude-path 'node_modules' \
             --exclude-path 'dist' \
-            --exclude 'https://hyakuninissyu\.genzouw\.com/hyakunin_issyu\.png' \
+            --exclude 'https://hyakuninissyu\.genzouw\.com/' \
             './**/*.md' './**/*.html' './**/*.vue'
