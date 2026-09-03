@@ -71,7 +71,7 @@
           <div class="col-6">
             <router-link
               to="/collection"
-              class="btn btn-lg btn-success btn-block"
+              class="btn btn-lg btn-success w-100"
             >
               📚 コレクション図鑑
             </router-link>
@@ -79,7 +79,7 @@
           <div class="col-6">
             <router-link
               to="/badges"
-              class="btn btn-lg btn-warning btn-block"
+              class="btn btn-lg btn-warning w-100"
             >
               🎖️ バッジコレクション
             </router-link>
