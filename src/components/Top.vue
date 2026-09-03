@@ -30,7 +30,7 @@
                 class="form-control form-control-lg"
               />
             </div>
-            <label class="col-4 col-form-label col-form-label-lg">もん</label>
+            <span class="col-4 col-form-label col-form-label-lg">もん</span>
           </div>
         </div>
 
