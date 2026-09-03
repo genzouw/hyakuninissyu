@@ -3,7 +3,9 @@
     <div class="row mb-3">
       <div class="col">
         <h2>📚 百人一首コレクション図鑑</h2>
-        <p class="text-muted">おぼえた歌を集めよう！</p>
+        <p class="text-muted">
+          おぼえた歌を集めよう！
+        </p>
       </div>
     </div>
 
@@ -12,8 +14,12 @@
       <div class="col-md-6">
         <div class="card bg-success text-white">
           <div class="card-body">
-            <h5 class="card-title">コレクション達成度</h5>
-            <h2 class="display-4">{{ collectedCount }} / {{ totalCount }}</h2>
+            <h5 class="card-title">
+              コレクション達成度
+            </h5>
+            <h2 class="display-4">
+              {{ collectedCount }} / {{ totalCount }}
+            </h2>
             <b-progress
               :value="collectionRate"
               :max="100"
@@ -74,20 +80,36 @@
         >
           <div class="card h-100 text-center">
             <div class="card-body">
-              <h5 class="card-title">{{ poem.id }}</h5>
-              <p class="poem-text" :class="{ blurred: !isCollected(poem.id) }">
-                {{ poem.question }}<br />
+              <h5 class="card-title">
+                {{ poem.id }}
+              </h5>
+              <p
+                class="poem-text"
+                :class="{ blurred: !isCollected(poem.id) }"
+              >
+                {{ poem.question }}<br>
                 {{ poem.answer }}
               </p>
               <p class="card-text">
-                <small class="text-muted" v-if="isCollected(poem.id)">{{
+                <small
+                  v-if="isCollected(poem.id)"
+                  class="text-muted"
+                >{{
                   poem.author
                 }}</small>
-                <small class="text-muted" v-else>？？？</small>
+                <small
+                  v-else
+                  class="text-muted"
+                >？？？</small>
               </p>
-              <span v-if="isCollected(poem.id)" class="badge bg-success"
-                >習得済み</span>
-              <span v-else class="badge bg-secondary">未習得</span>
+              <span
+                v-if="isCollected(poem.id)"
+                class="badge bg-success"
+              >習得済み</span>
+              <span
+                v-else
+                class="badge bg-secondary"
+              >未習得</span>
             </div>
           </div>
         </div>
@@ -101,16 +123,33 @@
       size="lg"
       hide-footer
     >
-      <div v-if="selectedPoem" class="poem-detail">
+      <div
+        v-if="selectedPoem"
+        class="poem-detail"
+      >
         <h4>{{ selectedPoem.question }}</h4>
         <h4>{{ selectedPoem.answer }}</h4>
-        <hr />
+        <hr>
         <p><strong>作者:</strong> {{ selectedPoem.author }}</p>
-        <div v-if="isCollected(selectedPoem.id)" class="mt-3">
-          <b-badge variant="success" class="me-2">習得済み</b-badge>
+        <div
+          v-if="isCollected(selectedPoem.id)"
+          class="mt-3"
+        >
+          <b-badge
+            variant="success"
+            class="me-2"
+          >
+            習得済み
+          </b-badge>
         </div>
-        <div v-else class="mt-3">
-          <b-alert :model-value="true" variant="info">
+        <div
+          v-else
+          class="mt-3"
+        >
+          <b-alert
+            :model-value="true"
+            variant="info"
+          >
             この歌を習得するには、ゲームで正解してください！
           </b-alert>
         </div>

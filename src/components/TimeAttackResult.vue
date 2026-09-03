@@ -7,8 +7,12 @@
             <h2>タイムアタック完了！</h2>
           </div>
           <div class="card-body text-center">
-            <h3 class="mb-4">クリアタイム</h3>
-            <h1 class="display-1 text-primary mb-4">{{ formattedTime }}</h1>
+            <h3 class="mb-4">
+              クリアタイム
+            </h3>
+            <h1 class="display-1 text-primary mb-4">
+              {{ formattedTime }}
+            </h1>
 
             <div class="row mb-4">
               <div class="col-md-6">
@@ -30,8 +34,18 @@
             </div>
 
             <div class="mt-4">
-              <router-link to="/" class="btn btn-primary btn-lg me-2">ホームに戻る</router-link>
-              <router-link to="/time-attack" class="btn btn-success btn-lg">もう一度挑戦</router-link>
+              <router-link
+                to="/"
+                class="btn btn-primary btn-lg me-2"
+              >
+                ホームに戻る
+              </router-link>
+              <router-link
+                to="/time-attack"
+                class="btn btn-success btn-lg"
+              >
+                もう一度挑戦
+              </router-link>
             </div>
           </div>
         </div>

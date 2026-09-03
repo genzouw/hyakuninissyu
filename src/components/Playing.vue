@@ -7,14 +7,14 @@
       <div class="col-auto">
         <button
           class="btn btn-sm btn-primary"
-          v-bind:class="{
-            'btn-primary': this.enableSpeak,
-            'btn-secondary': !this.enableSpeak,
+          :class="{
+            'btn-primary': enableSpeak,
+            'btn-secondary': !enableSpeak,
           }"
           @click.prevent="clickSpeakToggle"
         >
-          {{ this.enableSpeak ? '○' : '✕' }} よみあげ{{
-            this.enableSpeak ? 'あり' : 'なし'
+          {{ enableSpeak ? '○' : '✕' }} よみあげ{{
+            enableSpeak ? 'あり' : 'なし'
           }}
         </button>
       </div>
@@ -25,24 +25,24 @@
         <p>{{ questionData.question }}</p>
         <div class="row">
           <div
-            class="col-sm-12"
             v-for="(c, i) in questionData.choices"
-            v-bind:key="c"
+            :key="c"
+            class="col-sm-12"
           >
             <label
               class="option"
-              v-bind:class="{
+              :class="{
                 correct: !thinking && c === questionData.answer,
                 choiced: !thinking && c === choice,
               }"
             >
               <input
-                type="radio"
                 v-model="choice"
-                v-bind:value="c"
-                v-bind:disabled="!thinking"
+                type="radio"
+                :value="c"
+                :disabled="!thinking"
                 @change.prevent="clickAnswer"
-              />
+              >
               <span>({{ i + 1 }}) {{ c }}</span>
             </label>
           </div>
@@ -51,7 +51,7 @@
           <div class="col-sm-12">
             <button
               class="btn btn-lg btn-primary btn-block"
-              v-bind:disabled="thinking"
+              :disabled="thinking"
               @click.prevent="clickNext"
             >
               次へ
@@ -66,14 +66,26 @@
           src="@/assets/hyakunin_issyu.png"
           class="img-fluid w-75 mx-auto d-block"
           alt=""
-        />
+        >
       </div>
     </div>
-    <audio id="right-sound" preload>
-      <source src="@/assets/right.mp3" type="audio/mp3" />
+    <audio
+      id="right-sound"
+      preload
+    >
+      <source
+        src="@/assets/right.mp3"
+        type="audio/mp3"
+      >
     </audio>
-    <audio id="wrong-sound" preload>
-      <source src="@/assets/wrong.mp3" type="audio/mp3" />
+    <audio
+      id="wrong-sound"
+      preload
+    >
+      <source
+        src="@/assets/wrong.mp3"
+        type="audio/mp3"
+      >
     </audio>
   </div>
 </template>

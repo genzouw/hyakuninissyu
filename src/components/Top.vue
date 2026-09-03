@@ -7,28 +7,30 @@
       </div>
     </div>
 
-    <VeeForm v-slot="{ errors }" @submit="startGame">
+    <VeeForm
+      v-slot="{ errors }"
+      @submit="startGame"
+    >
       <div class="row justify-content-center">
         <div class="col-12">
           <div class="mb-3 row">
             <label
               for="countOfQuestions"
               class="col-4 col-form-label col-form-label-lg"
-              >もんだいのかず</label>
+            >もんだいのかず</label>
             <div class="col-4">
               <Field
                 id="countOfQuestions"
+                v-model.number="countOfQuestions"
                 name="countOfQuestions"
                 :rules="validateCount"
-                v-model.number="countOfQuestions"
                 type="number"
                 min="1"
                 max="100"
                 class="form-control form-control-lg"
               />
             </div>
-            <label class="col-4 col-form-label col-form-label-lg"
-              >もん</label>
+            <label class="col-4 col-form-label col-form-label-lg">もん</label>
           </div>
         </div>
 
@@ -39,7 +41,10 @@
 
       <div class="row justify-content-center">
         <div class="col">
-          <button type="submit" class="btn btn-lg btn-primary ps-5 pe-5">
+          <button
+            type="submit"
+            class="btn btn-lg btn-primary ps-5 pe-5"
+          >
             はじめる
           </button>
         </div>
@@ -72,7 +77,10 @@
         >
           📚 コレクション図鑑
         </router-link>
-        <router-link to="/badges" class="btn btn-lg btn-warning ps-5 pe-5">
+        <router-link
+          to="/badges"
+          class="btn btn-lg btn-warning ps-5 pe-5"
+        >
           🎖️ バッジコレクション
         </router-link>
         <p class="text-muted mt-2">
@@ -81,7 +89,7 @@
       </div>
     </div>
 
-    <hr />
+    <hr>
 
     <div class="row justify-content-center">
       <div class="col-auto text-center">
@@ -89,7 +97,7 @@
           src="@/assets/hyakunin_issyu.png"
           class="img-fluid w-75 mx-auto d-block"
           alt="百人一首のイメージ"
-        />
+        >
       </div>
     </div>
   </div>

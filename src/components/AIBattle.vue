@@ -1,7 +1,10 @@
 <template>
   <div class="container mt-5">
     <!-- ゲーム開始前の設定画面 -->
-    <div v-if="!gameStarted" class="row justify-content-center">
+    <div
+      v-if="!gameStarted"
+      class="row justify-content-center"
+    >
       <div class="col-md-8">
         <div class="card">
           <div class="card-header bg-danger text-white text-center">
@@ -10,7 +13,10 @@
           <div class="card-body">
             <div class="mb-3">
               <label class="h5">問題数を選択</label>
-              <div class="btn-group btn-group-lg d-flex" role="group">
+              <div
+                class="btn-group btn-group-lg d-flex"
+                role="group"
+              >
                 <button
                   v-for="count in [10, 20, 30]"
                   :key="count"
@@ -30,7 +36,10 @@
 
             <div class="mb-3 mt-4">
               <label class="h5">難易度を選択</label>
-              <div class="btn-group btn-group-lg d-flex" role="group">
+              <div
+                class="btn-group btn-group-lg d-flex"
+                role="group"
+              >
                 <button
                   type="button"
                   class="btn"
@@ -74,8 +83,8 @@
 
             <div class="text-center mt-4">
               <button
-                @click="startGame"
                 class="btn btn-lg btn-primary ps-5 pe-5"
+                @click="startGame"
               >
                 対戦開始！
               </button>
@@ -86,15 +95,18 @@
     </div>
 
     <!-- ゲーム中の画面 -->
-    <div v-else-if="!gameFinished" class="row justify-content-center">
+    <div
+      v-else-if="!gameFinished"
+      class="row justify-content-center"
+    >
       <div class="col-md-10">
         <!-- 音声読み上げトグル -->
         <div class="row mb-3">
           <div class="col-12 text-end">
             <button
-              @click="clickSpeakToggle"
               class="btn btn-sm"
               :class="enableSpeak ? 'btn-success' : 'btn-outline-secondary'"
+              @click="clickSpeakToggle"
             >
               <span v-if="enableSpeak">🔊 読み上げ ON</span>
               <span v-else>🔇 読み上げ OFF</span>
@@ -117,7 +129,10 @@
               <div class="card-body text-center">
                 <h5>🤖 AI</h5>
                 <h2>{{ aiScore }} / {{ currentQuestionIndex }}</h2>
-                <div v-if="aiWrong" class="mt-2 badge badge-warning text-dark">
+                <div
+                  v-if="aiWrong"
+                  class="mt-2 badge badge-warning text-dark"
+                >
                   お手つき！
                 </div>
               </div>
@@ -134,16 +149,28 @@
           </div>
           <div class="card-body">
             <!-- 上の句（カウントダウン終了後のみ表示） -->
-            <div v-if="countdown <= 0" class="text-center mb-4">
-              <h3 class="question-text">{{ currentQuestion.question }}</h3>
+            <div
+              v-if="countdown <= 0"
+              class="text-center mb-4"
+            >
+              <h3 class="question-text">
+                {{ currentQuestion.question }}
+              </h3>
             </div>
 
             <!-- 回答中の状態 -->
             <div v-if="!roundFinished">
               <!-- カウントダウン表示（選択肢の上部） -->
-              <div v-if="countdown > 0" class="text-center mb-4">
-                <h1 class="countdown-number text-primary">{{ countdown }}</h1>
-                <p class="text-muted">下の句を確認してください</p>
+              <div
+                v-if="countdown > 0"
+                class="text-center mb-4"
+              >
+                <h1 class="countdown-number text-primary">
+                  {{ countdown }}
+                </h1>
+                <p class="text-muted">
+                  下の句を確認してください
+                </p>
               </div>
 
               <!-- 選択肢（カウントダウン中も常に表示） -->
@@ -154,9 +181,9 @@
                   class="col-md-6 mb-3"
                 >
                   <button
-                    @click="selectAnswer(index)"
                     class="btn btn-outline-primary btn-lg btn-block choice-btn"
                     :disabled="!canAnswer"
+                    @click="selectAnswer(index)"
                   >
                     {{ choice }}
                   </button>
@@ -181,24 +208,34 @@
                     disabled
                   >
                     {{ choice }}
-                    <span v-if="index === winnerAnswerIndex"
-                      >（{{ winner === 'player' ? 'あなた' : 'AI' }}）</span>
+                    <span v-if="index === winnerAnswerIndex">（{{ winner === 'player' ? 'あなた' : 'AI' }}）</span>
                   </button>
                 </div>
               </div>
 
               <div class="text-center mt-4">
-                <div v-if="winner === 'player'" class="alert alert-success">
+                <div
+                  v-if="winner === 'player'"
+                  class="alert alert-success"
+                >
                   <strong>✅ あなたが先に正解！</strong>
                 </div>
-                <div v-else-if="winner === 'ai'" class="alert alert-warning">
+                <div
+                  v-else-if="winner === 'ai'"
+                  class="alert alert-warning"
+                >
                   <strong>🤖 AIが先に正解！</strong>
                 </div>
-                <div v-else class="alert alert-info">
+                <div
+                  v-else
+                  class="alert alert-info"
+                >
                   <strong>😢 どちらも不正解...</strong>
                 </div>
 
-                <p class="text-muted mt-2">{{ transitionMessage }}</p>
+                <p class="text-muted mt-2">
+                  {{ transitionMessage }}
+                </p>
               </div>
             </div>
           </div>
