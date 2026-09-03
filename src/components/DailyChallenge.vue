@@ -140,6 +140,7 @@
         src="@/assets/right.mp3"
         type="audio/mp3"
       >
+      <track kind="captions">
     </audio>
     <audio
       ref="wrongSoundDaily"
@@ -149,6 +150,7 @@
         src="@/assets/wrong.mp3"
         type="audio/mp3"
       >
+      <track kind="captions">
     </audio>
   </div>
 </template>

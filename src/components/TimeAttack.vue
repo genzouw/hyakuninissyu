@@ -104,6 +104,7 @@
         src="@/assets/right.mp3"
         type="audio/mp3"
       >
+      <track kind="captions">
     </audio>
     <audio
       id="wrong-sound"
@@ -113,6 +114,7 @@
         src="@/assets/wrong.mp3"
         type="audio/mp3"
       >
+      <track kind="captions">
     </audio>
   </div>
 </template>
