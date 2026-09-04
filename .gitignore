@@ -192,3 +192,6 @@ repomix-output.*
 *.tfvars
 *.auto.tfvars
 venv/
+
+# Optional stylelint cache
+.stylelintcache
