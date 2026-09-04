@@ -11,7 +11,7 @@
     "start": "bun run dev",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "test": "bun run unit",
-    "lint": "eslint src test/unit && stylelint \"src/**/*.vue\"",
+    "lint": "eslint --cache src test/unit && stylelint --cache \"src/**/*.vue\"",
     "markuplint": "markuplint \"src/**/*.vue\"",
     "build": "NODE_OPTIONS=--openssl-legacy-provider node build/build.mjs && bun run repomix --style markdown --output dist/llms-full.txt --quiet",
     "knip": "knip",
