@@ -3,8 +3,11 @@ name: OSV-Scanner
 on:
   pull_request:
     branches: ['**']
+  # push は既定ブランチのみ。'**' にすると、オープンなPRがあるブランチへの push で
+  # push と pull_request が同時発火し、同一コミットに対して二重実行される（#447）。
+  # PR の検証は pull_request 側が担う。
   push:
-    branches: ['**']
+    branches: [main, master]
   schedule:
     - cron: '15 21 * * 0' # 毎週月曜 06:00 JST (= 日曜 21:00 UTC)
 

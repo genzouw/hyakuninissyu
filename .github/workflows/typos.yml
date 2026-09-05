@@ -1,9 +1,13 @@
 name: typos
 
 on:
+  # push は既定ブランチのみ。'**' にすると、オープンなPRがあるブランチへの push で
+  # push と pull_request が同時発火し、同一コミットに対して二重実行される（#447）。
+  # PR の検証は pull_request 側が担う。
   push:
     branches:
-      - '**'
+      - main
+      - master
   pull_request:
     branches:
       - '**'
