@@ -1,0 +1,46 @@
+# 百人一首 (Hyakunin Isshu)
+
+> 百人一首を学び、楽しむためのモダンな Vue.js アプリケーション。
+
+This file provides context about the project for AI assistants and LLMs, formatted according to the llms.txt standard.
+
+## 概要 (Project Overview)
+このプロジェクトは、日本の古典文学である「百人一首」を閲覧し、読み解き、理解するためのインタラクティブでユーザーフレンドリーなインターフェースを提供します。
+また、最新の生成AIによる自動化ツール、自動コードレビュー、CI/CDパイプラインの検証およびプロトタイプとしての役割も持っています。
+
+## 技術スタック (Technical Stack)
+- **フロントエンド**: Vue 3 (Options API & Composables), Vue Router, Vuex 4
+- **UIフレームワーク**: Bootstrap 5 (Bootswatch Yeti), bootstrap-vue-next
+- **ランタイム / パッケージマネージャ**: Bun (>= 1.0.0)
+- **テスト**: Jest, @vue/test-utils
+
+## AIコンテキストファイル (Context Files)
+リポジトリの全容をAIに把握させるため、Repomix を用いて生成されたコンテキストファイルを公開しています。
+
+- [Full Codebase Context (Markdown)](/llms-full.txt): 全ソースコードを含む完全なコンテキスト
+- [Full Codebase Context (XML)](https://raw.githubusercontent.com/genzouw/hyakuninissyu/ai-context/repomix-output.xml): AIエージェント向けの XML フォーマット
+- [SECURITY.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/SECURITY.md): セキュリティポリシーと機密情報漏洩防止のためのガイドライン
+- [CONTRIBUTING.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/CONTRIBUTING.md): コントリビューションガイド
+- [CLAUDE.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/CLAUDE.md): AIエージェント共通のコーディング規約
+- [.claude/rules/project.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/.claude/rules/project.md): プロジェクト固有のルールと制約 (Bun 限定や無料ツール限定など)
+- [.github/copilot-instructions.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/.github/copilot-instructions.md): GitHub Copilot 向けの指示
+- [.github/actions/**](https://github.com/genzouw/hyakuninissyu/tree/main/.github/actions): CI/CD ワークフローで再利用可能な GitHub Action の定義
+
+## AIコーディング規約 (AI Coding Guidelines)
+本プロジェクトでAIアシスタントがコーディングやレビューを行う際の重要なルールです。
+- 詳細な指示はリポジトリ内の `CLAUDE.md` および `.cursorrules` を必ず参照してください。
+- すべてのコードコメント、PR説明文、ドキュメントは**日本語**で記述する必要があります。
+- パッケージマネージャは必ず `bun` を使用し、`npm` や `yarn` は使用しないでください。ローカル実行と検証は `bun install` -> `bun run lint` -> `bun run unit` -> `bun run build` の順に行ってください。
+- セキュリティ保護のため、APIキーなどのシークレット情報をハードコードしないでください。
+- 外部URL (`<a target="_blank">`) には必ず `rel="noopener noreferrer"` を付与してください。
+- Vue Router のルーティングパラメータはクエリストリングではなく、パスに直接埋め込んでください (例: `/playing/:countOfQuestions`)。
+- Webpack の起動 (dev, build) には必ず `NODE_OPTIONS=--openssl-legacy-provider` を指定してください。
+- `localStorage` に新しいキーを追加する場合は、既存のキー (`dailyChallengeLastCompleted`, `dailyChallengeStreak`, `collectedPoemIds`) と衝突しないようにしてください。
+
+## Optional
+ローカル実行と検証のためのコマンドライン:
+- [インストール](https://github.com/genzouw/hyakuninissyu/blob/main/package.json): `bun install`
+- [開発サーバー起動](https://github.com/genzouw/hyakuninissyu/blob/main/package.json#L9): `bun run dev`
+- [静的解析](https://github.com/genzouw/hyakuninissyu/blob/main/package.json#L13): `bun run lint`
+- [ユニットテスト](https://github.com/genzouw/hyakuninissyu/blob/main/package.json#L11): `bun run unit`
+- [本番ビルド](https://github.com/genzouw/hyakuninissyu/blob/main/package.json#L15): `bun run build`
