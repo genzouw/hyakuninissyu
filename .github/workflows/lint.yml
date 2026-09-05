@@ -64,7 +64,10 @@ jobs:
         uses: ./.github/actions/setup-bun-env
 
       - name: Run markuplint
-        run: bun run markuplint || true
+        # `.markuplintrc` の無効化設定が効かず誤検知で常に赤くなっていたため
+        # `|| true` で握りつぶしていた (#443)。設定修正により実際に green に
+        # なったのでゲートとして機能させる。
+        run: bun run markuplint
 
   build:
     name: Build (webpack production bundle)
