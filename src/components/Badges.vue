@@ -2,7 +2,9 @@
   <div class="badges-container">
     <div class="row">
       <div class="col-12">
-        <h2 class="text-center mb-4">🎖️ バッジコレクション</h2>
+        <h2 class="text-center mb-4">
+          🎖️ バッジコレクション
+        </h2>
       </div>
     </div>
 
@@ -11,9 +13,18 @@
       <div class="col-md-6">
         <div class="card bg-gradient-primary text-white">
           <div class="card-body text-center">
-            <h3 class="display-4 mb-2">{{ unlockedCount }} / {{ totalBadges }}</h3>
-            <p class="mb-2">バッジを獲得しました</p>
-            <b-progress :value="badgeRate" :max="100" height="2rem" variant="warning">
+            <h3 class="display-4 mb-2">
+              {{ unlockedCount }} / {{ totalBadges }}
+            </h3>
+            <p class="mb-2">
+              バッジを獲得しました
+            </p>
+            <b-progress
+              :value="badgeRate"
+              :max="100"
+              height="2rem"
+              variant="warning"
+            >
               <b-progress-bar :value="badgeRate">
                 <strong>{{ badgeRate }}%</strong>
               </b-progress-bar>
@@ -89,14 +100,19 @@
             >
               {{ rarityLabels[badge.rarity] }}
             </div>
-            <h5 class="badge-name">{{ badge.name }}</h5>
+            <h5 class="badge-name">
+              {{ badge.name }}
+            </h5>
             <p
               class="badge-description text-muted small"
               :class="{ 'blurred': !isUnlocked(badge.id) }"
             >
               {{ badge.description }}
             </p>
-            <div v-if="!isUnlocked(badge.id)" class="badge-lock">
+            <div
+              v-if="!isUnlocked(badge.id)"
+              class="badge-lock"
+            >
               🔒
             </div>
           </div>
@@ -111,7 +127,10 @@
       hide-footer
       centered
     >
-      <div v-if="selectedBadge" class="text-center">
+      <div
+        v-if="selectedBadge"
+        class="text-center"
+      >
         <div class="modal-badge-icon mb-3">
           {{ selectedBadge.icon }}
         </div>
@@ -124,10 +143,16 @@
         <p class="modal-badge-description">
           {{ selectedBadge.description }}
         </p>
-        <div v-if="isUnlocked(selectedBadge.id)" class="alert alert-success">
+        <div
+          v-if="isUnlocked(selectedBadge.id)"
+          class="alert alert-success"
+        >
           ✅ 獲得済み
         </div>
-        <div v-else class="alert alert-secondary">
+        <div
+          v-else
+          class="alert alert-secondary"
+        >
           🔒 未獲得
         </div>
       </div>
@@ -168,6 +193,10 @@ export default {
       }
       return this.badges.filter(b => b.rarity === this.rarityFilter)
     }
+  },
+  mounted () {
+    this.loadUnlockedBadges()
+    this.checkAndUnlockCollectionBadges()
   },
   methods: {
     isUnlocked (badgeId) {
@@ -214,10 +243,6 @@ export default {
         localStorage.setItem('unlockedBadgeIds', JSON.stringify(this.unlockedBadgeIds))
       }
     }
-  },
-  mounted () {
-    this.loadUnlockedBadges()
-    this.checkAndUnlockCollectionBadges()
   }
 }
 </script>

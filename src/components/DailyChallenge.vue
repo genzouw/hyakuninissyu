@@ -1,19 +1,30 @@
 <template>
   <div class="daily-challenge-container">
     <!-- 既にクリア済みの場合 -->
-    <div v-if="alreadyCompleted" class="row justify-content-center">
+    <div
+      v-if="alreadyCompleted"
+      class="row justify-content-center"
+    >
       <div class="col-md-8">
         <div class="card bg-success text-white mb-4">
           <div class="card-body text-center">
-            <h2 class="mb-3">🎉 今日のチャレンジクリア！</h2>
-            <p class="lead">おめでとうございます！</p>
-            <p class="mb-0">次のチャレンジは明日です。</p>
+            <h2 class="mb-3">
+              🎉 今日のチャレンジクリア！
+            </h2>
+            <p class="lead">
+              おめでとうございます！
+            </p>
+            <p class="mb-0">
+              次のチャレンジは明日です。
+            </p>
           </div>
         </div>
 
         <div class="card bg-info text-white">
           <div class="card-body text-center">
-            <h3 class="mb-3">⏰ 次のチャレンジまで</h3>
+            <h3 class="mb-3">
+              ⏰ 次のチャレンジまで
+            </h3>
             <div class="countdown display-4">
               {{ countdown.hours }}:{{
                 String(countdown.minutes).padStart(2, '0')
@@ -23,7 +34,10 @@
         </div>
 
         <div class="text-center mt-4">
-          <router-link to="/" class="btn btn-lg btn-primary">
+          <router-link
+            to="/"
+            class="btn btn-lg btn-primary"
+          >
             トップへ戻る
           </router-link>
         </div>
@@ -69,9 +83,9 @@
           <p>{{ questionData.question }}</p>
           <div class="row">
             <div
-              class="col-sm-12"
               v-for="(c, i) in questionData.choices"
               :key="c"
+              class="col-sm-12"
             >
               <label
                 class="option"
@@ -81,12 +95,12 @@
                 }"
               >
                 <input
-                  type="radio"
                   v-model="choice"
+                  type="radio"
                   :value="c"
                   :disabled="!thinking"
                   @change="clickAnswer"
-                />
+                >
                 <span>({{ i + 1 }}) {{ c }}</span>
               </label>
             </div>
@@ -112,17 +126,31 @@
             src="@/assets/hyakunin_issyu.png"
             class="img-fluid w-75 mx-auto d-block"
             alt=""
-          />
+          >
         </div>
       </div>
     </div>
 
     <!-- サウンド -->
-    <audio ref="rightSoundDaily" preload>
-      <source src="@/assets/right.mp3" type="audio/mp3" />
+    <audio
+      ref="rightSoundDaily"
+      preload
+    >
+      <source
+        src="@/assets/right.mp3"
+        type="audio/mp3"
+      >
+      <track kind="captions">
     </audio>
-    <audio ref="wrongSoundDaily" preload>
-      <source src="@/assets/wrong.mp3" type="audio/mp3" />
+    <audio
+      ref="wrongSoundDaily"
+      preload
+    >
+      <source
+        src="@/assets/wrong.mp3"
+        type="audio/mp3"
+      >
+      <track kind="captions">
     </audio>
   </div>
 </template>

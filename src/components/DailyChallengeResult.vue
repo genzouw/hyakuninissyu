@@ -3,33 +3,62 @@
     <div class="row justify-content-center">
       <div class="col-md-8">
         <!-- 結果表示 -->
-        <div class="result-card" :class="resultClass">
+        <div
+          class="result-card"
+          :class="resultClass"
+        >
           <div class="card-body text-center">
-            <h1 class="display-1 mb-3">{{ emoji }}</h1>
-            <h2 class="mb-4">{{ resultMessage }}</h2>
+            <h1 class="display-1 mb-3">
+              {{ emoji }}
+            </h1>
+            <h2 class="mb-4">
+              {{ resultMessage }}
+            </h2>
 
             <div class="score-display mb-4">
-              <p class="score-label">今日のスコア</p>
-              <p class="score-value">{{ score }} / 5</p>
+              <p class="score-label">
+                今日のスコア
+              </p>
+              <p class="score-value">
+                {{ score }} / 5
+              </p>
             </div>
 
-            <div v-if="isPerfect" class="perfect-bonus mb-4">
+            <div
+              v-if="isPerfect"
+              class="perfect-bonus mb-4"
+            >
               <h3>🏆 パーフェクト！</h3>
-              <p class="lead">5問全て正解しました！</p>
+              <p class="lead">
+                5問全て正解しました！
+              </p>
             </div>
 
             <div class="streak-display mb-4">
-              <h3 class="streak-title">🔥 連続達成記録</h3>
-              <p class="streak-value">{{ currentStreak }}日連続</p>
-              <p v-if="streakIncreased" class="streak-message text-success">
+              <h3 class="streak-title">
+                🔥 連続達成記録
+              </h3>
+              <p class="streak-value">
+                {{ currentStreak }}日連続
+              </p>
+              <p
+                v-if="streakIncreased"
+                class="streak-message text-success"
+              >
                 連続記録が更新されました！
               </p>
-              <p v-else-if="streakReset" class="streak-message text-warning">
+              <p
+                v-else-if="streakReset"
+                class="streak-message text-warning"
+              >
                 連続記録がリセットされました。明日また挑戦しましょう！
               </p>
             </div>
 
-            <div v-if="collectedCount > 0" class="collection-update mb-4">
+            <div
+              v-if="collectedCount > 0"
+              class="collection-update mb-4"
+            >
               <p class="text-muted">
                 ✅ {{ collectedCount }}首をコレクション図鑑に追加しました
               </p>
@@ -42,20 +71,26 @@
           <div class="col-6">
             <router-link
               to="/collection"
-              class="btn btn-lg btn-success btn-block"
+              class="btn btn-lg btn-success w-100"
             >
               📚 コレクション図鑑
             </router-link>
           </div>
           <div class="col-6">
-            <router-link to="/badges" class="btn btn-lg btn-warning btn-block">
+            <router-link
+              to="/badges"
+              class="btn btn-lg btn-warning w-100"
+            >
               🎖️ バッジコレクション
             </router-link>
           </div>
         </div>
 
         <div class="text-center mt-4">
-          <router-link to="/" class="btn btn-lg btn-primary ps-5 pe-5">
+          <router-link
+            to="/"
+            class="btn btn-lg btn-primary ps-5 pe-5"
+          >
             トップへ戻る
           </router-link>
         </div>
@@ -63,8 +98,12 @@
         <!-- 次のチャレンジ告知 -->
         <div class="card bg-info text-white mt-4">
           <div class="card-body text-center">
-            <h4 class="mb-2">次のチャレンジは明日！</h4>
-            <p class="mb-0">毎日続けて記録を伸ばそう 🎯</p>
+            <h4 class="mb-2">
+              次のチャレンジは明日！
+            </h4>
+            <p class="mb-0">
+              毎日続けて記録を伸ばそう 🎯
+            </p>
           </div>
         </div>
       </div>
