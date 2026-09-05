@@ -122,7 +122,7 @@ repos:
             (^|/)id_ed25519[^/]* |
             (^|/)(claude|cursor|aider|continue|windsurf|cline|copilot|codeium|cody|tabnine|zeal|gemini|bolt|lovable|devin)-report\.md |
             (^|/)\.dbeaver-data-sources\.xml$ |
-            (^|/)\..*_history$ |
+            (^|/)\.[^/]*_history$ |
             \.(
               tfstate |
               tfvars |
