@@ -6,7 +6,6 @@
     "markuplint:recommended"
   ],
   "rules": {
-    "node-name": false,
     "require-accessible-name": false,
     "ineffective-attr": false,
     "case-sensitive-attr-name": false,
@@ -15,5 +14,21 @@
     "required-element": false,
     "heading-levels": false,
     "label-has-control": false
-  }
+  },
+  // markuplint:recommended プリセットは nodeRules でセレクタ単位にルールを
+  // 再有効化しており、これがトップレベル rules の無効化より優先される。
+  // 例: :where(:not(dialog, dialog *)) が invalid-attr を、
+  //     :where(video, audio) が required-element を、
+  //     :where(img[src]) が required-attr を復活させていた。
+  // そのため上の rules だけでは無効化が効かず、nodeRules 側でも打ち消す。
+  "nodeRules": [
+    {
+      "selector": "*",
+      "rules": {
+        "invalid-attr": false,
+        "required-attr": false,
+        "required-element": false
+      }
+    }
+  ]
 }
