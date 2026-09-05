@@ -121,6 +121,8 @@ repos:
             (^|/)id_rsa[^/]* |
             (^|/)id_ed25519[^/]* |
             (^|/)(claude|cursor|aider|continue|windsurf|cline|copilot|codeium|cody|tabnine|zeal|gemini|bolt|lovable|devin)-report\.md |
+            (^|/)\.dbeaver-data-sources\.xml$ |
+            (^|/)\..*_history$ |
             \.(
               tfstate |
               tfvars |
@@ -145,6 +147,14 @@ repos:
               crt |
               p12 |
               pfx |
+              jks |
+              keystore |
+              truststore |
+              ovpn |
+              kdbx |
+              kdb |
+              pcap |
+              pcapng |
               log
             )$
           )
