@@ -1,0 +1,43 @@
+chore(security): 🔒 secretlint の追加と lint-staged を用いたローカル検知強化
+
+## 背景
+
+現状のコミット前検知（ローカル）において、`.husky/pre-commit` では `pre-commit` フックによる `gitleaks` などのスキャンが行われていますが、その後の Lint チェックが変更ファイル全体に対して行われているため、処理時間がかかっていました。これが原因で開発者が `--no-verify` を使い、重要なシークレット検証をバイパスしてしまうリスクがありました。
+
+## 現状認識（事前調査結果のサマリー）
+
+- 既存防御策: `pre-commit` (gitleaks, trufflehog, detect-secrets, zizmor) 導入済み、CI 防御策も充実。
+- 未カバー領域: ローカルコミットフックの処理最適化および Node.js 特化のシークレット検証ツール（secretlint）。
+- 直近の漏洩リスク兆候: `.env` やキーファイル類はコミット履歴に見られず、強固な防御体制が機能していることを確認。
+
+## このPRで導入・強化するもの
+
+- 対象: `.lintstagedrc.json`、`.secretlintrc.json` の新規追加、`.husky/pre-commit` の更新。
+- ツール名とバージョン: `secretlint v13.0.5` および `lint-staged v17.5.0`。
+- 期待される効果:
+  - コミット前にステージされたファイルのみを対象に `lint-staged` を実行することで、高速な検証を実現。
+  - 新たに `secretlint` を導入し、Node.js エコシステムに特化した多層的なシークレット検査を追加し、漏洩リスクをさらに低減。
+
+## 検知漏れリスクと補完策
+
+- 検知できないケース: カスタム形式の未知のトークンや難読化されたシークレット。
+- 補完策: 既存の GitHub Secret Scanning と Push Protection、および CI 環境での `trufflehog` / `gitleaks` と組み合わせて二重・三重に防御します。
+
+## マージ前に必要な手動作業（チェックリスト）
+
+レビュアーは PR をマージする前に必ず以下を実施してください。
+
+- [ ] developer 各自のローカルで `bun install` および `pre-commit install` を実行し、環境を最新化する周知。
+
+## マージ後の確認手順
+
+- [ ] 次の push / PR で導入した workflow およびローカルフックが正常に動作することを確認。
+- [ ] ローカルでコミット時に `secretlint` および `lint-staged` が動作することを確認。
+
+## ロールバック手順
+
+問題が出た場合は、本 PR を revert し、ローカルで `bun install` してパッケージとフックを元に戻してください。
+
+## 参考情報
+
+- 公式ドキュメント: https://github.com/secretlint/secretlint, https://github.com/lint-staged/lint-staged
