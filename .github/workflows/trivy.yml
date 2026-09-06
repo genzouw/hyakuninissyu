@@ -5,8 +5,11 @@ name: Trivy Scan
 # 参照 SHA の更新は Dependabot (github-actions ecosystem) が自動で PR を出す。
 # 必須チェック (context: "trivy / Trivy filesystem scan") のため paths フィルタ禁止。
 on:
+  # push は既定ブランチのみ。'**' にすると、オープンなPRがあるブランチへの push で
+  # push と pull_request が同時発火し、同一コミットに対して二重実行される（#447）。
+  # PR の検証は pull_request 側が担う。
   push:
-    branches: ['**']
+    branches: [main, master]
   pull_request:
     branches: ['**']
   schedule:
