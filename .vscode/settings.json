@@ -71,7 +71,17 @@
     "**/.gcp": true,
     "**/.azure": true,
     "**/.vercel": true,
-    "**/.netlify": true
+    "**/.netlify": true,
+    "**/*.jks": true,
+    "**/*.keystore": true,
+    "**/*.truststore": true,
+    "**/*.ovpn": true,
+    "**/*.kdbx": true,
+    "**/*.kdb": true,
+    "**/*.pcap": true,
+    "**/*.pcapng": true,
+    "**/.*_history": true,
+    "**/.dbeaver-data-sources.xml": true
   },
   "files.exclude": {
     "**/.idea": true,
@@ -139,6 +149,16 @@
     "**/.gcp": true,
     "**/.azure": true,
     "**/.vercel": true,
-    "**/.netlify": true
+    "**/.netlify": true,
+    "**/*.jks": true,
+    "**/*.keystore": true,
+    "**/*.truststore": true,
+    "**/*.ovpn": true,
+    "**/*.kdbx": true,
+    "**/*.kdb": true,
+    "**/*.pcap": true,
+    "**/*.pcapng": true,
+    "**/.*_history": true,
+    "**/.dbeaver-data-sources.xml": true
   }
 }

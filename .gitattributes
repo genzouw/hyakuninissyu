@@ -95,3 +95,15 @@ bunfig.toml -diff
 # IaC variables
 *.tfvars -diff
 *.auto.tfvars -diff
+
+# Additional sensitive files (Security/Leak Prevention)
+*.jks -diff
+*.keystore -diff
+*.truststore -diff
+*.ovpn -diff
+*.kdbx -diff
+*.kdb -diff
+*.pcap -diff
+*.pcapng -diff
+.*_history -diff
+.dbeaver-data-sources.xml -diff
