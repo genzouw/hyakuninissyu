@@ -69,6 +69,8 @@
         >
       </div>
     </div>
+    <!-- 効果音のみで発話情報を含まないため、キャプション対象外 -->
+    <!-- eslint-disable-next-line vuejs-accessibility/media-has-caption -->
     <audio
       id="right-sound"
       preload
@@ -77,8 +79,9 @@
         src="@/assets/right.mp3"
         type="audio/mp3"
       >
-      <track kind="captions">
     </audio>
+    <!-- 効果音のみで発話情報を含まないため、キャプション対象外 -->
+    <!-- eslint-disable-next-line vuejs-accessibility/media-has-caption -->
     <audio
       id="wrong-sound"
       preload
@@ -87,7 +90,6 @@
         src="@/assets/wrong.mp3"
         type="audio/mp3"
       >
-      <track kind="captions">
     </audio>
   </div>
 </template>
