@@ -24,6 +24,10 @@ This file provides context about the project for AI assistants and LLMs, formatt
 - [CLAUDE.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/CLAUDE.md): AIエージェント共通のコーディング規約
 - [.claude/rules/project.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/.claude/rules/project.md): プロジェクト固有のルールと制約 (Bun 限定や無料ツール限定など)
 - [.github/copilot-instructions.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/.github/copilot-instructions.md): GitHub Copilot 向けの指示
+- [.cursorrules](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/.cursorrules): Cursor 向けのプロジェクトルール
+- [.windsurfrules](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/.windsurfrules): Windsurf 向けのプロジェクトルール
+- [.clinerules](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/.clinerules): Cline 向けのプロジェクトルール
+- [.aider.instruction.md](https://raw.githubusercontent.com/genzouw/hyakuninissyu/main/.aider.instruction.md): Aider 向けのプロジェクトルール
 - [.github/actions/**](https://github.com/genzouw/hyakuninissyu/tree/main/.github/actions): CI/CD ワークフローで再利用可能な GitHub Action の定義
 
 ## AIコーディング規約 (AI Coding Guidelines)
