@@ -3,32 +3,47 @@
     <div class="row justify-content-center">
       <div class="col-md-8">
         <div class="card">
-          <div class="card-header text-white text-center" :class="resultHeaderClass">
+          <div
+            class="card-header text-white text-center"
+            :class="resultHeaderClass"
+          >
             <h2>{{ resultTitle }}</h2>
           </div>
           <div class="card-body text-center">
             <!-- 勝敗表示 -->
             <div class="mb-4">
-              <h1 class="display-1">{{ resultEmoji }}</h1>
+              <h1 class="display-1">
+                {{ resultEmoji }}
+              </h1>
             </div>
 
             <!-- スコア表示 -->
             <div class="row mb-4">
               <div class="col-md-6">
-                <div class="card" :class="playerWon ? 'bg-primary text-white' : 'bg-light'">
+                <div
+                  class="card"
+                  :class="playerWon ? 'bg-primary text-white' : 'bg-light'"
+                >
                   <div class="card-body">
                     <h5>👤 あなた</h5>
                     <h1>{{ playerScore }} / {{ totalQuestions }}</h1>
-                    <p class="mb-0">正答率: {{ playerAccuracy }}%</p>
+                    <p class="mb-0">
+                      正答率: {{ playerAccuracy }}%
+                    </p>
                   </div>
                 </div>
               </div>
               <div class="col-md-6">
-                <div class="card" :class="aiWon ? 'bg-danger text-white' : 'bg-light'">
+                <div
+                  class="card"
+                  :class="aiWon ? 'bg-danger text-white' : 'bg-light'"
+                >
                   <div class="card-body">
                     <h5>🤖 AI</h5>
                     <h1>{{ aiScore }} / {{ totalQuestions }}</h1>
-                    <p class="mb-0">正答率: {{ aiAccuracy }}%</p>
+                    <p class="mb-0">
+                      正答率: {{ aiAccuracy }}%
+                    </p>
                   </div>
                 </div>
               </div>
@@ -40,30 +55,46 @@
                 <div class="row">
                   <div class="col-md-6">
                     <h6>問題数</h6>
-                    <p class="mb-0">{{ totalQuestions }}問</p>
+                    <p class="mb-0">
+                      {{ totalQuestions }}問
+                    </p>
                   </div>
                   <div class="col-md-6">
                     <h6>難易度</h6>
-                    <p class="mb-0">{{ difficultyLabel }}</p>
+                    <p class="mb-0">
+                      {{ difficultyLabel }}
+                    </p>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- 結果メッセージ -->
-            <div class="alert" :class="resultAlertClass">
+            <div
+              class="alert"
+              :class="resultAlertClass"
+            >
               {{ resultMessage }}
             </div>
 
             <!-- アクションボタン -->
             <div class="mt-4">
-              <router-link to="/ai-battle" class="btn btn-danger btn-lg me-2">
+              <router-link
+                to="/ai-battle"
+                class="btn btn-danger btn-lg me-2"
+              >
                 🤖 もう一度対戦
               </router-link>
-              <router-link to="/time-attack" class="btn btn-success btn-lg me-2">
+              <router-link
+                to="/time-attack"
+                class="btn btn-success btn-lg me-2"
+              >
                 ⏱️ タイムアタックに挑戦
               </router-link>
-              <router-link to="/" class="btn btn-outline-primary btn-lg">
+              <router-link
+                to="/"
+                class="btn btn-outline-primary btn-lg"
+              >
                 ホームに戻る
               </router-link>
             </div>

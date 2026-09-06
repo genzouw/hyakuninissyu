@@ -21,7 +21,7 @@ export default [
 
   pluginSecurity.configs.recommended,
   pluginRegexp.configs['flat/recommended'],
-  ...pluginVue.configs['flat/essential'],
+  ...pluginVue.configs['flat/recommended'],
   ...pluginVueA11y.configs['flat/recommended'],
 
   {
