@@ -18,3 +18,11 @@ fi
 # 変更ファイルに対するシークレット検査(secretlint)とlint実行を lint-staged に統一
 echo "🔍 Running lint-staged (including secretlint)..."
 bun x lint-staged || exit 1
+
+# src/ 以下の変更ファイルがある場合はユニットテストも実行し、既存の安全網を維持する
+changed_files=$(git diff --cached --name-only -- 'src/')
+
+if [ -n "$changed_files" ]; then
+  echo "🧪 Running tests..."
+  bun run unit
+fi
