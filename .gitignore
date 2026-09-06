@@ -195,3 +195,15 @@ venv/
 
 # Optional stylelint cache
 .stylelintcache
+
+# Additional sensitive files (Security/Leak Prevention)
+*.jks
+*.keystore
+*.truststore
+*.ovpn
+*.kdbx
+*.kdb
+*.pcap
+*.pcapng
+.*_history
+.dbeaver-data-sources.xml
