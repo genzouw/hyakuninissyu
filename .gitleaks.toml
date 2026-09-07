@@ -26,7 +26,16 @@ regexes = [
   # `patches/@scope%2Fpkg@version.patch` からは、走査の起点により
   # `scope%2Fpkg@version.patch` / `pkg@version.patch` のいずれの部分文字列も切り出されうるため両方を許可する。
   '''(?i)^scope%2Fpkg@version\.patch$''',
-  '''(?i)^pkg@version\.patch$'''
+  '''(?i)^pkg@version\.patch$''',
+  # このファイル自身（.gitleaks.toml）が、上記コメントで「誤って許可リスト化されてしまう例」として
+  # 挙げている `xgenzouw@gmail.com` / `alice+genzouw@gmail.com` という文字列を含んでいる。
+  # `ai-context` ブランチ（Repomix ワークフローが生成する repomix-output.xml / llms-full.txt の
+  # スナップショット）にはリポジトリ全体のテキストがそのまま収録されるため、このコメント文字列も
+  # 一緒に取り込まれてしまう。gitleaks は `--log-opts="--all"` で全ブランチの履歴を走査するため、
+  # 実在しないダミーアドレスであるにもかかわらず pii-email として検知され続ける。実データではない
+  # ドキュメント上の例示であるため許可リスト化する。
+  '''(?i)^xgenzouw@gmail\.com$''',
+  '''(?i)^alice\+genzouw@gmail\.com$'''
 ]
 
 [allowlist]

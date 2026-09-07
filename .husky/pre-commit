@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # pre-commitフレームワークがインストールされている場合は、包括的なシークレットスキャンを実行します
-if command -v pre-commit &> /dev/null; then
+if command -v pre-commit > /dev/null 2>&1; then
   echo "🔒 pre-commitフック（gitleaksやdetect-secretsを含む）を実行中..."
   pre-commit run --hook-stage commit || exit 1
 else
@@ -9,18 +9,20 @@ else
   echo "   包括的なセキュリティチェックを有効にするには、'pip install -r requirements.txt' を実行してください。"
 
   # pre-commitがない場合でも、gitleaksが利用可能であれば直接実行するフォールバック
-  if command -v gitleaks &> /dev/null; then
+  if command -v gitleaks > /dev/null 2>&1; then
     echo "🔒 フォールバックのローカルgitleaksチェックを実行中..."
     gitleaks protect --staged --verbose || exit 1
   fi
 fi
 
-# src/ 以下の変更ファイルに対する lint とテストの実行
+# 変更ファイルに対するシークレット検査(secretlint)とlint実行を lint-staged に統一
+echo "🔍 Running lint-staged (including secretlint)..."
+bun x lint-staged || exit 1
+
+# src/ 以下の変更ファイルがある場合はユニットテストも実行し、既存の安全網を維持する
 changed_files=$(git diff --cached --name-only -- 'src/')
 
 if [ -n "$changed_files" ]; then
-  echo "🔍 Running lint..."
-  bun run lint
   echo "🧪 Running tests..."
   bun run unit
 fi
