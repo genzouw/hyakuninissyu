@@ -1,9 +1,6 @@
 {
   "*": "secretlint",
-  "src/**/*.{js,vue}": "eslint --cache",
-  "src/**/*.vue": [
-    "stylelint --cache",
-    "markuplint"
-  ],
+  "{src,test/unit}/**/*.{js,vue}": "eslint --cache",
+  "src/**/*.vue": ["stylelint --cache", "markuplint"],
   "**/*.md": "textlint --cache"
 }
