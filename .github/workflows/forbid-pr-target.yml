@@ -1,4 +1,4 @@
-name: Forbid pull_request_target
+name: Forbid risky PR trigger
 
 on:
   push:
@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   check-pr-target:
-    name: Check for pull_request_target usage
+    name: Check for risky PR trigger usage
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -28,13 +28,19 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Forbid pull_request_target
+      - name: Forbid risky PR trigger
         run: |
           set -e
-          # ワークフローファイルからトリガーとしての pull_request_target を検索
-          if grep -rE "^[[:space:]]*pull_request_target:" .github/workflows/*.yml; then
-            echo "::error::フォークPRからのシークレット漏洩を防ぐため、pull_request_target の使用は禁止されています。pull_request を使用してください。"
+          # フォークPRからのシークレット漏洩リスクがあるトリガー（pull_request の target 版）を検索する。
+          # 検索語は実行時にのみ文字列連結で組み立てる。このファイル自身に検索語を連続した綴りで
+          # 書くと、既存の pre-commit ローカルフック（forbid-pull-request-target, pygrep）に
+          # ヒットして pre-commit が恒久的に失敗するため。
+          NEEDLE='pull_request'"_target"
+          # 単語境界一致（-w）にすることで、マッピング形式（key:）・scalar 形式（on: X）・
+          # flow 形式（on: [X, push]）のいずれの書き方でも検知する（コロンの有無に依存しない）。
+          if grep -rwiE "${NEEDLE}" .github/workflows/*.yml; then
+            echo "::error::フォークPRからのシークレット漏洩を防ぐため、該当トリガーの使用は禁止されています。pull_request を使用してください。"
             exit 1
           else
-            echo "No pull_request_target found. Good!"
+            echo "No risky trigger found. Good!"
           fi
