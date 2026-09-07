@@ -38,9 +38,18 @@ jobs:
           NEEDLE='pull_request'"_target"
           # 単語境界一致（-w）にすることで、マッピング形式（key:）・scalar 形式（on: X）・
           # flow 形式（on: [X, push]）のいずれの書き方でも検知する（コロンの有無に依存しない）。
-          if grep -rwiE "${NEEDLE}" .github/workflows/*.yml; then
+          # --include で .yml / .yaml の両拡張子を対象にする（既存の pre-commit フック
+          # forbid-pull-request-target の files: '^\.github/workflows/.*\.ya?ml$' と範囲を揃える）。
+          set +e
+          grep -rwiE --include='*.yml' --include='*.yaml' -- "${NEEDLE}" .github/workflows
+          status=$?
+          set -e
+          if [ "${status}" -eq 0 ]; then
             echo "::error::フォークPRからのシークレット漏洩を防ぐため、該当トリガーの使用は禁止されています。pull_request を使用してください。"
             exit 1
-          else
+          elif [ "${status}" -eq 1 ]; then
             echo "No risky trigger found. Good!"
+          else
+            echo "::error::grep の実行に失敗しました（終了コード: ${status}）。検査を完了できないため失敗として扱います。"
+            exit "${status}"
           fi
