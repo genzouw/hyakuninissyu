@@ -1,0 +1,40 @@
+name: Forbid pull_request_target
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: ['**']
+  schedule:
+    - cron: '0 21 * * 0' # 毎週月曜 06:00 JST (= 日曜 21:00 UTC)
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check-pr-target:
+    name: Check for pull_request_target usage
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Forbid pull_request_target
+        run: |
+          set -e
+          # ワークフローファイルからトリガーとしての pull_request_target を検索
+          if grep -rE "^[[:space:]]*pull_request_target:" .github/workflows/*.yml; then
+            echo "::error::フォークPRからのシークレット漏洩を防ぐため、pull_request_target の使用は禁止されています。pull_request を使用してください。"
+            exit 1
+          else
+            echo "No pull_request_target found. Good!"
+          fi
