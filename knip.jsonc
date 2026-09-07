@@ -10,6 +10,8 @@
     "@markuplint/vue-parser",
     "textlint-filter-rule-comments",
     "textlint-rule-preset-ja-spacing",
+    "secretlint",
+    "@secretlint/secretlint-rule-preset-recommend",
   ],
   "ignoreBinaries": [
     "GPL-1.0-or-later",
