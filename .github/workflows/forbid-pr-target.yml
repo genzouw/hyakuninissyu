@@ -1,0 +1,55 @@
+name: Forbid risky PR trigger
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: ['**']
+  schedule:
+    - cron: '0 21 * * 0' # 毎週月曜 06:00 JST (= 日曜 21:00 UTC)
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check-pr-target:
+    name: Check for risky PR trigger usage
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Forbid risky PR trigger
+        run: |
+          set -e
+          # フォークPRからのシークレット漏洩リスクがあるトリガー（pull_request の target 版）を検索する。
+          # 検索語は実行時にのみ文字列連結で組み立てる。このファイル自身に検索語を連続した綴りで
+          # 書くと、既存の pre-commit ローカルフック（forbid-pull-request-target, pygrep）に
+          # ヒットして pre-commit が恒久的に失敗するため。
+          NEEDLE='pull_request'"_target"
+          # 単語境界一致（-w）にすることで、マッピング形式（key:）・scalar 形式（on: X）・
+          # flow 形式（on: [X, push]）のいずれの書き方でも検知する（コロンの有無に依存しない）。
+          # --include で .yml / .yaml の両拡張子を対象にする（既存の pre-commit フック
+          # forbid-pull-request-target の files: '^\.github/workflows/.*\.ya?ml$' と範囲を揃える）。
+          set +e
+          grep -rwiE --include='*.yml' --include='*.yaml' -- "${NEEDLE}" .github/workflows
+          status=$?
+          set -e
+          if [ "${status}" -eq 0 ]; then
+            echo "::error::フォークPRからのシークレット漏洩を防ぐため、該当トリガーの使用は禁止されています。pull_request を使用してください。"
+            exit 1
+          elif [ "${status}" -eq 1 ]; then
+            echo "No risky trigger found. Good!"
+          else
+            echo "::error::grep の実行に失敗しました（終了コード: ${status}）。検査を完了できないため失敗として扱います。"
+            exit "${status}"
+          fi
