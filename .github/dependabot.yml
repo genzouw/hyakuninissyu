@@ -166,3 +166,34 @@ updates:
     # cooldown 設定の理由は npm セクション（本ファイル冒頭）を参照。
     cooldown:
       default-days: 7
+
+  # pre-commit hooks (.pre-commit-config.yaml)
+  # 各フックは GitHub Actions の外部アクションと同様にコミットSHAで固定している。
+  # Dependabot は SHA固定のフックでも新しいタグを解決して rev を更新できるため、
+  # タグ参照の場合と同じ運用手順（自動PR→レビュー→マージ）で追従できる。
+  - package-ecosystem: pre-commit
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: '09:00'
+      timezone: Asia/Tokyo
+    open-pull-requests-limit: 5
+    target-branch: main
+    reviewers:
+      - genzouw
+    labels:
+      - dependencies
+      - pre-commit
+    commit-message:
+      prefix: chore
+      include: scope
+    pull-request-branch-name:
+      separator: /
+    groups:
+      pre-commit:
+        patterns:
+          - '*'
+    # cooldown 設定の理由は npm セクション（本ファイル冒頭）を参照。
+    cooldown:
+      default-days: 7
