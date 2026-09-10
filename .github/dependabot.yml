@@ -171,6 +171,11 @@ updates:
   # 各フックは GitHub Actions の外部アクションと同様にコミットSHAで固定している。
   # Dependabot は SHA固定のフックでも新しいタグを解決して rev を更新できるため、
   # タグ参照の場合と同じ運用手順（自動PR→レビュー→マージ）で追従できる。
+  # 注意: DependabotのPRはスクリプトを実行できないため、rev変更に伴う
+  # .secrets.baseline の再生成（detect-secrets scan --update .secrets.baseline）
+  # は追従されない。このPRのCI（pre-commit.yml）が detect-secrets hook で
+  # 失敗した場合は、bun.lock の手動追従と同様にPRブランチ上で上記コマンドを
+  # 実行してコミットする。
   - package-ecosystem: pre-commit
     directory: /
     schedule:

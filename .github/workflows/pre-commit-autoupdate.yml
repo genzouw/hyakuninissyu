@@ -47,6 +47,13 @@ jobs:
       - name: Run pre-commit autoupdate
         run: pre-commit autoupdate --freeze
 
+      # detect-secrets の Hex High Entropy String 検出は、.pre-commit-config.yaml
+      # 内のSHAを未登録の高エントロピー文字列として誤検知する。autoupdate で rev が
+      # 変わるたびにベースラインを再生成し、後続の pre-commit.yml (detect-secrets hook)
+      # が失敗しないようにする。
+      - name: Update secrets baseline
+        run: detect-secrets scan --update .secrets.baseline
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
