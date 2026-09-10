@@ -41,8 +41,11 @@ jobs:
       - name: Install pre-commit
         run: pip install -r requirements.txt
 
+      # --freeze を付けないと rev がタグ参照（例: v8.21.3）で書き換えられ、
+      # 本リポジトリが採用しているSHA固定方針（GitHub Actionsの外部アクションと
+      # 同じ運用）が自動更新のたびに巻き戻ってしまう。
       - name: Run pre-commit autoupdate
-        run: pre-commit autoupdate
+        run: pre-commit autoupdate --freeze
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
