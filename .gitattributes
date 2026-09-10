@@ -21,6 +21,8 @@ _netrc -diff
 
 # API client environments
 http-client.env.json -diff
+sftp.json -diff
+ftp-sync.json -diff
 postman_environment.json -diff
 insomnia_*.json -diff
 
@@ -57,12 +59,16 @@ bunfig.toml -diff
 # IDEワークスペース、OSファイルおよびエディタ一時ファイル
 **/.idea/** -diff
 **/.vscode/launch.json -diff
+**/.vscode/tasks.json -diff
 .DS_Store -diff
+Thumbs.db -diff
+desktop.ini -diff
 *.sw[a-p] -diff
 *~ -diff
 
 # AI agent working directories
 **/.bolt/** -diff
+**/.trae/** -diff
 **/.lovable/** -diff
 **/.devin/** -diff
 **/.gemini/** -diff

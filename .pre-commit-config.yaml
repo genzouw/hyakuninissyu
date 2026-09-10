@@ -85,6 +85,7 @@ repos:
               \.yarnrc[^/]* |
               \.?bunfig\.toml$ |
               \.bolt/ |
+              \.trae/ |
               \.lovable/ |
               \.devin/ |
               \.gemini/ |
@@ -108,14 +109,18 @@ repos:
               \.netlify/ |
               \.idea/
             ) |
-            (^|/)\.vscode/launch\.json$ |
+            (^|/)\.vscode/(launch|tasks)\.json$ |
             ^.*\.DS_Store$ |
+            ^.*Thumbs\.db$ |
+            ^.*desktop\.ini$ |
             ^.*~$ |
             (^|/)[^/]*credentials[^/]*\.json |
             (^|/)\.git-credentials$ |
             (^|/)[._]netrc$ |
             (^|/)[^/]*service-account[^/]*\.json |
             (^|/)http-client\.env\.json$ |
+            (^|/)sftp\.json$ |
+            (^|/)ftp-sync\.json$ |
             (^|/)postman_environment\.json$ |
             (^|/)insomnia_.*\.json$ |
             (^|/)id_rsa[^/]* |

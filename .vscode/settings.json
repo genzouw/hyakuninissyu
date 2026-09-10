@@ -81,7 +81,13 @@
     "**/*.pcap": true,
     "**/*.pcapng": true,
     "**/.*_history": true,
-    "**/.dbeaver-data-sources.xml": true
+    "**/.dbeaver-data-sources.xml": true,
+    "**/.vscode/tasks.json": true,
+    "**/sftp.json": true,
+    "**/ftp-sync.json": true,
+    "**/Thumbs.db": true,
+    "**/desktop.ini": true,
+    "**/.trae": true
   },
   "files.exclude": {
     "**/.idea": true,
@@ -159,6 +165,12 @@
     "**/*.pcap": true,
     "**/*.pcapng": true,
     "**/.*_history": true,
-    "**/.dbeaver-data-sources.xml": true
+    "**/.dbeaver-data-sources.xml": true,
+    "**/.vscode/tasks.json": true,
+    "**/sftp.json": true,
+    "**/ftp-sync.json": true,
+    "**/Thumbs.db": true,
+    "**/desktop.ini": true,
+    "**/.trae": true
   }
 }

@@ -90,13 +90,17 @@ dist/
 
 # IDEワークスペース、OSファイルおよびエディタ一時ファイル（セキュリティ/漏洩防止）
 .idea/
+**/.vscode/tasks.json
 **/.vscode/launch.json
 .DS_Store
+Thumbs.db
+desktop.ini
 *.sw[a-p]
 *~
 
 # AI agents
 .bolt/
+.trae/
 .lovable/
 .devin/
 .gemini/
@@ -144,6 +148,8 @@ _netrc
 
 # API client environments
 http-client.env.json
+sftp.json
+ftp-sync.json
 postman_environment.json
 insomnia_*.json
 
