@@ -89,4 +89,22 @@ describe('Collection.vue', () => {
     expect(wrapper.vm.selectedPoem).toEqual(poem)
     expect(wrapper.vm.showModal).toBe(true)
   })
+
+  it('should show poem detail when Enter key is pressed on poem card', async () => {
+    const wrapper = mountCollection()
+    await wrapper.find('.poem-card').trigger('keyup.enter')
+    expect(wrapper.vm.showModal).toBe(true)
+  })
+
+  it('should not show poem detail when Space key is pressed down (default scroll is prevented instead)', async () => {
+    const wrapper = mountCollection()
+    await wrapper.find('.poem-card').trigger('keydown.space')
+    expect(wrapper.vm.showModal).toBe(false)
+  })
+
+  it('should show poem detail when Space key is released on poem card', async () => {
+    const wrapper = mountCollection()
+    await wrapper.find('.poem-card').trigger('keyup.space')
+    expect(wrapper.vm.showModal).toBe(true)
+  })
 })
