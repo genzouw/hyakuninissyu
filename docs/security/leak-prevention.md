@@ -68,8 +68,10 @@ PR や Push 時に実行される第二の防御層です。
 
 ローカルおよび CI 環境で動作する `pre-commit` フック（`gitleaks` や `trufflehog` など）のシークレット検知ルールを常に最新状態に保つため、定期的な自動更新メカニズムを導入しています。
 
-- `.github/workflows/pre-commit-autoupdate.yml` により、定期的に `pre-commit autoupdate` が実行され、`.pre-commit-config.yaml` に定義されている各種フックのリビジョンを最新に更新する Pull Request が自動作成されます。
+- `.github/dependabot.yml` の `pre-commit` エコシステム設定により、`.pre-commit-config.yaml` に定義されている各種フックのリビジョンを最新に更新する Pull Request が Dependabot によって自動作成されます。SHA 固定（コミット SHA + `# frozen: <tag>` 形式のバージョンタグコメント）の形式のまま更新されるため、GitHub Actions の外部アクション同様、タグ参照への巻き戻りは発生しません。`# frozen: <tag>` コメントが無いと Dependabot はタグを解決できず、デフォルトブランチの HEAD SHA に更新してしまうため、この形式は必須です。
 - これにより、新たなシークレットパターンへの対応漏れを防ぎ、CI とローカル環境間のバージョン乖離（ドリフト）を解消します。
+- なお、Dependabot の PR はスクリプトを実行できないため、rev 更新に伴う `.secrets.baseline` の再生成（`detect-secrets scan --update .secrets.baseline`）は追従されません。CI（`pre-commit.yml`）の detect-secrets hook が失敗した場合は、`bun.lock` の手動追従と同様に PR ブランチ上で上記コマンドを実行してコミットしてください。
+- 以前は独立した cron ワークフロー（`pre-commit-autoupdate.yml`）で `pre-commit autoupdate` を実行していましたが、Dependabot の `pre-commit` エコシステムと同じファイルを異なるスケジュールで更新し合う二重 automation となっていたため廃止し、Dependabot 側に一本化しました。
 
 ## 万が一漏洩してしまった場合
 
