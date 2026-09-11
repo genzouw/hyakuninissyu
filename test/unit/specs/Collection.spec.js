@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils'
+import { mount, shallowMount } from '@vue/test-utils'
 import { createStore as createVuexStore } from 'vuex'
 import { createBootstrap } from 'bootstrap-vue-next'
 import Collection from '@/components/Collection'
@@ -19,6 +19,16 @@ describe('Collection.vue', () => {
   function mountCollection (collectedPoemIds = []) {
     const store = createStore(collectedPoemIds)
     return mount(Collection, {
+      global: { plugins: [store, createBootstrap()] },
+    })
+  }
+
+  // .poem-card はコンポーネント自身のテンプレートに属するため、
+  // shallowMount でも子コンポーネント（b-progress 等）のみがスタブ化され、
+  // キーボード操作の検証には影響しない。
+  function shallowMountCollection (collectedPoemIds = []) {
+    const store = createStore(collectedPoemIds)
+    return shallowMount(Collection, {
       global: { plugins: [store, createBootstrap()] },
     })
   }
@@ -91,19 +101,19 @@ describe('Collection.vue', () => {
   })
 
   it('should show poem detail when Enter key is pressed on poem card', async () => {
-    const wrapper = mountCollection()
+    const wrapper = shallowMountCollection()
     await wrapper.find('.poem-card').trigger('keyup.enter')
     expect(wrapper.vm.showModal).toBe(true)
   })
 
   it('should not show poem detail when Space key is pressed down (default scroll is prevented instead)', async () => {
-    const wrapper = mountCollection()
+    const wrapper = shallowMountCollection()
     await wrapper.find('.poem-card').trigger('keydown.space')
     expect(wrapper.vm.showModal).toBe(false)
   })
 
   it('should show poem detail when Space key is released on poem card', async () => {
-    const wrapper = mountCollection()
+    const wrapper = shallowMountCollection()
     await wrapper.find('.poem-card').trigger('keyup.space')
     expect(wrapper.vm.showModal).toBe(true)
   })
