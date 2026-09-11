@@ -29,6 +29,20 @@
         "required-attr": false,
         "required-element": false
       }
+    },
+    {
+      // @markuplint/vue-parser（v4.18系）は `@keyup.enter` と `@keyup.space` の
+      // ような「同じイベント種別 + 異なるキー修飾子」を持つ v-on 属性を、
+      // 修飾子を無視した `onkeyup` という同一の potentialName に解決してしまい、
+      // attr-duplication が誤検知する（`@keydown.space.prevent` のように
+      // 修飾子が2つ以上あると正規表現がマッチせず誤検知しない、という
+      // アンバランスなパーサー側の既知の制限に起因する）。
+      // .poem-card は Collection.vue のカード要素にのみ使用するクラスのため、
+      // 影響範囲をこの要素に限定して誤検知のみを抑止する。
+      "selector": ".poem-card",
+      "rules": {
+        "attr-duplication": false
+      }
     }
   ]
 }
