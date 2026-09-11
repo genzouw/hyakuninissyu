@@ -76,7 +76,11 @@
             collected: isCollected(poem.id),
             uncollected: !isCollected(poem.id),
           }"
+          role="button"
+          tabindex="0"
           @click="showPoemDetail(poem)"
+          @keyup.enter="showPoemDetail(poem)"
+          @keyup.space.prevent="showPoemDetail(poem)"
         >
           <div class="card h-100 text-center">
             <div class="card-body">
