@@ -108,7 +108,15 @@ describe('Collection.vue', () => {
 
   it('should not show poem detail when Space key is pressed down (default scroll is prevented instead)', async () => {
     const wrapper = shallowMountCollection()
-    await wrapper.find('.poem-card').trigger('keydown.space')
+    const event = new KeyboardEvent('keydown', {
+      key: ' ',
+      code: 'Space',
+      cancelable: true,
+      bubbles: true,
+    })
+    wrapper.find('.poem-card').element.dispatchEvent(event)
+    await wrapper.vm.$nextTick()
+    expect(event.defaultPrevented).toBe(true)
     expect(wrapper.vm.showModal).toBe(false)
   })
 
