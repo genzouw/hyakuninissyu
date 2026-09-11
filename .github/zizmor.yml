@@ -5,7 +5,26 @@
 # zizmor.yaml)。監査ルールの有効・無効や重要度の調整が将来的に必要になった
 # 場合は、CI とローカルの設定が乖離しないよう、必ずこのファイル一箇所に
 # 集約すること。
-#
-# 現時点では既定のルールセット・重要度をそのまま採用しており、個別の上書き
-# は行っていない。
-rules: {}
+rules:
+  # self-repository は zizmor 1.30.0 で追加された監査で、リポジトリ内アクションの
+  # 参照を `uses: ./...` から GitHub の self-repository 構文 `uses: $/...` へ
+  # 移行するよう求める (severity: low)。
+  #
+  # しかし actionlint 1.7.12 は `$/` 構文を未サポートで、
+  # 「specifying action "$/..." in invalid format because ref is missing」として
+  # エラーにする。両ツールの要求が相反するため、現時点では従来どおり `./` を維持し、
+  # この監査のみ抑止する。
+  #
+  # actionlint が `$/` を解釈できるようになった時点で、この抑止を削除し
+  # `uses: $/.github/actions/setup-bun-env` へ一括移行すること。
+  # ignore はグロブ (`*.yml`) を受け付けないため、対象ワークフローを明示列挙する。
+  # 新規ワークフローで `./` 参照を追加した場合はここへの追記が必要になる。
+  self-repository:
+    ignore:
+      - deploy.yml
+      - knip.yml
+      - license-compliance.yml
+      - lighthouse.yml
+      - lint.yml
+      - repomix.yml
+      - reviewdog.yml
