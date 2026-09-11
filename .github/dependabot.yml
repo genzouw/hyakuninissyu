@@ -169,8 +169,11 @@ updates:
 
   # pre-commit hooks (.pre-commit-config.yaml)
   # 各フックは GitHub Actions の外部アクションと同様にコミットSHAで固定している。
-  # Dependabot は SHA固定のフックでも新しいタグを解決して rev を更新できるため、
-  # タグ参照の場合と同じ運用手順（自動PR→レビュー→マージ）で追従できる。
+  # rev のコメントは "# frozen: <tag>" 形式で記述すること。この形式が無いと
+  # Dependabot はタグを解決できず、デフォルトブランチの HEAD SHA に更新して
+  # しまうため（CWE-829: 信頼できない管理領域からの機能取り込み）、SHA固定の
+  # 意図が損なわれる。frozen 形式であれば、タグ参照の場合と同じ運用手順
+  # （自動PR→レビュー→マージ）で正しいタグ解決のまま追従できる。
   # 注意: DependabotのPRはスクリプトを実行できないため、rev変更に伴う
   # .secrets.baseline の再生成（detect-secrets scan --update .secrets.baseline）
   # は追従されない。このPRのCI（pre-commit.yml）が detect-secrets hook で
