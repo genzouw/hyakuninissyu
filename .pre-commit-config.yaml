@@ -1,12 +1,12 @@
 repos:
   - repo: https://github.com/gitleaks/gitleaks
-    rev: 43fae355e6fe4d99d2a7b240a224b85e2903aeb4 # frozen: v8.21.2
+    rev: 83d9cd684c87d95d656c1458ef04895a7f1cbd8e # frozen: v8.30.1
     hooks:
       - id: gitleaks
         name: gitleaks (Secret Detection)
         description: Detect hardcoded secrets using Gitleaks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: cef0300fd0fc4d2a87a85fa2093c6b283ea36f4b # frozen: v5.0.0
+    rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c # frozen: v6.0.0
     hooks:
       - id: check-yaml
       - id: check-json
@@ -40,26 +40,26 @@ repos:
       - id: detect-secrets
         args: ['--baseline', '.secrets.baseline']
   - repo: https://github.com/trufflesecurity/trufflehog
-    rev: 20652fbbdefffcdaa493a5bf57ab2ac6b1db715b # frozen: v3.97.1
+    rev: 363923b901c911a9164f50b6c423f47c15372b1c # frozen: v3.97.4
     hooks:
       - id: trufflehog
         name: trufflehog (Secret Detection)
         description: CIと同期し、GoogleGeminiAPIKeyを除く全てのシークレット（無効化済み含む）をブロック
         entry: trufflehog git file://. --since-commit HEAD --fail --trust-local-git-config --exclude-detectors=GoogleGeminiAPIKey
   - repo: https://github.com/crate-ci/typos
-    rev: 37bb98842b0d8c4ffebdb75301a13db0267cef89 # frozen: v1.47.2
+    rev: d43b6c087ac471e2ea7b8af622ff15f05c0c365b # frozen: v1.50.1
     hooks:
       - id: typos
         name: typos (Spell Checker)
         description: Detect spelling mistakes using typos
   - repo: https://github.com/rhysd/actionlint
-    rev: e54bba5a3335513822197930bbcbab5af8e11188 # frozen: v1.7.6
+    rev: 914e7df21a07ef503a81201c76d2b11c789d3fca # frozen: v1.7.12
     hooks:
       - id: actionlint
         name: actionlint (GitHub Actions Static Analysis)
         description: Detect workflow syntax errors, expression mistakes, and script injection risks (pull_request_target usage is blocked separately by the forbid-pull-request-target hook and zizmor.yml)
   - repo: https://github.com/zizmorcore/zizmor-pre-commit
-    rev: 451b56af716f9f0d0c2b816503a3fd0cf8b036fa # frozen: v1.29.0
+    rev: cef8b8350da46d8114c7e6b7272aebdccdf193ce # frozen: v1.30.0
     hooks:
       - id: zizmor
         name: zizmor (GitHub Actions Security Static Analysis)
