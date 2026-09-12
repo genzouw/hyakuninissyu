@@ -230,7 +230,7 @@ export default {
   margin: 0;
 }
 
-.card-body h1 {
+.card-body .h1 {
   font-size: 3rem;
   font-weight: bold;
 }
