@@ -76,7 +76,7 @@
         {
           "kind": "glob",
           "value": "*-report.md",
-          "samples": ["claude-report.md", "nested/dir/gemini-report.md"],
+          "samples": ["claude-report.md", "nested/dir/gemini-report.md", "trae-report.md", "roo-report.md"],
           "note": "forbid-sensitive-files は既知のエージェント名を列挙する形式のため、サンプルも既知名を用いる"
         }
       ]
