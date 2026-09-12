@@ -96,6 +96,8 @@
         <img
           src="@/assets/hyakunin_issyu.png"
           class="img-fluid w-75 mx-auto d-block"
+          width="800"
+          height="798"
           alt="百人一首のイメージ"
         >
       </div>

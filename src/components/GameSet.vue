@@ -36,14 +36,14 @@
 
         <div class="row justify-content-center">
           <div class="col-auto">
-            <h3>
+            <p class="h3">
               <router-link
                 to="/"
                 class="btn btn-primary btn-lg"
               >
                 もういっかいちゃれんじ！
               </router-link>
-            </h3>
+            </p>
           </div>
         </div>
       </div>

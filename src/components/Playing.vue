@@ -65,6 +65,8 @@
         <img
           src="@/assets/hyakunin_issyu.png"
           class="img-fluid w-75 mx-auto d-block"
+          width="800"
+          height="798"
           alt=""
         >
       </div>
@@ -73,7 +75,7 @@
     <!-- eslint-disable-next-line vuejs-accessibility/media-has-caption -->
     <audio
       id="right-sound"
-      preload
+      preload="auto"
     >
       <source
         src="@/assets/right.mp3"
@@ -84,7 +86,7 @@
     <!-- eslint-disable-next-line vuejs-accessibility/media-has-caption -->
     <audio
       id="wrong-sound"
-      preload
+      preload="auto"
     >
       <source
         src="@/assets/wrong.mp3"

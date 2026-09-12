@@ -12,10 +12,16 @@
           </div>
           <div class="card-body">
             <div class="mb-3">
-              <label class="h5">問題数を選択</label>
+              <h3
+                id="ai-battle-question-count-label"
+                class="h5"
+              >
+                問題数を選択
+              </h3>
               <div
                 class="btn-group btn-group-lg d-flex"
                 role="group"
+                aria-labelledby="ai-battle-question-count-label"
               >
                 <button
                   v-for="count in [10, 20, 30]"
@@ -35,10 +41,16 @@
             </div>
 
             <div class="mb-3 mt-4">
-              <label class="h5">難易度を選択</label>
+              <h3
+                id="ai-battle-difficulty-label"
+                class="h5"
+              >
+                難易度を選択
+              </h3>
               <div
                 class="btn-group btn-group-lg d-flex"
                 role="group"
+                aria-labelledby="ai-battle-difficulty-label"
               >
                 <button
                   type="button"
@@ -119,16 +131,24 @@
           <div class="col-6">
             <div class="card bg-primary text-white">
               <div class="card-body text-center">
-                <h5>👤 あなた</h5>
-                <h2>{{ playerScore }} / {{ currentQuestionIndex }}</h2>
+                <h3 class="h5">
+                  👤 あなた
+                </h3>
+                <p class="h2">
+                  {{ playerScore }} / {{ currentQuestionIndex }}
+                </p>
               </div>
             </div>
           </div>
           <div class="col-6">
             <div class="card bg-danger text-white">
               <div class="card-body text-center">
-                <h5>🤖 AI</h5>
-                <h2>{{ aiScore }} / {{ currentQuestionIndex }}</h2>
+                <h3 class="h5">
+                  🤖 AI
+                </h3>
+                <p class="h2">
+                  {{ aiScore }} / {{ currentQuestionIndex }}
+                </p>
                 <div
                   v-if="aiWrong"
                   class="mt-2 badge badge-warning text-dark"
@@ -165,9 +185,9 @@
                 v-if="countdown > 0"
                 class="text-center mb-4"
               >
-                <h1 class="countdown-number text-primary">
+                <p class="countdown-number text-primary">
                   {{ countdown }}
-                </h1>
+                </p>
                 <p class="text-muted">
                   下の句を確認してください
                 </p>

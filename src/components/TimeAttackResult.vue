@@ -10,24 +10,32 @@
             <h3 class="mb-4">
               クリアタイム
             </h3>
-            <h1 class="display-1 text-primary mb-4">
+            <p class="display-1 text-primary mb-4">
               {{ formattedTime }}
-            </h1>
+            </p>
 
             <div class="row mb-4">
               <div class="col-md-6">
                 <div class="card bg-light">
                   <div class="card-body">
-                    <h5>正解数</h5>
-                    <h3>{{ score }} / 100</h3>
+                    <h4 class="h5">
+                      正解数
+                    </h4>
+                    <p class="h3">
+                      {{ score }} / 100
+                    </p>
                   </div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="card bg-light">
                   <div class="card-body">
-                    <h5>正答率</h5>
-                    <h3>{{ accuracy }}%</h3>
+                    <h4 class="h5">
+                      正答率
+                    </h4>
+                    <p class="h3">
+                      {{ accuracy }}%
+                    </p>
                   </div>
                 </div>
               </div>

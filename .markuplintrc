@@ -6,30 +6,18 @@
     "markuplint:recommended"
   ],
   "rules": {
-    "require-accessible-name": false,
-    "ineffective-attr": false,
-    "case-sensitive-attr-name": false,
-    "invalid-attr": false,
-    "required-attr": false,
-    "required-element": false,
-    "heading-levels": false,
-    "label-has-control": false
-  },
-  // markuplint:recommended プリセットは nodeRules でセレクタ単位にルールを
-  // 再有効化しており、これがトップレベル rules の無効化より優先される。
-  // 例: :where(:not(dialog, dialog *)) が invalid-attr を、
-  //     :where(video, audio) が required-element を、
-  //     :where(img[src]) が required-attr を復活させていた。
-  // そのため上の rules だけでは無効化が効かず、nodeRules 側でも打ち消す。
-  "nodeRules": [
-    {
-      "selector": "*",
-      "rules": {
-        "invalid-attr": false,
-        "required-attr": false,
-        "required-element": false
+    // @markuplint/vue-parser（v4.18系）は `:key`（`v-bind:key`）と `ref` を
+    // ディレクティブではなく素の HTML 属性 `key` / `ref` として解決するため、
+    // 標準 HTML には存在しない属性として誤検知される。
+    // Vue SFC ではあらゆる要素に付与しうるため、この2属性のみ全体で許可する。
+    // パーサー側の制限に対する暫定処置であり、解消されたら削除すること。
+    "invalid-attr": {
+      "options": {
+        "allowAttrs": ["key", "ref"]
       }
-    },
+    }
+  },
+  "nodeRules": [
     {
       // @markuplint/vue-parser（v4.18系）は `@keyup.enter` と `@keyup.space` の
       // ような「同じイベント種別 + 異なるキー修飾子」を持つ v-on 属性を、
@@ -42,6 +30,15 @@
       "selector": ".poem-card",
       "rules": {
         "attr-duplication": false
+      }
+    },
+    {
+      // 正解／不正解の効果音のみを再生する <audio> で、発話情報を含まないため
+      // キャプション（<track>）は不要。同じ理由で ESLint の
+      // vuejs-accessibility/media-has-caption も個別に無効化している。
+      "selector": "audio",
+      "rules": {
+        "required-element": false
       }
     }
   ]

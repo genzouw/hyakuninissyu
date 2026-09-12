@@ -4,24 +4,24 @@
       <div class="col-md-6">
         <div class="card bg-primary text-white">
           <div class="card-body text-center">
-            <h5 class="card-title">
+            <h2 class="h5 card-title">
               経過時間
-            </h5>
-            <h2 class="display-4">
-              {{ formattedTime }}
             </h2>
+            <p class="display-4 mb-2">
+              {{ formattedTime }}
+            </p>
           </div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="card bg-success text-white">
           <div class="card-body text-center">
-            <h5 class="card-title">
+            <h2 class="h5 card-title">
               残り枚数
-            </h5>
-            <h2 class="display-4">
-              {{ remainingCards }}
             </h2>
+            <p class="display-4 mb-2">
+              {{ remainingCards }}
+            </p>
           </div>
         </div>
       </div>
@@ -92,6 +92,8 @@
         <img
           src="@/assets/hyakunin_issyu.png"
           class="img-fluid w-75 mx-auto d-block"
+          width="800"
+          height="798"
           alt=""
         >
       </div>
@@ -100,7 +102,7 @@
     <!-- eslint-disable-next-line vuejs-accessibility/media-has-caption -->
     <audio
       id="right-sound"
-      preload
+      preload="auto"
     >
       <source
         src="@/assets/right.mp3"
@@ -111,7 +113,7 @@
     <!-- eslint-disable-next-line vuejs-accessibility/media-has-caption -->
     <audio
       id="wrong-sound"
-      preload
+      preload="auto"
     >
       <source
         src="@/assets/wrong.mp3"
