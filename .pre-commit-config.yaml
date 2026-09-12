@@ -178,8 +178,8 @@ repos:
         description: 'AIエージェントの作業ディレクトリ、汎用的なシークレットファイル（APIクライアント環境設定を含む）、パッケージマネージャー設定、データベース・PIIデータのエクスポートファイル、IDE固有設定ファイルおよびOS自動生成・エディタ一時ファイルのコミットをブロックします'
       - id: check-protected-patterns
         name: check protected patterns drift
-        entry: python3 scripts/check_protected_patterns.py
-        language: system
+        entry: python scripts/check_protected_patterns.py
+        language: python
         pass_filenames: false
         always_run: true
         description: '漏洩防止の保護対象パターンの単一ソース (docs/security/protected-patterns.json) と、.gitignore / .gitattributes / .vscode/settings.json (files.exclude, search.exclude) / forbid-sensitive-files の 5 箇所との乖離を検出します。該当ファイルがリポジトリに 1 つも存在しなくても検証が走るよう always_run で実行し、防御層の抜けを CI でも検知します'
