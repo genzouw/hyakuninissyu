@@ -40,9 +40,9 @@ jobs:
           path: |
             .eslintcache
             .stylelintcache
-          key: ${{ runner.os }}-lint-cache-${{ github.sha }}
+          key: ${{ runner.os }}-lint-cache-${{ hashFiles('bun.lock') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-lint-cache-
+            ${{ runner.os }}-lint-cache-${{ hashFiles('bun.lock') }}-
 
       - name: Run ESLint
         run: bun run lint
