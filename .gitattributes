@@ -28,8 +28,7 @@ insomnia_*.json -diff
 
 # Database dumps / Backups / PII exports
 *.db -diff
-*.sqlite -diff
-*.sqlite3 -diff
+*.sqlite* -diff
 *.dump -diff
 *.bak -diff
 *.sql -diff
@@ -52,7 +51,7 @@ yarn.lock linguist-generated=true
 pnpm-lock.yaml linguist-generated=true
 pnpm-lock.yml linguist-generated=true
 .npmrc -diff
-.yarnrc -diff
+.yarnrc* -diff
 .bunfig.toml -diff
 bunfig.toml -diff
 
@@ -91,12 +90,12 @@ desktop.ini -diff
 *.log -diff
 
 # Cloud configs
-.aws/** -diff
-.kube/** -diff
-.gcp/** -diff
-.azure/** -diff
-.vercel/** -diff
-.netlify/** -diff
+**/.aws/** -diff
+**/.kube/** -diff
+**/.gcp/** -diff
+**/.azure/** -diff
+**/.vercel/** -diff
+**/.netlify/** -diff
 
 # IaC variables
 *.tfvars -diff

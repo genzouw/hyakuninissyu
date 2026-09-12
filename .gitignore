@@ -106,8 +106,8 @@ desktop.ini
 .gemini/
 .claude/*
 !.claude/rules/
-!.cursor/rules/
 .cursor/*
+!.cursor/rules/
 .aider*
 !.aider.conf.yml
 !.aider.instruction.md
@@ -155,20 +155,20 @@ insomnia_*.json
 
 # Package manager configs and foreign lockfiles
 .npmrc
-.yarnrc
+.yarnrc*
 .bunfig.toml
 bunfig.toml
 package-lock.json
 npm-shrinkwrap.json
 yarn.lock
 pnpm-lock.yaml
+pnpm-lock.yml
 .yarn/
 .pnp.*
 
 # Database dumps / Backups / PII exports
 *.db
-*.sqlite
-*.sqlite3
+*.sqlite*
 *.dump
 *.bak
 *.sql
@@ -201,6 +201,10 @@ venv/
 
 # Optional stylelint cache
 .stylelintcache
+
+# Python（scripts/ 配下の検証スクリプトの生成物）
+__pycache__/
+*.py[cod]
 
 # Additional sensitive files (Security/Leak Prevention)
 *.jks
