@@ -18,16 +18,24 @@
               <div class="col-md-6">
                 <div class="card bg-light">
                   <div class="card-body">
-                    <h4 class="h5">正解数</h4>
-                    <p class="h3">{{ score }} / 100</p>
+                    <h4 class="h5">
+                      正解数
+                    </h4>
+                    <p class="h3">
+                      {{ score }} / 100
+                    </p>
                   </div>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="card bg-light">
                   <div class="card-body">
-                    <h4 class="h5">正答率</h4>
-                    <p class="h3">{{ accuracy }}%</p>
+                    <h4 class="h5">
+                      正答率
+                    </h4>
+                    <p class="h3">
+                      {{ accuracy }}%
+                    </p>
                   </div>
                 </div>
               </div>

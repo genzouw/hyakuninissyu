@@ -25,8 +25,12 @@
                   :class="playerWon ? 'bg-primary text-white' : 'bg-light'"
                 >
                   <div class="card-body">
-                    <h3 class="h5">👤 あなた</h3>
-                    <p class="h1">{{ playerScore }} / {{ totalQuestions }}</p>
+                    <h3 class="h5">
+                      👤 あなた
+                    </h3>
+                    <p class="h1">
+                      {{ playerScore }} / {{ totalQuestions }}
+                    </p>
                     <p class="mb-0">
                       正答率: {{ playerAccuracy }}%
                     </p>
@@ -39,8 +43,12 @@
                   :class="aiWon ? 'bg-danger text-white' : 'bg-light'"
                 >
                   <div class="card-body">
-                    <h3 class="h5">🤖 AI</h3>
-                    <p class="h1">{{ aiScore }} / {{ totalQuestions }}</p>
+                    <h3 class="h5">
+                      🤖 AI
+                    </h3>
+                    <p class="h1">
+                      {{ aiScore }} / {{ totalQuestions }}
+                    </p>
                     <p class="mb-0">
                       正答率: {{ aiAccuracy }}%
                     </p>
@@ -54,13 +62,17 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-6">
-                    <h4 class="h6">問題数</h4>
+                    <h4 class="h6">
+                      問題数
+                    </h4>
                     <p class="mb-0">
                       {{ totalQuestions }}問
                     </p>
                   </div>
                   <div class="col-md-6">
-                    <h4 class="h6">難易度</h4>
+                    <h4 class="h6">
+                      難易度
+                    </h4>
                     <p class="mb-0">
                       {{ difficultyLabel }}
                     </p>

@@ -131,16 +131,24 @@
           <div class="col-6">
             <div class="card bg-primary text-white">
               <div class="card-body text-center">
-                <h3 class="h5">👤 あなた</h3>
-                <p class="h2">{{ playerScore }} / {{ currentQuestionIndex }}</p>
+                <h3 class="h5">
+                  👤 あなた
+                </h3>
+                <p class="h2">
+                  {{ playerScore }} / {{ currentQuestionIndex }}
+                </p>
               </div>
             </div>
           </div>
           <div class="col-6">
             <div class="card bg-danger text-white">
               <div class="card-body text-center">
-                <h3 class="h5">🤖 AI</h3>
-                <p class="h2">{{ aiScore }} / {{ currentQuestionIndex }}</p>
+                <h3 class="h5">
+                  🤖 AI
+                </h3>
+                <p class="h2">
+                  {{ aiScore }} / {{ currentQuestionIndex }}
+                </p>
                 <div
                   v-if="aiWrong"
                   class="mt-2 badge badge-warning text-dark"
