@@ -3,7 +3,17 @@
 
 <head prefix="og: https://ogp.me/ns#">
   <meta charset="utf-8">
-  <link rel="shortcut icon" type="image/png" href="/favicon.ico" />
+  <!--
+    ファビコン。
+    以前は rel="shortcut icon" type="image/png" と宣言していたが、実体は ICO
+    (Content-Type も image/vnd.microsoft.icon) で MIME が食い違っていた。
+    この不一致があるとブラウザが宣言を無視し、同じドメインで以前配信していた
+    別サイトのキャッシュを使い続けることがある。
+  -->
+  <link rel="icon" href="/favicon.ico" sizes="any" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta name="google-site-verification" content="gFYiPUxpzQzAhrVmsACmY-N3Y7jURnIQMfT5GKlnWmU" />
   <title>ひゃくにんいっしゅをおぼえよう</title>
