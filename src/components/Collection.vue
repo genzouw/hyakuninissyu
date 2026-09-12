@@ -14,12 +14,12 @@
       <div class="col-md-6">
         <div class="card bg-success text-white">
           <div class="card-body">
-            <h5 class="card-title">
+            <h3 class="h5 card-title">
               コレクション達成度
-            </h5>
-            <h2 class="display-4">
+            </h3>
+            <p class="display-4 mb-2">
               {{ collectedCount }} / {{ totalCount }}
-            </h2>
+            </p>
             <b-progress
               :value="collectionRate"
               :max="100"
@@ -80,14 +80,14 @@
           tabindex="0"
           @click="showPoemDetail(poem)"
           @keyup.enter="showPoemDetail(poem)"
-          @keydown.space.prevent
+          @keydown.space="preventSpaceScroll"
           @keyup.space="showPoemDetail(poem)"
         >
           <div class="card h-100 text-center">
             <div class="card-body">
-              <h5 class="card-title">
+              <h3 class="h5 card-title">
                 {{ poem.id }}
-              </h5>
+              </h3>
               <p
                 class="poem-text"
                 :class="{ blurred: !isCollected(poem.id) }"
@@ -206,6 +206,13 @@ export default {
     showPoemDetail (poem) {
       this.selectedPoem = poem
       this.showModal = true
+    },
+    // スペースキー押下によるページスクロールを抑止する。
+    // `@keydown.space.prevent` と書くと @markuplint/vue-parser（v4.18系）が
+    // 修飾子2つの v-on 属性をディレクティブとして認識できず invalid-attr を
+    // 誤検知するため、`.prevent` はメソッド側で明示的に実行する。
+    preventSpaceScroll (event) {
+      event.preventDefault()
     },
   },
 }

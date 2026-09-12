@@ -13,9 +13,9 @@
       <div class="col-md-6">
         <div class="card bg-gradient-primary text-white">
           <div class="card-body text-center">
-            <h3 class="display-4 mb-2">
+            <p class="display-4 mb-2">
               {{ unlockedCount }} / {{ totalBadges }}
-            </h3>
+            </p>
             <p class="mb-2">
               バッジを獲得しました
             </p>
@@ -100,9 +100,9 @@
             >
               {{ rarityLabels[badge.rarity] }}
             </div>
-            <h5 class="badge-name">
+            <h3 class="badge-name">
               {{ badge.name }}
-            </h5>
+            </h3>
             <p
               class="badge-description text-muted small"
               :class="{ 'blurred': !isUnlocked(badge.id) }"

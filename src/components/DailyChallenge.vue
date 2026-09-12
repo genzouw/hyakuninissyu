@@ -125,6 +125,8 @@
           <img
             src="@/assets/hyakunin_issyu.png"
             class="img-fluid w-75 mx-auto d-block"
+            width="800"
+            height="798"
             alt=""
           >
         </div>
@@ -136,7 +138,7 @@
     <!-- eslint-disable-next-line vuejs-accessibility/media-has-caption -->
     <audio
       ref="rightSoundDaily"
-      preload
+      preload="auto"
     >
       <source
         src="@/assets/right.mp3"
@@ -147,7 +149,7 @@
     <!-- eslint-disable-next-line vuejs-accessibility/media-has-caption -->
     <audio
       ref="wrongSoundDaily"
-      preload
+      preload="auto"
     >
       <source
         src="@/assets/wrong.mp3"
