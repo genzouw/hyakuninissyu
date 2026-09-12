@@ -48,7 +48,41 @@ jobs:
       - name: Install pre-commit
         run: pip install -r requirements.txt
 
-      - name: Run protected patterns checker unit tests
+      # scripts/test_gitleaks_pii_email.py は gitleaks 本体を実行して .gitleaks.toml の
+      # 挙動を検証する。pre-commit が golang フックとして導入する gitleaks は
+      # ~/.cache/pre-commit 配下に入り PATH に載らないため、テスト用に別途導入する。
+      # バージョンは .pre-commit-config.yaml の `# frozen:` を単一ソースとして解決し、
+      # Dependabot (pre-commit ecosystem) の rev 更新に自動追従させる。
+      - name: Resolve pinned gitleaks version
+        id: gitleaks
+        run: |
+          version=$(python -c "import sys; sys.path.insert(0, 'scripts'); import test_gitleaks_pii_email as t; print(t.frozen_gitleaks_version())")
+          echo "version=${version}" >>"$GITHUB_OUTPUT"
+
+      - name: Cache gitleaks binary
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.local/bin/gitleaks
+          key: ${{ runner.os }}-gitleaks-${{ steps.gitleaks.outputs.version }}
+
+      - name: Install gitleaks
+        env:
+          GITLEAKS_VERSION: ${{ steps.gitleaks.outputs.version }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$HOME/.local/bin"
+          echo "$HOME/.local/bin" >>"$GITHUB_PATH"
+          if [ -x "$HOME/.local/bin/gitleaks" ]; then exit 0; fi
+          base="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}"
+          asset="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
+          tmp=$(mktemp -d)
+          curl -fsSL -o "${tmp}/${asset}" "${base}/${asset}"
+          curl -fsSL -o "${tmp}/checksums.txt" "${base}/gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+          (cd "$tmp" && grep " ${asset}\$" checksums.txt | sha256sum -c -)
+          tar -xzf "${tmp}/${asset}" -C "$tmp" gitleaks
+          install -m 0755 "${tmp}/gitleaks" "$HOME/.local/bin/gitleaks"
+
+      - name: Run scripts unit tests
         run: python -m unittest discover -s scripts -p 'test_*.py'
 
       - name: Run pre-commit hooks
