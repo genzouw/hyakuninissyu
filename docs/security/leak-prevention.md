@@ -10,6 +10,11 @@
   - `gitleaks` は `.gitleaks.toml` の拡張設定により、シークレットだけでなく個人情報（PII: 運用者やテストユーザーのメールアドレス等）のコミットも検知・ブロックします。ただし `pii-email` ルールには以下の検知範囲の限界があります。
     - **許可リストの対象**: `genzouw@gmail.com`（メンテナが README/SECURITY/package.json に意図的に公開している連絡先）、CI Bot のコミッターアドレス（`github-actions[bot]@users.noreply.github.com`, `dependabot[bot]@users.noreply.github.com`）、`bun` のパッチファイルパス（`patches/@scope%2Fpkg@version.patch` 等、メールアドレスと誤認識される文字列）、および `.gitleaks.toml` 自身のコメント中で「誤って許可リスト化されてしまう例」として記載しているダミーアドレス（`xgenzouw@gmail.com`, `alice+genzouw@gmail.com`）は、完全一致の正規表現で許可リスト化されており検知対象外です。後者は `ai-context` ブランチ（Repomix によるリポジトリ全体のスナップショット）に取り込まれると `--log-opts="--all"` の全ブランチ走査で恒常的に誤検知されるため許可リスト化しています。
     - **検知できない場合がある値**: 難読化された値（例: 全角文字への置換、`[at]` 等への置換、Base64 エンコード）や、正規表現のパターンに一致しない特殊な形式の PII は検知できません。
+    - **ドメイン部の仕様**: `pii-email` の正規表現はドメイン部に英字を 1 文字以上要求し、TLD を `[A-Za-z]{2,}` としています。この仕様から、以下は**意図的に検知対象外**です。
+      - 数値のみのドメインを持つアドレス（`alice@123.456.com` など）。`bun` のパッチファイル名（`node@29.2.6.patch` 等）をメールアドレスと誤検知しないための条件であり、その帰結として数値のみのドメインも検知されません。ただしこの条件は TLD 直前のラベルだけを見るものではないため、`123.456.co.uk` のように英字ラベルを含むドメインは検知されます。
+      - 非 ASCII のドメインを持つアドレス（`alice@例え.テスト` など）。文字クラスが ASCII のみで構成されているためです。なお同じドメインを Punycode（`xn--` 形式）へ変換した表記は ASCII のため検知されます。
+      - TLD が 1 文字のアドレス（`alice@example.c` など）。
+    - **回帰テスト**: 上記の検知・非検知の挙動は `scripts/test_gitleaks_pii_email.py` で固定しており、`.github/workflows/pre-commit.yml` の CI で `.pre-commit-config.yaml` に固定したものと同じバージョンの `gitleaks` を用いて検証されます。検証対象の文字列はリポジトリ内に完全なメールアドレスのリテラルを残さないよう、ローカル部とドメイン部を分けて保持し実行時に連結しています。`.gitleaks.toml` のルールや許可リストを変更する際は、このテストの期待値と本節の記述もあわせて更新してください。
     - **GitHub Secret Scanning との併用**: `gitleaks` は正規表現ベースの検知であり完全性を保証しないため、シークレットについては GitHub Secret Scanning（上記「マージ前の手動作業」参照）を併用し、多層防御としてください。`gitleaks` は PII 検知の**一助**であり、完全なカバレッジを保証するものではありません。
   - 加えて、`.pre-commit-config.yaml` にカスタムローカルフック (`forbid-sensitive-files`) を導入し、`.env` ファイル、各種キーファイル (`*.pem`, `*.key`)、インフラ状態ファイル (`*.tfstate`, `*.tfvars`, `*.auto.tfvars`)、各種証明書や SSH 鍵（`*.cert`, `*.p12`, `id_rsa`等）、クラウドサービスアカウント（`*service-account*.json`）、各種クラウド構成ディレクトリ (`.aws/`, `.kube/`, `.gcp/`, `.azure/`, `.vercel/`, `.netlify/`)、パッケージマネージャー設定 (`.npmrc`, `.yarnrc*`, `.bunfig.toml`, `bunfig.toml`)、DB ダンプ (`*.db`, `*.dump`, `*.sqlite*`, `*.sql`等)、HTTP Archive (`*.har`)、作業ログ・デバッグ出力等のログファイル（`*.log`）、および AI エージェントの作業ディレクトリ (`.claude/`, `.cursor/`, `.aider*/`, `.roo/`, `.zeal/` 等) などのステージング・コミットを明示的にブロックしています。
 - **設定ファイル**: `.pre-commit-config.yaml`、`.husky/pre-commit`、`.lintstagedrc.json` および `.secretlintrc.json`
@@ -153,13 +158,13 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 設定ファイル同士の文字列を突き合わせるのではなく、各パターンから代表パス（例: `*.pem` なら `sample.pem` と `nested/dir/sample.pem`）を生成し、**その代表パスを各層が実際に保護するか**という振る舞いを検証します。
 
-| 層 | 判定方法 |
-| --- | --- |
-| `gitignore` | `git check-ignore --no-index` で無視対象かを判定 |
-| `gitattributes` | `git check-attr diff` で `diff` が `unset` かを判定 |
-| `vscode-files` | `files.exclude` の glob で除外されるかを判定 |
-| `vscode-search` | `search.exclude` の glob で除外されるかを判定 |
-| `precommit` | `forbid-sensitive-files` の `files` にマッチし `exclude` にマッチしないかを判定 |
+| 層              | 判定方法                                                                        |
+| --------------- | ------------------------------------------------------------------------------- |
+| `gitignore`     | `git check-ignore --no-index` で無視対象かを判定                                |
+| `gitattributes` | `git check-attr diff` で `diff` が `unset` かを判定                             |
+| `vscode-files`  | `files.exclude` の glob で除外されるかを判定                                    |
+| `vscode-search` | `search.exclude` の glob で除外されるかを判定                                   |
+| `precommit`     | `forbid-sensitive-files` の `files` にマッチし `exclude` にマッチしないかを判定 |
 
 この方式により、設定ファイル間の表記差そのものではなく、実際に保護されるパスの違いを検証します。たとえば `.aws/**` はリポジトリ直下の `.aws/` のみを対象とし、`**/.aws/**` は下位階層も対象とするため両者は非等価ですが、この振る舞い検証によりそうした差分も防御の穴として正しく検出できます。逆に、単一ソースの `allowlist` に列挙したパス（`.env.example`、`test/fixtures/*.csv` 等）については「保護されて**いない**こと」を検証するため、除外設定を誤って削除した場合にも気づけます。
 
