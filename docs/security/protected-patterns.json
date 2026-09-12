@@ -145,7 +145,7 @@
       "name": "パッケージマネージャー設定",
       "patterns": [
         { "kind": "file", "value": ".npmrc" },
-        { "kind": "file", "value": ".yarnrc" },
+        { "kind": "glob", "value": ".yarnrc*", "samples": [".yarnrc", "nested/dir/.yarnrc.yml"], "note": "Yarn Berry の .yarnrc.yml も保護対象に含めるためワイルドカードで検証する" },
         { "kind": "file", "value": ".bunfig.toml" },
         { "kind": "file", "value": "bunfig.toml" }
       ]
@@ -167,8 +167,7 @@
       "name": "データベースダンプ・バックアップ・PII エクスポート",
       "patterns": [
         { "kind": "ext", "value": "db" },
-        { "kind": "ext", "value": "sqlite" },
-        { "kind": "ext", "value": "sqlite3" },
+        { "kind": "glob", "value": "*.sqlite*", "samples": ["sample.sqlite", "sample.sqlite3", "nested/dir/sample.sqlite-wal"], "note": "sqlite の journal/wal/shm 等の変化形も保護対象に含めるためワイルドカードで検証する" },
         { "kind": "ext", "value": "dump" },
         { "kind": "ext", "value": "bak" },
         { "kind": "ext", "value": "sql" },

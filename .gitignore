@@ -155,7 +155,7 @@ insomnia_*.json
 
 # Package manager configs and foreign lockfiles
 .npmrc
-.yarnrc
+.yarnrc*
 .bunfig.toml
 bunfig.toml
 package-lock.json
@@ -168,8 +168,7 @@ pnpm-lock.yml
 
 # Database dumps / Backups / PII exports
 *.db
-*.sqlite
-*.sqlite3
+*.sqlite*
 *.dump
 *.bak
 *.sql
