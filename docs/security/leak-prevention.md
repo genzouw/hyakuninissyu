@@ -143,6 +143,45 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 新たに利用される AI エージェントの作業ディレクトリ（`.bolt/`, `.lovable/`, `.devin/`, `.roo/`, `.zeal/`, `.trae/` 等）についても、他のツールと同様に `.gitignore`, `.gitattributes`, `.vscode/settings.json`, および `.pre-commit-config.yaml` を用いて、意図しないステージングや diff 出力を防ぐ設定を追加しました。
 
+### 保護対象パターンの単一ソース化とドリフト検知
+
+保護対象のパターンは `.gitignore` / `.gitattributes` / `.vscode/settings.json` の `files.exclude` / 同 `search.exclude` / `.pre-commit-config.yaml` の `forbid-sensitive-files` という **4 ファイル 5 箇所**に展開されています。これらは人力でのコピーが前提であり、どれか 1 枚の更新漏れが起きても、該当するファイルがリポジトリに 1 つも存在しない限り `pre-commit run --all-files` は緑のままです。防御層が 4 つあるように見えて実は 3 つ、という状態を検知できないことが最大のリスクでした。
+
+これを防ぐため、保護対象パターンの単一ソースを `docs/security/protected-patterns.json` に定義し、`scripts/check_protected_patterns.py` が 5 箇所すべてへの反映状況を検証します。検証は `check-protected-patterns` フック (`.pre-commit-config.yaml` の `repo: local`) として登録され、`always_run: true` / `pass_filenames: false` により該当ファイルの有無に関係なく毎回実行されます。CI 上でも `.github/workflows/pre-commit.yml` の `pre-commit run --all-files` にそのまま乗るため、ドリフトはプルリクエストの時点でブロックされます。
+
+#### 検証の方式
+
+設定ファイル同士の文字列を突き合わせるのではなく、各パターンから代表パス（例: `*.pem` なら `sample.pem` と `nested/dir/sample.pem`）を生成し、**その代表パスを各層が実際に保護するか**という振る舞いを検証します。
+
+| 層 | 判定方法 |
+| --- | --- |
+| `gitignore` | `git check-ignore --no-index` で無視対象かを判定 |
+| `gitattributes` | `git check-attr diff` で `diff` が `unset` かを判定 |
+| `vscode-files` | `files.exclude` の glob で除外されるかを判定 |
+| `vscode-search` | `search.exclude` の glob で除外されるかを判定 |
+| `precommit` | `forbid-sensitive-files` の `files` にマッチし `exclude` にマッチしないかを判定 |
+
+この方式により、`.aws/**` と `**/.aws/**` のような等価な表記揺れを差分として報告することなく、防御の穴だけを検出できます。逆に、単一ソースの `allowlist` に列挙したパス（`.env.example`、`test/fixtures/*.csv` 等）については「保護されて**いない**こと」を検証するため、除外設定を誤って削除した場合にも気づけます。
+
+#### パターンを追加・変更する手順
+
+1. `docs/security/protected-patterns.json` に追加する。層ごとの適用可否を変える場合は `layers` を、その理由は `note` を記述する
+2. `python3 scripts/check_protected_patterns.py` を実行し、報告された不足箇所を各設定ファイルへ**手動で**反映する
+3. 再度スクリプトを実行し、終了コードが 0 になることを確認する
+
+本スクリプトは検証のみを行い、設定ファイルの自動生成・自動書き換えは行いません。`.gitignore` や `.pre-commit-config.yaml` を機械的に書き換える仕組みは、設定破損時の影響が大きく、レビューで差分の意図を追いづらくなるためです。
+
+なお検証は「単一ソースにあるものが設定ファイルへ行き渡っているか」という一方向のみを対象とします。逆方向（設定ファイルにあるが単一ソースに無い）は、防御そのものは効いている状態であり緊急度が低い一方、各設定ファイルの構文を完全に解析する必要があって誤検知を招きやすいためです。設定ファイルへ直接パターンを追加した場合は、単一ソースにも追記してください。
+
+#### 導入時に検出された防御の穴
+
+単一ソース化にあたり、以下の不整合が実際に検出され、あわせて修正しました。
+
+- `.gitignore` の `!.cursor/rules/` が `.cursor/*` より前に置かれており、再包含が打ち消されていました。既に追跡済みの `.cursor/rules/general.mdc` は残るものの、`.cursor/rules/` への新規ファイル追加が無視される状態でした
+- `pnpm-lock.yml`（pnpm の旧形式）が `.gitattributes` と `.vscode/settings.json` にのみ存在し、`.gitignore` から漏れていました
+- `.gitattributes` のクラウド構成ディレクトリだけが `.aws/**` というリポジトリルート相対の指定で、下位階層の `.aws/` の diff を抑止できていませんでした（AI エージェント用ディレクトリは `**/.bolt/**` 形式）
+- `forbid-sensitive-files` が `terraform.tfstate.backup` のような state のバックアップ・世代付きファイルをブロックできていませんでした。拡張子が `.tfstate` で終わらないため、拡張子の列挙では捕捉できていませんでした
+
 ### 新規追加: 異種パッケージマネージャーのロックファイルの混入防止
 
 プロジェクトの標準パッケージマネージャー (Bun) 以外の異種ロックファイル (`package-lock.json`, `npm-shrinkwrap.json`, `yarn.lock`, `pnpm-lock.yaml`, `pnpm-lock.yml`) および Yarn Berry の副産物 (`.yarn/`, `.pnp.*`) は `.gitignore` で追跡対象から除外しつつ、`forbid-foreign-lockfiles` カスタムローカルフック (`.pre-commit-config.yaml`) がワークツリー上の実体の有無を毎回検査します。ステージ済みファイルではなくワークツリーを直接検査するため、`.gitignore` によってこれらのファイルがステージされない状態でも、誤って別のパッケージマネージャーで install した痕跡が残っていればコミットをブロックできます。生成そのものは `package.json` の `preinstall` スクリプト (`bunx only-allow bun`) で抑止しています。

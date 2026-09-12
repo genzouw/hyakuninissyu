@@ -91,12 +91,12 @@ desktop.ini -diff
 *.log -diff
 
 # Cloud configs
-.aws/** -diff
-.kube/** -diff
-.gcp/** -diff
-.azure/** -diff
-.vercel/** -diff
-.netlify/** -diff
+**/.aws/** -diff
+**/.kube/** -diff
+**/.gcp/** -diff
+**/.azure/** -diff
+**/.vercel/** -diff
+**/.netlify/** -diff
 
 # IaC variables
 *.tfvars -diff

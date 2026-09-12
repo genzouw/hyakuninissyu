@@ -1,0 +1,287 @@
+{
+  "_readme": [
+    "漏洩防止の保護対象パターンの単一ソース。",
+    "このファイルを編集したら scripts/check_protected_patterns.py を実行し、",
+    "検出された差分を各防御層の設定ファイルへ手動で反映すること。",
+    "運用手順は docs/security/leak-prevention.md を参照。",
+    "本ファイルは検証専用であり、設定ファイルの自動生成・自動書き換えは行わない。"
+  ],
+  "_layers": {
+    "gitignore": ".gitignore — 未追跡ファイルの追跡開始を防ぐ",
+    "gitattributes": ".gitattributes — -diff により diff 出力を抑止する",
+    "vscode-files": ".vscode/settings.json の files.exclude — エディタのファイルツリーから除外する",
+    "vscode-search": ".vscode/settings.json の search.exclude — エディタの全文検索から除外する",
+    "precommit": ".pre-commit-config.yaml の forbid-sensitive-files — ステージングをブロックする"
+  },
+  "_schema": {
+    "kind": "ext | dir | file | glob。samples の自動生成方法を決める",
+    "value": "kind に応じた値。ext は拡張子（ドット無し）、dir はディレクトリ名、file はファイル名またはパス、glob は表示用のパターン",
+    "layers": "このパターンが保護されるべき層。省略時は全 5 層",
+    "samples": "検証に用いる代表パス。kind が glob の場合は必須、それ以外は省略時に value から自動生成",
+    "note": "非対称性や既知のギャップの理由"
+  },
+  "categories": [
+    {
+      "name": "IDE 設定・OS 自動生成ファイル・エディタ一時ファイル",
+      "patterns": [
+        { "kind": "dir", "value": ".idea" },
+        { "kind": "file", "value": ".vscode/launch.json" },
+        { "kind": "file", "value": ".vscode/tasks.json" },
+        { "kind": "file", "value": ".DS_Store" },
+        { "kind": "file", "value": "Thumbs.db" },
+        { "kind": "file", "value": "desktop.ini" },
+        {
+          "kind": "glob",
+          "value": "*.sw[a-p]",
+          "samples": ["sample.swp", "nested/dir/sample.swo"],
+          "note": "vim のスワップファイルは多重オープンで .swp → .swo → .swn と名前がずれるためレンジ指定"
+        },
+        { "kind": "glob", "value": "*~", "samples": ["sample~", "nested/dir/sample~"] }
+      ]
+    },
+    {
+      "name": "AI エージェントの作業ディレクトリ・成果物",
+      "patterns": [
+        { "kind": "dir", "value": ".bolt" },
+        { "kind": "dir", "value": ".trae" },
+        { "kind": "dir", "value": ".lovable" },
+        { "kind": "dir", "value": ".devin" },
+        { "kind": "dir", "value": ".gemini" },
+        {
+          "kind": "dir",
+          "value": ".claude",
+          "samples": [".claude/settings.local.json"],
+          "note": ".gitignore は .claude/rules/ を追跡対象に残すため .claude/* 形式であり、下位階層の .claude/ は捕捉しない。ネストしたサンプルは検証対象外とする"
+        },
+        {
+          "kind": "dir",
+          "value": ".cursor",
+          "samples": [".cursor/mcp.json"],
+          "note": ".claude と同じ理由でネストしたサンプルは検証対象外"
+        },
+        { "kind": "dir", "value": ".continue" },
+        { "kind": "dir", "value": ".windsurf" },
+        { "kind": "dir", "value": ".cline" },
+        { "kind": "dir", "value": ".roo" },
+        { "kind": "dir", "value": ".copilot" },
+        { "kind": "dir", "value": ".codeium" },
+        { "kind": "dir", "value": ".cody" },
+        { "kind": "dir", "value": ".tabnine" },
+        { "kind": "dir", "value": ".zeal" },
+        {
+          "kind": "glob",
+          "value": ".aider*",
+          "samples": [".aider.chat.history.md", "nested/dir/.aider.tags.cache.v3"]
+        },
+        {
+          "kind": "glob",
+          "value": "*-report.md",
+          "samples": ["claude-report.md", "nested/dir/gemini-report.md"],
+          "note": "forbid-sensitive-files は既知のエージェント名を列挙する形式のため、サンプルも既知名を用いる"
+        }
+      ]
+    },
+    {
+      "name": "秘密鍵・証明書・キーストア",
+      "patterns": [
+        { "kind": "ext", "value": "pem" },
+        { "kind": "ext", "value": "key" },
+        { "kind": "ext", "value": "cert" },
+        { "kind": "ext", "value": "crt" },
+        { "kind": "ext", "value": "p12" },
+        { "kind": "ext", "value": "pfx" },
+        { "kind": "ext", "value": "jks" },
+        { "kind": "ext", "value": "keystore" },
+        { "kind": "ext", "value": "truststore" },
+        { "kind": "ext", "value": "kdbx" },
+        { "kind": "ext", "value": "kdb" },
+        { "kind": "glob", "value": "id_rsa*", "samples": ["id_rsa", "nested/dir/id_rsa.pub"] },
+        { "kind": "glob", "value": "id_ed25519*", "samples": ["id_ed25519", "nested/dir/id_ed25519.pub"] },
+        {
+          "kind": "glob",
+          "value": "*credentials*.json",
+          "samples": ["credentials.json", "nested/dir/gcp-credentials-prod.json"]
+        },
+        {
+          "kind": "glob",
+          "value": "*service-account*.json",
+          "samples": ["service-account.json", "nested/dir/my-service-account-key.json"]
+        }
+      ]
+    },
+    {
+      "name": "ネットワーク・Git 認証情報",
+      "patterns": [
+        { "kind": "file", "value": ".git-credentials" },
+        { "kind": "file", "value": ".netrc" },
+        { "kind": "file", "value": "_netrc" }
+      ]
+    },
+    {
+      "name": "環境変数ファイル",
+      "patterns": [
+        {
+          "kind": "glob",
+          "value": ".env*",
+          "samples": [".env", ".env.production", "nested/dir/.env.local"]
+        }
+      ]
+    },
+    {
+      "name": "API クライアント環境設定",
+      "patterns": [
+        { "kind": "file", "value": "http-client.env.json" },
+        { "kind": "file", "value": "sftp.json" },
+        { "kind": "file", "value": "ftp-sync.json" },
+        { "kind": "file", "value": "postman_environment.json" },
+        {
+          "kind": "glob",
+          "value": "insomnia_*.json",
+          "samples": ["insomnia_env.json", "nested/dir/insomnia_workspace.json"]
+        }
+      ]
+    },
+    {
+      "name": "パッケージマネージャー設定",
+      "patterns": [
+        { "kind": "file", "value": ".npmrc" },
+        { "kind": "file", "value": ".yarnrc" },
+        { "kind": "file", "value": ".bunfig.toml" },
+        { "kind": "file", "value": "bunfig.toml" }
+      ]
+    },
+    {
+      "name": "異種パッケージマネージャーのロックファイル",
+      "patterns": [
+        { "kind": "file", "value": "package-lock.json", "layers": ["gitignore", "vscode-search"] },
+        { "kind": "file", "value": "npm-shrinkwrap.json", "layers": ["gitignore", "vscode-search"] },
+        { "kind": "file", "value": "yarn.lock", "layers": ["gitignore", "vscode-search"] },
+        { "kind": "file", "value": "pnpm-lock.yaml", "layers": ["gitignore", "vscode-search"] },
+        { "kind": "file", "value": "pnpm-lock.yml", "layers": ["gitignore", "vscode-search"] },
+        { "kind": "dir", "value": ".yarn", "layers": ["gitignore"] },
+        { "kind": "glob", "value": ".pnp.*", "samples": [".pnp.cjs"], "layers": ["gitignore"] }
+      ],
+      "note": "ロックファイルは機密情報ではなく事故調査で diff を読めるようにするため、.gitattributes では -diff ではなく linguist-generated=true を付与する。ステージングのブロックは forbid-sensitive-files ではなく forbid-foreign-lockfiles が担当するため precommit 層も対象外。誤って生成された場合に気づけるようファイルツリーには残す方針のため vscode-files 層も対象外"
+    },
+    {
+      "name": "データベースダンプ・バックアップ・PII エクスポート",
+      "patterns": [
+        { "kind": "ext", "value": "db" },
+        { "kind": "ext", "value": "sqlite" },
+        { "kind": "ext", "value": "sqlite3" },
+        { "kind": "ext", "value": "dump" },
+        { "kind": "ext", "value": "bak" },
+        { "kind": "ext", "value": "sql" },
+        { "kind": "ext", "value": "csv" },
+        { "kind": "ext", "value": "tsv" },
+        { "kind": "ext", "value": "xls" },
+        { "kind": "ext", "value": "xlsx" },
+        { "kind": "ext", "value": "xlsm" },
+        { "kind": "ext", "value": "jsonl" },
+        { "kind": "ext", "value": "ndjson" }
+      ]
+    },
+    {
+      "name": "インフラ状態・IaC 変数",
+      "patterns": [
+        { "kind": "ext", "value": "tfstate" },
+        { "kind": "ext", "value": "tfvars" },
+        {
+          "kind": "glob",
+          "value": "*.tfstate.*",
+          "samples": ["terraform.tfstate.backup", "nested/dir/prod.tfstate.1"],
+          "note": "terraform が生成するバックアップ・世代付き state。拡張子が .tfstate で終わらないため独立したパターンが必要"
+        }
+      ]
+    },
+    {
+      "name": "リポジトリスナップショット",
+      "patterns": [
+        {
+          "kind": "glob",
+          "value": "repomix-output.*",
+          "samples": ["repomix-output.xml"],
+          "layers": ["gitignore"],
+          "note": "ローカル生成物であり、意図的に生成した場合のみ存在する。追跡開始の防止のみを目的とする"
+        }
+      ]
+    },
+    {
+      "name": "HTTP アーカイブ",
+      "patterns": [{ "kind": "ext", "value": "har" }]
+    },
+    {
+      "name": "クラウド構成ディレクトリ",
+      "patterns": [
+        { "kind": "dir", "value": ".aws" },
+        { "kind": "dir", "value": ".kube" },
+        { "kind": "dir", "value": ".gcp" },
+        { "kind": "dir", "value": ".azure" },
+        { "kind": "dir", "value": ".vercel" },
+        { "kind": "dir", "value": ".netlify" }
+      ]
+    },
+    {
+      "name": "VPN 設定・ネットワークキャプチャ・シェル履歴・DB クライアント設定",
+      "patterns": [
+        { "kind": "ext", "value": "ovpn" },
+        { "kind": "ext", "value": "pcap" },
+        { "kind": "ext", "value": "pcapng" },
+        {
+          "kind": "glob",
+          "value": ".*_history",
+          "samples": [".bash_history", "nested/dir/.psql_history"]
+        },
+        { "kind": "file", "value": ".dbeaver-data-sources.xml" }
+      ]
+    },
+    {
+      "name": "ログ",
+      "patterns": [
+        {
+          "kind": "ext",
+          "value": "log",
+          "layers": ["gitignore", "gitattributes", "vscode-search", "precommit"],
+          "note": "ビルドやテストの調査でログを開けるようファイルツリーには残す方針のため vscode-files 層は対象外。追跡開始とステージングは他の層でブロックする"
+        }
+      ]
+    }
+  ],
+  "allowlist": [
+    {
+      "path": ".env.example",
+      "layers": ["gitignore", "gitattributes", "precommit"],
+      "note": "vscode-files / vscode-search 層は対象外。値 false のエントリはパターンを無効化するだけで **/.env* による除外を打ち消さないため、エディタ上では隠れる"
+    },
+    {
+      "path": ".aider.conf.yml",
+      "layers": ["gitignore", "precommit"],
+      "note": "gitattributes は .aider* -diff で一律 diff 抑止、vscode-files / vscode-search は **/.aider* で一律除外のため対象外"
+    },
+    {
+      "path": ".aider.instruction.md",
+      "layers": ["gitignore", "precommit"],
+      "note": ".aider.conf.yml と同じ理由"
+    },
+    {
+      "path": ".claude/rules/project.md",
+      "layers": ["gitignore", "gitattributes", "precommit"],
+      "note": "vscode-files / vscode-search は **/.claude で一律除外のため対象外"
+    },
+    {
+      "path": ".cursor/rules/sample.mdc",
+      "layers": ["gitignore", "gitattributes", "precommit"],
+      "note": "vscode-files / vscode-search は **/.cursor で一律除外のため対象外"
+    },
+    {
+      "path": "test/fixtures/sample.csv",
+      "layers": ["precommit"],
+      "note": "PII を含まないテストフィクスチャ。gitignore の *.csv は効いたままであり、コミット時は git add -f が必要"
+    },
+    {
+      "path": "test/fixtures/sample.ndjson",
+      "layers": ["precommit"],
+      "note": "test/fixtures/sample.csv と同じ理由"
+    }
+  ]
+}
