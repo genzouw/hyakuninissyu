@@ -53,6 +53,20 @@ jobs:
       contents: read
     runs-on: ubuntu-latest
 
+    # 本リポジトリは公開されているため、本番デプロイは GitHub Environment 経由に
+    # 限定している。この宣言があると OIDC トークンの subject が
+    #
+    #   repo:genzouw/hyakuninissyu:environment:production
+    #
+    # となり、AWS 側の信頼ポリシーがこの形だけを許可している。environment を
+    # 宣言しないワークフローや、main 以外のブランチからのワークフローは
+    # デプロイ用ロールを引き受けられない (production 環境のデプロイ可能ブランチを
+    # main に限定しているため)。
+    #
+    # fork からの PR では OIDC トークンが発行されず secrets も渡らないので、
+    # 外部からの PR がこの経路でデプロイすることは元からできない。
+    environment: production
+
     steps:
       - name: Download artifact
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
