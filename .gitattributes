@@ -70,6 +70,7 @@ desktop.ini -diff
 **/.trae/** -diff
 **/.lovable/** -diff
 **/.devin/** -diff
+**/.openhands/** -diff
 **/.gemini/** -diff
 **/.claude/** -diff
 **/.claude/rules/**/*.md diff
