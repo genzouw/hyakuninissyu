@@ -103,6 +103,7 @@ desktop.ini
 .trae/
 .lovable/
 .devin/
+.openhands/
 .gemini/
 .claude/*
 !.claude/rules/

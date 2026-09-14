@@ -88,6 +88,7 @@ repos:
               \.trae/ |
               \.lovable/ |
               \.devin/ |
+              \.openhands/ |
               \.gemini/ |
               \.claude/ |
               \.cursor/ |
@@ -125,7 +126,7 @@ repos:
             (^|/)insomnia_.*\.json$ |
             (^|/)id_rsa[^/]* |
             (^|/)id_ed25519[^/]* |
-            (^|/)(claude|cursor|aider|continue|windsurf|cline|roo|copilot|codeium|cody|tabnine|zeal|gemini|bolt|lovable|devin|trae)-report\.md |
+            (^|/)(claude|cursor|aider|continue|windsurf|cline|roo|copilot|codeium|cody|tabnine|zeal|gemini|bolt|lovable|devin|trae|openhands)-report\.md |
             (^|/)\.dbeaver-data-sources\.xml$ |
             (^|/)\.[^/]*_history$ |
             (^|/)[^/]*\.tfstate\.[^/]*$ |

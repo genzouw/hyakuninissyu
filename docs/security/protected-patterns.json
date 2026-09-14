@@ -46,6 +46,7 @@
         { "kind": "dir", "value": ".trae" },
         { "kind": "dir", "value": ".lovable" },
         { "kind": "dir", "value": ".devin" },
+        { "kind": "dir", "value": ".openhands" },
         { "kind": "dir", "value": ".gemini" },
         {
           "kind": "dir",
@@ -76,7 +77,7 @@
         {
           "kind": "glob",
           "value": "*-report.md",
-          "samples": ["claude-report.md", "nested/dir/gemini-report.md", "trae-report.md", "roo-report.md"],
+          "samples": ["claude-report.md", "nested/dir/gemini-report.md", "trae-report.md", "roo-report.md", "openhands-report.md"],
           "note": "forbid-sensitive-files は既知のエージェント名を列挙する形式のため、サンプルも既知名を用いる"
         }
       ]

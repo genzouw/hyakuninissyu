@@ -84,7 +84,7 @@ PR や Push 時に実行される第二の防御層です。
 
 ### AIエージェントコンテキストの漏洩防止について
 
-AI エージェントの作業ディレクトリ（`.bolt/`, `.lovable/`, `.devin/`, `.claude/`, `.cursor/`, `.aider*/`, `.continue/`, `.windsurf/`, `.cline/`, `.zeal/` など）は、`.gitignore` で除外されていることに加え、万が一ステージングされた場合でも `.gitattributes` によって diff 出力が無効化（`-diff`）されています。これにより、PR レビュー等の過程でエージェントが保持しているシークレットやプロンプト履歴が意図せず露出することを防ぎます。
+AI エージェントの作業ディレクトリ（`.bolt/`, `.lovable/`, `.devin/`, `.openhands/`, `.claude/`, `.cursor/`, `.aider*/`, `.continue/`, `.windsurf/`, `.cline/`, `.zeal/` など）は、`.gitignore` で除外されていることに加え、万が一ステージングされた場合でも `.gitattributes` によって diff 出力が無効化（`-diff`）されています。これにより、PR レビュー等の過程でエージェントが保持しているシークレットやプロンプト履歴が意図せず露出することを防ぎます。
 さらに、`.vscode/settings.json` を通じて各種 AI アシスタントのワークスペース走査対象からこれらと特定のファイル群（DB ダンプファイルなど）を除外することで、意図しないコンテキストのインジェストや AI 経由の漏洩を未然に防止しています。
 
 ### detect-secrets によるベースライン管理
@@ -146,7 +146,7 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 ### AIエージェントコンテキストの漏洩防止の追加
 
-新たに利用される AI エージェントの作業ディレクトリ（`.bolt/`, `.lovable/`, `.devin/`, `.roo/`, `.zeal/`, `.trae/` 等）についても、他のツールと同様に `.gitignore`, `.gitattributes`, `.vscode/settings.json`, および `.pre-commit-config.yaml` を用いて、意図しないステージングや diff 出力を防ぐ設定を追加しました。
+新たに利用される AI エージェントの作業ディレクトリ（`.bolt/`, `.lovable/`, `.devin/`, `.openhands/`, `.roo/`, `.zeal/`, `.trae/` 等）についても、他のツールと同様に `.gitignore`, `.gitattributes`, `.vscode/settings.json`, および `.pre-commit-config.yaml` を用いて、意図しないステージングや diff 出力を防ぐ設定を追加しました。
 
 ### 保護対象パターンの単一ソース化とドリフト検知
 
