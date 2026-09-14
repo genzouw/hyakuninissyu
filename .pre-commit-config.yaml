@@ -47,7 +47,7 @@ repos:
         description: CIと同期し、GoogleGeminiAPIKeyを除く全てのシークレット（無効化済み含む）をブロック
         entry: trufflehog git file://. --since-commit HEAD --fail --trust-local-git-config --exclude-detectors=GoogleGeminiAPIKey
   - repo: https://github.com/crate-ci/typos
-    rev: d43b6c087ac471e2ea7b8af622ff15f05c0c365b # frozen: v1.50.1
+    rev: b859c0df7f391deba73030f79b957e62b4d81dc6 # frozen: varcon-core-v5.0.7
     hooks:
       - id: typos
         name: typos (Spell Checker)
