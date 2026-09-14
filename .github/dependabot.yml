@@ -202,6 +202,16 @@ updates:
       pre-commit:
         patterns:
           - '*'
+    # crate-ci/typos はモノレポで、本体の v1.x タグと並行して varcon-core や
+    # dictgen といったサブクレートのタグ (varcon-core-v5.0.7 等) を同じ
+    # リポジトリに打っている。Dependabot はこれらを typos 本体の新しい
+    # バージョンと誤認し (5.0.7 > 1.50.1)、5ヶ月古いコミットへ巻き戻す
+    # ダウングレードPRを作る。実際に PR #474 がこれに該当し、クローズした。
+    # 本体のメジャーリリース (v2.0.0 等) が出た際は、この ignore を外して
+    # 手動で追従すること。パッチ/マイナー更新は引き続き自動追従される。
+    ignore:
+      - dependency-name: 'https://github.com/crate-ci/typos'
+        update-types: ['version-update:semver-major']
     # cooldown 設定の理由は npm セクション（本ファイル冒頭）を参照。
     cooldown:
       default-days: 7
