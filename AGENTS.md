@@ -50,11 +50,29 @@
 ### 1.3 MAY — 採用してよい構成
 
 - **MAY**: GitHub Marketplace の「公開 OSS リポジトリ向け完全無料プラン」で提供される Action / App。
-- **MAY**: GitHub App の「公開 OSS リポジトリ向け完全無料枠」で、API キーの登録が不要なもの (例: CodeRabbit / Qodo Merge の OSS 無料枠)。
+- **MAY**: GitHub App の「公開 OSS リポジトリ向け完全無料枠」で、API キーの登録が不要なもの (例: CodeRabbit の OSS 無料枠)。ただし「公開リポジトリなら無料」と短絡せず、採用前に §1.4 の手順で条件を確認してください。
 - **MAY**: 完全無料で配布されている GitHub Action (Marketplace 登録の有無は問わない)。
 - **MAY**: ローカル LLM (Ollama / llama.cpp 等) を GitHub-hosted runner 上で動作させる、Secrets 不要の自動化。
 - **MAY**: リポジトリ内で完結する Shell スクリプト / Bun スクリプト / Make ターゲット (外部 SaaS 連携を伴わないもの)。
 - **MAY**: 既存ワークフローのキャッシュ最適化、並列化、`oven-sh/setup-bun` の最新化、`actions/*` の SHA pin 更新といった、課金を伴わない構造改善。
+
+### 1.4 採用前に必ず確認すること — 「公開リポジトリなら無料」は根拠になりません
+
+GitHub Actions / GitHub App を採用する前に、以下を **MUST** 確認してください。ひとつでも確認できないものは採用できません。
+
+1. **公式の料金ページで「公開 OSS リポジトリでは課金が一切発生しない」ことを確認する**。「Free プランがある」「無料枠がある」は根拠として無効です。
+2. **OSS 無料枠に申請・審査・star 数などの条件がある場合、本リポジトリが現時点でその条件を満たしているかを確認する**。条件を満たしていないなら採用できません。将来満たす見込みがある、というのは理由になりません。
+3. **無料トライアルで動く状態を「無料で使えている」と判断しない**。トライアルは期限が来れば止まり、止まったあとは CI 時間を消費するだけの死んだジョブになります。
+4. **Action 本体が LLM の API キーを必須とするものでないことを、その Action の README / ドキュメントで確認する**。キーを与えなければ黙ってスキップする実装であっても、それは「無料で動いている」のではなく「動いていない」だけです。
+5. **PR 本文に、上記を確認した根拠 URL と確認結果を日本語で明記する**。
+
+### 1.5 撤去済みのサービス — 再導入は MUST NOT
+
+- **Qodo Merge (旧 PR-Agent / CodiumAI)**: 2026-09 に撤去しました。再導入は **MUST NOT** です。
+  - Qodo には恒久的な無料プランがありません (公式料金ページの FAQ に "We don't offer a permanent free tier" と明記)。提供されるのは 14 日間の無料トライアルと、審査制の [Qodo for Open Source](https://docs.qodo.ai/open-source-program) のみです。
+  - Qodo for Open Source の条件は「公開 GitHub リポジトリ」「リポジトリの star 200 以上、または Organization 内に star 200 以上の公開リポジトリが 1 つ以上ある」「継続的にメンテナンスされている」「利用ポリシーの遵守」です。本リポジトリは star 数が条件に届いておらず、対象外です。
+  - 実際にトライアル終了後、ホスト型 App (`qodo-code-review` bot) は PR に `Qodo reviews are paused because the subscription is no longer active` とだけ投稿する状態になりました。
+  - 自己ホスト版の `The-PR-Agent/pr-agent` Action は **LLM の API キー (`OPENAI_KEY` 等) が必須** です。本リポジトリはそれを §1.1 で禁止しているため、この Action を動作させる手段がありません。実際に `.github/workflows/pr-agent.yml` は `GITHUB_TOKEN` のみで起動しており、実行ログには `OPENAI_KEY not set` が出力され、導入以来 AI レビューは一度も行われていませんでした。
 
 ---
 
@@ -65,7 +83,6 @@
 | 種別                    | ツール / 設定ファイル                                                                                               | 役割                                                                  |
 | :---------------------- | :------------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------- |
 | AI コードレビュー       | [CodeRabbit](https://github.com/apps/coderabbitai) (`.coderabbit.yaml`)                                             | プルリクエストの AI レビュー                                          |
-| AI コードレビュー       | [Qodo Merge (旧 PR-Agent)](https://github.com/apps/qodo-merge) (`.pr_agent.toml`, `.github/workflows/pr-agent.yml`) | PR スコアリング / 自動要約 / `/review` 等のコメントコマンド           |
 | LLM コンテキスト生成    | Repomix (`.github/workflows/repomix.yml`, `repomix.config.json`, `static/llms.txt`)                                 | `llms.txt` 規格の XML / Markdown 自動生成と `ai-context` ブランチ公開 |
 | セキュリティスキャン    | CodeQL (`.github/workflows/codeql.yml`)                                                                             | GitHub 公式の SAST                                                    |
 | セキュリティスキャン    | Gitleaks (`.github/workflows/gitleaks.yml`, `.gitleaks.toml`)                                                       | コミット内シークレット検知                                            |
@@ -89,7 +106,7 @@
 
 特に以下の領域は既に十分に網羅されているため、新規追加の PR は不要です。
 
-- **AI コードレビュー / AI コード補助**: CodeRabbit / Qodo Merge の 2 系統が稼働中。Gemini / OpenAI / Claude 等の API キーを使う追加 AI コードレビュー Action は **MUST NOT**。
+- **AI コードレビュー / AI コード補助**: CodeRabbit が稼働中。Gemini / OpenAI / Claude 等の API キーを使う追加 AI コードレビュー Action は **MUST NOT**。Qodo Merge (旧 PR-Agent) は §1.5 のとおり撤去済みで、再導入も **MUST NOT** です。
 - **シークレット検知**: Gitleaks / TruffleHog / pre-commit + detect-secrets の 3 重化で十分。GitGuardian 等の追加 SaaS は不要。
 - **依存脆弱性スキャン**: Trivy / OSV-Scanner / Dependency Review / Dependabot の 4 重化で十分。Snyk 等の追加 SaaS は不要。
 
