@@ -22,12 +22,22 @@ jobs:
     # 1) Bot 以外のイベントに限定
     # 2) issue_comment は PR に紐づくコメントのみ対象（純粋な Issue では起動しない）
     # 3) リポジトリの信頼済みアクター（OWNER / MEMBER / COLLABORATOR）のみに限定
+    #
+    # author_association はイベントごとに載っている場所が違う。issue_comment では
+    # コメント側 (github.event.comment)、pull_request では PR 側 (github.event.pull_request)
+    # に付く。github.event.sender はユーザーオブジェクトで、この項目を持たない。
+    # sender.association と書くと常に空となり、ジョブが一度も起動しなくなる。
     if: >
       github.event.sender.type != 'Bot' &&
-      (github.event_name != 'issue_comment' || github.event.issue.pull_request != null) &&
-      (github.event.sender.association == 'OWNER' ||
-       github.event.sender.association == 'MEMBER' ||
-       github.event.sender.association == 'COLLABORATOR')
+      (
+        (github.event_name == 'issue_comment' &&
+         github.event.issue.pull_request != null &&
+         contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'),
+                  github.event.comment.author_association)) ||
+        (github.event_name != 'issue_comment' &&
+         contains(fromJSON('["OWNER", "MEMBER", "COLLABORATOR"]'),
+                  github.event.pull_request.author_association))
+      )
     # PR コメント投稿に必要な権限のみ付与
     permissions:
       contents: read
