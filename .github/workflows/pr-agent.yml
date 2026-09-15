@@ -10,9 +10,14 @@ on:
 permissions:
   contents: read
 
-# 同一 PR への更新やコメント連投で重複起動するのを抑止し、ノイズとコストを削減
+# 同一 PR への更新やコメント連投で重複起動するのを抑止し、ノイズとコストを削減。
+#
+# グループにイベント名を含めるのは、コメント起因の実行が PR 起因のレビューを
+# 巻き添えで打ち切らないようにするため。ジョブが if で skip される場合でも実行
+# 自体はグループを占有するので、両者を同じグループに入れると、ボットが PR に
+# コメントしただけで実行中のレビューが cancelled になる (実際に発生していた)。
 concurrency:
-  group: qodo-merge-${{ github.workflow }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
+  group: qodo-merge-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.event.issue.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
