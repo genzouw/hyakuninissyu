@@ -62,8 +62,8 @@ In the project directory, you can run:
 
 - **ESLint & Jest**: GitHub Actions を介した自動リンティングとユニットテスト。
 - **Lighthouse CI**: 全てのプルリクエストに対して、パフォーマンス、アクセシビリティ、ベストプラクティス、SEO のスコアを計測します。
-- **PR Agent (Qodo)**: AI を活用した自動コードレビューツールです。本リポジトリでは `.pr_agent.toml` で設定を管理しています。
-  - **事前準備（手動設定）**: PR Agent（Qodo）を利用するためには、GitHub の公開リポジトリで無料で使える「Qodo GitHub App」を該当の GitHub アカウントまたは Organization にインストールする必要があります。
+- **PR Agent (Qodo)**: AI を活用した自動コードレビューツールです。本リポジトリでは `.pr_agent.toml` で設定を管理しています。GitHub の公開リポジトリで無料で使える「Qodo GitHub App」がホスト型で稼働し、PR にレビューコメントを投稿します（GitHub Actions ワークフローとしては提供していません。モデルプロバイダの API キーが無いと動作しないためです）。
+  - **事前準備（手動設定）**: PR Agent（Qodo）を利用するためには、「Qodo GitHub App」を該当の GitHub アカウントまたは Organization にインストールする必要があります。
 - **IndexNow**: SEO および検索エンジンへのインデックス登録を高速化するためのアクションです。`.github/workflows/deploy.yml` 内に設定されています。
   - **事前準備（手動設定）**: IndexNow を利用するためには、API キーを生成してリポジトリの Secrets に `INDEXNOW_KEY` として登録する必要があります。
 - **CodeRabbit**: `.coderabbit.yaml` で設定されている、もうひとつの AI コードレビューアシスタントです。
