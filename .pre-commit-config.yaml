@@ -23,6 +23,12 @@ repos:
         args: ['--maxkb=5000']
         name: check added large files
         description: 巨大ファイル（DBダンプや非圧縮メディア等）の意図しないコミットを防止
+      - id: check-case-conflict
+        name: check case conflict
+        description: 大文字小文字の違いのみのファイルのコミットを防止し、OS間の差異によるトラブルを防ぐ
+      - id: check-vcs-permalinks
+        name: check vcs permalinks
+        description: コミットメッセージ等に非永続的なGitHub等のリンクが含まれるのを防止
       - id: no-commit-to-branch
         args: ['--branch', 'main', '--branch', 'master']
         name: no commit to branch
