@@ -28,7 +28,7 @@ repos:
         description: 大文字小文字の違いのみのファイルのコミットを防止し、OS間の差異によるトラブルを防ぐ
       - id: check-vcs-permalinks
         name: check vcs permalinks
-        description: コミットメッセージ等に非永続的なGitHub等のリンクが含まれるのを防止
+        description: ファイル内のGitHub blobリンク（#L行番号付き）がブランチ名などの非固定参照を指している場合に検出（raw.githubusercontent.com や #L無しのリンク、コミットメッセージは対象外）
       - id: no-commit-to-branch
         args: ['--branch', 'main', '--branch', 'master']
         name: no commit to branch
