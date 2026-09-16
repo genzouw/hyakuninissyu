@@ -80,29 +80,29 @@ GitHub Actions / GitHub App を採用する前に、以下を **MUST** 確認し
 
 本リポジトリで既に有効化されている AI / 品質 / セキュリティ / リリース系の自動化です。これらと機能が重複する PR は **MUST NOT** で提出してください。詳細は `.github/workflows/` 配下の YAML と各設定ファイルを参照してください。
 
-| 種別                    | ツール / 設定ファイル                                                                                               | 役割                                                                  |
-| :---------------------- | :------------------------------------------------------------------------------------------------------------------ | :-------------------------------------------------------------------- |
-| AI コードレビュー       | [CodeRabbit](https://github.com/apps/coderabbitai) (`.coderabbit.yaml`)                                             | プルリクエストの AI レビュー                                          |
-| LLM コンテキスト生成    | Repomix (`.github/workflows/repomix.yml`, `repomix.config.json`, `static/llms.txt`)                                 | `llms.txt` 規格の XML / Markdown 自動生成と `ai-context` ブランチ公開 |
-| セキュリティスキャン    | CodeQL (`.github/workflows/codeql.yml`)                                                                             | GitHub 公式の SAST                                                    |
-| セキュリティスキャン    | Gitleaks (`.github/workflows/gitleaks.yml`, `.gitleaks.toml`)                                                       | コミット内シークレット検知                                            |
-| セキュリティスキャン    | TruffleHog (`.github/workflows/trufflehog.yml`)                                                                     | コミット履歴のシークレット検知                                        |
-| セキュリティスキャン    | Trivy (`.github/workflows/trivy.yml`)                                                                               | 依存パッケージ / IaC / コンテナ脆弱性スキャン                         |
-| セキュリティスキャン    | OSV-Scanner (`.github/workflows/osv-scanner.yml`)                                                                   | 依存パッケージの既知脆弱性スキャン                                    |
-| セキュリティスキャン    | zizmor (`.github/workflows/zizmor.yml`)                                                                             | GitHub Actions ワークフローの脆弱性監査                               |
-| セキュリティスキャン    | Dependency Review (`.github/workflows/dependency-review.yml`)                                                       | PR で導入される依存の脆弱性差分レビュー                               |
-| 機密ファイル検知        | pre-commit (`.pre-commit-config.yaml`, `.github/workflows/pre-commit.yml`, `.secrets.baseline`)                     | コミット前ローカル検査 + CI での再検査                                |
-| 供給網健全性            | Scorecard (`.github/workflows/scorecard.yml`), SBOM (`.github/workflows/sbom.yml`)                                  | OpenSSF Scorecard / SBOM 生成                                         |
-| Lint                    | ESLint (`eslint.config.js`)                                                                                         | JavaScript / Vue の静的検査                                           |
-| Lint                    | Prettier (`.prettierrc`)                                                                                            | コード整形                                                            |
-| Lint                    | actionlint (`.github/workflows/actionlint.yml`)                                                                     | GitHub Actions ワークフローの構文チェック                             |
-| Lint                    | markdownlint-cli2 (`.github/workflows/markdownlint.yml`, `.markdownlint-cli2.jsonc`)                                | Markdown の構文チェック                                               |
-| Lint                    | commitlint (`commitlint.config.js`, `.husky/`)                                                                      | Conventional Commits 準拠検証                                         |
-| 性能 / アクセシビリティ | Lighthouse CI (`.github/workflows/lighthouse.yml`)                                                                  | Web パフォーマンス / アクセシビリティ計測                             |
-| リリース管理            | Release Drafter (`.github/workflows/release-drafter.yml`, `.github/release-drafter.yml`)                            | リリースノート自動生成                                                |
-| リリース管理            | Semantic PR (`.github/workflows/semantic-pr.yml`)                                                                   | PR タイトルの Conventional Commits 準拠検証                           |
-| 依存更新                | Dependabot (`.github/dependabot.yml`, `.github/workflows/dependabot-auto-merge.yml`)                                | 依存パッケージ自動更新と auto-merge                                   |
-| その他                  | stale (`.github/workflows/stale.yml`), PR conflict notifier (`.github/workflows/pr_conflict_notify.yml`)            | Issue / PR の自動クローズ通知、コンフリクト通知                       |
+| 種別                    | ツール / 設定ファイル                                                                                    | 役割                                                                  |
+| :---------------------- | :------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------- |
+| AI コードレビュー       | [CodeRabbit](https://github.com/apps/coderabbitai) (`.coderabbit.yaml`)                                  | プルリクエストの AI レビュー                                          |
+| LLM コンテキスト生成    | Repomix (`.github/workflows/repomix.yml`, `repomix.config.json`, `static/llms.txt`)                      | `llms.txt` 規格の XML / Markdown 自動生成と `ai-context` ブランチ公開 |
+| セキュリティスキャン    | CodeQL (`.github/workflows/codeql.yml`)                                                                  | GitHub 公式の SAST                                                    |
+| セキュリティスキャン    | Gitleaks (`.github/workflows/gitleaks.yml`, `.gitleaks.toml`)                                            | コミット内シークレット検知                                            |
+| セキュリティスキャン    | TruffleHog (`.github/workflows/trufflehog.yml`)                                                          | コミット履歴のシークレット検知                                        |
+| セキュリティスキャン    | Trivy (`.github/workflows/trivy.yml`)                                                                    | 依存パッケージ / IaC / コンテナ脆弱性スキャン                         |
+| セキュリティスキャン    | OSV-Scanner (`.github/workflows/osv-scanner.yml`)                                                        | 依存パッケージの既知脆弱性スキャン                                    |
+| セキュリティスキャン    | zizmor (`.github/workflows/zizmor.yml`)                                                                  | GitHub Actions ワークフローの脆弱性監査                               |
+| セキュリティスキャン    | Dependency Review (`.github/workflows/dependency-review.yml`)                                            | PR で導入される依存の脆弱性差分レビュー                               |
+| 機密ファイル検知        | pre-commit (`.pre-commit-config.yaml`, `.github/workflows/pre-commit.yml`, `.secrets.baseline`)          | コミット前ローカル検査 + CI での再検査                                |
+| 供給網健全性            | Scorecard (`.github/workflows/scorecard.yml`), SBOM (`.github/workflows/sbom.yml`)                       | OpenSSF Scorecard / SBOM 生成                                         |
+| Lint                    | ESLint (`eslint.config.js`)                                                                              | JavaScript / Vue の静的検査                                           |
+| Lint                    | Prettier (`.prettierrc`)                                                                                 | コード整形                                                            |
+| Lint                    | actionlint (`.github/workflows/actionlint.yml`)                                                          | GitHub Actions ワークフローの構文チェック                             |
+| Lint                    | markdownlint-cli2 (`.github/workflows/markdownlint.yml`, `.markdownlint-cli2.jsonc`)                     | Markdown の構文チェック                                               |
+| Lint                    | commitlint (`commitlint.config.js`, `.husky/`)                                                           | Conventional Commits 準拠検証                                         |
+| 性能 / アクセシビリティ | Lighthouse CI (`.github/workflows/lighthouse.yml`)                                                       | Web パフォーマンス / アクセシビリティ計測                             |
+| リリース管理            | Release Drafter (`.github/workflows/release-drafter.yml`, `.github/release-drafter.yml`)                 | リリースノート自動生成                                                |
+| リリース管理            | Semantic PR (`.github/workflows/semantic-pr.yml`)                                                        | PR タイトルの Conventional Commits 準拠検証                           |
+| 依存更新                | Dependabot (`.github/dependabot.yml`, `.github/workflows/dependabot-auto-merge.yml`)                     | 依存パッケージ自動更新と auto-merge                                   |
+| その他                  | stale (`.github/workflows/stale.yml`), PR conflict notifier (`.github/workflows/pr_conflict_notify.yml`) | Issue / PR の自動クローズ通知、コンフリクト通知                       |
 
 特に以下の領域は既に十分に網羅されているため、新規追加の PR は不要です。
 
