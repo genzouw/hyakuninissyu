@@ -26,7 +26,6 @@
     ".github/workflows/**",
     ".coderabbit.yaml",
     "sweep.yaml",
-    ".pr_agent.toml",
     ".aider.conf.yml",
     ".aider.instruction.md",
     ".bloopignore",
