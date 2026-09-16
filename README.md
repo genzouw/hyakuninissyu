@@ -64,7 +64,7 @@ In the project directory, you can run:
 - **Lighthouse CI**: 全てのプルリクエストに対して、パフォーマンス、アクセシビリティ、ベストプラクティス、SEO のスコアを計測します。
 - **IndexNow**: SEO および検索エンジンへのインデックス登録を高速化するためのアクションです。`.github/workflows/deploy.yml` 内に設定されています。
   - **事前準備（手動設定）**: IndexNow を利用するためには、API キーを生成してリポジトリの Secrets に `INDEXNOW_KEY` として登録する必要があります。
-- **CodeRabbit**: `.coderabbit.yaml` で設定されている、もうひとつの AI コードレビューアシスタントです。
+- **CodeRabbit**: `.coderabbit.yaml` で設定されている、AI コードレビューアシスタントです。
 - **Zizmor**: GitHub Actions ワークフローのセキュリティ脆弱性を静的解析するツールです。`.github/workflows/zizmor.yml` にて GitHub Actions ワークフローとして設定されており、生成された SARIF レポートは GitHub Code Scanning にアップロードされます。公開リポジトリでは無料で利用可能です。
 - **Repomix**: リポジトリ全体のソースコードを AI が読みやすい単一ファイル（XML 形式）にパッケージングするツールです。`.github/workflows/repomix.yml` にて GitHub Actions として設定されており、生成されたファイル（`repomix-output.xml`）は Artifacts としてダウンロードでき、LLM のコンテキストとしてそのまま活用できます。
 
