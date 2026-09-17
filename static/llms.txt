@@ -44,7 +44,7 @@ This file provides context about the project for AI assistants and LLMs, formatt
 ## 機密情報とセキュリティ (Security & Secrets)
 本リポジトリは完全公開OSSであり、シークレットの流出を多層防御でブロックしています。
 - APIキーを GitHub Secrets に追加するような自動化やSaaSツール (課金を含むもの) の提案は厳禁です。
-- `.vscode/settings.json` や `.gitattributes` を通じて各種AIエージェントの作業ログ (e.g. `.cursor/`, `.aider*`, `.claude/`) および機密ファイルはコミットをブロックされます。
+- 各種AIエージェントの作業ログ (e.g. `.cursor/`, `.aider*`, `.claude/`) および機密ファイルのコミットは、`.pre-commit-config.yaml` の `forbid-sensitive-files` フックによってブロックされます。`.vscode/settings.json` (`search.exclude`) や `.gitattributes` (`-diff`) は、それぞれ検索結果からの除外・diff表示の抑制を行う補助的な設定であり、コミット自体を防ぐものではありません。
 - 作業完了時は必ず `pre-commit run --all-files` 相当の検証が行われることに留意し、パスワードやアクセスキーのダミー値は `<REDACTED>` 等を用いてください。
 
 ## Optional
