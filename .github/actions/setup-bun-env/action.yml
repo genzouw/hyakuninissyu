@@ -15,7 +15,7 @@ runs:
         bun-version: ${{ inputs.bun-version }}
 
     - name: Cache bun dependencies
-      uses: actions/cache@1bd1e32a3ceb4531156877a49bac2a14add66c25 # v4.2.0
+      uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
       with:
         path: |
           ~/.bun/install/cache
