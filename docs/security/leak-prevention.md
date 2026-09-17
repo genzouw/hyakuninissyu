@@ -6,7 +6,7 @@
 
 開発者および AI エージェントのローカル環境でのコミットを防ぐ第一の防御層です。
 
-- **仕組み**: Husky の `pre-commit` フック (`.husky/pre-commit`) により `pre-commit run` を呼び出し、`.pre-commit-config.yaml` で定義された `gitleaks`、`trufflehog`、`detect-private-key`、`detect-aws-credentials`、`actionlint` などを包括的に実行します。また、追加の多層防御として `secretlint` および `lint-staged` を導入し、コミット直前にステージされた全ファイルに対してシークレット検査を実行します。対象ファイルを限定することでフックの実行時間を短縮し、開発者が処理の重さを理由に `--no-verify` でセキュリティチェックごとバイパスしてしまうリスクを低減しつつ、漏洩防止のカバレッジをさらに強化しています。
+- **仕組み**: Husky の `pre-commit` フック (`.husky/pre-commit`) により `pre-commit run` を呼び出し、`.pre-commit-config.yaml` で定義された `gitleaks`、`trufflehog`、`detect-private-key`、`detect-aws-credentials`、`actionlint`、および `bandit` (Python スクリプト用) などを包括的に実行します。また、追加の多層防御として `secretlint` および `lint-staged` を導入し、コミット直前にステージされた全ファイルに対してシークレット検査を実行します。対象ファイルを限定することでフックの実行時間を短縮し、開発者が処理の重さを理由に `--no-verify` でセキュリティチェックごとバイパスしてしまうリスクを低減しつつ、漏洩防止のカバレッジをさらに強化しています。
   - `gitleaks` は `.gitleaks.toml` の拡張設定により、シークレットだけでなく個人情報（PII: 運用者やテストユーザーのメールアドレス等）のコミットも検知・ブロックします。ただし `pii-email` ルールには以下の検知範囲の限界があります。
     - **許可リストの対象**: `genzouw@gmail.com`（メンテナが README/SECURITY/package.json に意図的に公開している連絡先）、CI Bot のコミッターアドレス（`github-actions[bot]@users.noreply.github.com`, `dependabot[bot]@users.noreply.github.com`）、`bun` のパッチファイルパス（`patches/@scope%2Fpkg@version.patch` 等、メールアドレスと誤認識される文字列）、および `.gitleaks.toml` 自身のコメント中で「誤って許可リスト化されてしまう例」として記載しているダミーアドレス（`xgenzouw@gmail.com`, `alice+genzouw@gmail.com`）は、完全一致の正規表現で許可リスト化されており検知対象外です。後者は `ai-context` ブランチ（Repomix によるリポジトリ全体のスナップショット）に取り込まれると `--log-opts="--all"` の全ブランチ走査で恒常的に誤検知されるため許可リスト化しています。
     - **検知できない場合がある値**: 難読化された値（例: 全角文字への置換、`[at]` 等への置換、Base64 エンコード）や、正規表現のパターンに一致しない特殊な形式の PII は検知できません。
