@@ -52,7 +52,7 @@ To get a local copy up and running, follow these simple steps:
 In the project directory, you can run:
 
 - `bun run dev` - ホットリロード付きの開発サーバーを起動します。
-- `bun run build` - `dist` フォルダにミニファイ済みの本番用ビルドを生成します。
+- `bun run build` - `dist` フォルダにミニファイ済みの本番用ビルドを生成します。あわせて `dist/sitemap.xml` を自動生成します。
 - `bun run unit` - Jest を使用したユニットテストを実行します。
 - `bun run lint` - ESLint でコードベースをリンティングします。
 
@@ -62,6 +62,7 @@ In the project directory, you can run:
 
 - **ESLint & Jest**: GitHub Actions を介した自動リンティングとユニットテスト。
 - **Lighthouse CI**: 全てのプルリクエストに対して、パフォーマンス、アクセシビリティ、ベストプラクティス、SEO のスコアを計測します。
+- **sitemap.xml の自動生成**: `bun run build` の最後に `build/generate-sitemap.mjs` が実行され、[`sitemap`](https://www.npmjs.com/package/sitemap) パッケージを使って `dist/sitemap.xml` を生成します。掲載する URL は `src/router/index.js` のルート定義から抽出するため、ルートを追加しても sitemap.xml の更新漏れが起きません（ルート引数を含む動的なパスは除外されます）。
 - **IndexNow**: SEO および検索エンジンへのインデックス登録を高速化するためのアクションです。`.github/workflows/deploy.yml` 内に設定されています。
   - **事前準備（手動設定）**: IndexNow を利用するためには、API キーを生成してリポジトリの Secrets に `INDEXNOW_KEY` として登録する必要があります。
 - **CodeRabbit**: `.coderabbit.yaml` で設定されている、AI コードレビューアシスタントです。

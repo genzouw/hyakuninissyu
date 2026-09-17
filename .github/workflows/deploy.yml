@@ -109,16 +109,18 @@ jobs:
             --cache-control "max-age=31536000,public" \
             --exclude "*.html" \
             --exclude "*.json" \
-            --exclude "*.txt"
+            --exclude "*.txt" \
+            --exclude "*.xml"
 
-          # HTML, JSON, and TXT (llms.txt, etc.) files with shorter cache
+          # HTML, JSON, TXT (llms.txt, etc.), XML (sitemap.xml) files with shorter cache
           aws s3 sync dist/ "s3://${S3_BUCKET}/${S3_PREFIX}/" \
             --delete \
             --cache-control "max-age=0,no-cache,no-store,must-revalidate" \
             --exclude "*" \
             --include "*.html" \
             --include "*.json" \
-            --include "*.txt"
+            --include "*.txt" \
+            --include "*.xml"
 
       - name: Invalidate CloudFront cache
         run: |
