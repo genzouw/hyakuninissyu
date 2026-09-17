@@ -200,7 +200,7 @@ repos:
         always_run: true
         description: 'プロジェクトの標準パッケージマネージャー (Bun) 以外のロックファイルや Yarn Berry の副産物 (.yarn/, .pnp.*) がワークツリーに存在しないか検査します（.gitignore で除外されステージングされない場合でも誤用に気づけるよう、staged file ではなくワークツリーの実体を検査します）'
   - repo: https://github.com/PyCQA/bandit
-    rev: 1.7.9 # frozen: 1.7.9
+    rev: 691f465b4bac758ea1d6dfa9b57d3881a12954fd # frozen: 1.7.9
     hooks:
       - id: bandit
         name: bandit (Python Security Linter)
