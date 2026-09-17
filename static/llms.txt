@@ -41,6 +41,12 @@ This file provides context about the project for AI assistants and LLMs, formatt
 - Webpack の起動 (dev, build) には必ず `NODE_OPTIONS=--openssl-legacy-provider` を指定してください。
 - `localStorage` に新しいキーを追加する場合は、既存のキー (`dailyChallengeLastCompleted`, `dailyChallengeStreak`, `collectedPoemIds`) と衝突しないようにしてください。
 
+## 機密情報とセキュリティ (Security & Secrets)
+本リポジトリは完全公開OSSであり、シークレットの流出を多層防御でブロックしています。
+- APIキーを GitHub Secrets に追加するような自動化やSaaSツール (課金を含むもの) の提案は厳禁です。
+- `.vscode/settings.json` や `.gitattributes` を通じて各種AIエージェントの作業ログ (e.g. `.cursor/`, `.aider*`, `.claude/`) および機密ファイルはコミットをブロックされます。
+- 作業完了時は必ず `pre-commit run --all-files` 相当の検証が行われることに留意し、パスワードやアクセスキーのダミー値は `<REDACTED>` 等を用いてください。
+
 ## Optional
 ローカル実行と検証のためのコマンドライン:
 - [インストール](https://github.com/genzouw/hyakuninissyu/blob/b9d8de3020066eca390542118bb3d3dd9ff3d4b5/package.json): `bun install`
