@@ -22,11 +22,15 @@ module.exports = {
         presets: [['@babel/preset-env', { targets: { node: 'current' } }]],
       },
     ],
-    '^.+\\.js$': '<rootDir>/node_modules/babel-jest',
+    // build/ 配下のビルドスクリプト (ESM) をテストから import するために変換する。
+    '^.+\\.m?js$': '<rootDir>/node_modules/babel-jest',
     '.*\\.(vue)$': '<rootDir>/node_modules/@vue/vue3-jest',
   },
   // 既定では node_modules 全体が変換対象外なので、ESM 専用パッケージのみ許可する。
-  transformIgnorePatterns: ['/node_modules/(?!bootstrap-vue-next/)'],
+  // perfect-debounce は bootstrap-vue-next が依存する ESM 専用パッケージ。
+  transformIgnorePatterns: [
+    '/node_modules/(?!(bootstrap-vue-next|perfect-debounce)/)',
+  ],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
   setupFiles: ['<rootDir>/test/unit/setup'],
   coverageDirectory: '<rootDir>/test/unit/coverage',

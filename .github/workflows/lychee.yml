@@ -58,9 +58,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          # www.npmjs.com は GitHub Actions からのアクセスを bot とみなして
+          # 403 Forbidden を返すことがあるため、実リンク切れではなくチェック対象から除外する。
           lychee --verbose --no-progress \
             --root-dir './static' \
             --exclude-path 'node_modules' \
             --exclude-path 'dist' \
             --exclude 'https://hyakuninissyu\.genzouw\.com/hyakunin_issyu\.png' \
+            --exclude 'https://www\.npmjs\.com/' \
             './**/*.md' './**/*.html' './**/*.vue'

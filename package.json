@@ -13,7 +13,7 @@
     "test": "bun run unit",
     "lint": "eslint --cache src test/unit && stylelint --cache \"src/**/*.vue\" && bun run markuplint",
     "markuplint": "markuplint \"src/**/*.vue\"",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider node build/build.mjs && bun run repomix --style markdown --output dist/llms-full.txt --quiet",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider node build/build.mjs && node build/generate-sitemap.mjs && bun run repomix --style markdown --output dist/llms-full.txt --quiet",
     "knip": "knip",
     "textlint": "textlint \"**/*.md\"",
     "prepare": "husky"
@@ -78,6 +78,7 @@
     "repomix": "1.18.0",
     "rimraf": "^5.0.10",
     "secretlint": "13.0.5",
+    "sitemap": "^9.0.1",
     "stylelint": "17.15.0",
     "stylelint-config-html": "2.0.0",
     "stylelint-config-recommended-vue": "2.0.0",

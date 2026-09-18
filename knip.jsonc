@@ -3,6 +3,8 @@
   "project": ["src/**/*.js", "src/**/*.vue"],
   "ignoreDependencies": [
     "repomix",
+    // build/generate-sitemap.mjs から使用 (knip の project は src 配下のみ)
+    "sitemap",
     "stylelint-config-standard-scss",
     "css-minimizer-webpack-plugin",
     "mini-css-extract-plugin",
