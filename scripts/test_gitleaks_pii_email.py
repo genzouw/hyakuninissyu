@@ -22,7 +22,7 @@ import json
 import os
 import re
 import shutil
-import subprocess
+import subprocess  # nosec B404
 import unittest
 from pathlib import Path
 
@@ -68,7 +68,7 @@ def address(local_part: str, domain_part: str) -> str:
 
 
 def installed_gitleaks_version(gitleaks: str) -> str:
-    completed = subprocess.run(
+    completed = subprocess.run(  # nosec B603
         [gitleaks, "version"],
         capture_output=True,
         text=True,
@@ -81,7 +81,7 @@ def installed_gitleaks_version(gitleaks: str) -> str:
 
 def scan(gitleaks: str, text: str) -> list[dict]:
     """``gitleaks stdin`` で 1 行を走査し、検出結果の一覧を返す。"""
-    completed = subprocess.run(
+    completed = subprocess.run(  # nosec B603
         [
             gitleaks,
             "stdin",

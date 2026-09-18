@@ -23,7 +23,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
-import subprocess
+import subprocess  # nosec B404
 import sys
 from pathlib import Path
 
@@ -124,7 +124,7 @@ def allowlist_entries(data: dict) -> list[dict]:
 def git_ignored(paths: list[str], cwd: Path) -> set[str]:
     """git の無視ルールで除外されるパスの集合を返す。"""
     # --no-index: 追跡済みかどうかに関係なく .gitignore の評価結果だけを見る
-    result = subprocess.run(
+    result = subprocess.run(  # nosec B603 B607
         ["git", "check-ignore", "--no-index", "--stdin", "-z"],
         input="\0".join(paths).encode("utf-8"),
         stdout=subprocess.PIPE,
@@ -141,7 +141,7 @@ def git_ignored(paths: list[str], cwd: Path) -> set[str]:
 
 def git_diff_suppressed(paths: list[str], cwd: Path) -> set[str]:
     """diff 属性が unset（diff 出力が抑止される）なパスの集合を返す。"""
-    result = subprocess.run(
+    result = subprocess.run(  # nosec B603 B607
         ["git", "check-attr", "--stdin", "-z", "diff"],
         input="\0".join(paths).encode("utf-8"),
         stdout=subprocess.PIPE,
@@ -309,7 +309,7 @@ class SensitiveFilesHook:
 
 
 def repo_root() -> Path:
-    result = subprocess.run(
+    result = subprocess.run(  # nosec B603 B607
         ["git", "rev-parse", "--show-toplevel"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
