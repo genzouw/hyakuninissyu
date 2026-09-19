@@ -14,13 +14,16 @@
 // オプション `options.storage` を渡すとテスト時に独自ストレージを注入できる。
 
 function getByPath (obj, path) {
+  // eslint-disable-next-line security/detect-object-injection
   return path.split('.').reduce((acc, key) => (acc == null ? acc : acc[key]), obj)
 }
 
 function setByPath (obj, path, value) {
   const segments = path.split('.')
   const last = segments.pop()
+  // eslint-disable-next-line security/detect-object-injection
   const parent = segments.reduce((acc, key) => (acc == null ? acc : acc[key]), obj)
+  // eslint-disable-next-line security/detect-object-injection
   if (parent != null) parent[last] = value
 }
 

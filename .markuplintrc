@@ -27,7 +27,8 @@
       // アンバランスなパーサー側の既知の制限に起因する）。
       // .poem-card は Collection.vue のカード要素にのみ使用するクラスのため、
       // 影響範囲をこの要素に限定して誤検知のみを抑止する。
-      "selector": ".poem-card",
+      // .badge-card (Badges.vue) にも同じ問題があるため追加する。
+      "selector": ".poem-card, .badge-card",
       "rules": {
         "attr-duplication": false
       }

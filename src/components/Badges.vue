@@ -85,7 +85,11 @@
             'unlocked': isUnlocked(badge.id),
             'locked': !isUnlocked(badge.id)
           }"
+          role="button"
+          tabindex="0"
           @click="showBadgeDetail(badge)"
+          @keydown.enter="showBadgeDetail(badge)"
+          @keydown.space="showBadgeDetail(badge)"
         >
           <div class="card-body text-center">
             <div

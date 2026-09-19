@@ -66,6 +66,7 @@ export function getTodaysChallengePoems (allPoems) {
 
   for (let i = 0; i < 5 && poemsCopy.length > 0; i++) {
     const randomIndex = Math.floor(random() * poemsCopy.length)
+    // eslint-disable-next-line security/detect-object-injection
     selectedPoems.push(poemsCopy[randomIndex])
     poemsCopy.splice(randomIndex, 1)
   }
