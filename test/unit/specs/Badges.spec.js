@@ -83,6 +83,32 @@ describe('Badges.vue', () => {
     expect(wrapper.vm.filteredBadges.length).toBe(14)
   })
 
+  it('should show badge detail when Enter key is pressed on badge card', async () => {
+    const wrapper = mountBadges()
+    await wrapper.find('.badge-card').trigger('keydown.enter')
+    expect(wrapper.vm.showModal).toBe(true)
+  })
+
+  it('should not show badge detail when Space key is pressed down (default scroll is prevented instead)', async () => {
+    const wrapper = mountBadges()
+    const event = new KeyboardEvent('keydown', {
+      key: ' ',
+      code: 'Space',
+      cancelable: true,
+      bubbles: true,
+    })
+    wrapper.find('.badge-card').element.dispatchEvent(event)
+    await wrapper.vm.$nextTick()
+    expect(event.defaultPrevented).toBe(true)
+    expect(wrapper.vm.showModal).toBe(false)
+  })
+
+  it('should show badge detail when Space key is released on badge card', async () => {
+    const wrapper = mountBadges()
+    await wrapper.find('.badge-card').trigger('keyup.space')
+    expect(wrapper.vm.showModal).toBe(true)
+  })
+
   it('should clear unlockedBadgeIds and localStorage if JSON.parse fails', () => {
     // Suppress console.error for this test
     const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {})

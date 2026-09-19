@@ -89,7 +89,8 @@
           tabindex="0"
           @click="showBadgeDetail(badge)"
           @keydown.enter="showBadgeDetail(badge)"
-          @keydown.space="showBadgeDetail(badge)"
+          @keydown.space="preventSpaceScroll"
+          @keyup.space="showBadgeDetail(badge)"
         >
           <div class="card-body text-center">
             <div
@@ -209,6 +210,13 @@ export default {
     showBadgeDetail (badge) {
       this.selectedBadge = badge
       this.showModal = true
+    },
+    // スペースキー押下によるページスクロールを抑止する。
+    // `@keydown.space.prevent` と書くと @markuplint/vue-parser（v4.18系）が
+    // 修飾子2つの v-on 属性をディレクティブとして認識できず invalid-attr を
+    // 誤検知するため、`.prevent` はメソッド側で明示的に実行する。
+    preventSpaceScroll (event) {
+      event.preventDefault()
     },
     loadUnlockedBadges () {
       const saved = localStorage.getItem('unlockedBadgeIds')
