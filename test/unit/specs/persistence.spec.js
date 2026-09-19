@@ -6,11 +6,14 @@ const KEY = 'test_collected'
 function createMockLocalStorage (initial) {
   const store = Object.assign({}, initial || {})
   return {
+    // eslint-disable-next-line security/detect-object-injection
     getItem: jest.fn((k) => (k in store ? store[k] : null)),
     setItem: jest.fn((k, v) => {
+      // eslint-disable-next-line security/detect-object-injection
       store[k] = v
     }),
     removeItem: jest.fn((k) => {
+      // eslint-disable-next-line security/detect-object-injection
       delete store[k]
     }),
     _backing: store,

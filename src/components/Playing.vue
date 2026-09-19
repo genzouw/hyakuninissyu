@@ -35,8 +35,10 @@
                 correct: !thinking && c === questionData.answer,
                 choiced: !thinking && c === choice,
               }"
+              :for="'playing-choice-' + i"
             >
               <input
+                :id="'playing-choice-' + i"
                 v-model="choice"
                 type="radio"
                 :value="c"
