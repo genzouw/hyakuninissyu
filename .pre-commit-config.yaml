@@ -53,7 +53,7 @@ repos:
         description: CIと同期し、GoogleGeminiAPIKeyを除く全てのシークレット（無効化済み含む）をブロック
         entry: trufflehog git file://. --since-commit HEAD --fail --trust-local-git-config --exclude-detectors=GoogleGeminiAPIKey
   - repo: https://github.com/crate-ci/typos
-    rev: d43b6c087ac471e2ea7b8af622ff15f05c0c365b # frozen: v1.50.1
+    rev: b859c0df7f391deba73030f79b957e62b4d81dc6 # frozen: varcon-core-v5.0.7
     hooks:
       - id: typos
         name: typos (Spell Checker)
@@ -65,7 +65,7 @@ repos:
         name: actionlint (GitHub Actions Static Analysis)
         description: Detect workflow syntax errors, expression mistakes, and script injection risks (pull_request_target usage is blocked separately by the forbid-pull-request-target hook and zizmor.yml)
   - repo: https://github.com/zizmorcore/zizmor-pre-commit
-    rev: cef8b8350da46d8114c7e6b7272aebdccdf193ce # frozen: v1.30.0
+    rev: fa412071e4f5d44d44f9e365f4676f9df92456a2 # frozen: v1.30.1
     hooks:
       - id: zizmor
         name: zizmor (GitHub Actions Security Static Analysis)
@@ -200,7 +200,7 @@ repos:
         always_run: true
         description: 'プロジェクトの標準パッケージマネージャー (Bun) 以外のロックファイルや Yarn Berry の副産物 (.yarn/, .pnp.*) がワークツリーに存在しないか検査します（.gitignore で除外されステージングされない場合でも誤用に気づけるよう、staged file ではなくワークツリーの実体を検査します）'
   - repo: https://github.com/PyCQA/bandit
-    rev: 691f465b4bac758ea1d6dfa9b57d3881a12954fd # frozen: 1.7.9
+    rev: 92ae8b82fb422a639f0ed8d99e96cea769594e08 # frozen: 1.9.4
     hooks:
       - id: bandit
         name: bandit (Python Security Linter)
