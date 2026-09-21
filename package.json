@@ -70,7 +70,7 @@
     "node-notifier": "^10.0.1",
     "ora": "^9.4.0",
     "portfinder": "^1.0.38",
-    "postcss": "^8.4.49",
+    "postcss": "^8.5.28",
     "postcss-html": "2.0.0",
     "postcss-import": "^17.0.0",
     "postcss-loader": "^8.1.1",
