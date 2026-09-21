@@ -4,7 +4,31 @@
 version: 2
 updates:
   # Node.js dependencies (root)
-  - package-ecosystem: npm
+  #
+  # 本リポジトリの唯一のロックファイルは bun.lock（npm/yarn のロックファイルは
+  # pre-commit の "forbid foreign lockfiles" で禁止している）。
+  # `package-ecosystem: npm` は package.json と npm/yarn のロックファイルしか
+  # 更新しないため、Dependabot PR は package.json だけが進んだ状態で届き、
+  # setup-bun-env の `bun install --frozen-lockfile` が
+  # `error: lockfile had changes, but lockfile is frozen` で必ず落ちていた
+  # （Bun 依存の全ジョブが一斉に短時間で失敗する）。毎回 PR ブランチ上で
+  # `bun install` を手動実行して bun.lock を追従させていたのがこれ。
+  # Dependabot は 2025-02-13 に bun を GA でサポートしており
+  # (https://github.blog/changelog/2025-02-13-dependabot-version-updates-now-support-the-bun-package-manager-ga/)、
+  # `package-ecosystem: bun` にすると package.json と bun.lock を
+  # 同一 PR で更新する。これが手動追従の根本対処。
+  #
+  # 既知のトレードオフ: bun エコシステムは version updates のみ対応で
+  # security updates は非対応（
+  # https://docs.github.com/en/code-security/dependabot/ecosystems-supported-by-dependabot/supported-ecosystems-and-repositories
+  # の Bun 行）。ただし npm のままでも security update PR は bun.lock を
+  # 更新しないため同じく CI が落ちる状態であり、実運用上の後退はない。
+  # 脆弱性の検知自体は Dependabot alerts / OSV-Scanner / Trivy /
+  # Dependency Review が継続してカバーする。
+  #
+  # ラベルは既存の `npm` を維持している。Dependabot は存在しないラベルを
+  # 自動作成しないため、`bun` ラベルへ変更する場合は先にラベルを作成すること。
+  - package-ecosystem: bun
     directory: /
     schedule:
       interval: weekly
@@ -177,8 +201,10 @@ updates:
   # 注意: DependabotのPRはスクリプトを実行できないため、rev変更に伴う
   # .secrets.baseline の再生成（detect-secrets scan --update .secrets.baseline）
   # は追従されない。このPRのCI（pre-commit.yml）が detect-secrets hook で
-  # 失敗した場合は、bun.lock の手動追従と同様にPRブランチ上で上記コマンドを
-  # 実行してコミットする。
+  # 失敗した場合は、PRブランチ上で上記コマンドを実行してコミットする。
+  # （npm セクションの bun.lock 手動追従は package-ecosystem: bun への
+  # 切り替えで解消済みだが、こちらは同種の「Dependabot が再生成できない
+  # 副産物」であり、引き続き手動対応が必要。）
   - package-ecosystem: pre-commit
     directory: /
     schedule:
