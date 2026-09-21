@@ -75,7 +75,7 @@ PR や Push 時に実行される第二の防御層です。
 
 - `.github/dependabot.yml` の `pre-commit` エコシステム設定により、`.pre-commit-config.yaml` に定義されている各種フックのリビジョンを最新に更新する Pull Request が Dependabot によって自動作成されます。SHA 固定（コミット SHA + `# frozen: <tag>` 形式のバージョンタグコメント）の形式のまま更新されるため、GitHub Actions の外部アクション同様、タグ参照への巻き戻りは発生しません。`# frozen: <tag>` コメントが無いと Dependabot はタグを解決できず、デフォルトブランチの HEAD SHA に更新してしまうため、この形式は必須です。
 - これにより、新たなシークレットパターンへの対応漏れを防ぎ、CI とローカル環境間のバージョン乖離（ドリフト）を解消します。
-- なお、Dependabot の PR はスクリプトを実行できないため、rev 更新に伴う `.secrets.baseline` の再生成（`detect-secrets scan --update .secrets.baseline`）は追従されません。CI（`pre-commit.yml`）の detect-secrets hook が失敗した場合は、`bun.lock` の手動追従と同様に PR ブランチ上で上記コマンドを実行してコミットしてください。
+- なお、rev 更新に伴う `.secrets.baseline` の再生成は不要です。`rev:` 行は `.secrets.baseline` の `should_exclude_line` フィルタで走査対象から外しているため（後述の「`rev:` 行の除外フィルタ」節）、rev が更新されても detect-secrets hook が落ちることはありません。したがって Dependabot の PR で detect-secrets hook が失敗した場合は、ベースラインを再生成して通すのではなく**別の原因を疑ってください**（ベースラインの再生成は、検出された内容を確認せずに握りつぶす操作になり得ます）。
 - 以前は独立した cron ワークフロー（`pre-commit-autoupdate.yml`）で `pre-commit autoupdate` を実行していましたが、Dependabot の `pre-commit` エコシステムと同じファイルを異なるスケジュールで更新し合う二重 automation となっていたため廃止し、Dependabot 側に一本化しました。
 
 ## 万が一漏洩してしまった場合
@@ -92,6 +92,20 @@ AI エージェントの作業ディレクトリ（`.bolt/`, `.lovable/`, `.devi
 新たに `detect-secrets` を導入し、`.secrets.baseline` を用いたシークレット混入のベースライン管理を追加しました。
 
 - 既存のソースコードに含まれる誤検知等はベースラインとして除外され、新規コミット時にのみ新たに混入したシークレットを `pre-commit` フックで検知します。
+
+#### `rev:` 行の除外フィルタ
+
+`.pre-commit-config.yaml` の `rev:` には pre-commit フックを固定する 40 桁のコミット SHA が書かれており、detect-secrets はこれを `Hex High Entropy String` として検出します。検出結果をベースラインにハッシュ値で記録する方式では、Dependabot が `rev` を更新するたびに記録と実値が食い違って CI が落ちるため、`.secrets.baseline` の `filters_used` に `detect_secrets.filters.regex.should_exclude_line` を追加し、`rev:` 行そのものを走査対象から外しています。
+
+このフィルタを読み書きする際は、以下の 3 点に注意してください。
+
+- **パターンは行末まで縛ります**。`should_exclude_line` は行全体を走査対象から外すフィルタです。終端を縛らないと `rev:` 行に何を書き足しても一緒に除外されるため、`rev: <SHA> aws_secret_access_key = ...` のような混入行が無検査になります。`.pre-commit-config.yaml` は Dependabot が毎週書き換えるファイルであり、コンフリクト解消やマージの事故で `rev:` 行に別の値が混ざる経路は現実にあります。終端は `\s*(#.*)?$` と書いてください。`\s*$` だけで締めると `# frozen: <tag>` コメントに阻まれてどの行にも一致せず、下の引用符の罠と同じ「無言で効かない」状態になります。
+- **除外はファイルを問わず効きます**。`should_exclude_line` はファイル名を受け取らず行の内容だけで判定する（`detect_secrets/filters/regex.py` の `should_exclude_line(line: str) -> bool`）ため、対象は `.pre-commit-config.yaml` に限定されません。リポジトリ内のどのファイルであっても `rev:` キーに 40 桁 hex が書かれた行は detect-secrets の検査対象から外れます。将来この形の行を別の設定ファイルに追加する場合は、実在のシークレットが紛れ込んでも detect-secrets では検出されない点を踏まえてください（`gitleaks` / `trufflehog` 等は独自パターンで全ファイルを走査するため、多層防御自体は維持されます）。
+- **パターンには引用符を含めます**。detect-secrets は YAML を正規化してからフィルタに渡すため、フィルタが受け取る行は `rev: "b859c0df..."` の形になります。`^\s*rev: [0-9a-f]{40}` のように引用符を考慮せずに書くとどの行にも一致せず、**フィルタが無言で効かない**状態になります。
+
+この挙動は `scripts/test_secrets_baseline_precommit_rev.py` が detect-secrets 本体を実行して固定しています（CI では `pre-commit.yml` の `Run scripts unit tests` で実行）。除外フィルタを外したベースラインでは同じ入力が検出されることもあわせて検証しているため、テストが素通りしていないことを確認できます。**このフィルタの `pattern` を変更する際は、本節と同テストの両方を更新してください**（`.gitleaks.toml` と `scripts/test_gitleaks_pii_email.py` に定めているものと同じルールです）。このフィルタは効かなくなる方向は CI が赤くなって気づけますが、**除外が広がる方向は無言で通る**ため、回帰テストでの固定が唯一の検知手段になります。
+
+ベースラインを再生成する必要が生じた場合は、必ず `detect-secrets scan --baseline .secrets.baseline` を使ってください。`detect-secrets scan > .secrets.baseline` のようにリダイレクトすると `filters_used` の `should_exclude_line` が消え、rev 更新での誤検知が再発します。なお `--update` は detect-secrets 1.5.0 に存在しないフラグです。
 
 #### 開発環境の前提条件とセットアップ
 
