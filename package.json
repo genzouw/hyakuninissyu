@@ -34,7 +34,7 @@
     "@babel/core": "^8.0.1",
     "@babel/plugin-transform-modules-commonjs": "^8.0.1",
     "@babel/plugin-transform-runtime": "^8.0.1",
-    "@babel/preset-env": "^8.0.2",
+    "@babel/preset-env": "^8.0.5",
     "@commitlint/cli": "^21.2.1",
     "@jest/globals": "^30.4.1",
     "@markuplint/vue-parser": "^4.18.3",
