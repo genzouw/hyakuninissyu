@@ -203,6 +203,9 @@ venv/
 # Optional stylelint cache
 .stylelintcache
 
+# Optional textlint cache
+.textlintcache
+
 # Python（scripts/ 配下の検証スクリプトの生成物）
 __pycache__/
 *.py[cod]
