@@ -37,7 +37,7 @@
     "@babel/preset-env": "^8.0.2",
     "@commitlint/cli": "^21.2.1",
     "@jest/globals": "^30.4.1",
-    "@markuplint/vue-parser": "^4.18.3",
+    "@markuplint/vue-parser": "^5.0.0",
     "@secretlint/secretlint-rule-preset-recommend": "13.0.5",
     "@soda/friendly-errors-webpack-plugin": "^1.8.1",
     "@vue/compiler-sfc": "^3.5.34",
