@@ -1,0 +1,39 @@
+## 背景
+
+本リポジトリには `gitleaks` や `trufflehog` など強力な漏洩防止機構と、`actionlint`、`CodeQL` などの CI 定期監査が導入されていますが、`scripts/` 配下のテストや検証で使用する Python スクリプト群について、CodeQL の対象言語に Python が含まれておらず、脆弱性（インジェクションやロジック不備など）の継続的な静的解析から漏れている状態でした。
+
+## 現状認識（事前調査結果のサマリー）
+
+- 既存防御策: `gitleaks`, `trufflehog`, `trivy`, `actionlint`, `osv-scanner`, `CodeQL (javascript-typescript)` などの導入済み
+- 未カバー領域: CodeQL での Python スクリプト監査
+- 直近の漏洩リスク兆候: 特になし（既存ファイルに明白なシークレット等は見られません）
+
+## このPRで導入・強化するもの
+
+- 対象: `.github/workflows/codeql.yml` の `matrix`
+- ツール名とバージョン: CodeQL Advanced Security (v4.38.0)
+- 期待される効果: 定期監査・PR時に Python コードも自動的に静的解析され、スクリプトにおける不安全なロジックやインジェクション脆弱性などが自動検知されるようになります。
+
+## 検知漏れリスクと補完策
+
+- 検知できないケース: 静的解析で捉えきれないビジネスロジックのバグなど
+- 補完策: 既存の `pre-commit` フック (`bandit`) によりローカル環境でもコミット前に基本的な Python セキュリティ検査を実施し、多層防御を構成しています。
+
+## マージ前に必要な手動作業（チェックリスト）
+
+レビュアーは PR をマージする前に必ず以下を実施してください。
+本 PR の CI は手動作業完了を前提に通る設計です。
+
+- [ ] (手動作業は特に不要ですが、GitHub Settings の Code Scanning 機能が有効であることの再確認)
+
+## マージ後の確認手順
+
+- [ ] 次の push / PR で `Analyze (python)` のジョブが追加され、正常終了することを確認
+
+## ロールバック手順
+
+問題が発生した場合は、`.github/workflows/codeql.yml` の `matrix` から `python` を削除してコミットしてください。
+
+## 参考情報
+
+- 公式ドキュメント: https://docs.github.com/ja/code-security/code-scanning/automatically-scanning-your-code-for-vulnerabilities-and-errors/configuring-code-scanning
