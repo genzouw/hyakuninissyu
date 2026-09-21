@@ -8,12 +8,17 @@
 ``detect_secrets.filters.regex.should_exclude_line`` で ``rev:`` 行そのものを
 走査対象から外している。
 
-このテストが固定したい挙動は 2 つある。
+このテストが固定したい挙動は 3 つある。
 
 1. **クォートの罠**: detect-secrets は YAML を正規化してからフィルタに渡すため、
    フィルタが受け取る行は ``rev: "b859c0df..."`` のように値が引用符で囲まれた形になる。
    ``^\\s*rev: [0-9a-f]{40}`` と書くと一致せず、**フィルタが無言で効かない**状態になる。
 2. **rev 更新への耐性**: 将来 rev が別の SHA に更新されても検出されないこと。
+3. **除外範囲の上限**: ``should_exclude_line`` は行全体を走査対象から外すフィルタなので、
+   パターンに終端が無いと ``rev:`` 行に何を書き足しても一緒に除外される。行末（``# frozen: <tag>``
+   コメント込み）まで縛ることで、``rev: <SHA> aws_secret_access_key = ...`` のような
+   混入行が検出されるようにしている。終端を ``\\s*$`` だけで締めると ``# frozen: <tag>``
+   コメントに阻まれて 1 と同じ「無言で効かない」状態になるため、``(#.*)?`` は必須である。
 
 正規表現を Python 側で再実装するのではなく detect-secrets 本体を実行するのは、
 検証したいのが「本リポジトリのベースラインを detect-secrets が解釈した結果」そのものだから
@@ -47,6 +52,11 @@ EXCLUDE_LINE_FILTER = "detect_secrets.filters.regex.should_exclude_line"
 # 40 桁 hex のリテラルをこのファイル内に残さないよう、実行時に組み立てる。
 # リテラルで書くと本テスト自身が detect-secrets / gitleaks の検出対象になり得る。
 FAKE_SHA = "dead" + "beef" * 9
+
+# 除外範囲の上限を検証するための、rev 行に混入させるダミーのシークレット。
+# AWS の公開ドキュメントに載っている例示値だが、リテラルで書くと本テスト自身が
+# 検出対象になるため実行時に組み立てる。
+INJECTED_SECRET = "aws_secret_access_key = " + "wJalrXUtnFEMI/K7MDENG/" + "bPxRfiCYEXAMPLEKEY"
 
 
 def load_baseline() -> dict:
@@ -112,6 +122,19 @@ class ExcludePatternTest(unittest.TestCase):
 
     def test_インデントが無いrev行も除外する(self):
         self.assertExcluded(f"rev: {FAKE_SHA}")
+
+    def test_frozenコメント付きのrev行を除外する(self):
+        # .pre-commit-config.yaml の実際の形。終端を `\s*$` だけで締めると
+        # このコメントに阻まれてフィルタが無言で効かなくなる。
+        self.assertExcluded(f"    rev: {FAKE_SHA} # frozen: v1.5.0")
+        self.assertExcluded(f'    rev: "{FAKE_SHA}" # frozen: v1.5.0')
+
+    def test_rev行に後続の値が続く場合は除外対象外(self):
+        # 除外範囲の上限。`should_exclude_line` は行全体を走査対象から外すため、
+        # 終端を縛らないと rev 行に書き足された実在のシークレットまで除外される。
+        self.assertNotExcluded(f"    rev: {FAKE_SHA} secret = s3cr3t")
+        self.assertNotExcluded(f"    rev: {FAKE_SHA} secret = s3cr3t # frozen: v1.5.0")
+        self.assertNotExcluded(f'    rev: "{FAKE_SHA}" secret = s3cr3t')
 
     def test_タグ形式のrevは除外対象外(self):
         self.assertNotExcluded("    rev: v1.5.0")
@@ -204,6 +227,29 @@ class DetectSecretsHookTest(unittest.TestCase):
         self.assertIn(FAKE_SHA, rewritten, "rev の置換に失敗しました（テストの前提が壊れています）")
         completed = self.run_hook(load_baseline(), rewritten)
         self.assertNoSecretDetected(completed)
+
+    def test_rev行に混入したシークレットは検出される(self):
+        # 除外範囲の上限。`should_exclude_line` は行全体を走査対象から外すため、
+        # パターンに終端が無いと rev 行に書き足されたシークレットまで除外される。
+        # Dependabot が毎週書き換えるファイルであり、コンフリクト解消の事故で
+        # rev 行に別の値が混ざる経路は現実にある。
+        polluted = re.sub(
+            r"(?m)^(\s*rev: [0-9a-f]{40})",
+            lambda match: f"{match.group(1)} {INJECTED_SECRET}",
+            PRE_COMMIT_CONFIG_PATH.read_text(encoding="utf-8"),
+            count=1,
+        )
+        self.assertIn(
+            INJECTED_SECRET, polluted, "シークレットの混入に失敗しました（テストの前提が壊れています）"
+        )
+        completed = self.run_hook(load_baseline(), polluted)
+        self.assertNotEqual(
+            completed.returncode,
+            0,
+            "rev 行に混入したシークレットが検出されませんでした。"
+            "除外パターンの終端（`\\s*(#.*)?$`）が外れていないか確認してください:\n"
+            f"stdout:\n{completed.stdout}\nstderr:\n{completed.stderr}",
+        )
 
     def test_除外フィルタを外すと検出される(self):
         # 陽性コントロール。これが失敗する場合、上の 2 つは
