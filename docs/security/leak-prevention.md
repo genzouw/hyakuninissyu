@@ -93,6 +93,17 @@ AI エージェントの作業ディレクトリ（`.bolt/`, `.lovable/`, `.devi
 
 - 既存のソースコードに含まれる誤検知等はベースラインとして除外され、新規コミット時にのみ新たに混入したシークレットを `pre-commit` フックで検知します。
 
+#### `rev:` 行の除外フィルタ
+
+`.pre-commit-config.yaml` の `rev:` には pre-commit フックを固定する 40 桁のコミット SHA が書かれており、detect-secrets はこれを `Hex High Entropy String` として検出します。検出結果をベースラインにハッシュ値で記録する方式では、Dependabot が `rev` を更新するたびに記録と実値が食い違って CI が落ちるため、`.secrets.baseline` の `filters_used` に `detect_secrets.filters.regex.should_exclude_line` を追加し、`rev:` 行そのものを走査対象から外しています。
+
+このフィルタを読み書きする際は、以下の 2 点に注意してください。
+
+- **除外はファイルを問わず効きます**。`should_exclude_line` はファイル名を受け取らず行の内容だけで判定する（`detect_secrets/filters/regex.py` の `should_exclude_line(line: str) -> bool`）ため、対象は `.pre-commit-config.yaml` に限定されません。リポジトリ内のどのファイルであっても `rev:` キーに 40 桁 hex が書かれた行は detect-secrets の検査対象から外れます。将来この形の行を別の設定ファイルに追加する場合は、実在のシークレットが紛れ込んでも detect-secrets では検出されない点を踏まえてください（`gitleaks` / `trufflehog` 等は独自パターンで全ファイルを走査するため、多層防御自体は維持されます）。
+- **パターンには引用符を含めます**。detect-secrets は YAML を正規化してからフィルタに渡すため、フィルタが受け取る行は `rev: "b859c0df..."` の形になります。`^\s*rev: [0-9a-f]{40}` のように引用符を考慮せずに書くとどの行にも一致せず、**フィルタが無言で効かない**状態になります。
+
+この挙動は `scripts/test_secrets_baseline_precommit_rev.py` が detect-secrets 本体を実行して固定しています（CI では `pre-commit.yml` の `Run scripts unit tests` で実行）。除外フィルタを外したベースラインでは同じ入力が検出されることもあわせて検証しているため、テストが素通りしていないことを確認できます。
+
 #### 開発環境の前提条件とセットアップ
 
 ローカル環境でベースラインの更新や検証を行うには、以下の環境が必要です。
