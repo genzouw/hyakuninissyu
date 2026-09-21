@@ -16,8 +16,8 @@
 2. **rev 更新への耐性**: 将来 rev が別の SHA に更新されても検出されないこと。
 3. **除外範囲の上限**: ``should_exclude_line`` は行全体を走査対象から外すフィルタなので、
    パターンに終端が無いと ``rev:`` 行に何を書き足しても一緒に除外される。行末（``# frozen: <tag>``
-   コメント込み）まで縛ることで、``rev: <SHA> aws_secret_access_key = ...`` のような
-   混入行が検出されるようにしている。終端を ``\\s*$`` だけで締めると ``# frozen: <tag>``
+   コメント込み）まで縛ることで、``rev: <SHA> <別の値>`` のような混入行が
+   検出されるようにしている。終端を ``\\s*$`` だけで締めると ``# frozen: <tag>``
    コメントに阻まれて 1 と同じ「無言で効かない」状態になるため、``(#.*)?`` は必須である。
 
 正規表現を Python 側で再実装するのではなく detect-secrets 本体を実行するのは、
@@ -53,10 +53,12 @@ EXCLUDE_LINE_FILTER = "detect_secrets.filters.regex.should_exclude_line"
 # リテラルで書くと本テスト自身が detect-secrets / gitleaks の検出対象になり得る。
 FAKE_SHA = "dead" + "beef" * 9
 
-# 除外範囲の上限を検証するための、rev 行に混入させるダミーのシークレット。
-# AWS の公開ドキュメントに載っている例示値だが、リテラルで書くと本テスト自身が
-# 検出対象になるため実行時に組み立てる。
-INJECTED_SECRET = "aws_secret_access_key = " + "wJalrXUtnFEMI/K7MDENG/" + "bPxRfiCYEXAMPLEKEY"
+# 除外範囲の上限を検証するために rev 行へ混入させるダミーのシークレット。
+# detect-secrets の Private Key プラグインが行内のどこにあっても拾う目印を使う
+# （高エントロピー文字列だと、YAML の 1 スカラーに空白混じりで収まった時点で
+# hex / base64 のトークンとして成立せず、検出されなくなってしまう）。
+# リテラルで書くと本テスト自身が検出対象になるため実行時に連結する。
+INJECTED_MARKER = "-----BEGIN RSA PRIVATE " + "KEY-----"
 
 
 def load_baseline() -> dict:
@@ -235,12 +237,12 @@ class DetectSecretsHookTest(unittest.TestCase):
         # rev 行に別の値が混ざる経路は現実にある。
         polluted = re.sub(
             r"(?m)^(\s*rev: [0-9a-f]{40})",
-            lambda match: f"{match.group(1)} {INJECTED_SECRET}",
+            lambda match: f"{match.group(1)} {INJECTED_MARKER}",
             PRE_COMMIT_CONFIG_PATH.read_text(encoding="utf-8"),
             count=1,
         )
         self.assertIn(
-            INJECTED_SECRET, polluted, "シークレットの混入に失敗しました（テストの前提が壊れています）"
+            INJECTED_MARKER, polluted, "シークレットの混入に失敗しました（テストの前提が壊れています）"
         )
         completed = self.run_hook(load_baseline(), polluted)
         self.assertNotEqual(
