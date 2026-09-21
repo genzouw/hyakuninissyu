@@ -232,13 +232,17 @@ updates:
   # しまうため（CWE-829: 信頼できない管理領域からの機能取り込み）、SHA固定の
   # 意図が損なわれる。frozen 形式であれば、タグ参照の場合と同じ運用手順
   # （自動PR→レビュー→マージ）で正しいタグ解決のまま追従できる。
-  # 注意: DependabotのPRはスクリプトを実行できないため、rev変更に伴う
-  # .secrets.baseline の再生成（detect-secrets scan --update .secrets.baseline）
-  # は追従されない。このPRのCI（pre-commit.yml）が detect-secrets hook で
-  # 失敗した場合は、PRブランチ上で上記コマンドを実行してコミットする。
-  # （npm セクションの bun.lock 手動追従は package-ecosystem: bun への
-  # 切り替えで解消済みだが、こちらは同種の「Dependabot が再生成できない
-  # 副産物」であり、引き続き手動対応が必要。）
+  # rev 変更に伴う .secrets.baseline の再生成は不要。40桁hexのrev行は
+  # .secrets.baseline の detect_secrets.filters.regex.should_exclude_line
+  # フィルタで走査対象から外しているため、rev が更新されても detect-secrets
+  # hook は落ちない。したがってこのPRで detect-secrets hook が失敗した場合は、
+  # ベースラインを再生成して通すのではなく別の原因を疑うこと（再生成は検出
+  # 内容を確認せずに握りつぶす操作になり得る）。
+  # 再生成が本当に必要になった場合は detect-secrets scan --baseline
+  # .secrets.baseline を使う（--update はv1.5.0に存在しないフラグ）。
+  # detect-secrets scan > .secrets.baseline のようにリダイレクトすると
+  # 上記のカスタムフィルタが消え、rev 更新での誤検知が再発する。
+  # 詳細は docs/security/leak-prevention.md の「rev: 行の除外フィルタ」節。
   - package-ecosystem: pre-commit
     directory: /
     schedule:
