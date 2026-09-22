@@ -21,7 +21,7 @@
   "dependencies": {
     "@babel/runtime": "^8.0.0",
     "@popperjs/core": "^2.11.8",
-    "@unhead/vue": "^3.1.0",
+    "@unhead/vue": "^3.4.0",
     "bootstrap": "^5.3.8",
     "bootstrap-vue-next": "^1.2.0",
     "underscore": "^1.13.8",
