@@ -28,8 +28,10 @@ module.exports = {
   },
   // 既定では node_modules 全体が変換対象外なので、ESM 専用パッケージのみ許可する。
   // perfect-debounce は bootstrap-vue-next が依存する ESM 専用パッケージ。
+  // nostics は vue-router 5.2.0 以降が依存する ESM 専用パッケージで、
+  // vue-router の CJS ビルドから require されるため変換が必要。
   transformIgnorePatterns: [
-    '/node_modules/(?!(bootstrap-vue-next|perfect-debounce)/)',
+    '/node_modules/(?!(bootstrap-vue-next|perfect-debounce|nostics)/)',
   ],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
   setupFiles: ['<rootDir>/test/unit/setup'],
