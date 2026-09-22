@@ -42,7 +42,7 @@ PR や Push 時に実行される第二の防御層です。
   - `trivy.yml`: ファイルシステムおよび依存関係のシークレット・脆弱性スキャン。
   - `actionlint.yml`: GitHub Actions ワークフローの静的解析および `shellcheck` 連携によるシェルスクリプトの脆弱性（インジェクション等）検知。
   - `zizmor.yml`: GitHub Actions ワークフローに特化したセキュリティ静的解析ツール。`actionlint` よりも踏み込んだ設定ミス（過剰な `permissions`、認証情報の永続化、信頼できない入力の利用など）を検知し、結果を SARIF 形式で GitHub Code Scanning へアップロードします（ジョブレベルで `security-events: write` を付与）。
-  - `codeql.yml`: `security-extended` および `security-and-quality` クエリによる高度な脆弱性・コード品質の検知（一部のハードコードされた認証情報パターンも含む）。
+  - `codeql.yml`: `security-extended` および `security-and-quality` クエリによる高度な脆弱性・コード品質の検知（一部のハードコードされた認証情報パターンも含む）。`javascript-typescript` に加えて `python` を解析対象とし、リポジトリ内の補助スクリプトの脆弱性（インジェクション等）も継続的に監査します。
   - `dependency-review.yml`: PR で新たに追加・更新される依存パッケージ（OSS）に既知の脆弱性が含まれていないかをスキャン。このワークフローはすべてのプルリクエストに対して実行されます。
   - `osv-scanner.yml`: OSS 依存パッケージの既知脆弱性（OSV データベース照合）をスキャン。「3. 定期監査と自動防御」のスケジュール実行に加え、本拡張によりプッシュ時・PR 時の CI 検知としても動作し、検出結果を SARIF 形式で GitHub Code Scanning へアップロードします（ジョブレベルで `security-events: write` を付与）。
   - `trufflehog.yml`: プッシュ時および PR 時にシークレット検証を実行し、無効化済み・ローテート済みのシークレットも含めた大部分のシークレットパターンの混入をリアルタイムにブロック（例外は後述）。`base`と`head`を両方とも省略した場合、アクション側で push は差分コミットのみ、PR はベース〜ヘッドの差分レンジのみが自動的にスキャン対象となり過去コミットの検知は保証されないため、push/PR 実行時は `base: ''` を明示しつつ `head` にコミット SHA を指定することで、毎回の CI 実行時にリポジトリ全履歴および全ファイルの包括的なシークレットスキャンを実施しています。一方 schedule/workflow_dispatch 実行時は、`head` に単一のコミット SHA を渡すと走査対象がその ref のみに縮退してしまうため、push/PR とは別のステップに分離し、`base`/`head` を渡さずアクション既定のフォールバックに委ねています。
