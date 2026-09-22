@@ -36,7 +36,7 @@
     "@babel/plugin-transform-runtime": "^8.0.1",
     "@babel/preset-env": "^8.0.5",
     "@commitlint/cli": "^21.2.1",
-    "@jest/globals": "^30.4.1",
+    "@jest/globals": "^30.5.1",
     "@markuplint/vue-parser": "^4.18.3",
     "@secretlint/secretlint-rule-preset-recommend": "13.0.5",
     "@soda/friendly-errors-webpack-plugin": "^1.8.1",
