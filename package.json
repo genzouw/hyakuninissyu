@@ -11,12 +11,15 @@
     "start": "bun run dev",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "test": "bun run unit",
-    "lint": "eslint --cache src test/unit && stylelint --cache \"src/**/*.vue\" && bun run markuplint",
+    "lint": "bun run lint:eslint && bun run lint:style && bun run lint:markup",
     "markuplint": "markuplint \"src/**/*.vue\"",
     "build": "NODE_OPTIONS=--openssl-legacy-provider node build/build.mjs && node build/generate-sitemap.mjs && bun run repomix --style markdown --output dist/llms-full.txt --quiet",
     "knip": "knip",
     "textlint": "textlint \"**/*.md\"",
-    "prepare": "husky"
+    "prepare": "husky",
+    "lint:eslint": "eslint --cache src test/unit",
+    "lint:style": "stylelint --cache \"src/**/*.vue\"",
+    "lint:markup": "bun run markuplint"
   },
   "dependencies": {
     "@babel/runtime": "^8.0.0",
