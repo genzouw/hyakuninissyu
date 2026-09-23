@@ -57,7 +57,7 @@ jobs:
       # 挙動を検証する。pre-commit が golang フックとして導入する gitleaks は
       # ~/.cache/pre-commit 配下に入り PATH に載らないため、テスト用に別途導入する。
       # バージョンは .pre-commit-config.yaml の `# frozen:` を単一ソースとして解決し、
-      # Dependabot (pre-commit ecosystem) の rev 更新に自動追従させる。
+      # Renovate (pre-commit manager) の rev 更新に自動追従させる。
       - name: Resolve pinned gitleaks version
         id: gitleaks
         run: |

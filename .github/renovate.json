@@ -1,0 +1,256 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "semanticCommits": "enabled",
+  "semanticCommitScope": "deps",
+  "timezone": "Asia/Tokyo",
+  "schedule": [
+    "* 9 * * 1"
+  ],
+  "minimumReleaseAge": "7 days",
+  "pre-commit": {
+    "description": [
+      "pre-commit manager を明示的に有効にする (Dependabot の package-ecosystem: pre-commit に相当)。",
+      "rev は SHA + '# frozen: <tag>' 形式で固定している。Renovate はこの形式を認識し",
+      "SHA とタグを同時に書き換えるため、タグ参照へ戻って SHA ピンの意図が失われることはない。"
+    ],
+    "enabled": true
+  },
+  "prConcurrentLimit": 10,
+  "labels": [
+    "dependencies"
+  ],
+  "reviewers": [
+    "genzouw"
+  ],
+  "vulnerabilityAlerts": {
+    "description": [
+      "脆弱性修正は minimumReleaseAge と schedule の対象外にして即時 PR にする。",
+      "Dependabot の cooldown が security updates に効かなかったのと同じ挙動を保つため。"
+    ],
+    "minimumReleaseAge": null,
+    "schedule": [],
+    "addLabels": [
+      "security"
+    ]
+  },
+  "packageRules": [
+    {
+      "description": [
+        "依存更新はすべて chore プレフィックスで出す。",
+        "config:recommended に含まれる :semanticPrefixFixDepsChoreOthers は本番依存を fix にするが、",
+        "fix は release 生成ツールがリリース対象として扱うため、Dependabot 時代と同じ chore に固定する。"
+      ],
+      "matchPackageNames": [
+        "*"
+      ],
+      "semanticCommitType": "chore"
+    },
+    {
+      "description": "GitHub Actions の更新のプレフィックスとラベル (Dependabot の commit-message.prefix と同じ)",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "semanticCommitType": "ci",
+      "addLabels": [
+        "github-actions"
+      ]
+    },
+    {
+      "description": "Docker ベースイメージの更新には docker ラベルを付ける",
+      "matchManagers": [
+        "dockerfile",
+        "docker-compose"
+      ],
+      "addLabels": [
+        "docker"
+      ]
+    },
+    {
+      "description": "npm / bun の更新には npm ラベルを付ける",
+      "matchManagers": [
+        "npm",
+        "bun"
+      ],
+      "addLabels": [
+        "npm"
+      ]
+    },
+    {
+      "description": "pip の更新には pip ラベルを付け 1 PR にまとめる",
+      "matchManagers": [
+        "pip_requirements"
+      ],
+      "addLabels": [
+        "pip"
+      ],
+      "groupName": "pip"
+    },
+    {
+      "description": "pre-commit hooks は 1 PR にまとめる (Dependabot の groups.pre-commit と同じ)",
+      "matchManagers": [
+        "pre-commit"
+      ],
+      "addLabels": [
+        "pre-commit"
+      ],
+      "groupName": "pre-commit"
+    },
+    {
+      "description": "GitHub Actions の更新は 1 PR にまとめる (Dependabot の groups.github-actions と同じ)",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "github-actions"
+    },
+    {
+      "description": "Docker の更新は 1 PR にまとめる (Dependabot の groups.docker と同じ)",
+      "matchManagers": [
+        "dockerfile",
+        "docker-compose"
+      ],
+      "groupName": "docker"
+    },
+    {
+      "description": [
+        "Jest スタックは一体で上げる必要がある。jest / babel-jest / @vue/vue3-jest /",
+        "jest-serializer-vue / jest-environment-* は transformer ABI や getCacheKey の",
+        "シグネチャで密結合しており、個別に上がると babel-jest@30 + babel-core@6 のような",
+        "壊れた組み合わせが main に入る (PR #127 以前に発生)。CI は npm run unit を回さないため",
+        "個別バンプでは検出できない。",
+        "@jest/** を含める。Dependabot の patterns (jest / jest-* / babel-jest / @vue/vue3-jest / @types/jest) は",
+        "@jest/globals に一致せず、実際に #499 が単独でマージされて main の jest が壊れている。"
+      ],
+      "matchManagers": [
+        "npm",
+        "bun"
+      ],
+      "matchPackageNames": [
+        "jest",
+        "jest-*",
+        "babel-jest",
+        "@vue/vue3-jest",
+        "@jest/**",
+        "@types/jest"
+      ],
+      "groupName": "jest-stack"
+    },
+    {
+      "description": [
+        "stylelint スタックも一体で上げる。stylelint-config-standard-vue v2 が共有 config を",
+        "dependencies から peerDependencies へ移し、.stylelintrc.json が stylelint-config-html を",
+        "直接 extends しているため、片方ずつ上げるとどちらが先に入っても peer が満たされない",
+        "(PR #402 / #403 / #406)。"
+      ],
+      "matchManagers": [
+        "npm",
+        "bun"
+      ],
+      "matchPackageNames": [
+        "stylelint",
+        "stylelint-config-*",
+        "postcss-html"
+      ],
+      "groupName": "stylelint-stack"
+    },
+    {
+      "description": [
+        "markuplint スタックも一体で上げる。markuplint 本体と .markuplintrc が parser に指定する",
+        "@markuplint/vue-parser はバージョンが揃っている前提で作られており、片方だけ上がると",
+        "markuplint がレポータ内で TypeError を起こして異常終了する (PR #492 / #493 / #504)。"
+      ],
+      "matchManagers": [
+        "npm",
+        "bun"
+      ],
+      "matchPackageNames": [
+        "markuplint",
+        "@markuplint/**"
+      ],
+      "groupName": "markuplint-stack"
+    },
+    {
+      "description": [
+        "Jest スタックの major は止める。@vue/vue3-jest@29.2.6 が peer を jest 29.x / babel-jest 29.x に",
+        "固定しており、これが npm latest のため追従できない (Issue #133)。",
+        "@jest/** は Dependabot の patterns が取りこぼしていた (jest-* は @jest/globals に一致しない)。"
+      ],
+      "matchManagers": [
+        "npm",
+        "bun"
+      ],
+      "matchPackageNames": [
+        "jest",
+        "jest-*",
+        "babel-jest",
+        "@vue/vue3-jest",
+        "@jest/**",
+        "@types/jest"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
+    },
+    {
+      "description": [
+        "eslint / neostandard の major は止める。neostandard@0.13.0 が peer を eslint ^9 に固定し、",
+        "同梱の @stylistic/eslint-plugin@2.11.0 が eslint 10 でクラッシュする",
+        "(sourceCode.isSpaceBetweenTokens が削除された。クローズ済み PR #196)。"
+      ],
+      "matchManagers": [
+        "npm",
+        "bun"
+      ],
+      "matchPackageNames": [
+        "eslint",
+        "neostandard"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
+    },
+    {
+      "description": [
+        "markuplint スタックの major は止める。v5 はグループ化だけでは追従できない破壊的変更で、",
+        ".markuplintrc の移行 (extends を markuplint:recommended-vue へ、@markuplint/vue-spec を specs に指定、",
+        "invalid-attr / attr-duplication / required-element の改名対応) が別途必要になる。",
+        "ローカル検証では揃えても 493 件 (error 118 / warning 375) が出て CI が通らない。",
+        "専用の移行 PR で扱う。"
+      ],
+      "matchManagers": [
+        "npm",
+        "bun"
+      ],
+      "matchPackageNames": [
+        "markuplint",
+        "@markuplint/**"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "enabled": false
+    },
+    {
+      "description": [
+        "major 以外は自動マージする。削除した .github/workflows/dependabot-auto-merge.yml が",
+        "update-type != version-update:semver-major を gh pr merge --auto --squash していたのと同じ範囲。",
+        "GITHUB_TOKEN では自リポジトリの PR を approve できない制約は Renovate でも同じで、",
+        "approve はメンテナーの手動レビューに委ね、ここでは auto-merge の予約だけを行う。"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "digest",
+        "pin"
+      ],
+      "automerge": true,
+      "platformAutomerge": true,
+      "automergeStrategy": "squash"
+    }
+  ]
+}

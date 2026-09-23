@@ -49,7 +49,7 @@
     ".typos.toml",
     "knip.jsonc",
     ".gitleaks.toml",
-    ".github/dependabot.yml",
+    ".github/renovate.json",
     ".github/labeler.yml"
   ],
   "ignore": {

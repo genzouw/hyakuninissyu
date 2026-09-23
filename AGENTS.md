@@ -101,14 +101,14 @@ GitHub Actions / GitHub App を採用する前に、以下を **MUST** 確認し
 | 性能 / アクセシビリティ | Lighthouse CI (`.github/workflows/lighthouse.yml`)                                                       | Web パフォーマンス / アクセシビリティ計測                             |
 | リリース管理            | Release Drafter (`.github/workflows/release-drafter.yml`, `.github/release-drafter.yml`)                 | リリースノート自動生成                                                |
 | リリース管理            | Semantic PR (`.github/workflows/semantic-pr.yml`)                                                        | PR タイトルの Conventional Commits 準拠検証                           |
-| 依存更新                | Dependabot (`.github/dependabot.yml`, `.github/workflows/dependabot-auto-merge.yml`)                     | 依存パッケージ自動更新と auto-merge                                   |
+| 依存更新                | Renovate (`.github/renovate.json`)                                                                       | 依存パッケージ自動更新と auto-merge                                   |
 | その他                  | stale (`.github/workflows/stale.yml`), PR conflict notifier (`.github/workflows/pr_conflict_notify.yml`) | Issue / PR の自動クローズ通知、コンフリクト通知                       |
 
 特に以下の領域は既に十分に網羅されているため、新規追加の PR は不要です。
 
 - **AI コードレビュー / AI コード補助**: CodeRabbit が稼働中。Gemini / OpenAI / Claude 等の API キーを使う追加 AI コードレビュー Action は **MUST NOT**。Qodo Merge (旧 PR-Agent) は §1.5 のとおり撤去済みで、再導入も **MUST NOT** です。
 - **シークレット検知**: Gitleaks / TruffleHog / pre-commit + detect-secrets の 3 重化で十分。GitGuardian 等の追加 SaaS は不要。
-- **依存脆弱性スキャン**: Trivy / OSV-Scanner / Dependency Review / Dependabot の 4 重化で十分。Snyk 等の追加 SaaS は不要。
+- **依存脆弱性スキャン**: Trivy / OSV-Scanner / Dependency Review / Dependabot alerts の 4 重化で十分。Snyk 等の追加 SaaS は不要。
 
 ---
 
