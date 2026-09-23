@@ -8,7 +8,7 @@
   "semanticCommitScope": "deps",
   "timezone": "Asia/Tokyo",
   "schedule": [
-    "* * * * 1"
+    "after 9am and before 10am on monday"
   ],
   "minimumReleaseAge": "7 days",
   "pre-commit": {
