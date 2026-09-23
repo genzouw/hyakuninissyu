@@ -39,12 +39,10 @@ jobs:
       - name: Setup Bun Environment
         uses: ./.github/actions/setup-bun-env
 
-      - name: Cache ESLint/Stylelint cache files
+      - name: Cache ESLint cache file
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: |
-            .eslintcache
-            .stylelintcache
+          path: .eslintcache
           key: ${{ runner.os }}-eslint-cache-${{ hashFiles('bun.lock') }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-eslint-cache-${{ hashFiles('bun.lock') }}-
@@ -73,12 +71,10 @@ jobs:
       - name: Setup Bun Environment
         uses: ./.github/actions/setup-bun-env
 
-      - name: Cache ESLint/Stylelint cache files
+      - name: Cache Stylelint cache file
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: |
-            .eslintcache
-            .stylelintcache
+          path: .stylelintcache
           key: ${{ runner.os }}-stylelint-cache-${{ hashFiles('bun.lock') }}-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-stylelint-cache-${{ hashFiles('bun.lock') }}-
