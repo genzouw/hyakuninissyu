@@ -11,15 +11,17 @@ concurrency:
   cancel-in-progress: false
 
 permissions:
-  actions: read # 各ワークフローの直近 run を集計する
-  contents: read # ワークフロー実ファイルの存在確認に使う
-  issues: write # 検知結果を追跡 Issue に集約する
+  contents: read
 
 jobs:
   check:
     name: Detect startup_failure / chronic failures
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      actions: read # 各ワークフローの直近 run を集計する
+      contents: read # ワークフロー実ファイルの存在確認に使う
+      issues: write # 検知結果を追跡 Issue に集約する
     env:
       RECENT_RUN_LIMIT: 10
       CHRONIC_FAILURE_THRESHOLD: 3
