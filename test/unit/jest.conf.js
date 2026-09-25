@@ -42,4 +42,14 @@ module.exports = {
     '!src/router/index.js',
     '!**/node_modules/**',
   ],
+  // カバレッジの下限（ラチェット）。実測値（45.81 / 31.08 / 47.36 / 46.02）より少し低く置く。
+  // 実測値そのものではなく「下がってはいけない下限」なので、実測が安定して上回ってから引き上げる。
+  coverageThreshold: {
+    global: {
+      statements: 44,
+      branches: 30,
+      functions: 45,
+      lines: 44,
+    },
+  },
 }
