@@ -28,7 +28,6 @@ jobs:
       TRACKING_ISSUE_TITLE: '[workflow-health-check] 既定ブランチで失敗し続けているワークフロー'
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
-      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
@@ -40,6 +39,14 @@ jobs:
         id: scan
         run: |
           set -euo pipefail
+
+          # schedule イベントの payload は github.event.repository を保証しないため、API から取得する。
+          # 空のままだと branch= が空になり、PR ブランチの失敗まで集計して誤検知する。
+          DEFAULT_BRANCH="$(gh api "repos/${GH_REPO}" --jq '.default_branch')"
+          if [ -z "${DEFAULT_BRANCH}" ]; then
+            echo '::error::既定ブランチを取得できませんでした'
+            exit 1
+          fi
 
           workflows_json="$(gh api "repos/${GH_REPO}/actions/workflows?per_page=100")"
           report_file="${RUNNER_TEMP}/health-report.md"
