@@ -221,3 +221,8 @@ __pycache__/
 *.pcapng
 .*_history
 .dbeaver-data-sources.xml
+
+# Playwright
+playwright-report/
+test-results/
+blob-report/
