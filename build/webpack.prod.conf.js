@@ -65,6 +65,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // 2026-09 時点の実測: 最大アセット (js/vendor) 374,043 B /
     // entrypoint 合計 1,051,032 B。約 12〜14% の余裕を持たせている。
     // 正当な機能追加で超える場合は、同じ PR でこの値を意識して引き上げる。
+    // lighthouserc.json にも転送量の上限 (広告込み・warn) があるため併せて見直す。
     maxAssetSize: 420000,
     maxEntrypointSize: 1200000,
   },
