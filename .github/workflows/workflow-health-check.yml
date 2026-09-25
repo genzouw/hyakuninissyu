@@ -120,7 +120,10 @@ jobs:
           body="$(printf '%s ソースの集計結果 (直近 %s 件、既定ブランチの push / schedule のみ):\n\n%s\n' \
             "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "${RECENT_RUN_LIMIT}" "$(cat "${REPORT_FILE}")")"
 
-          existing="$(gh issue list --repo "${GH_REPO}" --state open --limit 50 --json number,title \
+          # 追跡 Issue はコメントで更新するだけで作成日時が古いままなので、新しい順の先頭 N 件では見つからなくなる。
+          # タイトル検索で絞ったうえで、完全一致のものだけを対象にする。
+          existing="$(gh issue list --repo "${GH_REPO}" --state open --limit 100 \
+            --search "\"${TRACKING_ISSUE_TITLE}\" in:title" --json number,title \
             --jq '[.[] | select(.title == env.TRACKING_ISSUE_TITLE)] | .[0].number // empty')"
 
           if [ -n "${existing}" ]; then
