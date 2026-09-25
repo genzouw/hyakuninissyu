@@ -48,7 +48,9 @@ jobs:
             exit 1
           fi
 
-          workflows_json="$(gh api "repos/${GH_REPO}/actions/workflows?per_page=100")"
+          # 100 件を超えても後続ページが調査対象から漏れないよう、全ページを取得して 1 つの配列に結合する。
+          workflows_json="$(gh api --paginate --slurp "repos/${GH_REPO}/actions/workflows?per_page=100" \
+            | jq -c '[.[].workflows[]]')"
           report_file="${RUNNER_TEMP}/health-report.md"
           : > "${report_file}"
           any_problem=0
@@ -98,7 +100,7 @@ jobs:
                        | .[0:3][] | "  - " + .created_at + " " + .conclusion + " " + .html_url' <<<"${runs}"
               } >> "${report_file}"
             fi
-          done < <(jq -r '.workflows[] | select(.state == "active") | [.id, .name, .path] | @tsv' <<<"${workflows_json}")
+          done < <(jq -r '.[] | select(.state == "active") | [.id, .name, .path] | @tsv' <<<"${workflows_json}")
 
           {
             echo "report_file=${report_file}"
