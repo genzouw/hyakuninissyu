@@ -1,0 +1,109 @@
+name: Workflow Health Check
+
+on:
+  schedule:
+    # 毎日 07:30 JST (= 22:30 UTC)
+    - cron: '30 22 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: workflow-health-check
+  cancel-in-progress: false
+
+permissions:
+  actions: read # 各ワークフローの直近 run を集計する
+  contents: read # ワークフロー実ファイルの存在確認に使う
+  issues: write # 検知結果を追跡 Issue に集約する
+
+jobs:
+  check:
+    name: Detect startup_failure / chronic failures
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      RECENT_RUN_LIMIT: 10
+      CHRONIC_FAILURE_THRESHOLD: 3
+      TRACKING_ISSUE_TITLE: '[workflow-health-check] 既定ブランチで失敗し続けているワークフロー'
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
+      # リポジトリのローカルファイルは参照せず gh api だけを使うため checkout はしない。
+      - name: Scan recent runs on the default branch
+        id: scan
+        run: |
+          set -euo pipefail
+
+          workflows_json="$(gh api "repos/${GH_REPO}/actions/workflows?per_page=100")"
+          report_file="${RUNNER_TEMP}/health-report.md"
+          : > "${report_file}"
+          any_problem=0
+
+          while IFS=$'\t' read -r wf_id wf_name wf_path; do
+            # 削除済みワークフローは API 上 active のまま残り、古い失敗を報告し続けるため除外する。
+            if ! gh api "repos/${GH_REPO}/contents/${wf_path}" >/dev/null 2>&1; then
+              continue
+            fi
+
+            runs="$(gh api "repos/${GH_REPO}/actions/workflows/${wf_id}/runs?branch=${DEFAULT_BRANCH}&per_page=${RECENT_RUN_LIMIT}" \
+              --jq '[.workflow_runs[] | select(.event == "push" or .event == "schedule") | {conclusion, created_at, html_url}]')"
+
+            total="$(jq 'length' <<<"${runs}")"
+            if [ "${total}" -eq 0 ]; then
+              continue
+            fi
+
+            startup_failures="$(jq '[.[] | select(.conclusion == "startup_failure")] | length' <<<"${runs}")"
+            failure_count="$(jq '[.[] | select(.conclusion == "failure" or .conclusion == "startup_failure" or .conclusion == "timed_out")] | length' <<<"${runs}")"
+
+            reasons=''
+            if [ "${startup_failures}" -gt 0 ]; then
+              reasons="startup_failure x${startup_failures}/${total}"
+            fi
+            if [ "${failure_count}" -ge "${CHRONIC_FAILURE_THRESHOLD}" ]; then
+              reasons="${reasons:+${reasons}; }chronic failures ${failure_count}/${total}"
+            fi
+
+            if [ -n "${reasons}" ]; then
+              any_problem=1
+              {
+                printf -- '- **%s** (%s) — %s\n' "${wf_name}" "\`${wf_path}\`" "${reasons}"
+                jq -r '[.[] | select(.conclusion == "failure" or .conclusion == "startup_failure" or .conclusion == "timed_out")]
+                       | .[0:3][] | "  - " + .created_at + " " + .conclusion + " " + .html_url' <<<"${runs}"
+              } >> "${report_file}"
+            fi
+          done < <(jq -r '.workflows[] | select(.state == "active") | [.id, .name, .path] | @tsv' <<<"${workflows_json}")
+
+          {
+            echo "report_file=${report_file}"
+            echo "any_problem=${any_problem}"
+          } >> "${GITHUB_OUTPUT}"
+
+          if [ "${any_problem}" -eq 1 ]; then
+            echo '::warning::既定ブランチで失敗し続けているワークフローを検知しました'
+            cat "${report_file}"
+          fi
+
+      - name: Create or update tracking issue
+        if: steps.scan.outputs.any_problem == '1'
+        env:
+          REPORT_FILE: ${{ steps.scan.outputs.report_file }}
+        run: |
+          set -euo pipefail
+
+          body="$(printf '%s ソースの集計結果 (直近 %s 件、既定ブランチの push / schedule のみ):\n\n%s\n' \
+            "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "${RECENT_RUN_LIMIT}" "$(cat "${REPORT_FILE}")")"
+
+          existing="$(gh issue list --repo "${GH_REPO}" --state open --limit 50 --json number,title \
+            --jq '[.[] | select(.title == env.TRACKING_ISSUE_TITLE)] | .[0].number // empty')"
+
+          if [ -n "${existing}" ]; then
+            gh issue comment "${existing}" --repo "${GH_REPO}" --body "${body}"
+          else
+            gh issue create --repo "${GH_REPO}" --title "${TRACKING_ISSUE_TITLE}" --body "${body}"
+          fi
