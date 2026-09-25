@@ -64,8 +64,15 @@ jobs:
               exit 1
             fi
 
-            runs="$(gh api "repos/${GH_REPO}/actions/workflows/${wf_id}/runs?branch=${DEFAULT_BRANCH}&per_page=${RECENT_RUN_LIMIT}" \
-              --jq '[.workflow_runs[] | select(.event == "push" or .event == "schedule") | {conclusion, created_at, html_url}]')"
+            # 取得後に event で絞ると、pull_request 等の run が per_page を占有して push / schedule が漏れる。
+            # そのため API 側で event を絞って別々に取得し、結合して新しい順に RECENT_RUN_LIMIT 件を残す。
+            runs='[]'
+            for event in push schedule; do
+              event_runs="$(gh api "repos/${GH_REPO}/actions/workflows/${wf_id}/runs?branch=${DEFAULT_BRANCH}&event=${event}&per_page=${RECENT_RUN_LIMIT}" \
+                --jq '[.workflow_runs[] | {conclusion, created_at, html_url}]')"
+              runs="$(jq -c --argjson add "${event_runs}" '. + $add' <<<"${runs}")"
+            done
+            runs="$(jq -c --argjson limit "${RECENT_RUN_LIMIT}" 'sort_by(.created_at) | reverse | .[0:$limit]' <<<"${runs}")"
 
             total="$(jq 'length' <<<"${runs}")"
             if [ "${total}" -eq 0 ]; then
