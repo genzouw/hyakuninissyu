@@ -103,6 +103,7 @@ GitHub Actions / GitHub App を採用する前に、以下を **MUST** 確認し
 | リリース管理            | Semantic PR (`.github/workflows/semantic-pr.yml`)                                                        | PR タイトルの Conventional Commits 準拠検証                           |
 | 依存更新                | Renovate (`.github/renovate.json`)                                                                       | 依存パッケージ自動更新と auto-merge                                   |
 | その他                  | stale (`.github/workflows/stale.yml`), PR conflict notifier (`.github/workflows/pr_conflict_notify.yml`) | Issue / PR の自動クローズ通知、コンフリクト通知                       |
+| その他                  | Workflow Health Check (`.github/workflows/workflow-health-check.yml`)                                    | 既定ブランチで失敗し続けるワークフローを日次検知し追跡 Issue に集約   |
 
 特に以下の領域は既に十分に網羅されているため、新規追加の PR は不要です。
 

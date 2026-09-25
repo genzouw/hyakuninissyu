@@ -98,6 +98,7 @@ Jules の管理画面に貼り付けてご利用ください。
 | リリース管理            | Semantic PR (`.github/workflows/semantic-pr.yml`)                                                        | PR タイトルの Conventional Commits 準拠検証                           |
 | 依存更新                | Dependabot (`.github/dependabot.yml`, `.github/workflows/dependabot-auto-merge.yml`)                     | 依存パッケージ自動更新と auto-merge                                   |
 | その他                  | stale (`.github/workflows/stale.yml`), PR conflict notifier (`.github/workflows/pr_conflict_notify.yml`) | Issue / PR の自動クローズ通知、コンフリクト通知                       |
+| その他                  | Workflow Health Check (`.github/workflows/workflow-health-check.yml`)                                    | 既定ブランチで失敗し続けるワークフローを日次検知し追跡 Issue に集約   |
 
 新しい AI コードレビュー、新しい AI コード補助 (Cursor / Cody 等のリポジトリインデクサを GitHub Actions として組み込む類のもの) は **すでに導入済みなので追加しないでください**。
 シークレット検知系の追加 (例: GitGuardian の新規組み込み) も、Gitleaks / TruffleHog / pre-commit + detect-secrets で既に多層化されているため不要です。
