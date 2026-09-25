@@ -17,7 +17,8 @@ export default defineConfig({
   webServer: {
     command: `bun x --bun serve@14.2.6 dist -s -l ${PORT}`,
     url: BASE_URL,
-    reuseExistingServer: !process.env.CI,
+    // dev server (8080) や古いビルドを検査しないよう、ポート使用中は起動失敗にする
+    reuseExistingServer: false,
     timeout: 120_000,
   },
 })
