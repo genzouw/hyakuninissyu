@@ -1,0 +1,135 @@
+name: Workflow Health Check
+
+on:
+  schedule:
+    # 毎日 07:30 JST (= 22:30 UTC)
+    - cron: '30 22 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: workflow-health-check
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Detect startup_failure / chronic failures
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      actions: read # 各ワークフローの直近 run を集計する
+      contents: read # ワークフロー実ファイルの存在確認に使う
+      issues: write # 検知結果を追跡 Issue に集約する
+    env:
+      RECENT_RUN_LIMIT: 10
+      CHRONIC_FAILURE_THRESHOLD: 3
+      TRACKING_ISSUE_TITLE: '[workflow-health-check] 既定ブランチで失敗し続けているワークフロー'
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
+      # リポジトリのローカルファイルは参照せず gh api だけを使うため checkout はしない。
+      - name: Scan recent runs on the default branch
+        id: scan
+        run: |
+          set -euo pipefail
+
+          # schedule イベントの payload は github.event.repository を保証しないため、API から取得する。
+          # 空のままだと branch= が空になり、PR ブランチの失敗まで集計して誤検知する。
+          DEFAULT_BRANCH="$(gh api "repos/${GH_REPO}" --jq '.default_branch')"
+          if [ -z "${DEFAULT_BRANCH}" ]; then
+            echo '::error::既定ブランチを取得できませんでした'
+            exit 1
+          fi
+
+          # 100 件を超えても後続ページが調査対象から漏れないよう、全ページを取得して 1 つの配列に結合する。
+          workflows_json="$(gh api --paginate --slurp "repos/${GH_REPO}/actions/workflows?per_page=100" \
+            | jq -c '[.[].workflows[]]')"
+          report_file="${RUNNER_TEMP}/health-report.md"
+          : > "${report_file}"
+          any_problem=0
+
+          while IFS=$'\t' read -r wf_id wf_name wf_path; do
+            # 削除済みワークフローは API 上 active のまま残り、古い失敗を報告し続けるため除外する。
+            # 除外するのは 404 のみ。レート制限・5xx・権限不足で全件スキップして無言で成功しないよう、それ以外は失敗させる。
+            if ! response="$(gh api --include "repos/${GH_REPO}/contents/${wf_path}" 2>&1)"; then
+              if grep -qE '^HTTP/[0-9.]+ 404([[:space:]]|$)' <<<"${response}"; then
+                continue
+              fi
+              echo "::error::${wf_path} の存在確認に失敗しました: ${response}"
+              exit 1
+            fi
+
+            # 取得後に event で絞ると、pull_request 等の run が per_page を占有して push / schedule が漏れる。
+            # そのため API 側で event を絞って別々に取得し、結合して新しい順に RECENT_RUN_LIMIT 件を残す。
+            runs='[]'
+            for event in push schedule; do
+              event_runs="$(gh api "repos/${GH_REPO}/actions/workflows/${wf_id}/runs?branch=${DEFAULT_BRANCH}&event=${event}&per_page=${RECENT_RUN_LIMIT}" \
+                --jq '[.workflow_runs[] | {conclusion, created_at, html_url}]')"
+              runs="$(jq -c --argjson add "${event_runs}" '. + $add' <<<"${runs}")"
+            done
+            runs="$(jq -c --argjson limit "${RECENT_RUN_LIMIT}" 'sort_by(.created_at) | reverse | .[0:$limit]' <<<"${runs}")"
+
+            total="$(jq 'length' <<<"${runs}")"
+            if [ "${total}" -eq 0 ]; then
+              continue
+            fi
+
+            startup_failures="$(jq '[.[] | select(.conclusion == "startup_failure")] | length' <<<"${runs}")"
+            failure_count="$(jq '[.[] | select(.conclusion == "failure" or .conclusion == "startup_failure" or .conclusion == "timed_out")] | length' <<<"${runs}")"
+
+            reasons=''
+            if [ "${startup_failures}" -gt 0 ]; then
+              reasons="startup_failure x${startup_failures}/${total}"
+            fi
+            if [ "${failure_count}" -ge "${CHRONIC_FAILURE_THRESHOLD}" ]; then
+              reasons="${reasons:+${reasons}; }chronic failures ${failure_count}/${total}"
+            fi
+
+            if [ -n "${reasons}" ]; then
+              any_problem=1
+              {
+                printf -- '- **%s** (%s) — %s\n' "${wf_name}" "\`${wf_path}\`" "${reasons}"
+                jq -r '[.[] | select(.conclusion == "failure" or .conclusion == "startup_failure" or .conclusion == "timed_out")]
+                       | .[0:3][] | "  - " + .created_at + " " + .conclusion + " " + .html_url' <<<"${runs}"
+              } >> "${report_file}"
+            fi
+          done < <(jq -r '.[] | select(.state == "active") | [.id, .name, .path] | @tsv' <<<"${workflows_json}")
+
+          {
+            echo "report_file=${report_file}"
+            echo "any_problem=${any_problem}"
+          } >> "${GITHUB_OUTPUT}"
+
+          if [ "${any_problem}" -eq 1 ]; then
+            echo '::warning::既定ブランチで失敗し続けているワークフローを検知しました'
+            cat "${report_file}"
+          fi
+
+      - name: Create or update tracking issue
+        if: steps.scan.outputs.any_problem == '1'
+        env:
+          REPORT_FILE: ${{ steps.scan.outputs.report_file }}
+        run: |
+          set -euo pipefail
+
+          body="$(printf '%s 時点の集計結果 (直近 %s 件、既定ブランチの push / schedule のみ):\n\n%s\n' \
+            "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "${RECENT_RUN_LIMIT}" "$(cat "${REPORT_FILE}")")"
+
+          # 追跡 Issue はコメントで更新するだけで作成日時が古いままなので、新しい順の先頭 N 件では見つからなくなる。
+          # タイトル検索で絞ったうえで、完全一致のものだけを対象にする。
+          existing="$(gh issue list --repo "${GH_REPO}" --state open --limit 100 \
+            --search "\"${TRACKING_ISSUE_TITLE}\" in:title" --json number,title \
+            --jq '[.[] | select(.title == env.TRACKING_ISSUE_TITLE)] | .[0].number // empty')"
+
+          if [ -n "${existing}" ]; then
+            gh issue comment "${existing}" --repo "${GH_REPO}" --body "${body}"
+          else
+            gh issue create --repo "${GH_REPO}" --title "${TRACKING_ISSUE_TITLE}" --body "${body}"
+          fi
