@@ -33,6 +33,8 @@ module.exports = {
   transformIgnorePatterns: [
     '/node_modules/(?!(bootstrap-vue-next|perfect-debounce|nostics)/)',
   ],
+  // Playwright の E2E (test/e2e) は jest ではなく `bun run test:e2e` で実行する。
+  testPathIgnorePatterns: ['/node_modules/', '<rootDir>/test/e2e/'],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
   setupFiles: ['<rootDir>/test/unit/setup'],
   coverageDirectory: '<rootDir>/test/unit/coverage',
