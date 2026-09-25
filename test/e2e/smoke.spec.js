@@ -1,7 +1,15 @@
+import fs from 'node:fs'
 import { test, expect } from '@playwright/test'
+import { extractStaticPaths } from '../../build/sitemap.mjs'
 
-// パラメータ不要の公開ルート (src/router/index.js)
-const ROUTES = ['/', '/time-attack', '/ai-battle', '/badges', '/collection', '/daily-challenge']
+// パラメータ不要の公開ルートは sitemap.xml と同じ抽出ロジックで src/router/index.js から取得し、
+// ルートを追加してもスモークの対象から漏れないようにする
+const ROUTES = extractStaticPaths(fs.readFileSync('src/router/index.js', 'utf8'))
+
+// 抽出に失敗して 0 件のまま緑になるのを防ぐ
+test('検査対象のルートを 1 件以上抽出できている', () => {
+  expect(ROUTES.length).toBeGreaterThan(0)
+})
 
 for (const path of ROUTES) {
   test(`ランタイムエラーなく表示できる: ${path}`, async ({ page }) => {
