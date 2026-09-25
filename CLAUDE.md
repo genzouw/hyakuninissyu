@@ -24,6 +24,7 @@
 - Install dependencies: `bun install`
 - Start dev server: `bun run dev`
 - Run unit tests: `bun run unit`
+- Run E2E smoke tests: `bun run test:e2e` (builds first; run `bun x playwright install chromium` once beforehand)
 - Run linter: `bun run lint`
 - Build production bundle: `bun run build`
 
