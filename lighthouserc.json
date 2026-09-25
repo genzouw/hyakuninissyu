@@ -5,12 +5,13 @@
     },
     "assert": {
       "assertions": {
-        "categories:accessibility": ["warn", { "minScore": 1 }],
-        "categories:seo": ["warn", { "minScore": 1 }],
-        "categories:best-practices": ["warn", { "minScore": 1 }],
-        "categories:performance": ["warn", { "minScore": 1 }],
-        "resource-summary:script:size": ["warn", { "maxNumericValue": 1 }],
-        "resource-summary:total:size": ["warn", { "maxNumericValue": 1 }]
+        "categories:accessibility": ["error", { "minScore": 0.95 }],
+        "html-has-lang": "error",
+        "categories:seo": ["error", { "minScore": 1 }],
+        "categories:best-practices": ["error", { "minScore": 0.6 }],
+        "categories:performance": ["warn", { "minScore": 0.45 }],
+        "resource-summary:script:size": ["warn", { "maxNumericValue": 515000 }],
+        "resource-summary:total:size": ["warn", { "maxNumericValue": 1460000 }]
       }
     }
   }
