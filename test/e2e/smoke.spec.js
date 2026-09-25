@@ -14,9 +14,13 @@ test('検査対象のルートを 1 件以上抽出できている', () => {
 // 検査したいのは自前のバンドルであり外部スクリプトの可用性ではないため、
 // AdSense / Twitter widgets / GA は空スクリプトで応答する。
 // abort にすると Chromium が net::ERR_FAILED を console error として出すため fulfill を使う
+// URL 全体への正規表現はホスト名の前後に任意の文字列が付いても一致するため、ホスト名の完全一致で判定する
+const STUBBED_HOSTS = new Set(['pagead2.googlesyndication.com', 'platform.twitter.com', 'www.googletagmanager.com'])
+
 test.beforeEach(async ({ page }) => {
-  await page.route(/pagead2\.googlesyndication\.com|platform\.twitter\.com|www\.googletagmanager\.com/, (route) =>
-    route.fulfill({ status: 200, contentType: 'application/javascript', body: '' })
+  await page.route(
+    (url) => STUBBED_HOSTS.has(url.hostname),
+    (route) => route.fulfill({ status: 200, contentType: 'application/javascript', body: '' })
   )
 })
 
