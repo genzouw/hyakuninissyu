@@ -54,6 +54,7 @@ In the project directory, you can run:
 - `bun run dev` - ホットリロード付きの開発サーバーを起動します。
 - `bun run build` - `dist` フォルダにミニファイ済みの本番用ビルドを生成します。あわせて `dist/sitemap.xml` を自動生成します。
 - `bun run unit` - Jest を使用したユニットテストを実行します。
+- `bun run test:e2e` - 本番ビルドを生成し、Playwright で主要ルートのスモーク E2E テストを実行します。初回のみ `bun x playwright install chromium` でブラウザを取得してください。
 - `bun run lint` - ESLint でコードベースをリンティングします。
 
 ## CI/CD および自動コードレビュー

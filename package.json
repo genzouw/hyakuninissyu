@@ -19,7 +19,7 @@
     "knip": "knip",
     "textlint": "textlint \"**/*.md\"",
     "prepare": "husky",
-    "lint:eslint": "eslint --cache src test/unit",
+    "lint:eslint": "eslint --cache src test/unit test/e2e",
     "lint:style": "stylelint --cache \"src/**/*.vue\"",
     "lint:markup": "bun run markuplint"
   },
