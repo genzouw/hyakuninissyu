@@ -55,8 +55,13 @@ jobs:
 
           while IFS=$'\t' read -r wf_id wf_name wf_path; do
             # 削除済みワークフローは API 上 active のまま残り、古い失敗を報告し続けるため除外する。
-            if ! gh api "repos/${GH_REPO}/contents/${wf_path}" >/dev/null 2>&1; then
-              continue
+            # 除外するのは 404 のみ。レート制限・5xx・権限不足で全件スキップして無言で成功しないよう、それ以外は失敗させる。
+            if ! response="$(gh api --include "repos/${GH_REPO}/contents/${wf_path}" 2>&1)"; then
+              if grep -qE '^HTTP/[0-9.]+ 404([[:space:]]|$)' <<<"${response}"; then
+                continue
+              fi
+              echo "::error::${wf_path} の存在確認に失敗しました: ${response}"
+              exit 1
             fi
 
             runs="$(gh api "repos/${GH_REPO}/actions/workflows/${wf_id}/runs?branch=${DEFAULT_BRANCH}&per_page=${RECENT_RUN_LIMIT}" \
