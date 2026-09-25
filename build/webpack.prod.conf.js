@@ -54,6 +54,20 @@ const webpackConfig = merge(baseWebpackConfig, {
       new CssMinimizerPlugin(),
     ],
   },
+  // バンドルサイズのバジェット。超過すると compilation error になり build.mjs が
+  // exit 1 で落ちる。依存更新 (Renovate の minor/patch 自動マージ) や実装変更による
+  // 無音の肥大化を build ジョブで止める (#489)。
+  // 判定は gzip 前のサイズ。CloudFront の転送量ではなく相対的な退行検知として使う。
+  performance: {
+    hints: 'error',
+    // 画像は依存更新では増減しないため対象外にし、JS/CSS の退行だけを見る
+    assetFilter: (assetFilename) => /\.(js|css)$/.test(assetFilename),
+    // 2026-09 時点の実測: 最大アセット (js/vendor) 374,043 B /
+    // entrypoint 合計 1,051,032 B。約 12〜14% の余裕を持たせている。
+    // 正当な機能追加で超える場合は、同じ PR でこの値を意識して引き上げる。
+    maxAssetSize: 420000,
+    maxEntrypointSize: 1200000,
+  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': env,
