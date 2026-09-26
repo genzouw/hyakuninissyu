@@ -19,4 +19,4 @@ permissions:
 
 jobs:
   fallow:
-    uses: genzouw/ci-workflows/.github/workflows/fallow.yml@b53053cdc06376f55b59798b03e4bd8547c347cd # 検証用: genzouw/ci-workflows fix/fallow-legacy-peer-deps
+    uses: genzouw/ci-workflows/.github/workflows/fallow.yml@25d9ccba55e73641a6998b24fe89ddfbb020beed # v1.4.1
