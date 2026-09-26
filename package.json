@@ -82,7 +82,7 @@
     "postcss-loader": "^8.1.1",
     "postcss-url": "^10.1.4",
     "repomix": "1.18.0",
-    "rimraf": "^5.0.10",
+    "rimraf": "^6.0.0",
     "secretlint": "13.0.5",
     "sitemap": "^9.0.1",
     "stylelint": "17.15.0",
