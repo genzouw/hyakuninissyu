@@ -40,7 +40,7 @@ jobs:
 
       - name: Run TruffleHog (All Secrets, Push/PR)
         if: github.event_name == 'push' || github.event_name == 'pull_request'
-        uses: trufflesecurity/trufflehog@363923b901c911a9164f50b6c423f47c15372b1c # v3.97.4
+        uses: trufflesecurity/trufflehog@f714bf454f350590f4a24c3ddb1aef02c35bf5b6 # v3.97.5
         # NOTE: このコミットSHA固定はアクション本体（ワークフロー実行ロジック）のみを対象と
         # する。version 入力を省略しているため、実際にスキャンを行う Docker イメージ
         # （ghcr.io/trufflesecurity/trufflehog）は latest タグのまま運用しており、
@@ -81,7 +81,7 @@ jobs:
       # した理由そのもの）。
       - name: Run TruffleHog (All Secrets, Schedule/Dispatch)
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        uses: trufflesecurity/trufflehog@363923b901c911a9164f50b6c423f47c15372b1c # v3.97.4
+        uses: trufflesecurity/trufflehog@f714bf454f350590f4a24c3ddb1aef02c35bf5b6 # v3.97.5
         with:
           extra_args: --exclude-detectors=GoogleGeminiAPIKey
 
@@ -93,7 +93,7 @@ jobs:
       # ため、この補完ステップで再び誤検知することはない。
       - name: Run TruffleHog (PR diff, all detectors)
         if: github.event_name == 'pull_request'
-        uses: trufflesecurity/trufflehog@363923b901c911a9164f50b6c423f47c15372b1c # v3.97.4
+        uses: trufflesecurity/trufflehog@f714bf454f350590f4a24c3ddb1aef02c35bf5b6 # v3.97.5
         with:
           base: ${{ github.event.pull_request.base.sha }}
           head: ${{ github.event.pull_request.head.sha }}
