@@ -81,7 +81,7 @@
     "postcss-import": "^17.0.0",
     "postcss-loader": "^8.1.1",
     "postcss-url": "^10.1.4",
-    "repomix": "1.18.0",
+    "repomix": "1.18.1",
     "rimraf": "^6.0.0",
     "secretlint": "13.0.5",
     "sitemap": "^9.0.1",
