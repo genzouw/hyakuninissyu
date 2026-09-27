@@ -143,6 +143,14 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 
 正しい手順は、`.pre-commit-config.yaml` の `forbid-sensitive-files` フックの `exclude` に許可パスを追加することです。PII を含まないことを確認したフィクスチャに限り、`test/fixtures/` 配下の `*.csv` / `*.tsv` / `*.jsonl` / `*.ndjson` をあらかじめ許可済みとしています。これ以外のパスを許可する場合は、`exclude` に明示的なパスを追加してレビューを受けてください。
 
+### GitHub Actions permissions 最小化
+
+GitHub Actions のワークフローにおいて、シークレット漏洩や不正アクセスのリスクを最小化するため、権限設定（`permissions:`）は最小権限の原則（Least Privilege）に従います。
+
+- **ワークフローレベルでの `read-all` の禁止**: `permissions: read-all` は、デフォルトトークンに対してリポジトリ内のすべてのスコープ（issues, PRs, deployments 等）への読み取り権限を包括的に付与するため使用を禁止します。
+- **デフォルトの最小権限**: 各ワークフローのトップレベルでは、原則として `permissions: contents: read` （またはそれより厳しい `{}`）をデフォルトとして設定します。
+- **ジョブレベルでの権限付与**: 書き込み権限（`security-events: write`, `id-token: write` 等）や追加の読み取り権限が必要な場合は、ワークフロー全体ではなく、その権限を必要とする個別のジョブ（`jobs.<job_id>.permissions:`）に限定して付与します。
+
 ### ライセンスコンプライアンス監査
 
 定期的な監査の一環として、利用している依存パッケージ（OSS）のライセンスコンプライアンス監査を導入しています。
