@@ -50,7 +50,7 @@ PR や Push 時に実行される第二の防御層です。
 - **GitHub Actions 権限の最小化**: すべてのワークフローにおいて Principle of Least Privilege（最小権限の原則）を徹底し、ブラストラジアス（被害範囲）を最小化しています。
   - **トップレベル権限の最小化**: ワークフローのトップレベル `permissions:` は最小化（デフォルトを `contents: read` または `{}` とし、不要な権限を持たせない）しています。
   - **ジョブレベルでの権限付与**: 必要な書き込み・読み取り権限（`security-events: write`, `issues: write`, `pull-requests: write`, `pull-requests: read`, `checks: write`, `actions: read` など）は、各ジョブレベルでのみ明示的に付与しています。さらに、明示的な書き込み権限が不要なジョブであっても、`contents: read` 等の最小限の権限を明示的に定義することで、暗黙的な権限の継承や意図しない動作を防いでいます。
-  - **対象ワークフロー**: `hadolint.yml`, `lighthouse.yml`, `markdownlint.yml`, `pre-commit.yml`, `shellcheck.yml`, `trufflehog.yml`, `dependency-review.yml`, `actionlint.yml` をはじめとする全ての CI セキュリティスキャンワークフローにおいて、各ジョブに必要な権限のみを厳密に割り当てています（例外として OSSF Scorecard は `read-all` を許容）。
+  - **対象ワークフロー**: `hadolint.yml`, `lighthouse.yml`, `markdownlint.yml`, `pre-commit.yml`, `shellcheck.yml`, `trufflehog.yml`, `dependency-review.yml`, `actionlint.yml` をはじめとする全ての CI セキュリティスキャンワークフローにおいて、各ジョブに必要な権限のみを厳密に割り当てています。
   - **設定レベルの制限**: なお、GitHub Actions の権限はワークフローレベルまたはジョブレベルでのみ設定可能であり、ステップレベルでは設定できません。
 - **pull_request_target の使用禁止（フォークPRからの漏洩防止）**: フォーク元から悪意あるコードが送られた際、`pull_request_target` トリガーはフォークからの PR であってもベースリポジトリのシークレットにアクセスできてしまうため、漏洩の定番経路となります。本リポジトリでは原則として `pull_request_target` の使用を禁止し、安全な `pull_request` トリガーを使用することで、フォーク PR からの意図しないシークレット流出を防ぎます。さらに、ローカルの `pre-commit` フック (`forbid-pull-request-target`) にて、GitHub Actions ワークフローファイルに対する `pull_request_target` の追加を自動的に検知しブロックします。
 - **運用上の責任**: CI が落ちた場合、対象のコミットに含まれる漏洩疑いのコードを適切に修正し（必要であればシークレットをローテートし）、マージブロックを解消すること。
@@ -142,6 +142,14 @@ Dependabot を用いて、定期的に利用パッケージのアップデート
 また `git commit --no-verify` は `gitleaks` / `detect-secrets` / `zizmor` を含む**全フックを丸ごと飛ばす**操作であり、最も危険な逃げ道になるため使用しないでください。
 
 正しい手順は、`.pre-commit-config.yaml` の `forbid-sensitive-files` フックの `exclude` に許可パスを追加することです。PII を含まないことを確認したフィクスチャに限り、`test/fixtures/` 配下の `*.csv` / `*.tsv` / `*.jsonl` / `*.ndjson` をあらかじめ許可済みとしています。これ以外のパスを許可する場合は、`exclude` に明示的なパスを追加してレビューを受けてください。
+
+### GitHub Actions permissions 最小化
+
+GitHub Actions のワークフローにおいて、シークレット漏洩や不正アクセスのリスクを最小化するため、権限設定（`permissions:`）は最小権限の原則（Least Privilege）に従います。
+
+- **ワークフローレベルでの `read-all` の禁止**: `permissions: read-all` は、デフォルトトークンに対してリポジトリ内のすべてのスコープ（issues, PRs, deployments 等）への読み取り権限を包括的に付与するため使用を禁止します。
+- **デフォルトの最小権限**: 各ワークフローのトップレベルでは、原則として `permissions: contents: read`（またはそれより厳しい `{}`）をデフォルトとして設定します。
+- **ジョブレベルでの権限付与**: 書き込み権限（`security-events: write`, `id-token: write` 等）や追加の読み取り権限が必要な場合は、ワークフロー全体ではなく、その権限を必要とする個別のジョブ（`jobs.<job_id>.permissions:`）に限定して付与します。
 
 ### ライセンスコンプライアンス監査
 
