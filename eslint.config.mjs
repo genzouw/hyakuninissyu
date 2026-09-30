@@ -6,6 +6,10 @@ import pluginSecurity from 'eslint-plugin-security'
 import pluginVueA11y from 'eslint-plugin-vuejs-accessibility'
 import pluginRegexp from 'eslint-plugin-regexp'
 
+import pluginJest from 'eslint-plugin-jest'
+import pluginPlaywright from 'eslint-plugin-playwright'
+
+
 export default [
   {
     ignores: [
@@ -52,12 +56,23 @@ export default [
     },
   },
 
-  {
-    files: ['test/**/*.{js,vue}'],
+    {
+    files: ['test/unit/**/*.{js,vue}'],
+    ...pluginJest.configs['flat/recommended'],
     languageOptions: {
       globals: {
         ...globals.jest,
       },
     },
   },
+  {
+    files: ['test/e2e/**/*.{js,vue}'],
+    ...pluginPlaywright.configs['flat/recommended'],
+    rules: {
+      ...pluginPlaywright.configs['flat/recommended'].rules,
+      'playwright/prefer-hooks-on-top': 'off',
+      'playwright/no-conditional-in-test': 'off',
+      'playwright/no-conditional-expect': 'off',
+    }
+  }
 ]
