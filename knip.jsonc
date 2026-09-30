@@ -2,28 +2,12 @@
   "$schema": "https://unpkg.com/knip@6/schema-jsonc.json",
   "project": ["src/**/*.js", "src/**/*.vue"],
   "ignoreDependencies": [
-    "repomix",
     // build/generate-sitemap.mjs から使用 (knip の project は src 配下のみ)
     "sitemap",
-    "stylelint-config-standard-scss",
     "css-minimizer-webpack-plugin",
     "mini-css-extract-plugin",
     "terser-webpack-plugin",
     "@markuplint/vue-parser",
-    "textlint-filter-rule-comments",
-    "textlint-rule-preset-ja-spacing",
-    "secretlint",
     "@secretlint/secretlint-rule-preset-recommend",
-  ],
-  "ignoreBinaries": [
-    "GPL-1.0-or-later",
-    "GPL-2.0-only",
-    "GPL-2.0-or-later",
-    "GPL-3.0-only",
-    "GPL-3.0-or-later",
-    "AGPL-1.0-only",
-    "AGPL-1.0-or-later",
-    "AGPL-3.0-only",
-    "AGPL-3.0-or-later",
   ],
 }
