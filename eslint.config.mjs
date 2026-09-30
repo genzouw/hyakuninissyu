@@ -5,10 +5,8 @@ import globals from 'globals'
 import pluginSecurity from 'eslint-plugin-security'
 import pluginVueA11y from 'eslint-plugin-vuejs-accessibility'
 import pluginRegexp from 'eslint-plugin-regexp'
-
 import pluginJest from 'eslint-plugin-jest'
 import pluginPlaywright from 'eslint-plugin-playwright'
-
 
 export default [
   {
@@ -55,8 +53,7 @@ export default [
       'vuejs-accessibility/media-has-caption': 'warn',
     },
   },
-
-    {
+  {
     files: ['test/unit/**/*.{js,vue}'],
     ...pluginJest.configs['flat/recommended'],
     languageOptions: {
