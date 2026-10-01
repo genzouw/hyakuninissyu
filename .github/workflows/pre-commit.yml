@@ -90,5 +90,11 @@ jobs:
       - name: Run scripts unit tests
         run: python -m unittest discover -s scripts -p 'test_*.py'
 
+      # no-commit-to-branch は「ローカルで main へ直接コミットすること」を防ぐフックで、
+      # 現在のブランチ名だけを見て判定する。既定ブランチの push / schedule では checkout 先が
+      # main になるため必ず失敗し、他のフックの結果を覆い隠してしまう (#524)。
+      # CI では判定対象のコミット操作が存在しないのでスキップする。
       - name: Run pre-commit hooks
+        env:
+          SKIP: no-commit-to-branch
         run: pre-commit run --all-files --show-diff-on-failure
