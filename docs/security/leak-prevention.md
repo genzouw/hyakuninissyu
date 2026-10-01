@@ -212,3 +212,8 @@ GitHub Actions のワークフローにおいて、シークレット漏洩や�
 ### 新規追加: 異種パッケージマネージャーのロックファイルの混入防止
 
 プロジェクトの標準パッケージマネージャー (Bun) 以外の異種ロックファイル (`package-lock.json`, `npm-shrinkwrap.json`, `yarn.lock`, `pnpm-lock.yaml`, `pnpm-lock.yml`) および Yarn Berry の副産物 (`.yarn/`, `.pnp.*`) は `.gitignore` で追跡対象から除外しつつ、`forbid-foreign-lockfiles` カスタムローカルフック (`.pre-commit-config.yaml`) がワークツリー上の実体の有無を毎回検査します。ステージ済みファイルではなくワークツリーを直接検査するため、`.gitignore` によってこれらのファイルがステージされない状態でも、誤って別のパッケージマネージャーで install した痕跡が残っていればコミットをブロックできます。生成そのものは `package.json` の `preinstall` スクリプト (`bunx only-allow bun`) で抑止しています。
+
+### 定期監査 (Dependabot)
+Dependabot を導入し、パッケージのバージョンや Actions のタグなどの依存関係に起因する脆弱性が放置されるのを防いでいます。
+`.github/dependabot.yml` では週次での自動更新を有効化し、`npm`, `github-actions`, `docker`, `pip` の各エコシステムを対象にしています。
+これにより、セキュリティ防壁としてのエコシステム全般が最新の脆弱性対応状態へ自動追従し、間接的な情報の漏洩や不正アクセスを未然に防ぎます。
