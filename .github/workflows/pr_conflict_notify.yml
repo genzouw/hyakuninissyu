@@ -26,8 +26,9 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: read
-      issues: write
+      # PR へのコメント投稿・更新・削除は issues API 経由でも pull-requests: write が必要。
+      # issues: write だけでは 403 (Resource not accessible by integration) になる (#524)。
+      pull-requests: write
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
