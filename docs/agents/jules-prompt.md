@@ -96,7 +96,8 @@ Jules の管理画面に貼り付けてご利用ください。
 | 性能 / アクセシビリティ | Lighthouse CI (`.github/workflows/lighthouse.yml`)                                                       | Web パフォーマンス / アクセシビリティ計測                             |
 | リリース管理            | Release Drafter (`.github/workflows/release-drafter.yml`, `.github/release-drafter.yml`)                 | リリースノート自動生成                                                |
 | リリース管理            | Semantic PR (`.github/workflows/semantic-pr.yml`)                                                        | PR タイトルの Conventional Commits 準拠検証                           |
-| 依存更新                | Dependabot (`.github/dependabot.yml`, `.github/workflows/dependabot-auto-merge.yml`)                     | 依存パッケージ自動更新と auto-merge                                   |
+| 依存更新                | Renovate (`.github/renovate.json`)                                                                       | 依存パッケージ自動更新と auto-merge                                   |
+| Lint                    | renovate-config-validator (`.github/workflows/renovate-config-validator.yml`)                            | `.github/renovate.json` の構文・オプション検証                        |
 | その他                  | stale (`.github/workflows/stale.yml`), PR conflict notifier (`.github/workflows/pr_conflict_notify.yml`) | Issue / PR の自動クローズ通知、コンフリクト通知                       |
 | その他                  | Workflow Health Check (`.github/workflows/workflow-health-check.yml`)                                    | 既定ブランチで失敗し続けるワークフローを日次検知し追跡 Issue に集約   |
 | ポリシー検査            | free-policy (`.github/workflows/free-policy.yml`)                                                        | 制約違反の Secret 参照で job が失敗。例外は `allowed_secrets` に追記  |

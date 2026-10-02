@@ -60,7 +60,10 @@ jobs:
         run: |
           # www.npmjs.com は GitHub Actions からのアクセスを bot とみなして
           # 403 Forbidden を返すことがあるため、実リンク切れではなくチェック対象から除外する。
+          # github.com が一時的に 504 を返すことがあるため、リトライ回数と待機時間を増やす。
           lychee --verbose --no-progress \
+            --max-retries 5 \
+            --retry-wait-time 10 \
             --root-dir './static' \
             --exclude-path 'node_modules' \
             --exclude-path 'dist' \
