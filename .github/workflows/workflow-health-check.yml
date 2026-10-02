@@ -71,7 +71,7 @@ jobs:
             runs='[]'
             for event in push schedule; do
               event_runs="$(gh api "repos/${GH_REPO}/actions/workflows/${wf_id}/runs?branch=${DEFAULT_BRANCH}&event=${event}&per_page=${RECENT_RUN_LIMIT}" \
-                --jq '[.workflow_runs[] | {conclusion, created_at, html_url}]')"
+                --jq '[.workflow_runs[] | {conclusion, created_at, html_url, event}]')"
               runs="$(jq -c --argjson add "${event_runs}" '. + $add' <<<"${runs}")"
             done
             runs="$(jq -c --argjson limit "${RECENT_RUN_LIMIT}" 'sort_by(.created_at) | reverse | .[0:$limit]' <<<"${runs}")"
@@ -83,9 +83,13 @@ jobs:
 
             # 修正がマージされた後も、過去の失敗が集計範囲に残っている間は報告し続けてしまう。
             # 完了済みの最新 run が成功していれば復旧済みとみなして報告しない (実行中・待機中の run は conclusion が null)。
+            # push と schedule は実行するステップが異なる場合があり、まとめて最新 1 件だけを見ると
+            # push の成功が schedule の失敗を隠すため、event ごとの最新 run がすべて成功のときだけ除外する。
             # 成功と失敗を繰り返すワークフローは、最新 run が失敗している日の実行で検知する。
-            latest_conclusion="$(jq -r '[.[] | select(.conclusion != null)] | .[0].conclusion // ""' <<<"${runs}")"
-            if [ "${latest_conclusion}" = 'success' ]; then
+            recovered="$(jq -r '[.[] | select(.conclusion != null)]
+              | group_by(.event) | map(max_by(.created_at).conclusion)
+              | length > 0 and all(.[]; . == "success")' <<<"${runs}")"
+            if [ "${recovered}" = 'true' ]; then
               continue
             fi
 
