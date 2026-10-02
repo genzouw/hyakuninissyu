@@ -81,6 +81,14 @@ jobs:
               continue
             fi
 
+            # 修正がマージされた後も、過去の失敗が集計範囲に残っている間は報告し続けてしまう。
+            # 完了済みの最新 run が成功していれば復旧済みとみなして報告しない (実行中・待機中の run は conclusion が null)。
+            # 成功と失敗を繰り返すワークフローは、最新 run が失敗している日の実行で検知する。
+            latest_conclusion="$(jq -r '[.[] | select(.conclusion != null)] | .[0].conclusion // ""' <<<"${runs}")"
+            if [ "${latest_conclusion}" = 'success' ]; then
+              continue
+            fi
+
             startup_failures="$(jq '[.[] | select(.conclusion == "startup_failure")] | length' <<<"${runs}")"
             failure_count="$(jq '[.[] | select(.conclusion == "failure" or .conclusion == "startup_failure" or .conclusion == "timed_out")] | length' <<<"${runs}")"
 
