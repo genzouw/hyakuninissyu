@@ -85,8 +85,9 @@ jobs:
             # 完了済みの最新 run が成功していれば復旧済みとみなして報告しない (実行中・待機中の run は conclusion が null)。
             # push と schedule は実行するステップが異なる場合があり、まとめて最新 1 件だけを見ると
             # push の成功が schedule の失敗を隠すため、event ごとの最新 run がすべて成功のときだけ除外する。
+            # cancelled / skipped は成否を表さないため最新 run の候補から除く (concurrency で先行 run が打ち切られた場合など)。
             # 成功と失敗を繰り返すワークフローは、最新 run が失敗している日の実行で検知する。
-            recovered="$(jq -r '[.[] | select(.conclusion != null)]
+            recovered="$(jq -r '[.[] | select(.conclusion != null and .conclusion != "cancelled" and .conclusion != "skipped")]
               | group_by(.event) | map(max_by(.created_at).conclusion)
               | length > 0 and all(.[]; . == "success")' <<<"${runs}")"
             if [ "${recovered}" = 'true' ]; then
