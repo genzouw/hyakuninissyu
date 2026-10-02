@@ -27,6 +27,7 @@
         { "kind": "dir", "value": ".idea" },
         { "kind": "file", "value": ".vscode/launch.json" },
         { "kind": "file", "value": ".vscode/tasks.json" },
+        { "kind": "dir", "value": ".history" },
         { "kind": "file", "value": ".DS_Store" },
         { "kind": "file", "value": "Thumbs.db" },
         { "kind": "file", "value": "desktop.ini" },
@@ -132,6 +133,7 @@
       "name": "API クライアント環境設定",
       "patterns": [
         { "kind": "file", "value": "http-client.env.json" },
+        { "kind": "file", "value": "http-client.private.env.json" },
         { "kind": "file", "value": "sftp.json" },
         { "kind": "file", "value": "ftp-sync.json" },
         { "kind": "file", "value": "postman_environment.json" },
