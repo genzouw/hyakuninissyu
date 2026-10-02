@@ -21,6 +21,7 @@ _netrc -diff
 
 # API client environments
 http-client.env.json -diff
+http-client.private.env.json -diff
 sftp.json -diff
 ftp-sync.json -diff
 postman_environment.json -diff
@@ -59,6 +60,7 @@ bunfig.toml -diff
 **/.idea/** -diff
 **/.vscode/launch.json -diff
 **/.vscode/tasks.json -diff
+**/.history/** -diff
 .DS_Store -diff
 Thumbs.db -diff
 desktop.ini -diff

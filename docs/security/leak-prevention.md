@@ -212,3 +212,7 @@ GitHub Actions のワークフローにおいて、シークレット漏洩や�
 ### 新規追加: 異種パッケージマネージャーのロックファイルの混入防止
 
 プロジェクトの標準パッケージマネージャー (Bun) 以外の異種ロックファイル (`package-lock.json`, `npm-shrinkwrap.json`, `yarn.lock`, `pnpm-lock.yaml`, `pnpm-lock.yml`) および Yarn Berry の副産物 (`.yarn/`, `.pnp.*`) は `.gitignore` で追跡対象から除外しつつ、`forbid-foreign-lockfiles` カスタムローカルフック (`.pre-commit-config.yaml`) がワークツリー上の実体の有無を毎回検査します。ステージ済みファイルではなくワークツリーを直接検査するため、`.gitignore` によってこれらのファイルがステージされない状態でも、誤って別のパッケージマネージャーで install した痕跡が残っていればコミットをブロックできます。生成そのものは `package.json` の `preinstall` スクリプト (`bunx only-allow bun`) で抑止しています。
+
+### 新規追加: IDEローカル履歴ファイルとプライベートAPI設定ファイルの漏洩防止
+
+IDE 拡張機能（例: VS Code Local History）が自動生成する `.history/` ディレクトリや、開発者がテスト目的で用いる `http-client.private.env.json` といったプライベートな API クライアント環境設定ファイルについて、`.gitignore`, `.gitattributes`, `.vscode/settings.json`, および `.pre-commit-config.yaml` への除外・ブロック設定を追加し、漏洩防止を強化しました。これにより、エディタの一時的なバックアップや、プライベートな資格情報が意図せずコミットされるリスクを防ぎます。

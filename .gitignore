@@ -92,6 +92,7 @@ dist/
 .idea/
 **/.vscode/tasks.json
 **/.vscode/launch.json
+**/.history/
 .DS_Store
 Thumbs.db
 desktop.ini
@@ -149,6 +150,7 @@ _netrc
 
 # API client environments
 http-client.env.json
+**/http-client.private.env.json
 sftp.json
 ftp-sync.json
 postman_environment.json

@@ -114,7 +114,8 @@ repos:
               \.azure/ |
               \.vercel/ |
               \.netlify/ |
-              \.idea/
+              \.idea/ |
+              \.history/
             ) |
             (^|/)\.vscode/(launch|tasks)\.json$ |
             ^.*\.DS_Store$ |
@@ -126,6 +127,7 @@ repos:
             (^|/)[._]netrc$ |
             (^|/)[^/]*service-account[^/]*\.json |
             (^|/)http-client\.env\.json$ |
+            (^|/)http-client\.private\.env\.json$ |
             (^|/)sftp\.json$ |
             (^|/)ftp-sync\.json$ |
             (^|/)postman_environment\.json$ |
