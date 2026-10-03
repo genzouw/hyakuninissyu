@@ -77,7 +77,7 @@ jobs:
             wf_failed_runs='[]'
             for event in push schedule; do
               runs="$(gh api "repos/${GH_REPO}/actions/workflows/${wf_id}/runs?branch=${DEFAULT_BRANCH}&event=${event}&per_page=${RECENT_RUN_LIMIT}" \
-                --jq '[.workflow_runs[] | {conclusion, created_at, html_url, event}] | sort_by(.created_at) | reverse')"
+                --jq '[.workflow_runs[] | {conclusion, created_at, run_number, html_url, event}] | sort_by(.created_at, .run_number) | reverse')"
 
               total="$(jq 'length' <<<"${runs}")"
               if [ "${total}" -eq 0 ]; then
