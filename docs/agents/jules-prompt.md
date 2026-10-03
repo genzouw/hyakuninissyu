@@ -27,7 +27,7 @@ Jules の管理画面に貼り付けてご利用ください。
 - コード品質チェックツール (lint / format / 静的解析 / セキュリティスキャン / アクセシビリティ / Web パフォーマンス計測) の導入と既存設定の見直し
 - リポジトリのコンテキストを LLM やサーチサービスに連携させる仕組みの導入 (Repomix の出力品質向上、`llms.txt` 規格の拡充など)
 - CI/CD パイプラインの構造改善 (高速化、並列化、ジョブの再利用化、Bun キャッシュ最適化など)
-- 設定ファイル (`eslint.config.js` / `.markdownlint-cli2.jsonc` / `.pre-commit-config.yaml` 等) のリファクタリングによる保守性向上
+- 設定ファイル (`eslint.config.mjs` / `.markdownlint-cli2.jsonc` / `.pre-commit-config.yaml` 等) のリファクタリングによる保守性向上
 - Vue 3 + Bun という構成に最適化された Action の差し替え提案 (Node.js セットアップを `oven-sh/setup-bun` に置き換える等)
 
 最新の動向 (IT / コンピュータサイエンス / コンピュータエンジニアリングのコミュニティサイト、生成 AI の最新ニュース) を必ず調査したうえで、導入するツールや設定を検討してください。
@@ -78,7 +78,6 @@ Jules の管理画面に貼り付けてご利用ください。
 | :---------------------- | :------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------- |
 | AI コードレビュー       | [CodeRabbit](https://github.com/apps/coderabbitai) (`.coderabbit.yaml`)                                  | プルリクエストの AI レビュー                                          |
 | LLM コンテキスト生成    | Repomix (`.github/workflows/repomix.yml`, `repomix.config.json`, `static/llms.txt`)                      | `llms.txt` 規格の XML / Markdown 自動生成と `ai-context` ブランチ公開 |
-| 静的解析                | [Codacy](https://www.codacy.com/) (`.codacy.yaml`)                                                       | 静的コード解析 (公開リポジトリ向け無料プラン)                         |
 | セキュリティスキャン    | CodeQL (`.github/workflows/codeql.yml`)                                                                  | GitHub 公式の SAST                                                    |
 | セキュリティスキャン    | Gitleaks (`.github/workflows/gitleaks.yml`, `.gitleaks.toml`)                                            | コミット内シークレット検知                                            |
 | セキュリティスキャン    | TruffleHog (`.github/workflows/trufflehog.yml`)                                                          | コミット履歴のシークレット検知                                        |
@@ -88,7 +87,7 @@ Jules の管理画面に貼り付けてご利用ください。
 | セキュリティスキャン    | Dependency Review (`.github/workflows/dependency-review.yml`)                                            | PR で導入される依存の脆弱性差分レビュー                               |
 | 機密ファイル検知        | pre-commit (`.pre-commit-config.yaml`, `.github/workflows/pre-commit.yml`, `.secrets.baseline`)          | コミット前ローカル検査 + CI での再検査                                |
 | 供給網健全性            | Scorecard (`.github/workflows/scorecard.yml`), SBOM (`.github/workflows/sbom.yml`)                       | OpenSSF Scorecard / SBOM 生成                                         |
-| Lint                    | ESLint (`eslint.config.js`)                                                                              | JavaScript / Vue の静的検査                                           |
+| Lint                    | ESLint (`eslint.config.mjs`)                                                                             | JavaScript / Vue の静的検査                                           |
 | Lint                    | Prettier (`.prettierrc`)                                                                                 | コード整形                                                            |
 | Lint                    | actionlint (`.github/workflows/actionlint.yml`)                                                          | GitHub Actions ワークフローの構文チェック                             |
 | Lint                    | markdownlint-cli2 (`.github/workflows/markdownlint.yml`, `.markdownlint-cli2.jsonc`)                     | Markdown の構文チェック                                               |
@@ -202,6 +201,9 @@ Issue では「なぜ既存の無料サービスでは目的を達成できな�
 - 本プロンプトを変更する際は、[`CLAUDE.md`](../../CLAUDE.md)、[`.github/copilot-instructions.md`](../../.github/copilot-instructions.md)、[`CONTRIBUTING.md`](../../CONTRIBUTING.md) と整合性が保たれているか確認してください。
 - 同種のプロンプトを他の自律型エージェント (Devin / Sweep / Codex / Aider 等) に適用する場合は、本ファイルを参考にエージェントごとに別ファイルを作成することを推奨します (例: `docs/agents/devin-prompt.md`)。
 - 「既に動いているツール」表は実態と乖離しやすいので、新しいワークフローを追加・削除するたびに更新してください。
+  この表は [`AGENTS.md`](../../AGENTS.md) 2 章の表の写しです。両方を同じ内容に保ってください。
+  pre-commit の `check-agents-tools-table` フック (`scripts/check_agents_tools_table.py`) が、2 つの表の「種別」「ツール / 設定ファイル」列の一致と、記載したパスの実在を検査します。
+  「役割」列は、本プロンプトを単体で読ませるために章番号参照を言い換えているため、検査の対象外です。
 
 ## 関連ドキュメント
 

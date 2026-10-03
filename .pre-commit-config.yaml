@@ -192,6 +192,13 @@ repos:
         pass_filenames: false
         always_run: true
         description: '漏洩防止の保護対象パターンの単一ソース (docs/security/protected-patterns.json) と、.gitignore / .gitattributes / .vscode/settings.json (files.exclude, search.exclude) / forbid-sensitive-files の 5 箇所との乖離を検出します。該当ファイルがリポジトリに 1 つも存在しなくても検証が走るよう always_run で実行し、防御層の抜けを CI でも検知します'
+      - id: check-agents-tools-table
+        name: check AGENTS.md tools table sync
+        entry: python scripts/check_agents_tools_table.py
+        language: python
+        pass_filenames: false
+        always_run: true
+        description: 'AGENTS.md 2 章「既に動いているツール」表と、その写しである docs/agents/jules-prompt.md の表の「種別」「ツール / 設定ファイル」列が一致し、記載したパスが実在するかを検査します。表に載せた設定ファイルの削除・リネームでも検知できるよう always_run で実行します'
       - id: forbid-foreign-lockfiles
         name: forbid foreign lockfiles
         entry: >-
