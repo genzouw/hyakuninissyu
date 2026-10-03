@@ -37,36 +37,22 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install lychee
-        env:
-          LYCHEE_VERSION: lychee-v0.24.2
-          LYCHEE_ASSET: lychee-x86_64-unknown-linux-gnu.tar.gz
-        run: |
-          set -euo pipefail
-          workdir="$(mktemp -d)"
-          curl -sSfLo "${workdir}/${LYCHEE_ASSET}" "https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/${LYCHEE_ASSET}"
-          curl -sSfLo "${workdir}/${LYCHEE_ASSET}.sha256" "https://github.com/lycheeverse/lychee/releases/download/${LYCHEE_VERSION}/${LYCHEE_ASSET}.sha256"
-          (cd "${workdir}" && sha256sum -c "${LYCHEE_ASSET}.sha256")
-          # tarball には README.md や docs/*.md も同梱されており、リポジトリ直下に展開すると
-          # lychee 自身のドキュメント（存在しない assets/yes.svg 等へのリンクを含む）が
-          # リンクチェック対象に混入してしまうため、リポジトリ外の一時ディレクトリに展開する。
-          tar -xzf "${workdir}/${LYCHEE_ASSET}" --strip-components=1 -C "${workdir}"
-          sudo mv "${workdir}/lychee" /usr/local/bin/lychee
-          rm -rf "${workdir}"
-
       - name: Run Lychee
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
           # www.npmjs.com は GitHub Actions からのアクセスを bot とみなして
           # 403 Forbidden を返すことがあるため、実リンク切れではなくチェック対象から除外する。
           # github.com が一時的に 504 を返すことがあるため、リトライ回数と待機時間を増やす。
-          lychee --verbose --no-progress \
-            --max-retries 5 \
-            --retry-wait-time 10 \
-            --root-dir './static' \
-            --exclude-path 'node_modules' \
-            --exclude-path 'dist' \
-            --exclude 'https://hyakuninissyu\.genzouw\.com/hyakunin_issyu\.png' \
-            --exclude 'https://www\.npmjs\.com/' \
+          args: >-
+            --verbose --no-progress
+            --max-retries 5
+            --retry-wait-time 10
+            --root-dir './static'
+            --exclude-path 'node_modules'
+            --exclude-path 'dist'
+            --exclude 'https://hyakuninissyu\.genzouw\.com/hyakunin_issyu\.png'
+            --exclude 'https://www\.npmjs\.com/'
             './**/*.md' './**/*.html' './**/*.vue'
+          fail: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
