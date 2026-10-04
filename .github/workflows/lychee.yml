@@ -54,5 +54,3 @@ jobs:
             --exclude 'https://www\.npmjs\.com/'
             './**/*.md' './**/*.html' './**/*.vue'
           fail: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
