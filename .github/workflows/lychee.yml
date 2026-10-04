@@ -40,8 +40,6 @@ jobs:
       - name: Run Lychee
         uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
         with:
-          # 移行前の手順で固定していた lychee のバージョンを維持する（未指定だと最新版を取得する）。
-          lycheeVersion: 'v0.24.2'
           # www.npmjs.com は GitHub Actions からのアクセスを bot とみなして
           # 403 Forbidden を返すことがあるため、実リンク切れではなくチェック対象から除外する。
           # github.com が一時的に 504 を返すことがあるため、リトライ回数と待機時間を増やす。
