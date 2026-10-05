@@ -188,6 +188,8 @@
       "patterns": [
         { "kind": "ext", "value": "tfstate" },
         { "kind": "ext", "value": "tfvars" },
+        { "kind": "glob", "value": "*.tfvars.json", "samples": ["terraform.tfvars.json", "nested/dir/prod.tfvars.json"] },
+        { "kind": "glob", "value": "*.auto.tfvars.json", "samples": ["dev.auto.tfvars.json", "nested/dir/staging.auto.tfvars.json"] },
         {
           "kind": "glob",
           "value": "*.tfstate.*",
