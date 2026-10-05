@@ -200,6 +200,8 @@ repomix-output.*
 .netlify/
 *.tfvars
 *.auto.tfvars
+*.tfvars.json
+*.auto.tfvars.json
 venv/
 
 # Optional stylelint cache

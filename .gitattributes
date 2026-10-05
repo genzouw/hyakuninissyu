@@ -103,6 +103,8 @@ desktop.ini -diff
 # IaC variables
 *.tfvars -diff
 *.auto.tfvars -diff
+*.tfvars.json -diff
+*.auto.tfvars.json -diff
 
 # Additional sensitive files (Security/Leak Prevention)
 *.jks -diff
