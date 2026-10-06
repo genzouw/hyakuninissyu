@@ -13,15 +13,16 @@
     "test": "bun run unit",
     "pretest:e2e": "NODE_OPTIONS=--openssl-legacy-provider bun run build",
     "test:e2e": "playwright test",
-    "lint": "bun run lint:eslint && bun run lint:style && bun run lint:markup && bun run knip",
+    "lint": "bun run lint:eslint && bun run lint:style && bun run lint:markup && bun run lint:markdown && bun run lint:text && bun run knip",
     "markuplint": "markuplint \"src/**/*.vue\"",
     "build": "NODE_OPTIONS=--openssl-legacy-provider node build/build.mjs && node build/generate-sitemap.mjs && bun run repomix --style markdown --output dist/llms-full.txt --quiet",
     "knip": "knip",
-    "textlint": "textlint \"**/*.md\"",
     "prepare": "husky",
     "lint:eslint": "eslint --cache src test/unit test/e2e",
     "lint:style": "stylelint --cache \"src/**/*.vue\"",
-    "lint:markup": "bun run markuplint"
+    "lint:markup": "bun run markuplint",
+    "lint:markdown": "markdownlint-cli2 \"**/*.md\"",
+    "lint:text": "textlint \"**/*.md\""
   },
   "dependencies": {
     "@babel/runtime": "^8.0.0",
@@ -72,6 +73,7 @@
     "jest-serializer-vue": "^3.1.0",
     "knip": "6.37.0",
     "lint-staged": "17.5.1",
+    "markdownlint-cli2": "^0.23.3",
     "markuplint": "^4.18.3",
     "mini-css-extract-plugin": "^2.9.2",
     "neostandard": "^0.13.0",

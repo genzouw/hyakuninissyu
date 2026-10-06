@@ -2,5 +2,5 @@
   "*": "secretlint",
   "{src,test/unit,test/e2e}/**/*.{js,vue}": "eslint --cache",
   "src/**/*.vue": ["stylelint --cache", "markuplint"],
-  "**/*.md": "textlint --cache"
+  "**/*.md": ["textlint --cache", "markdownlint-cli2 --no-globs"]
 }
