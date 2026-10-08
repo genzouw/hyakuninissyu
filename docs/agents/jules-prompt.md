@@ -54,6 +54,7 @@ Jules の管理画面に貼り付けてご利用ください。
 - **MUST NOT**: 既に本リポジトリに導入済みのツールと機能が重複する追加 (後述の「既に動いているツール」を参照)。
 - **MUST NOT**: 本リポジトリの Secrets に追加が必要な API キー / トークンを要求する PR (OIDC / 公開鍵証明を用いず、リポジトリオーナーに鍵発行と登録を依頼する形のもの)。
 - **MUST NOT**: 既存テスト / 既存 lint / 既存セキュリティスキャンをスキップ / 無効化 / コメントアウトすること。
+- **MUST NOT**: ローカル LLM (Ollama / llama.cpp / LocalAI / vLLM 等) を CI の runner 上で起動し、その推論結果を使う自動化の追加。API キー不要・完全無料であっても、用途 (PR レビュー、Issue トリアージ、ドキュメント生成等) を問わず禁止です。開発者個人の端末で動かすことは対象外です。
 - **MUST NOT**: パッケージマネージャを `npm` / `yarn` / `pnpm` に変更すること、または `npm install` 等の `npm` コマンドを CI / スクリプトに追加すること。**本リポジトリは Bun のみを使用します** (`bun install` / `bun run dev` / `bun run unit` / `bun run lint` / `bun run build`)。
 - **MUST NOT**: Bootstrap 4 の非推奨クラス (例: `ml-*`, `mr-*`) を新規追加すること。Bootstrap 5 のユーティリティクラス (`ms-*`, `me-*` 等) を使ってください。
 - **MUST NOT**: 外部リンク (`<a target="_blank">`) を新設する際に `rel="noopener noreferrer"` を省略すること。
@@ -66,7 +67,6 @@ Jules の管理画面に貼り付けてご利用ください。
 - GitHub Marketplace の **公開 OSS リポジトリ向け完全無料プラン** で提供される Action / App
 - GitHub App の **公開 OSS リポジトリ向け完全無料枠** (API キー不要型)
 - 完全無料で配布されている GitHub Action (Marketplace 登録の有無は問わない)
-- ローカル LLM (Ollama / llama.cpp 等) を GitHub-hosted runner 上で動作させる、Secrets 不要の自動化
 - リポジトリ内で完結する Shell スクリプト / Bun スクリプト / Make ターゲット (外部 SaaS 連携を伴わないもの)
 - 既存 GitHub Actions ワークフローのキャッシュ最適化、並列化、`oven-sh/setup-bun` の最新化、`actions/*` の SHA pin 更新といった、課金を伴わない構造改善
 
