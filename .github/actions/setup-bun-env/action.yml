@@ -15,7 +15,7 @@ runs:
         bun-version: ${{ inputs.bun-version }}
 
     - name: Cache bun dependencies
-      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
       with:
         # node_modules は復元しない。restore-keys で旧ロックの node_modules が復元されると、
         # bun.lock 更新後に hoist 構成が混在して ajv 等の解決が壊れるため

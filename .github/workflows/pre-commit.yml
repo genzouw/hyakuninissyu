@@ -43,7 +43,7 @@ jobs:
           cache: 'pip'
 
       - name: Cache pre-commit environments
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         with:
           path: ~/.cache/pre-commit
           key: ${{ runner.os }}-pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
@@ -65,7 +65,7 @@ jobs:
           echo "version=${version}" >>"$GITHUB_OUTPUT"
 
       - name: Cache gitleaks binary
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
         with:
           path: ~/.local/bin/gitleaks
           key: ${{ runner.os }}-gitleaks-${{ steps.gitleaks.outputs.version }}
