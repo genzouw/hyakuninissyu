@@ -35,12 +35,12 @@ jobs:
         uses: ./.github/actions/setup-bun-env
 
       - name: Cache ESLint cache file
-        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .eslintcache
-          key: ${{ runner.os }}-eslint-cache-${{ hashFiles('bun.lock', 'bun.lockb') }}-${{ github.sha }}
+          key: ${{ runner.os }}-reviewdog-eslint-cache-${{ hashFiles('bun.lock') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-eslint-cache-${{ hashFiles('bun.lock', 'bun.lockb') }}-
+            ${{ runner.os }}-reviewdog-eslint-cache-${{ hashFiles('bun.lock') }}-
 
       - name: Setup reviewdog
         uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
@@ -53,7 +53,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          bun x eslint --cache -f stylish "src/" "test/" \
+          bun x eslint --cache --cache-strategy content -f stylish "src/" "test/" \
             | reviewdog -f=eslint -name="eslint" -reporter=github-pr-review -fail-level=any
 
   stylelint:
@@ -78,12 +78,12 @@ jobs:
         uses: ./.github/actions/setup-bun-env
 
       - name: Cache Stylelint cache file
-        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: .stylelintcache
-          key: ${{ runner.os }}-stylelint-cache-${{ hashFiles('bun.lock', 'bun.lockb') }}-${{ github.sha }}
+          key: ${{ runner.os }}-reviewdog-stylelint-cache-${{ hashFiles('bun.lock') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-stylelint-cache-${{ hashFiles('bun.lock', 'bun.lockb') }}-
+            ${{ runner.os }}-reviewdog-stylelint-cache-${{ hashFiles('bun.lock') }}-
 
       - name: Setup reviewdog
         uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
@@ -96,7 +96,7 @@ jobs:
         shell: bash
         run: |
           set -o pipefail
-          bun x stylelint --cache "src/**/*.vue" \
+          bun x stylelint --cache --cache-strategy content "src/**/*.vue" \
             | reviewdog -f=stylelint -name="stylelint" -reporter=github-pr-review -fail-level=any
 
   textlint:
