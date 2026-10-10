@@ -1,0 +1,70 @@
+name: Mutation Testing
+
+# 週次の観測用ジョブ。PR のマージ条件にはしない（thresholds.break も設定しない）。
+# 生き残った変異体の傾向を確認してから、マージ条件にするかを決める。
+on:
+  schedule:
+    - cron: '0 18 * * 0' # 毎週月曜 03:00 JST
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  mutation:
+    name: Run Stryker
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Bun Environment
+        uses: ./.github/actions/setup-bun-env
+
+      # 変更のない箇所の再計算を省くため、前回の incremental.json を引き継ぐ
+      - name: Restore Stryker incremental cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: .stryker-tmp/incremental.json
+          key: stryker-incremental-${{ github.run_id }}
+          restore-keys: |
+            stryker-incremental-
+
+      - name: Run mutation testing
+        run: bun run mutation 2>&1 | tee stryker-output.txt
+
+      - name: Write job summary
+        if: always()
+        run: |
+          {
+            echo '## Mutation testing'
+            echo
+            echo '```text'
+            # スコア表（"All files" の見出しから末尾まで）だけを抜き出す
+            sed -n '/^-*|/,$p' stryker-output.txt | tail -n 40
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload mutation report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: mutation-report
+          path: reports/mutation/
+          if-no-files-found: warn
+          retention-days: 30
