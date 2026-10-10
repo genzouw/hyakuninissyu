@@ -26,5 +26,6 @@ rules:
       - license-compliance.yml
       - lighthouse.yml
       - lint.yml
+      - mutation.yml
       - repomix.yml
       - reviewdog.yml
