@@ -230,3 +230,8 @@ __pycache__/
 playwright-report/
 test-results/
 blob-report/
+
+# Stryker（ミューテーションテスト）の一時ファイルとレポート
+.stryker-tmp/
+reports/
+stryker-output.txt
