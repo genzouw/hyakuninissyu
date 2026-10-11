@@ -46,6 +46,8 @@ jobs:
             stryker-incremental-
 
       - name: Run mutation testing
+        # shell: bash は pipefail 付きで実行されるため、Stryker の異常終了を tee が隠さない
+        shell: bash
         run: bun run mutation 2>&1 | tee stryker-output.txt
 
       - name: Write job summary
