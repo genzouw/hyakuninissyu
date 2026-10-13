@@ -77,3 +77,12 @@ GitHub 経由が難しい場合は以下に直接ご連絡ください。
   - **Push protection**
 
 これらの機能により、シークレットがハードコードされたコミットが GitHub にプッシュされる前に自動的にブロックされ、漏洩リスクが大幅に低減されます。
+
+### 本番環境向け変数の手動セットアップ
+
+本リポジトリでは、インフラ情報等の漏洩リスクを最小化するため、GitHub Actions ワークフロー（デプロイ等）で使用する識別子をソースコードから除外し、GitHub Repository Variables で管理しています。
+リポジトリ管理者は、デプロイ等のワークフローを実行する前に、以下の手順で変数を手動設定する必要があります。
+
+- **設定手順**: リポジトリの `Settings` → `Secrets and variables` → `Actions` → `Variables` タブにて、以下を登録してください。
+  - `S3_BUCKET`: デプロイ先の S3 バケット名
+  - `CLOUDFRONT_DISTRIBUTION_ID`: Invalidate する CloudFront のディストリビューション ID
