@@ -27,7 +27,7 @@ Jules の管理画面に貼り付けてご利用ください。
 - コード品質チェックツール (lint / format / 静的解析 / セキュリティスキャン / アクセシビリティ / Web パフォーマンス計測) の導入と既存設定の見直し
 - リポジトリのコンテキストを LLM やサーチサービスに連携させる仕組みの導入 (Repomix の出力品質向上、`llms.txt` 規格の拡充など)
 - CI/CD パイプラインの構造改善 (高速化、並列化、ジョブの再利用化、Bun キャッシュ最適化など)
-- 設定ファイル (`eslint.config.mjs` / `.markdownlint-cli2.jsonc` / `.pre-commit-config.yaml` 等) のリファクタリングによる保守性向上
+- 設定ファイル (`eslint.config.js` / `.markdownlint-cli2.jsonc` / `.pre-commit-config.yaml` 等) のリファクタリングによる保守性向上
 - Vue 3 + Bun という構成に最適化された Action の差し替え提案 (Node.js セットアップを `oven-sh/setup-bun` に置き換える等)
 
 最新の動向 (IT / コンピュータサイエンス / コンピュータエンジニアリングのコミュニティサイト、生成 AI の最新ニュース) を必ず調査したうえで、導入するツールや設定を検討してください。
@@ -87,7 +87,7 @@ Jules の管理画面に貼り付けてご利用ください。
 | セキュリティスキャン    | Dependency Review (`.github/workflows/dependency-review.yml`)                                            | PR で導入される依存の脆弱性差分レビュー                               |
 | 機密ファイル検知        | pre-commit (`.pre-commit-config.yaml`, `.github/workflows/pre-commit.yml`, `.secrets.baseline`)          | コミット前ローカル検査 + CI での再検査                                |
 | 供給網健全性            | Scorecard (`.github/workflows/scorecard.yml`), SBOM (`.github/workflows/sbom.yml`)                       | OpenSSF Scorecard / SBOM 生成                                         |
-| Lint                    | ESLint (`eslint.config.mjs`)                                                                             | JavaScript / Vue の静的検査                                           |
+| Lint                    | ESLint (`eslint.config.js`)                                                                             | JavaScript / Vue の静的検査                                           |
 | Lint                    | Prettier (`.prettierrc`)                                                                                 | コード整形                                                            |
 | Lint                    | actionlint (`.github/workflows/actionlint.yml`)                                                          | GitHub Actions ワークフローの構文チェック                             |
 | Lint                    | markdownlint-cli2 (`.github/workflows/markdownlint.yml`, `.markdownlint-cli2.jsonc`)                     | Markdown の構文チェック                                               |

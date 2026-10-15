@@ -7,7 +7,7 @@ frontend:
           - 'static/**/*'
           - 'test/**/*'
           - 'package.json'
-          - 'eslint.config.mjs'
+          - 'eslint.config.js'
 
 ci:
   - changed-files:

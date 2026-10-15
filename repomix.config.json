@@ -30,7 +30,7 @@
     ".aider.instruction.md",
     ".bloopignore",
     "static/llms.txt",
-    "eslint.config.mjs",
+    "eslint.config.js",
     ".pre-commit-config.yaml",
     "repomix.config.json",
     "commitlint.config.js",

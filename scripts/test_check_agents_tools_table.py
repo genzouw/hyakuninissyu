@@ -79,10 +79,10 @@ class DiffTablesTest(unittest.TestCase):
 class ReferencedPathsTest(unittest.TestCase):
     def test_ツール列のパスだけを抽出する(self):
         rows = [
-            ["Lint", "ESLint (`eslint.config.mjs`), commitlint (`.husky/`)", "`allowed_secrets` に追記"],
+            ["Lint", "ESLint (`eslint.config.js`), commitlint (`.husky/`)", "`allowed_secrets` に追記"],
             ["AI", "[CodeRabbit](https://github.com/apps/coderabbitai) (`.coderabbit.yaml`)", "レビュー"],
         ]
-        self.assertEqual(referenced_paths(rows), ["eslint.config.mjs", ".husky/", ".coderabbit.yaml"])
+        self.assertEqual(referenced_paths(rows), ["eslint.config.js", ".husky/", ".coderabbit.yaml"])
 
     def test_パスとみなせないコードスパンは除外する(self):
         self.assertEqual(referenced_paths([["種別", "`bun` (`package.json`)", "役割"]]), ["package.json"])
@@ -97,8 +97,8 @@ class CheckTest(unittest.TestCase):
     def test_一致していてパスも実在すれば問題なし(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            (root / "eslint.config.mjs").touch()
-            self.write_repo(root, "| Lint | ESLint (`eslint.config.mjs`) | 検査 |\n", "| Lint | ESLint (`eslint.config.mjs`) | 静的検査 |\n")
+            (root / "eslint.config.js").touch()
+            self.write_repo(root, "| Lint | ESLint (`eslint.config.js`) | 検査 |\n", "| Lint | ESLint (`eslint.config.js`) | 静的検査 |\n")
             self.assertEqual(check(root), [])
 
     def test_実在しないパスを両ファイルについて報告する(self):
