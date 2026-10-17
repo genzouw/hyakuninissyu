@@ -10,7 +10,7 @@ on:
       - '**/*.sh'
       - '.github/workflows/shellcheck.yml'
   pull_request:
-    branches: [main, master]
+    branches: ['**']
     paths:
       - '**/*.sh'
       - '.github/workflows/shellcheck.yml'

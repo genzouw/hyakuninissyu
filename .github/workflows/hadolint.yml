@@ -12,7 +12,7 @@ on:
       - '.hadolint.yaml'
       - '.github/workflows/hadolint.yml'
   pull_request:
-    branches: [main, master]
+    branches: ['**']
     paths:
       - '**/Dockerfile'
       - '**/Dockerfile.*'
