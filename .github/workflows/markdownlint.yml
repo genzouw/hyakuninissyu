@@ -11,7 +11,7 @@ on:
       - '.markdownlint-cli2.jsonc'
       - '.github/workflows/markdownlint.yml'
   pull_request:
-    branches: [main, master]
+    branches: ['**']
     paths:
       - '**/*.md'
       - '.markdownlint-cli2.jsonc'
