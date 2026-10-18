@@ -24,8 +24,12 @@ while read -r _local_ref local_sha _remote_ref remote_sha; do
   if [ "$remote_sha" = "$zero_sha" ]; then
     # 新規ブランチ: リモートに存在しないコミットだけを検査する
     log_opts="$local_sha --not --remotes=$remote_name"
-  else
+  elif git cat-file -e "${remote_sha}^{commit}" 2> /dev/null; then
     log_opts="$remote_sha..$local_sha"
+  else
+    # リモート側 SHA がローカルに無い場合（未 fetch の他者の push など）は範囲を解決できず、
+    # gitleaks が 0 コミット検査で成功扱いになるため、新規ブランチと同じ方式に切り替える
+    log_opts="$local_sha --not --remotes=$remote_name"
   fi
 
   echo "🔒 プッシュ対象コミットを gitleaks で検査中... ($log_opts)"
