@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# ローカルでの --no-verify コミット等によるシークレットの流出を防ぐため、
+# push 前に再度シークレットスキャンを実行します。
+echo "🔒 pre-pushフックを実行中... シークレットの流出を防ぎます。"
+
+if command -v pre-commit > /dev/null 2>&1; then
+  echo "🔒 pre-commit (pushステージ) を実行中..."
+  pre-commit run --hook-stage push || exit 1
+else
+  echo "⚠️ pre-commitがローカルにインストールされていません。"
+  # gitleaks単体でのフォールバック
+  if command -v gitleaks > /dev/null 2>&1; then
+    echo "🔒 フォールバックのローカルgitleaksチェックを実行中..."
+    gitleaks protect --verbose || exit 1
+  fi
+fi
+
+echo "✅ pre-push チェック完了。push を続行します。"
