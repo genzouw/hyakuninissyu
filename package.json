@@ -23,7 +23,7 @@
     "lint:style": "stylelint --cache --cache-strategy content \"src/**/*.vue\"",
     "lint:markup": "bun run markuplint",
     "lint:markdown": "markdownlint-cli2 \"**/*.md\"",
-    "lint:text": "textlint \"**/*.md\""
+    "lint:text": "textlint --cache \"**/*.md\""
   },
   "dependencies": {
     "@babel/runtime": "^8.0.0",
