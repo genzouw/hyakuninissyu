@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        uses: step-security/harden-runner@ccd8616d44fd3846e67624a50d5aad6d37bf2d25 # v2.22.1
         with:
           egress-policy: audit
 
@@ -40,7 +40,7 @@ jobs:
 
       - name: Run TruffleHog (All Secrets, Push/PR)
         if: github.event_name == 'push' || github.event_name == 'pull_request'
-        uses: trufflesecurity/trufflehog@f714bf454f350590f4a24c3ddb1aef02c35bf5b6 # v3.97.5
+        uses: trufflesecurity/trufflehog@e76dff8a7e57d6df0c60ad8cbf5d5cba505a8fc9 # v3.99.2
         # NOTE: このコミットSHA固定はアクション本体（ワークフロー実行ロジック）のみを対象と
         # する。version 入力を省略しているため、実際にスキャンを行う Docker イメージ
         # （ghcr.io/trufflesecurity/trufflehog）は latest タグのまま運用しており、
@@ -81,7 +81,7 @@ jobs:
       # した理由そのもの）。
       - name: Run TruffleHog (All Secrets, Schedule/Dispatch)
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-        uses: trufflesecurity/trufflehog@f714bf454f350590f4a24c3ddb1aef02c35bf5b6 # v3.97.5
+        uses: trufflesecurity/trufflehog@e76dff8a7e57d6df0c60ad8cbf5d5cba505a8fc9 # v3.99.2
         with:
           extra_args: --exclude-detectors=GoogleGeminiAPIKey
 
@@ -93,7 +93,7 @@ jobs:
       # ため、この補完ステップで再び誤検知することはない。
       - name: Run TruffleHog (PR diff, all detectors)
         if: github.event_name == 'pull_request'
-        uses: trufflesecurity/trufflehog@f714bf454f350590f4a24c3ddb1aef02c35bf5b6 # v3.97.5
+        uses: trufflesecurity/trufflehog@e76dff8a7e57d6df0c60ad8cbf5d5cba505a8fc9 # v3.99.2
         with:
           base: ${{ github.event.pull_request.base.sha }}
           head: ${{ github.event.pull_request.head.sha }}
