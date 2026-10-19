@@ -27,7 +27,7 @@
   - `actionlint` をローカルフックとして導入し、GitHub Actions ワークフローの構文エラーや式の誤り、シェルインジェクションのリスクなどをコミット前に検出して未然に防ぎます（`pull_request_target` の使用禁止は、ローカルフック `forbid-pull-request-target` および CI の `zizmor.yml` が担当します）。
   - さらに `zizmor` (`zizmor-pre-commit`) をローカルフックとして導入し、GitHub Actions ワークフロー・`.github/dependabot.yml`・`action.yml` の高度なセキュリティミス（`permissions` 過剰、template injection、依存更新ポリシーの不備等）をコミット前に検出します（`known-vulnerable-actions` 等の GitHub API を要するオンライン監査はローカルでは実行されず、CI の `zizmor.yml` が SARIF で補完します）。CI とローカルの監査ルール設定は `.github/zizmor.yml` に一元化しています。
   - `.github/dependabot.yml` の全エコシステムに `cooldown.default-days: 7` を設定し、侵害されたリリースが自動マージされる窓を狭めています（GitHub 既定の 3 日から引き上げ。セキュリティ更新は cooldown の対象外で即時適用されます）。
-  - `pre-push` フック (`.husky/pre-push`) にて、`git commit --no-verify` でローカルのコミット前検知をバイパスされた場合でも、プッシュ前に Git が渡す参照からプッシュ対象のコミット範囲を求め、`gitleaks git --log-opts` で送信されるコミットそのものを検査し、二重の防御網として機能させています（作業ツリーやステージ済み差分は検査対象ではありません）。
+  - `pre-push` フック (`.husky/pre-push`) にて、`git commit --no-verify` でローカルのコミット前検知をバイパスされた場合でも、プッシュ前に Git が渡す参照からプッシュ対象のコミット範囲を求め、`gitleaks git --log-opts` で送信されるコミットそのものを検査し（新規ブランチなどリモート側の基準が使えない場合は、ローカルの古いリモート追跡参照に依存しないよう先端から履歴全体を検査し）、二重の防御網として機能させています（作業ツリーやステージ済み差分は検査対象ではありません）。
   - `.gitignore` にて各種シークレットファイルや AI エージェントの作業履歴を除外し、事故を根本から防止。
   - `.gitattributes` にてシークレット関連ファイルの diff 出力を無効化（`-diff`）し、レビュー時の意図しない露出を防止。
   - `.vscode/settings.json` により、AI エージェント（Copilot / Cursor 等）のワークスペース走査からシークレットファイル、パッケージマネージャーの設定ファイル (`.npmrc`, `.yarnrc*`（`.yarnrc.yml` を含む）, `.bunfig.toml`, `bunfig.toml`)、各種証明書・SSH 鍵、クラウドサービスアカウント、各種クラウド構成ディレクトリや IaC 変数 (`*.tfvars`, `*.auto.tfvars`, `*.tfvars.json`, `*.auto.tfvars.json`)、およびデータベースのダンプファイル等 (`*.db`, `*.dump`, `*.bak`, `*.sqlite*`, `*.sql`)、HTTP Archive (`*.har`) を除外。
