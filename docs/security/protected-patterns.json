@@ -97,7 +97,6 @@
         { "kind": "ext", "value": "truststore" },
         { "kind": "ext", "value": "kdbx" },
         { "kind": "ext", "value": "kdb" },
-        { "kind": "ext", "value": "ppk" },
         { "kind": "glob", "value": "id_rsa*", "samples": ["id_rsa", "nested/dir/id_rsa.pub"] },
         { "kind": "glob", "value": "id_ed25519*", "samples": ["id_ed25519", "nested/dir/id_ed25519.pub"] },
         { "kind": "glob", "value": "id_dsa*", "samples": ["id_dsa", "nested/dir/id_dsa.pub"] },

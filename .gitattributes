@@ -10,7 +10,6 @@ id_ed25519* -diff
 id_dsa* -diff
 id_ecdsa* -diff
 id_ecdsa_sk* -diff
-*.ppk -diff
 *.env* -diff
 .env.example diff
 *.tfstate -diff
