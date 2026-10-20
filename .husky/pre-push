@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# ローカルでの --no-verify コミット等によるシークレットの流出を防ぐため、
+# push 前に「実際に送信されるコミット」をシークレットスキャンします。
+# 作業ツリーやステージ済み差分ではなく、Git が標準入力で渡す参照から
+# プッシュ対象のコミット範囲を求めて検査します。
+echo "🔒 pre-pushフックを実行中... シークレットの流出を防ぎます。"
+
+zero_sha="0000000000000000000000000000000000000000"
+
+if ! command -v gitleaks > /dev/null 2>&1; then
+  # pre-push では gitleaks が唯一の検査であり、未導入のまま通すと --no-verify 対策が成立しないため push を中断する
+  echo "❌ gitleaksがローカルにインストールされていないため、プッシュ対象コミットを検査できません。push を中断します。"
+  echo "   'brew install gitleaks' 等で導入してから再実行してください。"
+  exit 1
+fi
+
+# 標準入力の各行: <local ref> <local sha> <remote ref> <remote sha>
+while read -r _local_ref local_sha _remote_ref remote_sha; do
+  # ブランチ削除のプッシュは検査対象のコミットが無い
+  if [ "$local_sha" = "$zero_sha" ]; then
+    continue
+  fi
+
+  if [ "$remote_sha" = "$zero_sha" ]; then
+    # 新規ブランチ: ローカルのリモート追跡参照は古い可能性があり、実際にはリモートに無い
+    # コミットまで除外してしまうため、先端から履歴全体を検査する
+    log_opts="$local_sha"
+  elif git cat-file -e "${remote_sha}^{commit}" 2> /dev/null; then
+    log_opts="$remote_sha..$local_sha"
+  else
+    # リモート側 SHA がローカルに無い場合（未 fetch の他者の push など）は範囲を解決できず、
+    # gitleaks が 0 コミット検査で成功扱いになるため、新規ブランチと同じく先端から検査する
+    log_opts="$local_sha"
+  fi
+
+  echo "🔒 プッシュ対象コミットを gitleaks で検査中... ($log_opts)"
+  # log_opts は意図的に単語分割せず、1 つの引数として渡す
+  gitleaks git --verbose --redact --log-opts="$log_opts" || exit 1
+done
+
+echo "✅ pre-push チェック完了。push を続行します。"
