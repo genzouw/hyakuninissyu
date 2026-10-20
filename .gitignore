@@ -136,6 +136,10 @@ pr_body.*
 *.pfx
 id_rsa*
 id_ed25519*
+id_dsa*
+id_ecdsa*
+id_ecdsa_sk*
+*.ppk
 *credentials*.json
 *service-account*.json
 
