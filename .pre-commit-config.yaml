@@ -134,6 +134,9 @@ repos:
             (^|/)insomnia_.*\.json$ |
             (^|/)id_rsa[^/]* |
             (^|/)id_ed25519[^/]* |
+            (^|/)id_dsa[^/]* |
+            (^|/)id_ecdsa[^/]* |
+            (^|/)id_ecdsa_sk[^/]* |
             (^|/)(claude|cursor|aider|continue|windsurf|cline|roo|copilot|codeium|cody|tabnine|zeal|gemini|bolt|lovable|devin|trae|openhands)-report\.md |
             (^|/)\.dbeaver-data-sources\.xml$ |
             (^|/)\.[^/]*_history$ |

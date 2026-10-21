@@ -7,6 +7,9 @@
 *.pfx -diff
 id_rsa* -diff
 id_ed25519* -diff
+id_dsa* -diff
+id_ecdsa* -diff
+id_ecdsa_sk* -diff
 *.env* -diff
 .env.example diff
 *.tfstate -diff
