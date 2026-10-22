@@ -16,7 +16,7 @@
     "test:e2e": "playwright test",
     "lint": "bun run lint:eslint && bun run lint:style && bun run lint:markup && bun run lint:markdown && bun run lint:text && bun run knip",
     "markuplint": "markuplint \"src/**/*.vue\"",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider node build/build.mjs && node build/generate-sitemap.mjs && bun run repomix --style markdown --output dist/llms-full.txt --quiet",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider node build/build.mjs && bun build/generate-sitemap.mjs && bun run repomix --style markdown --output dist/llms-full.txt --quiet",
     "knip": "knip",
     "prepare": "husky",
     "lint:eslint": "eslint --cache --cache-strategy content src test/unit test/e2e",
