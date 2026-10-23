@@ -42,6 +42,24 @@ regexes = [
   '''(?i)^alice\+genzouw@gmail\.com$'''
 ]
 
+# GitHub Actions の SHA ピン（`owner/action@<40 桁 hex> # vX.Y.Z`）は 40 桁の 16 進数であり、
+# デフォルトの sourcegraph-access-token ルール（素の 40 桁 hex も検知する）に誤検知される。
+# `ai-context` ブランチの llms-full.txt / repomix-output.xml にはワークフロー全文が収録され、
+# gitleaks は `--log-opts="--all"` で全ブランチを走査するため、無関係な PR まで一律で失敗していた。
+# 全ルール・全文字列を除外しないよう、デフォルトルールを id で上書きして許可リストを足し、
+# 行が「`@` または `rev: ` + 40 桁 hex + バージョンコメント」の形（Actions の `uses:` と
+# pre-commit の `rev: ... # frozen: vX.Y.Z` / `frozen: <prefix>-vX.Y.Z`）をしている場合だけを許可する。
+# 旧形式のトップレベル [allowlist] は [[allowlists]] と併用できないため、ここではルール側に置く。
+[[rules]]
+id = "sourcegraph-access-token"
+
+[[rules.allowlists]]
+description = "GitHub Actions / pre-commit の SHA ピン（`@<sha> # vX`、`rev: <sha> # frozen: vX`）を除外する"
+regexTarget = "line"
+regexes = [
+  '''(?:@|rev:\s*)[0-9a-f]{40}\s+#\s*(?:frozen:\s*)?[A-Za-z-]*v?[0-9]'''
+]
+
 [allowlist]
 description = "detect-secrets のベースラインファイルは hashed_secret（SHA1 ハッシュ値）を含むが実際のシークレットではないため除外。"
 paths = ['''.secrets.baseline''']
