@@ -31,6 +31,10 @@ GITLEAKS_CONFIG_PATH = REPO_ROOT / ".gitleaks.toml"
 PRE_COMMIT_CONFIG_PATH = REPO_ROOT / ".pre-commit-config.yaml"
 
 RULE_ID = "pii-email"
+SOURCEGRAPH_RULE_ID = "sourcegraph-access-token"
+
+# SHA ピンの検証用ダミー値（40 桁 hex）。リポジトリ内にリテラルを残さないよう実行時に組み立てる。
+DUMMY_SHA = "0123456789abcdef" * 2 + "01234567"
 
 # .pre-commit-config.yaml の gitleaks エントリから `# frozen: vX.Y.Z` を取り出す。
 # rev は SHA 固定のため、タグ名はこのコメントにしか存在しない。
@@ -241,6 +245,44 @@ class SpecificationBoundaryTest(GitleaksTestCase):
     def test_tld_が_1_文字のアドレスを検知しない(self):
         # TLD は `[A-Za-z]{2,}` を要求している。
         self.assertNotDetected(address("alice", "example.c"))
+
+
+class SourcegraphShaPinTest(GitleaksTestCase):
+    """``sourcegraph-access-token`` ルールの SHA ピン許可リスト。
+
+    デフォルトルールは素の 40 桁 hex も検知するため、`ai-context` ブランチに収録された
+    Actions / pre-commit の SHA ピンが誤検知される。許可は SHA ピンの行に限り、
+    実際のトークン形式まで検知対象外にならないことも固定する。
+    """
+
+    def sourcegraph_secrets(self, text: str) -> list[str]:
+        # デフォルトルールはキーワード（`sourcegraph` / `sgp_`）が断片内にあるときだけ評価される。
+        # 実環境ではリポジトリ全体を収録したファイルがキーワードを含むため、同じ状況を再現する。
+        return [
+            finding["Secret"]
+            for finding in scan(self.gitleaks, f"sourcegraph\n{text}")
+            if finding.get("RuleID") == SOURCEGRAPH_RULE_ID
+        ]
+
+    def test_sha_ピンを検知しない(self):
+        for line in (
+            f"uses: actions/checkout@{DUMMY_SHA} # v7.0.1",
+            f"uses: genzouw/ci-workflows/.github/workflows/gitleaks.yml@{DUMMY_SHA} # v1.5.18",
+            f"    rev: {DUMMY_SHA} # frozen: v8.30.1",
+            f"    rev: {DUMMY_SHA} # frozen: varcon-core-v5.0.7",
+            f"    rev: {DUMMY_SHA} # frozen: 1.9.4",
+        ):
+            with self.subTest(line=line):
+                self.assertEqual(self.sourcegraph_secrets(line), [])
+
+    def test_素の_40_桁_hex_を検知する(self):
+        # SHA ピンの形（`@` / `rev:` + バージョンコメント）でなければ除外されない。
+        self.assertEqual(self.sourcegraph_secrets(f"token = {DUMMY_SHA}"), [DUMMY_SHA])
+        self.assertEqual(self.sourcegraph_secrets(f"token = {DUMMY_SHA} # memo"), [DUMMY_SHA])
+
+    def test_sgp_形式のトークンを検知する(self):
+        token = "sg" + "p_" + DUMMY_SHA
+        self.assertEqual(self.sourcegraph_secrets(f"token = {token}"), [token])
 
 
 class FrozenVersionTest(unittest.TestCase):
