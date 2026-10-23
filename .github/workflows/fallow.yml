@@ -19,4 +19,4 @@ permissions:
 
 jobs:
   fallow:
-    uses: genzouw/ci-workflows/.github/workflows/fallow.yml@197e09c1418fd2e660bb24684c076ecb3463e7ac # v1.5.18
+    uses: genzouw/ci-workflows/.github/workflows/fallow.yml@8b59dccc8bcc68c33872e25f2e499493737eb742 # v1.5.24
