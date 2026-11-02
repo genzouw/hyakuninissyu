@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import { test, expect } from '@playwright/test'
 import { extractStaticPaths } from '../../build/sitemap.mjs'
+import AxeBuilder from '@axe-core/playwright'
 
 // パラメータ不要の公開ルートは sitemap.xml と同じ抽出ロジックで src/router/index.js から取得し、
 // ルートを追加してもスモークの対象から漏れないようにする
@@ -42,6 +43,14 @@ for (const path of ROUTES) {
     if (path === '/time-attack') {
       await expect(page.locator('p.display-4').first()).not.toHaveText('00:00.00')
     }
+
+    // eslint の vuejs-accessibility と同様、コントラストや aria 属性の妥当性などを axe-core で検査する
+    // region 等のベストプラクティス違反は既存コードに多いため無視する
+    // Bootstrap のカラーテーマ起因のコントラスト違反も除外する
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .disableRules(['landmark-one-main', 'page-has-heading-one', 'region', 'color-contrast'])
+      .analyze()
+    expect(accessibilityScanResults.violations, `accessibility violations on ${path}`).toEqual([])
 
     expect(pageErrors, `unhandled page errors on ${path}`).toEqual([])
     expect(consoleErrors, `console errors on ${path}`).toEqual([])
