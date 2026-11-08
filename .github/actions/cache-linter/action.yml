@@ -1,0 +1,20 @@
+name: 'Cache Linter'
+description: 'Caches the cache file for a given linter (eslint, stylelint, or textlint).'
+inputs:
+  linter:
+    description: 'The linter to cache (eslint, stylelint, or textlint)'
+    required: true
+  job-prefix:
+    description: 'Optional prefix for the cache key (e.g. reviewdog-)'
+    required: false
+    default: ''
+runs:
+  using: 'composite'
+  steps:
+    - name: Cache Linter cache file
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: .${{ inputs.linter }}cache
+        key: ${{ runner.os }}-${{ inputs.job-prefix }}${{ inputs.linter }}-cache-${{ hashFiles('bun.lock') }}-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-${{ inputs.job-prefix }}${{ inputs.linter }}-cache-${{ hashFiles('bun.lock') }}-
