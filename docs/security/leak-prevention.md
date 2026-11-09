@@ -20,7 +20,11 @@
   - 加えて、`.pre-commit-config.yaml` にカスタムローカルフック (`forbid-sensitive-files`) を導入し、`.env` ファイル、各種キーファイル (`*.pem`, `*.key`)、インフラ状態ファイル (`*.tfstate`, `*.tfvars`, `*.auto.tfvars`, `*.tfvars.json`, `*.auto.tfvars.json`)、各種証明書や SSH 鍵（`*.cert`, `*.p12`, `id_rsa`等）、クラウドサービスアカウント（`*service-account*.json`）、各種クラウド構成ディレクトリ (`.aws/`, `.kube/`, `.gcp/`, `.azure/`, `.vercel/`, `.netlify/`)、パッケージマネージャー設定 (`.npmrc`, `.yarnrc*`, `.bunfig.toml`, `bunfig.toml`)、DB ダンプ (`*.db`, `*.dump`, `*.sqlite*`, `*.sql`等)、HTTP Archive (`*.har`)、作業ログ・デバッグ出力等のログファイル（`*.log`）、および AI エージェントの作業ディレクトリ (`.claude/`, `.cursor/`, `.aider*/`, `.roo/`, `.zeal/` 等) などのステージング・コミットを明示的にブロックしています。
 - **設定ファイル**: `.pre-commit-config.yaml`、`.husky/pre-commit`、`.husky/pre-push`、`.lintstagedrc.json` および `.secretlintrc.json`
 - **開発者の責任**: リポジトリをクローンしたのち、Python 仮想環境（例: `python3 -m venv venv && source venv/bin/activate`）を利用して `pip install -r requirements.txt` および `pre-commit install` を実行し、ローカル環境で包括的なシークレット検知が機能するようにすること。あわせて、`.husky/pre-push` は `gitleaks` コマンドを直接呼び出し、未導入の場合は push を中断するため、`brew install gitleaks` 等で `gitleaks` を導入すること。システム依存関係の競合を避けるため、仮想環境の利用を推奨します。
-- **マージ前の手動作業（必須）**: GitHub Secret Scanning および Push Protection が有効化されていない場合は、リポジトリの Settings → Security → Code security and analysis から必ず有効化してください。
+- **GitHub Secret Scanning と Push Protection (手動有効化の要件)**:
+  本リポジトリでは、gitleaks や trufflehog に加えて、GitHub のネイティブ機能である **Secret Scanning** と **Push Protection** を多層防御の要として位置づけています。これらはコードベースの設定ファイルでは制御できず、リポジトリの設定画面から手動で有効化する必要があります。
+  管理者は、リポジトリの **Settings → Security → Code security and analysis** から、以下の両方を必ず有効化してください。
+  1. **Secret scanning**: 既知のシークレットプロバイダのトークン漏洩をリポジトリ履歴全体から検知します。
+  2. **Push protection**: 開発者がシークレットを含むコミットを push しようとした際に、GitHub 側で push を拒否して未然に流出を防ぎます。
 - **補完**:
   - `pre-commit` にて `trufflehog` フックを動作させ、シークレットのローカル環境でのコミットを防止します（正規表現ベースの `gitleaks` を補完する仕組みです）。デフォルトの `--results=verified` オプションを削除することで、無効化・ローテート済みのシークレットも含めて全てブロックし、CI のポリシー（`--only-verified` の省略）と厳密に同期しています。また CI と同様に `GoogleGeminiAPIKey` を除外し、過剰なブロックを防ぎつつ多層防御を維持しています。
   - `pre-commit` のローカルフック（`forbid-sensitive-files`）にて、`.env` ファイル、各種資格情報（`credentials`, `*.pem`, `*.tfstate`等）、API クライアント環境設定ファイル（`http-client.env.json`, `postman_environment.json`, `insomnia_*.json`）、および AI エージェントの作業履歴（`.claude/`, `.cursor/`, `.aider*` 等）が誤ってステージングされることを明示的にブロックしています。

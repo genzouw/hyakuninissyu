@@ -70,13 +70,17 @@ GitHub 経由が難しい場合は以下に直接ご連絡ください。
 
 本リポジトリでは、意図しない認証情報やシークレットの流出を防ぐため、多層的なセキュリティチェックを導入しています。詳細は `docs/security/leak-prevention.md` を参照してください。
 
-リポジトリ管理者は、GitHub のネイティブ機能である **Secret Scanning** と **Push Protection** を有効化することが必須となっています。
+### GitHub Secret Scanning と Push Protection の手動有効化 (必須)
 
-- **有効化手順**: リポジトリの `Settings` → `Security` → `Code security and analysis` から、以下の機能を有効（Enable）にしてください。
-  - **Secret scanning**
-  - **Push protection**
+本リポジトリでは、gitleaks や trufflehog 等のコードベースのチェックに加え、GitHub のネイティブ機能である **Secret Scanning** と **Push Protection** の利用を多層防御の要としています。これらはソースコード上の設定ファイルでは制御できず、リポジトリの設定画面から手動で有効化する必要があります。
 
-これらの機能により、シークレットがハードコードされたコミットが GitHub にプッシュされる前に自動的にブロックされ、漏洩リスクが大幅に低減されます。
+リポジトリ管理者は、必ず以下の手順で両方の機能を有効化してください。
+
+- **有効化手順**: リポジトリの `Settings` → `Security` → `Code security and analysis` にアクセスし、以下の機能を有効（Enable）にしてください。
+  1. **Secret scanning**
+  2. **Push protection**
+
+これらの機能により、既知のプロバイダのシークレットがハードコードされたコミットが GitHub にプッシュされる前に自動的にブロックされ、漏洩リスクが根本から低減されます。
 
 ### 本番環境向け変数の手動セットアップ
 
