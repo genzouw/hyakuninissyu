@@ -22,7 +22,7 @@
 ## パッケージマネージャー
 
 - **Bun** を唯一のパッケージマネージャーとして使用してください。`npm` / `yarn` / `pnpm` は使用しないでください。
-- GitHub Actions では `actions/setup-node` ではなく `oven-sh/setup-bun` を使用してください。
+- GitHub Actions では依存のインストールとタスク実行に `oven-sh/setup-bun` を使用してください。`actions/setup-node` は、webpack などを動かす Node.js 本体の版を `.node-version` で固定する目的に限り、`setup-bun` と併用できます（共通 Action `.github/actions/setup-bun-env` で設定済み）。その場合も `cache` オプションは使わないでください。
 - `npx` の代わりに `bun x` を使用してください。
 
 ## 技術スタックとスタイリング
