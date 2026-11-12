@@ -42,3 +42,4 @@ When assisting with code generation or answering questions about this repository
 ## GitHub Actions
 
 - All CI/CD workflows should execute natively using Bun via `oven-sh/setup-bun` instead of Node.js/npm.
+  - 例外: Node.js 本体の版を `.node-version` で固定する目的に限り、共通 Action `.github/actions/setup-bun-env` で `actions/setup-node` を併用します（`cache` オプションは使いません）。依存のインストールとタスク実行は Bun で行います。

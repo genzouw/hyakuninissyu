@@ -1,5 +1,5 @@
 name: 'Setup Bun Environment'
-description: 'Sets up Bun, configures dependency caching, and installs dependencies.'
+description: 'Sets up Node.js and Bun, configures dependency caching, and installs dependencies.'
 inputs:
   bun-version:
     description: 'The version of Bun to install'
@@ -9,6 +9,14 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    # build・Playwright・mutation は Node.js 上で動くため、ランナーのプリインストール版に
+    # 依存しないよう .node-version で固定する。依存キャッシュは後段の actions/cache が担うため
+    # setup-node の cache オプションは使わない
+    - name: Setup Node.js
+      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-version-file: .node-version
+
     - name: Setup Bun
       uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2
       with:
