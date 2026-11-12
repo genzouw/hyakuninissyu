@@ -28,7 +28,7 @@ Jules の管理画面に貼り付けてご利用ください。
 - リポジトリのコンテキストを LLM やサーチサービスに連携させる仕組みの導入 (Repomix の出力品質向上、`llms.txt` 規格の拡充など)
 - CI/CD パイプラインの構造改善 (高速化、並列化、ジョブの再利用化、Bun キャッシュ最適化など)
 - 設定ファイル (`eslint.config.mjs` / `.markdownlint-cli2.jsonc` / `.pre-commit-config.yaml` 等) のリファクタリングによる保守性向上
-- Vue 3 + Bun という構成に最適化された Action の差し替え提案 (Node.js セットアップを `oven-sh/setup-bun` に置き換える等)
+- Vue 3 + Bun という構成に最適化された Action の差し替え提案 (依存のインストールとタスク実行を `oven-sh/setup-bun` に寄せる等。Node.js 本体の版固定に使う `actions/setup-node` は残す)
 
 最新の動向 (IT / コンピュータサイエンス / コンピュータエンジニアリングのコミュニティサイト、生成 AI の最新ニュース) を必ず調査したうえで、導入するツールや設定を検討してください。
 本リポジトリで採用された改善は、他のリポジトリ (例: [`genzouw/trim-text`](https://github.com/genzouw/trim-text)) にも転用しやすいプロトタイプとなることを意識してください。
@@ -113,7 +113,7 @@ Jules の管理画面に貼り付けてご利用ください。
 - [ ] LLM プロバイダの API キー / 従量課金 API キーを GitHub Secrets に追加していない。
 - [ ] 「無料枠内に収まる前提」の利用ではなく、「課金が一切発生しない構成」であることを PR 本文に明記している。
 - [ ] 追加する GitHub Action / GitHub App は、信頼できる発行元 (GitHub 公式 / Verified creator / 著名 OSS 組織) のものを優先的に選んでいる。サードパーティ Action を使う場合は **フルコミット SHA で pin** している (`@v1` 等のタグ参照は不可)。
-- [ ] Node.js / npm / yarn / pnpm のセットアップを増やしていない。Bun (`oven-sh/setup-bun`) を使っている。
+- [ ] Node.js / npm / yarn / pnpm のセットアップを増やしていない。Bun (`oven-sh/setup-bun`) を使っている（共通 Action `.github/actions/setup-bun-env` で Node.js 本体の版を `.node-version` に固定する `actions/setup-node` は除く。`cache` オプションは使わない）。
 - [ ] 既存テスト / lint / セキュリティスキャンをスキップ・削除していない。
 - [ ] ローカルで `bun install` → `bun run lint` → `bun run unit` → `bun run build` が通る。
 - [ ] 変更によって Lighthouse スコア (パフォーマンス / アクセシビリティ) が悪化していない (UI / アセット変更時のみ)。

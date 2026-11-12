@@ -128,7 +128,7 @@ PR を提出する前に、以下のチェックリストを **MUST すべて** 
 - [ ] LLM プロバイダの API キー / 従量課金 API キーを GitHub Secrets に追加していない。`OPENAI_API_KEY` / `GEMINI_API_KEY` / `ANTHROPIC_API_KEY` 等を `secrets.*` から参照する記述が新規ファイルに含まれていない。
 - [ ] 「無料枠内に収まる前提」の利用ではなく、「課金が一切発生しない構成」であることを PR 本文に明記している。
 - [ ] 追加する GitHub Action は **フルコミット SHA で pin** している (`@v1` 等のタグ参照は禁止)。
-- [ ] Node.js / npm / yarn / pnpm のセットアップを増やしていない。Bun (`oven-sh/setup-bun`) を使っている。
+- [ ] Node.js / npm / yarn / pnpm のセットアップを増やしていない。Bun (`oven-sh/setup-bun`) を使っている（共通 Action `.github/actions/setup-bun-env` で Node.js 本体の版を `.node-version` に固定する `actions/setup-node` は除く。`cache` オプションは使わない）。
 - [ ] 既存テスト / lint / セキュリティスキャンをスキップ・削除していない。
 - [ ] ローカルで `bun install` → `bun run lint` → `bun run unit` → `bun run build` が通る。
 - [ ] UI / アセット変更を含む場合、Lighthouse スコア (パフォーマンス / アクセシビリティ) が悪化していない。
