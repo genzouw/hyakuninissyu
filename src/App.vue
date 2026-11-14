@@ -43,13 +43,20 @@
 </template>
 
 <script>
-import { useHead } from '@unhead/vue'
+// 名前付き import (`import { useHead } from '@unhead/vue'`) にすると、@vue/vue3-jest が
+// <script> 側の `@unhead/vue` と <template> 側の `vue` に同じ `_vue` 変数名を割り当てて上書き衝突するため、
+// 名前空間 import で回避する。
+import * as unhead from '@unhead/vue'
+import { BNavbar } from 'bootstrap-vue-next'
 import { TWITTER_SHARE_URL } from './constants/url'
 
 export default {
   name: 'App',
+  components: {
+    BNavbar,
+  },
   setup () {
-    useHead({
+    unhead.useHead({
       title: 'ひゃくにんいっしゅをおぼえよう',
       meta: [
         { 'http-equiv': 'Content-Type', content: 'text/html; charset=utf-8' },

@@ -24,6 +24,7 @@
               :max="100"
               height="2rem"
               variant="warning"
+              aria-label="バッジ獲得率"
             >
               <b-progress-bar :value="badgeRate">
                 <strong>{{ badgeRate }}%</strong>
@@ -166,10 +167,24 @@
 </template>
 
 <script>
+import {
+  BButton,
+  BButtonGroup,
+  BModal,
+  BProgress,
+  BProgressBar,
+} from 'bootstrap-vue-next'
 import { badges, rarityColors, rarityLabels } from '@/data/badges'
 
 export default {
   name: 'Badges',
+  components: {
+    BButton,
+    BButtonGroup,
+    BModal,
+    BProgress,
+    BProgressBar,
+  },
   data () {
     return {
       badges,
