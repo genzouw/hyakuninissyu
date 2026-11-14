@@ -1,5 +1,7 @@
 name: CI
 
+# 全ジョブが必須チェック (context は各ジョブの name:) のため paths フィルタと job 単位の if: は禁止。
+# 必須チェックは genzouw/genzouw.com の Terraform で管理しているため、ジョブ名を変える場合は同時に更新する。
 on:
   push:
     branches:
