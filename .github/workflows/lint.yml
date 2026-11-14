@@ -182,12 +182,16 @@ jobs:
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
+          # 導入するブラウザをキーに含める。含めないと Chromium だけを保存した既存キャッシュに完全一致し、
+          # actions/cache は完全一致時に保存し直さないため、WebKit が毎回ダウンロードされる
+          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}-chromium-webkit
           restore-keys: |
+            ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}-
             ${{ runner.os }}-playwright-
 
+      # playwright.config.js の chromium / mobile-webkit の 2 プロジェクトで使うブラウザを導入する
       - name: Install Playwright browsers
-        run: bun x playwright install --with-deps chromium
+        run: bun x playwright install --with-deps chromium webkit
 
       # pretest:e2e で本番ビルドを作り、dist を配信して全公開ルートを巡回する。
       # 「ビルドは通るがブラウザで起動しない」破壊を Renovate の auto-merge 前に検知する (#482)。
