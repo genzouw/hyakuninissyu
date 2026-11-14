@@ -26,6 +26,9 @@ function createStore () {
       timeAttack: {
         namespaced: true,
         state: { remainingCards: 100 },
+        getters: {
+          formattedTime: () => '00:00.00',
+        },
         actions: {
           startGame: jest.fn(),
           answerCard: jest.fn(),

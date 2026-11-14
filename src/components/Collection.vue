@@ -25,6 +25,7 @@
               :max="100"
               class="mt-2"
               height="2rem"
+              aria-label="コレクション達成度"
             >
               <b-progress-bar :value="collectionRate">
                 <strong>{{ collectionRate }}%</strong>
@@ -164,6 +165,15 @@
 </template>
 
 <script>
+import {
+  BAlert,
+  BBadge,
+  BButton,
+  BButtonGroup,
+  BModal,
+  BProgress,
+  BProgressBar,
+} from 'bootstrap-vue-next'
 import { mapGetters } from 'vuex'
 import poems from '@/data/poems'
 
@@ -176,6 +186,15 @@ const FILTERS = {
 
 export default {
   name: 'Collection',
+  components: {
+    BAlert,
+    BBadge,
+    BButton,
+    BButtonGroup,
+    BModal,
+    BProgress,
+    BProgressBar,
+  },
   data () {
     return {
       poems,

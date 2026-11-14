@@ -62,12 +62,13 @@ const webpackConfig = merge(baseWebpackConfig, {
     hints: 'error',
     // 画像は依存更新では増減しないため対象外にし、JS/CSS の退行だけを見る
     assetFilter: (assetFilename) => /\.(js|css)$/.test(assetFilename),
-    // 2026-09 時点の実測: 最大アセット (js/vendor) 374,043 B /
-    // entrypoint 合計 1,051,032 B。約 12〜14% の余裕を持たせている。
+    // 2026-11 時点の実測: bootstrap-vue-next コンポーネント（BNavbar 等 8 種）を
+    // 明示登録した後の最大アセット (js/vendor) 456,209 B / entrypoint 合計 1,133,498 B。
+    // 約 13% の余裕を持たせている。
     // 正当な機能追加で超える場合は、同じ PR でこの値を意識して引き上げる。
     // lighthouserc.json にも転送量の上限 (広告込み・warn) があるため併せて見直す。
-    maxAssetSize: 420000,
-    maxEntrypointSize: 1200000,
+    maxAssetSize: 520000,
+    maxEntrypointSize: 1280000,
   },
   plugins: [
     new webpack.DefinePlugin({
