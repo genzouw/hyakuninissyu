@@ -1,5 +1,7 @@
 name: pre-commit
 
+# 必須チェック (context: "Run pre-commit") のため paths フィルタと job 単位の if: は禁止。
+# 必須チェックは genzouw/genzouw.com の Terraform で管理しているため、ジョブ名を変える場合は同時に更新する。
 on:
   # push は既定ブランチのみ。'**' にすると、オープンなPRがあるブランチへの push で
   # push と pull_request が同時発火し、同一コミットに対して二重実行される（#447）。
