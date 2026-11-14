@@ -30,13 +30,15 @@ module.exports = {
   // perfect-debounce は bootstrap-vue-next が依存する ESM 専用パッケージ。
   // nostics は vue-router 5.2.0 以降が依存する ESM 専用パッケージで、
   // vue-router の CJS ビルドから require されるため変換が必要。
+  // @unhead/vue とその依存 (unhead, hookable) も ESM 専用のため許可する。
   transformIgnorePatterns: [
-    '/node_modules/(?!(bootstrap-vue-next|perfect-debounce|nostics)/)',
+    '/node_modules/(?!(bootstrap-vue-next|perfect-debounce|nostics|@unhead/vue|unhead|hookable)/)',
   ],
   // Playwright の E2E (test/e2e) は jest ではなく `bun run test:e2e` で実行する。
   testPathIgnorePatterns: ['/node_modules/', '<rootDir>/test/e2e/'],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
   setupFiles: ['<rootDir>/test/unit/setup'],
+  setupFilesAfterEnv: ['<rootDir>/test/unit/setupAfterEnv'],
   coverageDirectory: '<rootDir>/test/unit/coverage',
   collectCoverageFrom: [
     'src/**/*.{js,vue}',

@@ -59,14 +59,24 @@ describe('persistence plugin', () => {
   })
 
   it('falls back to default and clears storage when JSON parse fails', () => {
-    const storage = createMockLocalStorage({ [KEY]: '{not-json' })
-    const plugin = createPersistencePlugin(
-      [{ path: 'collection.collectedPoemIds', key: KEY, default: [] }],
-      { storage }
-    )
-    const store = buildStore(plugin)
-    expect(store.state.collection.collectedPoemIds).toEqual([])
-    expect(storage.removeItem).toHaveBeenCalledWith(KEY)
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation(() => {})
+    try {
+      const storage = createMockLocalStorage({ [KEY]: '{not-json' })
+      const plugin = createPersistencePlugin(
+        [{ path: 'collection.collectedPoemIds', key: KEY, default: [] }],
+        { storage }
+      )
+      const store = buildStore(plugin)
+      expect(consoleSpy).toHaveBeenCalledWith(
+        `persistence: failed to parse localStorage key "${KEY}":`,
+        expect.any(SyntaxError)
+      )
+      expect(consoleSpy).toHaveBeenCalledTimes(1)
+      expect(store.state.collection.collectedPoemIds).toEqual([])
+      expect(storage.removeItem).toHaveBeenCalledWith(KEY)
+    } finally {
+      consoleSpy.mockRestore()
+    }
   })
 
   it('writes to localStorage on every mutation', () => {
