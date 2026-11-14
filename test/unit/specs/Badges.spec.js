@@ -35,7 +35,9 @@ function mountBadges (collectedPoemIds = []) {
 
 describe('Badges.vue', () => {
   beforeEach(() => {
-    localStorageMock.getItem.mockClear()
+    // mockClear() は呼び出し履歴しか消さず、mockImplementation() で差し替えた実装が後続のテストに残る。
+    // getItem は実装を差し替えるテストがあるため、mockReset() で実装まで初期化する。
+    localStorageMock.getItem.mockReset()
     localStorageMock.setItem.mockClear()
     localStorageMock.removeItem.mockClear()
   })

@@ -152,8 +152,10 @@ jobs:
       - name: Setup Bun Environment
         uses: ./.github/actions/setup-bun-env
 
+      # --randomize で describe 内のテスト順をシャッフルし、テスト間の状態の持ち越しを検出する。
+      # 失敗したらログ末尾の Seed を bun run unit --randomize --seed=<Seed> に渡すと同じ順序で再現できる。
       - name: Run unit tests
-        run: bun run unit
+        run: bun run unit --randomize
 
   e2e:
     name: E2E smoke (Playwright)
