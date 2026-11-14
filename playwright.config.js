@@ -13,7 +13,11 @@ export default defineConfig({
   workers: 1,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : [['list']],
   use: { baseURL: BASE_URL, trace: 'on-first-retry' },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    // iPhone のブラウザは原則 WebKit で動くため、スマートフォン幅 + WebKit でも同じスモークを回す
+    { name: 'mobile-webkit', use: { ...devices['iPhone 13'] } },
+  ],
   webServer: {
     command: `bun x --bun serve@14.2.6 dist -s -l ${PORT}`,
     url: BASE_URL,
