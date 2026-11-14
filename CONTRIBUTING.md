@@ -96,6 +96,7 @@ To set up the project locally for development:
 5. Use `bun run dev` to start the local development server at `http://localhost:8080`.
 6. Check for style issues with `bun run lint`.
 7. Execute unit tests using `bun run unit`. `test/unit/jest.conf.js` の `coverageThreshold` はカバレッジの下限（ラチェット）で、割れると失敗します。実測値ではなく「下げてはいけない値」なので、実測が安定して上回ってから引き上げてください。
+   CI ではテストの順序をシャッフルする `--randomize` を付けて実行します。CI だけで失敗した場合は、ログ末尾に表示される `Seed:` の値を使い `bun run unit --randomize --seed=<Seed>` で同じ順序を再現してください。
 8. Perform end-to-end testing with `bun run test:e2e`. 初回のみ `bun x playwright install chromium webkit` でブラウザを取得してください。
 
 ## セキュリティおよび漏洩防止 (Security and Leak Prevention)
