@@ -15,6 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from check_ai_instructions_sync import (  # noqa: E402
     COPY_PATHS,
+    LINK_REPLACEMENTS,
     SOURCE_PATH,
     CheckError,
     check,
@@ -52,13 +53,13 @@ class ExtractSectionTest(unittest.TestCase):
 class CheckTest(unittest.TestCase):
     def write_repo(self, root: Path, overrides: dict[Path, str] | None = None) -> None:
         overrides = overrides or {}
-        (root / ".github").mkdir()
         (root / SOURCE_PATH).write_text(document(SECTION), encoding="utf-8")
         for path in COPY_PATHS:
             section = SECTION
-            if path.parent == Path(".github"):
-                section = section.replace("](AGENTS.md)", "](../AGENTS.md)")
+            for old, new in LINK_REPLACEMENTS.get(path, ()):
+                section = section.replace(old, new)
             text = overrides.get(path, document(section, title=f"# {path}\n\n"))
+            (root / path).parent.mkdir(parents=True, exist_ok=True)
             (root / path).write_text(text, encoding="utf-8")
 
     def test_すべて一致していれば問題なし(self):
@@ -85,7 +86,16 @@ class CheckTest(unittest.TestCase):
             self.assertEqual(len(problems), 1)
             self.assertIn("+詳細は [`AGENTS.md`](AGENTS.md) を参照してください。", problems[0])
 
-    def test_copilot_instructions_以外で親ディレクトリのリンクを使うと差分になる(self):
+    def test_cursor_rules_のリンクを書き換えずに写すと差分になる(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.write_repo(root, {Path(".cursor/rules/general.mdc"): document(SECTION)})
+            problems = check(root)
+            self.assertEqual(len(problems), 1)
+            self.assertIn(".cursor/rules/general.mdc", problems[0])
+            self.assertIn("+詳細は [`AGENTS.md`](AGENTS.md) を参照してください。", problems[0])
+
+    def test_サブディレクトリ以外の写しで親ディレクトリのリンクを使うと差分になる(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             moved = SECTION.replace("](AGENTS.md)", "](../AGENTS.md)")

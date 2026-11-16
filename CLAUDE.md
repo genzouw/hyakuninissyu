@@ -1,6 +1,6 @@
 # Hyakunin Isshu - AI Agent Instructions
 
-<!-- 次の「最重要原則」節は .cursorrules / .windsurfrules / .clinerules / .github/copilot-instructions.md に写している。変更したら写しも更新すること（pre-commit の check-ai-instructions-sync が一致を検査する） -->
+<!-- 次の「最重要原則」節は .cursorrules / .cursor/rules/general.mdc / .windsurfrules / .clinerules / .github/copilot-instructions.md に写している。変更したら写しも更新すること（pre-commit の check-ai-instructions-sync が一致を検査する） -->
 
 ## 最重要原則: 完全無料の SaaS・AI・ツールのみを利用する (MUST)
 

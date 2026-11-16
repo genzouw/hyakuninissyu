@@ -1,14 +1,15 @@
 #!/usr/bin/env python3
 """AI エージェント向け指示ファイルの「最重要原則」節の同期を検証する。
 
-Cursor・Windsurf・Cline・Copilot はそれぞれ自分の指示ファイルだけを読むため、
+Cursor・Windsurf・Cline・Copilot はそれぞれ自分の指示ファイルだけを読むため
+(Cursor は ``.cursorrules`` と ``.cursor/rules/*.mdc`` の両方を読む)、
 ``CLAUDE.md`` 冒頭の「## 最重要原則」節 (採用可否を決める規則) を各ファイルが写しとして持っている。
 写しは ``CLAUDE.md`` だけ更新されてずれやすいので、``CLAUDE.md`` を正として
 各ファイルの同節 (見出し行から次の ``## `` 見出しの直前まで) が一致するかを検査する。
 
-- ``.github/copilot-instructions.md`` は ``.github/`` 配下にあるため、
-  ``AGENTS.md`` へのリンクを ``../AGENTS.md`` と書く。``CLAUDE.md`` の同節のリンクをこの表記に
-  置き換えたものを期待値として比較するので、リンクの書き換え忘れも検出できる
+- ``.cursor/rules/general.mdc`` と ``.github/copilot-instructions.md`` はサブディレクトリにあるため、
+  ``AGENTS.md`` へのリンクをそれぞれ ``../../AGENTS.md`` / ``../AGENTS.md`` と書く。``CLAUDE.md`` の
+  同節のリンクをこの表記に置き換えたものを期待値として比較するので、リンクの書き換え忘れも検出できる
 - 他の節は、ファイルごとに言語や粒度が違い完全一致を求めると誤検知になるため検査しない
 
 なお本スクリプトは検証のみを行い、写しの自動書き換えは行わない。
@@ -26,6 +27,7 @@ from pathlib import Path
 SOURCE_PATH = Path("CLAUDE.md")
 COPY_PATHS = (
     Path(".cursorrules"),
+    Path(".cursor/rules/general.mdc"),
     Path(".windsurfrules"),
     Path(".clinerules"),
     Path(".github/copilot-instructions.md"),
@@ -36,6 +38,7 @@ NEXT_HEADING_RE = re.compile(r"^## ")
 
 # 写しごとの、期待値を作るためのリンク表記の置き換え (CLAUDE.md での表記 -> 写しでの表記)
 LINK_REPLACEMENTS = {
+    Path(".cursor/rules/general.mdc"): (("](AGENTS.md)", "](../../AGENTS.md)"),),
     Path(".github/copilot-instructions.md"): (("](AGENTS.md)", "](../AGENTS.md)"),),
 }
 
@@ -125,7 +128,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  - {problem}", file=sys.stderr)
         print(
             f"\n{SOURCE_PATH} の同節を正として、各ファイルの同節へ写してください"
-            "（.github/copilot-instructions.md のみ AGENTS.md へのリンクを ../AGENTS.md とする）。",
+            "（AGENTS.md へのリンクは .cursor/rules/general.mdc では ../../AGENTS.md、"
+            ".github/copilot-instructions.md では ../AGENTS.md とする）。",
             file=sys.stderr,
         )
         return 1

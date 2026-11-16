@@ -210,7 +210,7 @@ repos:
         language: python
         pass_filenames: false
         always_run: true
-        description: 'CLAUDE.md の「最重要原則」節を正とし、その写しである .cursorrules / .windsurfrules / .clinerules / .github/copilot-instructions.md の同節との乖離を検出します。写しの削除でも検知できるよう always_run で実行します'
+        description: 'CLAUDE.md の「最重要原則」節を正とし、その写しである .cursorrules / .cursor/rules/general.mdc / .windsurfrules / .clinerules / .github/copilot-instructions.md の同節との乖離を検出します。写しの削除でも検知できるよう always_run で実行します'
       - id: forbid-foreign-lockfiles
         name: forbid foreign lockfiles
         entry: >-
