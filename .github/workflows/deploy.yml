@@ -23,6 +23,8 @@ jobs:
     permissions:
       contents: read
     runs-on: ubuntu-latest
+    outputs:
+      app-js: ${{ steps.app-js.outputs.path }}
 
     steps:
       - name: Harden Runner
@@ -43,6 +45,19 @@ jobs:
           GA_ID: ${{ vars.GA_ID }}
           NODE_OPTIONS: --openssl-legacy-provider
         run: bun run build
+
+      # smoke-production が「本番に今回のビルドが反映されたか」を判定するため、
+      # index.html が参照する app.<hash>.js のパスを取り出して渡す
+      - name: Extract app bundle path
+        id: app-js
+        run: |
+          set -euo pipefail
+          path="$(grep -oE '/js/app\.[0-9a-f]+\.js' dist/index.html | head -n 1 || true)"
+          if [ -z "${path}" ]; then
+            echo "::error::dist/index.html から /js/app.<hash>.js を抽出できません" >&2
+            exit 1
+          fi
+          echo "path=${path}" >> "$GITHUB_OUTPUT"
 
       - name: Upload artifact
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -191,3 +206,80 @@ jobs:
             -X POST 'https://api.indexnow.org/IndexNow' \
             -H 'Content-Type: application/json; charset=utf-8' \
             --data-binary @/tmp/payload.json
+
+  # デプロイ直後の本番に対して、PR 時と同じ E2E スモーク (test/e2e/smoke.spec.js) を実行する (#604)。
+  # S3・CloudFront の配信経路や、本番ビルドだけで有効になる分岐 (GA_ID) の破壊を検知する。
+  # 検知した時点で本番は壊れているため、破壊を防ぐのではなく気づくまでの時間を縮めるもの。
+  # 失敗したら原因のコミットを revert して main に push し、再デプロイする。
+  smoke-production:
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      E2E_BASE_URL: https://hyakuninissyu.genzouw.com
+      APP_JS: ${{ needs.build.outputs.app-js }}
+
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
+        with:
+          egress-policy: audit
+
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # CloudFront の無効化は非同期に反映される。古い版を検査しないよう、本番の index.html が
+      # 今回のビルドの app.<hash>.js を参照し、その JS 自体も配信されるまで待つ
+      - name: Wait for the new build to be served
+        run: |
+          set -euo pipefail
+          if [ -z "${APP_JS}" ]; then
+            echo "::error::build ジョブから app.<hash>.js のパスを受け取れていません" >&2
+            exit 1
+          fi
+          for _ in $(seq 1 30); do
+            if curl -fsS --max-time 10 "${E2E_BASE_URL}/" | grep -qF "${APP_JS}" \
+              && curl -fsS --max-time 10 -o /dev/null "${E2E_BASE_URL}${APP_JS}"; then
+              echo "本番が ${APP_JS} を配信しています"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::5 分待っても本番が ${APP_JS} を配信しません" >&2
+          exit 1
+
+      - name: Setup Bun Environment
+        uses: ./.github/actions/setup-bun-env
+
+      - name: Get Playwright version
+        id: playwright-version
+        run: echo "version=$(bun x playwright --version | awk '{print $2}')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}-chromium
+          restore-keys: |
+            ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}-
+            ${{ runner.os }}-playwright-
+
+      # E2E_BASE_URL 指定時の playwright.config.js は chromium プロジェクトだけを実行する
+      - name: Install Playwright browsers
+        run: bun x playwright install --with-deps chromium
+
+      # pretest:e2e のビルドを避けるため、bun run test:e2e ではなく playwright を直接呼ぶ
+      - name: Run E2E smoke against production
+        run: bun x playwright test
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: playwright-report-production
+          path: playwright-report
+          retention-days: 7
