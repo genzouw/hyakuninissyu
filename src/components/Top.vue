@@ -13,7 +13,7 @@
     >
       <div class="row justify-content-center">
         <div class="col-12">
-          <div class="mb-5 row">
+          <div class="mb-3 row">
             <label
               for="countOfQuestions"
               class="col-4 col-form-label col-form-label-lg"
