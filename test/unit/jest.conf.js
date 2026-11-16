@@ -34,8 +34,9 @@ module.exports = {
   transformIgnorePatterns: [
     '/node_modules/(?!(bootstrap-vue-next|perfect-debounce|nostics|@unhead/vue|unhead|hookable)/)',
   ],
-  // Playwright の E2E (test/e2e) は jest ではなく `bun run test:e2e` で実行する。
-  testPathIgnorePatterns: ['/node_modules/', '<rootDir>/test/e2e/'],
+  // Playwright の E2E (test/e2e) とビジュアルリグレッション (test/visual) は jest ではなく
+  // `bun run test:e2e` / `bun run test:visual` で実行する。
+  testPathIgnorePatterns: ['/node_modules/', '<rootDir>/test/e2e/', '<rootDir>/test/visual/'],
   snapshotSerializers: ['<rootDir>/node_modules/jest-serializer-vue'],
   setupFiles: ['<rootDir>/test/unit/setup'],
   setupFilesAfterEnv: ['<rootDir>/test/unit/setupAfterEnv'],

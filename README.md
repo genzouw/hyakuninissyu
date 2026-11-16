@@ -55,6 +55,7 @@ In the project directory, you can run:
 - `bun run build` - `dist` フォルダにミニファイ済みの本番用ビルドを生成します。あわせて `dist/sitemap.xml` を自動生成します。
 - `bun run unit` - Jest を使用したユニットテストを実行します。
 - `bun run test:e2e` - 本番ビルドを生成し、Playwright で主要ルートのスモーク E2E テストを実行します。初回のみ `bun x playwright install chromium webkit` でブラウザを取得してください。
+- `bun run test:visual` - 本番ビルドを生成し、公開ルートの見た目を基準画像と比較します。基準画像は CI のコンテナ（`.github/workflows/visual-regression.yml`）で撮った Linux 用のため、ローカルで実行すると `-darwin` などの画像が別に作られます。
 - `bun run lint` - ESLint でコードベースをリンティングします。
 
 ## CI/CD および自動コードレビュー

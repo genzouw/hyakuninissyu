@@ -1,0 +1,99 @@
+name: Visual regression
+
+# 公開ルートの見た目を基準画像 (test/visual/visual.spec.js-snapshots/*-linux.png) と比較する (#616)。
+# Renovate が自動マージする Bootstrap などの minor 更新で表示が崩れたときに、差分画像で気づけるようにする。
+#
+# 誤検知の頻度を見るため、導入から 2 週間程度は必須チェックに登録しない。
+# 必須チェックにする場合は genzouw/genzouw.com の Terraform に context (ジョブの name:) を追加し、
+# このワークフローに paths フィルタや job 単位の if: を付けないこと。
+#
+# 基準画像の作り直し: Actions タブから workflow_dispatch を update-snapshots: true で実行し、
+# artifact visual-snapshots の PNG を test/visual/visual.spec.js-snapshots/ にコミットする。
+# 基準画像が無い状態で実行した場合も、撮った画像を同じ artifact に出す。
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+    inputs:
+      update-snapshots:
+        description: '差分のある基準画像を撮り直して artifact に出す'
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  visual:
+    name: Visual regression (Playwright)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    # 描画はホストの OS・フォント・ブラウザの版で変わるため、撮影環境を公式イメージで固定する。
+    # タグは bun.lock の @playwright/test と同じ版にする (Renovate の playwright グループで同時に上がる)。
+    # step-security/harden-runner はコンテナジョブに対応していないため、このジョブでは使わない
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+
+    steps:
+      # oven-sh/setup-bun は Bun の zip を unzip コマンドで展開するが、公式イメージには入っていない
+      - name: Install unzip
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends unzip
+
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Bun Environment
+        uses: ./.github/actions/setup-bun-env
+
+      # 版がずれると、イメージに同梱のブラウザが見つからないか、基準画像と違う版のブラウザで撮ることになる
+      - name: Check Playwright version matches container image
+        run: |
+          installed="$(bun x playwright --version | awk '{print $2}')"
+          image="$(grep -oE 'mcr\.microsoft\.com/playwright:v[0-9.]+' .github/workflows/visual-regression.yml | head -n 1 | sed 's/.*:v//')"
+          echo "@playwright/test: ${installed} / container image: ${image}"
+          if [ "${installed}" != "${image}" ]; then
+            echo "::error::@playwright/test (${installed}) とコンテナイメージ (v${image}) の版が一致しません。container.image のタグを ${installed} にそろえてください" >&2
+            exit 1
+          fi
+
+      - name: Build
+        run: bun run build
+
+      # 既定 (missing) は基準画像が無いルートだけ撮って失敗にする。差分があれば失敗し、差分画像はレポートに出る
+      - name: Run visual regression
+        env:
+          UPDATE_SNAPSHOTS: ${{ inputs.update-snapshots && 'changed' || 'missing' }}
+        run: bun x playwright test --config playwright.visual.config.js --update-snapshots="${UPDATE_SNAPSHOTS}"
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: visual-report
+          path: playwright-report
+          retention-days: 7
+
+      - name: Upload snapshots
+        if: failure() || inputs.update-snapshots
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: visual-snapshots
+          path: test/visual/visual.spec.js-snapshots
+          if-no-files-found: ignore
+          retention-days: 7

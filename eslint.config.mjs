@@ -63,7 +63,7 @@ export default [
     },
   },
   {
-    files: ['test/e2e/**/*.{js,vue}'],
+    files: ['test/{e2e,visual}/**/*.{js,vue}'],
     ...pluginPlaywright.configs['flat/recommended'],
     rules: {
       ...pluginPlaywright.configs['flat/recommended'].rules,
