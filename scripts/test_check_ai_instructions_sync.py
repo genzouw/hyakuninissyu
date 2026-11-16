@@ -45,6 +45,21 @@ class ExtractSectionTest(unittest.TestCase):
     def test_最後の節ならファイル末尾までを抽出する(self):
         self.assertEqual(extract_section("# タイトル\n\n" + SECTION), SECTION.splitlines())
 
+    def test_コードブロック内の見出し記法では終端しない(self):
+        for fence in ("```", "~~~", "````"):
+            with self.subTest(fence=fence):
+                section = SECTION + f"{fence}markdown\n## 記載例\n{fence}\n\n- **禁止**: 後続の規則。\n\n"
+                lines = extract_section(document(section))
+                self.assertIn("## 記載例", lines)
+                self.assertIn("- **禁止**: 後続の規則。", lines)
+                self.assertNotIn("## Commands", lines)
+
+    def test_短いフェンスや別種のフェンスではコードブロックを閉じない(self):
+        section = SECTION + "````\n```\n~~~\n## 記載例\n````\n\n"
+        lines = extract_section(document(section))
+        self.assertIn("## 記載例", lines)
+        self.assertNotIn("## Commands", lines)
+
     def test_見出しがなければエラー(self):
         with self.assertRaises(CheckError):
             extract_section("# タイトル\n\n## Commands\n")
@@ -77,6 +92,23 @@ class CheckTest(unittest.TestCase):
             self.assertEqual(len(problems), 1)
             self.assertIn(".cursorrules", problems[0])
             self.assertIn("-- **禁止**: 有料プランの導入。", problems[0])
+
+    def test_記載例の後にある規則の欠落を差分として報告する(self):
+        example = "```markdown\n## 記載例\n```\n\n"
+        rule = "- **禁止**: 後続の規則。\n"
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.write_repo(root)
+            (root / SOURCE_PATH).write_text(document(SECTION + example + rule + "\n"), encoding="utf-8")
+            for path in COPY_PATHS:
+                section = SECTION + example + ("" if path == Path(".clinerules") else rule + "\n")
+                for old, new in LINK_REPLACEMENTS.get(path, ()):
+                    section = section.replace(old, new)
+                (root / path).write_text(document(section), encoding="utf-8")
+            problems = check(root)
+            self.assertEqual(len(problems), 1)
+            self.assertIn(".clinerules", problems[0])
+            self.assertIn("-- **禁止**: 後続の規則。", problems[0])
 
     def test_copilot_instructions_のリンクを書き換えずに写すと差分になる(self):
         with tempfile.TemporaryDirectory() as tmp:

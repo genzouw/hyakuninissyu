@@ -6,6 +6,7 @@ Cursor・Windsurf・Cline・Copilot はそれぞれ自分の指示ファイル�
 ``CLAUDE.md`` 冒頭の「## 最重要原則」節 (採用可否を決める規則) を各ファイルが写しとして持っている。
 写しは ``CLAUDE.md`` だけ更新されてずれやすいので、``CLAUDE.md`` を正として
 各ファイルの同節 (見出し行から次の ``## `` 見出しの直前まで) が一致するかを検査する。
+フェンス付きコードブロック内の ``## `` は見出しではないため、節の終端とみなさない。
 
 - ``.cursor/rules/general.mdc`` と ``.github/copilot-instructions.md`` はサブディレクトリにあるため、
   ``AGENTS.md`` へのリンクをそれぞれ ``../../AGENTS.md`` / ``../AGENTS.md`` と書く。``CLAUDE.md`` の
@@ -35,6 +36,8 @@ COPY_PATHS = (
 
 HEADING_RE = re.compile(r"^## 最重要原則")
 NEXT_HEADING_RE = re.compile(r"^## ")
+# CommonMark のフェンス: 3 つ以上の ` または ~ (行頭の空白は 3 つまで)
+FENCE_RE = re.compile(r"^ {0,3}(?P<fence>`{3,}|~{3,})(?P<rest>.*)$")
 
 # 写しごとの、期待値を作るためのリンク表記の置き換え (CLAUDE.md での表記 -> 写しでの表記)
 LINK_REPLACEMENTS = {
@@ -54,10 +57,24 @@ def extract_section(text: str) -> list[str]:
     if start is None:
         raise CheckError("「## 最重要原則」見出しが見つかりません")
 
-    end = next(
-        (i for i in range(start + 1, len(lines)) if NEXT_HEADING_RE.match(lines[i])),
-        len(lines),
-    )
+    end = len(lines)
+    fence: str | None = None  # 開いているフェンス (コードブロック外なら None)
+    for i in range(start + 1, len(lines)):
+        line = lines[i]
+        match = FENCE_RE.match(line)
+        if fence is None:
+            if match and not (match["fence"][0] == "`" and "`" in match["rest"]):
+                fence = match["fence"]
+            elif NEXT_HEADING_RE.match(line):
+                end = i
+                break
+        elif (
+            match
+            and match["fence"][0] == fence[0]
+            and len(match["fence"]) >= len(fence)
+            and not match["rest"].strip()
+        ):
+            fence = None
     return lines[start:end]
 
 
