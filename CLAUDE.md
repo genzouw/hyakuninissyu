@@ -1,5 +1,7 @@
 # Hyakunin Isshu - AI Agent Instructions
 
+<!-- 次の「最重要原則」節は .cursorrules / .windsurfrules / .clinerules / .github/copilot-instructions.md に写している。変更したら写しも更新すること（pre-commit の check-ai-instructions-sync が一致を検査する） -->
+
 ## 最重要原則: 完全無料の SaaS・AI・ツールのみを利用する (MUST)
 
 本リポジトリは公開 OSS です。CI/CD および自動化ワークフローに組み込んでよいのは、**公開 OSS リポジトリで完全無料 (課金が一切発生しない) な SaaS / AI / ツールのみ** です。

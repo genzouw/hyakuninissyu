@@ -1,5 +1,7 @@
 # GitHub Copilot Instructions for Hyakunin Isshu
 
+When assisting with code generation or answering questions about this repository, please adhere to the following guidelines:
+
 ## 最重要原則: 完全無料の SaaS・AI・ツールのみを利用する (MUST)
 
 本リポジトリは公開 OSS です。CI/CD および自動化ワークフローに組み込んでよいのは、**公開 OSS リポジトリで完全無料 (課金が一切発生しない) な SaaS / AI / ツールのみ** です。
@@ -14,9 +16,11 @@
 - **許可**: 公開 OSS 向けに完全無料の GitHub Action / GitHub App、リポジトリ内で完結するスクリプト。
 - **許可**: 開発者個人のローカル環境で自分の負担で AI ツールを使うこと。禁止しているのは CI/CD への組み込みです。
 
+**GitHub Actions / GitHub App に採用してよいのは、公開リポジトリで無料で実行できるツールだけです。** 採用前に (1) 公式料金ページで「公開 OSS では課金が発生しない」ことを確認、(2) OSS 無料枠に審査や star 数の条件があるなら本リポジトリが現時点で満たしているかを確認、(3) 無料トライアル中であることを「無料」と判断しない、(4) その Action / GitHub App が LLM の API キーを必須としないことを確認、の 4 点を必ず行い、根拠 URL を PR 本文に記載してください。
+
 判断に迷ったら PR を作らず Issue でオーナー (@genzouw) に相談してください。詳細は [`AGENTS.md`](../AGENTS.md) を参照してください。
 
-When assisting with code generation or answering questions about this repository, please adhere to the following guidelines:
+過去の違反例として、Qodo Merge (旧 PR-Agent) を 2026-09 に撤去しています。恒久的な無料プランが存在せず (トライアル 14 日 + star 200 以上が条件の審査制 OSS プログラムのみ)、自己ホスト版 Action も `OPENAI_KEY` を必須とするため、本リポジトリでは動作させる手段がありませんでした。
 
 ## Technology Stack
 
