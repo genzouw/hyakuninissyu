@@ -29,3 +29,4 @@ rules:
       - mutation.yml
       - repomix.yml
       - reviewdog.yml
+      - visual-regression.yml

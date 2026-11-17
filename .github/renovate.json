@@ -109,6 +109,18 @@
       "groupName": "github-actions"
     },
     {
+      "description": [
+        "@playwright/test と、ビジュアルリグレッションの撮影に使う公式コンテナイメージは同じ版で上げる。",
+        "片方だけ上がると visual-regression.yml の版の一致検査で失敗する (#616)。",
+        "github-actions グループより後に置き、container.image をこちらのグループへ移す。"
+      ],
+      "matchPackageNames": [
+        "@playwright/test",
+        "mcr.microsoft.com/playwright"
+      ],
+      "groupName": "playwright"
+    },
+    {
       "description": "Docker の更新は 1 PR にまとめる (Dependabot の groups.docker と同じ)",
       "matchManagers": [
         "dockerfile",

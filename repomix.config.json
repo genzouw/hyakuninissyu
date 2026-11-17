@@ -38,6 +38,7 @@
     "repomix.config.json",
     "commitlint.config.js",
     "playwright.config.js",
+    "playwright.visual.config.js",
     ".babelrc",
     "stryker.config.json",
     "docker-compose.yml",

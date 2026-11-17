@@ -55,6 +55,7 @@ In the project directory, you can run:
 - `bun run build` - `dist` フォルダにミニファイ済みの本番用ビルドを生成します。あわせて `dist/sitemap.xml` を自動生成します。
 - `bun run unit` - Jest を使用したユニットテストを実行します。
 - `bun run test:e2e` - 本番ビルドを生成し、Playwright で主要ルートのスモーク E2E テストを実行します。初回のみ `bun x playwright install chromium webkit` でブラウザを取得してください。
+- `bun run test:visual` - 本番ビルドを生成し、公開ルートの見た目を基準画像と比較します。基準画像は CI のコンテナ（`.github/workflows/visual-regression.yml`）で撮った Linux 用のため、ローカルの macOS に基準画像がない初回実行では、`-darwin` の画像を生成してテストが失敗します。次回以降はその画像と比較するため、CI の Linux 基準画像との差分は検出できません。CI と同じ比較結果を確認したい場合は、CI の結果を確認してください。
 - `bun run lint` - ESLint でコードベースをリンティングします。
 
 ## CI/CD および自動コードレビュー

@@ -94,6 +94,7 @@ Jules の管理画面に貼り付けてご利用ください。
 | Lint                    | commitlint (`commitlint.config.js`, `.husky/`)                                                           | Conventional Commits 準拠検証                                         |
 | 性能 / アクセシビリティ | Lighthouse CI (`.github/workflows/lighthouse.yml`)                                                       | Web パフォーマンス / アクセシビリティ計測                             |
 | テスト                  | E2E スモーク (`test/e2e/smoke.spec.js`, `playwright.config.js`)                                          | PR 時と本番デプロイ後に全公開ルートを巡回し表示不能を検知             |
+| テスト                  | ビジュアルリグレッション (`.github/workflows/visual-regression.yml`, `playwright.visual.config.js`)      | 公開ルートの見た目を基準画像と比較し表示崩れを検知 (必須チェック外)   |
 | リリース管理            | Release Drafter (`.github/workflows/release-drafter.yml`, `.github/release-drafter.yml`)                 | リリースノート自動生成                                                |
 | リリース管理            | Semantic PR (`.github/workflows/semantic-pr.yml`)                                                        | PR タイトルの Conventional Commits 準拠検証                           |
 | 依存更新                | Renovate (`.github/renovate.json`)                                                                       | 依存パッケージ自動更新と auto-merge                                   |
