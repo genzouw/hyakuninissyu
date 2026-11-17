@@ -5,19 +5,16 @@ const PORT = 8080
 const EXTERNAL_BASE_URL = process.env.E2E_BASE_URL
 const BASE_URL = EXTERNAL_BASE_URL || `http://127.0.0.1:${PORT}`
 
+// 外部ホスト（本番など）を巡回するときも、両方のプロジェクトを実行する。
+// WebKit は、CSP の違反と「report-to の無い Report-Only の CSP は効果が無い」という警告を
+// console error として出す。本番の CSP は本適用（Content-Security-Policy）で、実際の読み込みと
+// 揃っているため、mobile-webkit も通る（genzouw/genzouw.com#460）。CSP を Report-Only に戻すと
+// mobile-webkit は全ルートで失敗する。
 const PROJECTS = [
   { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
   // iPhone のブラウザは原則 WebKit で動くため、スマートフォン幅 + WebKit でも同じスモークを回す
   { name: 'mobile-webkit', use: { ...devices['iPhone 13'] } },
 ]
-
-// 外部ホストを巡回するときは chromium だけを実行する。
-// 本番 CloudFront が返す Content-Security-Policy-Report-Only の違反を、WebKit だけが
-// console error として出すため、mobile-webkit は全ルートで失敗する。CSP 側が
-// 実際の読み込み（Google Fonts・AdSense・Twitter ウィジェット）と揃ったら mobile-webkit も加える。
-const ACTIVE_PROJECTS = EXTERNAL_BASE_URL
-  ? PROJECTS.filter(({ name }) => name === 'chromium')
-  : PROJECTS
 
 // 既定では、ビルド済みの dist を history fallback (-s) 付きで配信して巡回する。
 // 事前に `bun run build` が必要（`bun run test:e2e` は pretest:e2e で実行する）。
@@ -29,7 +26,7 @@ export default defineConfig({
   workers: 1,
   reporter: process.env.CI ? [['github'], ['html', { open: 'never' }]] : [['list']],
   use: { baseURL: BASE_URL, trace: 'on-first-retry' },
-  projects: ACTIVE_PROJECTS,
+  projects: PROJECTS,
   webServer: EXTERNAL_BASE_URL
     ? undefined
     : {
