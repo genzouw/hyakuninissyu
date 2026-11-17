@@ -129,9 +129,6 @@ export default {
     this.loadQuestion()
   },
   methods: {
-    clickStart () {
-      this.clickNext()
-    },
     clickAnswer () {
       this.thinking = false
 
