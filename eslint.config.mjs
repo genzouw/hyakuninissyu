@@ -51,6 +51,11 @@ export default [
       'vuejs-accessibility/click-events-have-key-events': 'warn',
       'vuejs-accessibility/no-static-element-interactions': 'warn',
       'vuejs-accessibility/media-has-caption': 'warn',
+      // 定義したまま template・スクリプトのどこからも参照されない props・data・computed・methods を検出する。
+      // flat/recommended に含まれない Uncategorized のルールのため明示的に有効にする。
+      'vue/no-unused-properties': ['error', {
+        groups: ['props', 'data', 'computed', 'methods', 'setup'],
+      }],
     },
   },
   {

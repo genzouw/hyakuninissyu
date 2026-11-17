@@ -62,13 +62,6 @@ export default {
       TWITTER_SHARE_URL
     }
   },
-  computed: {
-    result () {
-      return ` ${this.score}もん せいかい ( ${
-        this.countOfQuestions
-      }もんちゅう )`
-    }
-  },
   watch: {
     $route: 'fetchData'
   },

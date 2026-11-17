@@ -153,7 +153,6 @@ export default {
   computed: {
     ...mapGetters('timeAttack', [
       'formattedTime',
-      'isGameFinished',
       'elapsedTimeMs'
     ]),
     remainingCards () {

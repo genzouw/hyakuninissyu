@@ -134,9 +134,6 @@ export default {
     aiWon () {
       return this.aiScore > this.playerScore
     },
-    isDraw () {
-      return this.playerScore === this.aiScore
-    },
     playerAccuracy () {
       return ((this.playerScore / this.totalQuestions) * 100).toFixed(1)
     },
