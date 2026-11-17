@@ -1,4 +1,4 @@
-FROM httpd:2.4.69-alpine
+FROM httpd:2.4.71-alpine
 
 # ベースイメージ同梱の Alpine パッケージの既知脆弱性 (expat / nghttp2 / perl) を修正版へ更新する
 RUN apk upgrade --no-cache && \
