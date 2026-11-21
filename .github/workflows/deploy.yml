@@ -91,7 +91,16 @@ jobs:
       - name: Harden Runner
         uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
         with:
-          egress-policy: audit
+          # 本番の AWS 認証情報を扱うジョブのため、許可した宛先以外への通信を遮断する。
+          # Renovate による Action 更新で宛先が増えたときは、ここへ追加する。
+          # S3 の許可先は S3 sync と同じ Repository Variables の S3_BUCKET から生成する。
+          egress-policy: block
+          allowed-endpoints: >
+            *.actions.githubusercontent.com:443
+            *.blob.core.windows.net:443
+            sts.ap-northeast-1.amazonaws.com:443
+            ${{ vars.S3_BUCKET }}.s3.ap-northeast-1.amazonaws.com:443
+            cloudfront.amazonaws.com:443
 
       - name: Download artifact
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -166,7 +175,11 @@ jobs:
       - name: Harden Runner
         uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
         with:
-          egress-policy: audit
+          # INDEXNOW_KEY を扱うジョブのため、許可した宛先以外への通信を遮断する。
+          egress-policy: block
+          allowed-endpoints: >
+            hyakuninissyu.genzouw.com:443
+            api.indexnow.org:443
 
       - name: Submit URLs to IndexNow API
         run: |
