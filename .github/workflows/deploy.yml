@@ -93,13 +93,13 @@ jobs:
         with:
           # 本番の AWS 認証情報を扱うジョブのため、許可した宛先以外への通信を遮断する。
           # Renovate による Action 更新で宛先が増えたときは、ここへ追加する。
-          # S3 バケット名は Repository Variables の S3_BUCKET と合わせる。
+          # S3 の許可先は S3 sync と同じ Repository Variables の S3_BUCKET から生成する。
           egress-policy: block
           allowed-endpoints: >
             *.actions.githubusercontent.com:443
             *.blob.core.windows.net:443
             sts.ap-northeast-1.amazonaws.com:443
-            genzouw-static-content.s3.ap-northeast-1.amazonaws.com:443
+            ${{ vars.S3_BUCKET }}.s3.ap-northeast-1.amazonaws.com:443
             cloudfront.amazonaws.com:443
 
       - name: Download artifact
