@@ -175,6 +175,7 @@ Issue では「なぜ既存の無料サービスでは目的を達成できな�
 - **パッケージマネージャ**: Bun のみ。`package.json` の `scripts` は `bun run <cmd>` で実行する。
 - **webpack 起動時の環境変数**: `NODE_OPTIONS=--openssl-legacy-provider` が必須 (`bun run build` / `bun run dev`)。CI で `bun run build` を新規追加する場合も同様。
 - **GA 計測タグ ID**: `process.env.GA_ID` は webpack DefinePlugin で静的に埋め込まれる (未設定時は `null`)。Secrets での管理は不要。
+- **Sentry Loader キー**: `SENTRY_LOADER_KEY` は Repository Variables で管理する公開キーで、`index.html` の Loader Script に埋め込まれる (未設定時はタグを出さない)。Secrets での管理は不要。
 - **ルーティング**: パラメータをパスに埋め込む形 (`/playing/:countOfQuestions`、`/gameSet/:countOfQuestions/:score`、`/time-attack-result/:timeMs/:score`、`/ai-battle-result/:playerScore/:aiScore/:totalQuestions/:difficulty`、`/daily-challenge-result/:score/:streak/:previousStreak/:newlyCollectedCount?` 等)。新規ルートを追加する場合はこの形式に揃える。
 - **永続化**: `localStorage` のキーは `dailyChallengeLastCompleted` / `dailyChallengeStreak` / `collectedPoemIds` 等が既に使われている。新キーを追加する際は衝突を避ける。
 - **TTS**: 音声合成は `src/composables/useSpeech.js` の `enableSpeak` / `speakText` インターフェース経由で利用する。`speechSynthesis.cancel()` に引数を渡してはいけない。
