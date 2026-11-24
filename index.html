@@ -29,14 +29,19 @@
     SHA が無いビルドでは release を付けない。
   -->
   <% if (htmlWebpackPlugin.options.sentryLoaderKey) { %>
+  <% if (htmlWebpackPlugin.options.sentryRelease) { %>
+  <meta name="sentry-release" content="<%- htmlWebpackPlugin.options.sentryRelease %>">
+  <% } %>
   <script>
     window.sentryOnLoad = function () {
-      Sentry.init({
+      var releaseMeta = document.querySelector('meta[name="sentry-release"]');
+      var options = {
         allowUrls: [/^https:\/\/hyakunin(?:issyu)?\.genzouw\.com\//],
-        <% if (htmlWebpackPlugin.options.sentryRelease) { %>
-        release: <%= JSON.stringify(htmlWebpackPlugin.options.sentryRelease) %>,
-        <% } %>
-      });
+      };
+      if (releaseMeta) {
+        options.release = releaseMeta.content;
+      }
+      Sentry.init(options);
     };
   </script>
   <script src="https://js.sentry-cdn.com/<%= htmlWebpackPlugin.options.sentryLoaderKey %>.min.js" crossorigin="anonymous"></script>
