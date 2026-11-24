@@ -22,6 +22,9 @@
     公開キーが未設定のビルド（ローカル・PR の CI・E2E・Lighthouse）ではタグを出さない。
     allowUrls で自サイトのスクリプトのエラーだけを送り、AdSense や Twitter ウィジェットのエラーは送らない。
     自サイトには、同じ内容を配信している別名ホスト hyakunin.genzouw.com も含める。
+    Loader は async を付けず同期で読む。後続のスクリプト（アプリのバンドルなど）より必ず先に動かし、
+    その読み込み直後のエラーも取りこぼさないためである。代わりに Sentry の CDN が遅い・止まっているときは
+    初回描画が待たされる。
   -->
   <% if (htmlWebpackPlugin.options.sentryLoaderKey) { %>
   <script>
