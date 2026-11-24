@@ -8,9 +8,16 @@ const ROUTES = [
   { path: '/collection', name: 'collection' },
 ]
 
-// test/e2e/smoke.spec.js と同じく、AdSense / Twitter widgets / GA は空スクリプトで応答する。
-// 外部スクリプトが差し込む広告やボタンは撮るたびに変わるため、読み込ませない
-const STUBBED_HOSTS = new Set(['pagead2.googlesyndication.com', 'platform.twitter.com', 'www.googletagmanager.com'])
+// test/e2e/smoke.spec.js と同じく、AdSense / Twitter widgets / GA / Sentry Loader は空スクリプトで応答する。
+// 外部スクリプトが差し込む広告やボタンは撮るたびに変わるため、読み込ませない。
+// Sentry Loader はキー無しのビルドでは出力されないが、キー入りのビルドで撮っても本番の Sentry へ送らないよう揃えておく
+const STUBBED_HOSTS = new Set([
+  'pagead2.googlesyndication.com',
+  'platform.twitter.com',
+  'www.googletagmanager.com',
+  'js.sentry-cdn.com',
+  'browser.sentry-cdn.com',
+])
 
 test.beforeEach(async ({ page }) => {
   await page.route(

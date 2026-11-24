@@ -31,6 +31,15 @@ if (process.env.GA_ID) {
 }
 
 const app = createApp(App)
+// 本番の Vue は未処理のエラーを console に出すだけで window の error イベントに届かないため、
+// ここで Sentry へ渡す。Loader Script が無い（キー未設定・広告ブロッカー）ときは送らない。
+// console.error を残し、console へ出す既存の挙動は変えない
+app.config.errorHandler = (err, instance, info) => {
+  console.error(err)
+  if (window.Sentry) {
+    window.Sentry.captureException(err, { tags: { vue_info: info } })
+  }
+}
 app.use(router)
 app.use(store)
 app.use(createBootstrap())

@@ -43,6 +43,7 @@ jobs:
       - name: Build
         env:
           GA_ID: ${{ vars.GA_ID }}
+          SENTRY_LOADER_KEY: ${{ vars.SENTRY_LOADER_KEY }}
           NODE_OPTIONS: --openssl-legacy-provider
         run: bun run build
 
@@ -221,7 +222,7 @@ jobs:
             --data-binary @/tmp/payload.json
 
   # デプロイ直後の本番に対して、PR 時と同じ E2E スモーク (test/e2e/smoke.spec.js) を実行する (#604)。
-  # S3・CloudFront の配信経路や、本番ビルドだけで有効になる分岐 (GA_ID) の破壊を検知する。
+  # S3・CloudFront の配信経路や、本番ビルドだけで有効になる分岐 (GA_ID・SENTRY_LOADER_KEY) の破壊を検知する。
   # 検知した時点で本番は壊れているため、破壊を防ぐのではなく気づくまでの時間を縮めるもの。
   # 失敗したら原因のコミットを revert して main に push し、再デプロイする。
   smoke-production:

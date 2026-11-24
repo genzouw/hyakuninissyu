@@ -13,10 +13,18 @@ test('検査対象のルートを 1 件以上抽出できている', () => {
 })
 
 // 検査したいのは自前のバンドルであり外部スクリプトの可用性ではないため、
-// AdSense / Twitter widgets / GA は空スクリプトで応答する。
+// AdSense / Twitter widgets / GA / Sentry Loader は空スクリプトで応答する。
+// Sentry をスタブすると window.Sentry が作られず、本番スモーク中のエラーやセッションが本番の Sentry に送られない。
+// CSP の判定はリクエストを出す前にブラウザが行うため、スタブしても script-src の違反は検知できる
 // abort にすると Chromium が net::ERR_FAILED を console error として出すため fulfill を使う
 // URL 全体への正規表現はホスト名の前後に任意の文字列が付いても一致するため、ホスト名の完全一致で判定する
-const STUBBED_HOSTS = new Set(['pagead2.googlesyndication.com', 'platform.twitter.com', 'www.googletagmanager.com'])
+const STUBBED_HOSTS = new Set([
+  'pagead2.googlesyndication.com',
+  'platform.twitter.com',
+  'www.googletagmanager.com',
+  'js.sentry-cdn.com',
+  'browser.sentry-cdn.com',
+])
 
 test.beforeEach(async ({ page }) => {
   await page.route(

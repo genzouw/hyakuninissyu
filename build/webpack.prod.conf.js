@@ -83,6 +83,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         process.env.NODE_ENV === 'testing' ? 'index.html' : config.build.index,
       template: 'index.html',
       inject: true,
+      // Sentry の Loader Script の公開キー（vars.SENTRY_LOADER_KEY）。未設定ならタグを出さない
+      sentryLoaderKey: process.env.SENTRY_LOADER_KEY || '',
       minify: {
         removeComments: true,
         collapseWhitespace: true,
