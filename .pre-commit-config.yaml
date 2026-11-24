@@ -89,7 +89,7 @@ repos:
               \.env[^/]* |
               \.npmrc |
               \.yarnrc[^/]* |
-              \.?bunfig\.toml$ |
+              \.bunfig\.toml$ |
               \.bolt/ |
               \.trae/ |
               \.lovable/ |
@@ -118,6 +118,7 @@ repos:
               \.history/
             ) |
             (^|/)\.vscode/(launch|tasks)\.json$ |
+            ^.+/bunfig\.toml$ |
             ^.*\.DS_Store$ |
             ^.*Thumbs\.db$ |
             ^.*desktop\.ini$ |

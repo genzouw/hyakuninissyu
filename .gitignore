@@ -164,6 +164,9 @@ insomnia_*.json
 .yarnrc*
 .bunfig.toml
 bunfig.toml
+# ルートの bunfig.toml は minimumReleaseAge の設定だけを持ち、認証情報を書かない (#631)。
+# 認証情報を書かないこと。書く場合は ignore に戻す
+!/bunfig.toml
 package-lock.json
 npm-shrinkwrap.json
 yarn.lock
