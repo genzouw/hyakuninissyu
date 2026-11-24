@@ -21,12 +21,13 @@
     Sentry の Loader Script。後から読まれるスクリプトのエラーも拾うため、AdSense より前に置く。
     公開キーが未設定のビルド（ローカル・PR の CI・E2E・Lighthouse）ではタグを出さない。
     allowUrls で自サイトのスクリプトのエラーだけを送り、AdSense や Twitter ウィジェットのエラーは送らない。
+    自サイトには、同じ内容を配信している別名ホスト hyakunin.genzouw.com も含める。
   -->
   <% if (htmlWebpackPlugin.options.sentryLoaderKey) { %>
   <script>
     window.sentryOnLoad = function () {
       Sentry.init({
-        allowUrls: [/^https:\/\/hyakuninissyu\.genzouw\.com\//],
+        allowUrls: [/^https:\/\/hyakunin(?:issyu)?\.genzouw\.com\//],
       });
     };
   </script>
