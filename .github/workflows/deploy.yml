@@ -25,6 +25,10 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       app-js: ${{ steps.app-js.outputs.path }}
+    # Sentry の release に使うコミット SHA。ソースマップのアップロードを同じジョブに足すときも
+    # 同じ名前を使えるよう、Build ステップではなくジョブ全体に置く
+    env:
+      SENTRY_RELEASE: ${{ github.sha }}
 
     steps:
       - name: Harden Runner

@@ -16,6 +16,22 @@ const env =
     ? require('../config/test.env')
     : require('../config/prod.env');
 
+// Sentry の Loader Script の公開キー（vars.SENTRY_LOADER_KEY）。未設定なら Sentry のタグを出さない
+const sentryLoaderKey = process.env.SENTRY_LOADER_KEY || '';
+
+// Sentry の release に使うコミット SHA（deploy.yml の SENTRY_RELEASE）。
+// index.html のスクリプトに埋め込むため、40 桁の 16 進数だけを受け付ける。
+// キーがあるのに値が無い・不正なときは、release を付けずに警告だけ出してビルドを続ける
+const rawSentryRelease = process.env.SENTRY_RELEASE || '';
+const sentryRelease = /^[0-9a-f]{40}$/.test(rawSentryRelease)
+  ? rawSentryRelease
+  : '';
+if (sentryLoaderKey && !sentryRelease) {
+  console.warn(
+    'SENTRY_RELEASE が未設定か 40 桁の 16 進数ではないため、Sentry の release を付けずにビルドします',
+  );
+}
+
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
   module: {
@@ -83,8 +99,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         process.env.NODE_ENV === 'testing' ? 'index.html' : config.build.index,
       template: 'index.html',
       inject: true,
-      // Sentry の Loader Script の公開キー（vars.SENTRY_LOADER_KEY）。未設定ならタグを出さない
-      sentryLoaderKey: process.env.SENTRY_LOADER_KEY || '',
+      sentryLoaderKey,
+      sentryRelease,
       minify: {
         removeComments: true,
         collapseWhitespace: true,

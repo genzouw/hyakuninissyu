@@ -25,13 +25,23 @@
     Loader は async を付けず同期で読む。後続のスクリプト（アプリのバンドルなど）より必ず先に動かし、
     その読み込み直後のエラーも取りこぼさないためである。代わりに Sentry の CDN が遅い・止まっているときは
     初回描画が待たされる。
+    release にはデプロイしたコミット SHA を渡し、Sentry 上でイベントをデプロイ単位に分ける。
+    SHA が無いビルドでは release を付けない。
   -->
   <% if (htmlWebpackPlugin.options.sentryLoaderKey) { %>
+  <% if (htmlWebpackPlugin.options.sentryRelease) { %>
+  <meta name="sentry-release" content="<%- htmlWebpackPlugin.options.sentryRelease %>">
+  <% } %>
   <script>
     window.sentryOnLoad = function () {
-      Sentry.init({
+      var releaseMeta = document.querySelector('meta[name="sentry-release"]');
+      var options = {
         allowUrls: [/^https:\/\/hyakunin(?:issyu)?\.genzouw\.com\//],
-      });
+      };
+      if (releaseMeta) {
+        options.release = releaseMeta.content;
+      }
+      Sentry.init(options);
     };
   </script>
   <script src="https://js.sentry-cdn.com/<%= htmlWebpackPlugin.options.sentryLoaderKey %>.min.js" crossorigin="anonymous"></script>
