@@ -180,7 +180,7 @@ Issue では「なぜ既存の無料サービスでは目的を達成できな�
 - **パッケージマネージャ**: Bun のみ。`package.json` の `scripts` は `bun run <cmd>` で実行してください。
 - **webpack 起動時の環境変数**: `NODE_OPTIONS=--openssl-legacy-provider` が必須です (`bun run build` / `bun run dev`)。CI で `bun run build` を新規追加する場合も同様。
 - **GA 計測タグ ID**: `process.env.GA_ID` は webpack DefinePlugin で静的に埋め込まれます (未設定時は `null`)。Secrets での管理は不要です。
-- **Sentry Loader キー**: `SENTRY_LOADER_KEY` は Repository Variables で管理する公開キーで、`index.html` の Loader Script に埋め込まれます (未設定時はタグを出しません)。Secrets での管理は不要です。
+- **Sentry Loader キー**: `SENTRY_LOADER_KEY` は Repository Variables で管理する公開キーで、`index.html` の Loader Script に埋め込まれます (未設定時はタグを出しません)。Secrets での管理は不要です。`Sentry.init` の `release` には、`deploy.yml` の build ジョブが `SENTRY_RELEASE` として渡すコミット SHA を埋め込みます (40 桁の 16 進数以外は付けません)。
 - **ルーティング**: パラメータをパスに埋め込む形 (`/playing/:countOfQuestions`、`/gameSet/:countOfQuestions/:score`、`/time-attack-result/:timeMs/:score`、`/ai-battle-result/:playerScore/:aiScore/:totalQuestions/:difficulty`、`/daily-challenge-result/:score/:streak/:previousStreak/:newlyCollectedCount?` 等)。新規ルートを追加する場合はこの形式に揃えてください。
 - **永続化**: `localStorage` のキーは `dailyChallengeLastCompleted` / `dailyChallengeStreak` / `collectedPoemIds` 等が既に使われています。新キーを追加する際は衝突を避けてください。
 - **TTS**: `src/composables/useSpeech.js` の `enableSpeak` / `speakText` インターフェース経由で利用してください。`speechSynthesis.cancel()` に引数を渡してはいけません。
