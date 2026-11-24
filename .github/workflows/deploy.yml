@@ -43,6 +43,7 @@ jobs:
       - name: Build
         env:
           GA_ID: ${{ vars.GA_ID }}
+          SENTRY_LOADER_KEY: ${{ vars.SENTRY_LOADER_KEY }}
           NODE_OPTIONS: --openssl-legacy-provider
         run: bun run build
 

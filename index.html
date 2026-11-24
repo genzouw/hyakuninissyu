@@ -17,6 +17,21 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <meta name="google-site-verification" content="gFYiPUxpzQzAhrVmsACmY-N3Y7jURnIQMfT5GKlnWmU" />
   <title>ひゃくにんいっしゅをおぼえよう</title>
+  <!--
+    Sentry の Loader Script。後から読まれるスクリプトのエラーも拾うため、AdSense より前に置く。
+    公開キーが未設定のビルド（ローカル・PR の CI・E2E・Lighthouse）ではタグを出さない。
+    allowUrls で自サイトのスクリプトのエラーだけを送り、AdSense や Twitter ウィジェットのエラーは送らない。
+  -->
+  <% if (htmlWebpackPlugin.options.sentryLoaderKey) { %>
+  <script>
+    window.sentryOnLoad = function () {
+      Sentry.init({
+        allowUrls: [/^https:\/\/hyakuninissyu\.genzouw\.com\//],
+      });
+    };
+  </script>
+  <script src="https://js.sentry-cdn.com/<%= htmlWebpackPlugin.options.sentryLoaderKey %>.min.js" crossorigin="anonymous"></script>
+  <% } %>
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <script>
     (adsbygoogle = window.adsbygoogle || []).push({
