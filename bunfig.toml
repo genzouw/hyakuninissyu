@@ -1,0 +1,4 @@
+[install]
+# 公開から 2 日（172800 秒）未満の版を解決しない。
+# Renovate の minimumReleaseAge（3 日）より短くし、Renovate が出した更新 PR を bun が拒みにくくする
+minimumReleaseAge = 172800
