@@ -20,6 +20,10 @@ permissions:
 jobs:
   smoke:
     runs-on: ubuntu-latest
+    # Deploy の group とは共有しない。イベント種別を含め、push 起点の検査が定期・手動実行に取り消されないようにする
+    concurrency:
+      group: smoke-production-${{ github.event_name }}-${{ github.ref }}
+      cancel-in-progress: false
     timeout-minutes: 15
     permissions:
       contents: read
