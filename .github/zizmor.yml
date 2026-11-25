@@ -29,4 +29,5 @@ rules:
       - mutation.yml
       - repomix.yml
       - reviewdog.yml
+      - smoke-production.yml
       - visual-regression.yml
