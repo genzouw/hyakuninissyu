@@ -215,9 +215,7 @@ export default {
       // 今日のチャレンジ用の5首を取得
       const todaysPoems = getTodaysChallengePoems(poems)
       this.questionList = todaysPoems.map((poem) => ({
-        id: poem.id,
-        question: poem.question,
-        answer: poem.answer,
+        ...poem,
         choices: [],
       }))
 
