@@ -51,6 +51,10 @@ export default [
       'vuejs-accessibility/click-events-have-key-events': 'warn',
       'vuejs-accessibility/no-static-element-interactions': 'warn',
       'vuejs-accessibility/media-has-caption': 'warn',
+      // テンプレートと this から参照しているが、props・data・computed・methods・setup と
+      // Vuex の map* ヘルパーのどこにも定義が無いプロパティを検出する（綴り誤り・削除漏れ）。
+      // 下の vue/no-unused-properties と対になるルール。
+      'vue/no-undef-properties': 'error',
       // 定義したまま template・スクリプトのどこからも参照されない props・data・computed・methods を検出する。
       // flat/recommended に含まれない Uncategorized のルールのため明示的に有効にする。
       'vue/no-unused-properties': ['error', {

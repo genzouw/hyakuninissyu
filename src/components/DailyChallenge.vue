@@ -187,9 +187,11 @@ export default {
       score: 0,
       newlyCollectedCount: 0,
       questionData: {
+        id: null,
         question: '',
         choices: [],
         answer: '',
+        author: '',
       },
       choice: null,
       thinking: false,
