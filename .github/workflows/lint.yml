@@ -148,6 +148,8 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+          # diff-cover がベースブランチとの merge-base を求めるため、全履歴を取得する
+          fetch-depth: 0
 
       - name: Setup Bun Environment
         uses: ./.github/actions/setup-bun-env
@@ -156,6 +158,26 @@ jobs:
       # 失敗したらログ末尾の Seed を bun run unit --randomize --seed=<Seed> に渡すと同じ順序で再現できる。
       - name: Run unit tests
         run: bun run unit --randomize
+
+      - name: Setup Python (diff coverage)
+        if: github.event_name == 'pull_request'
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.15'
+
+      # PR で追加・変更した src の JS の行のうち、単体テストで実行された割合を検査する。
+      # .vue は lcov.info の行番号が <script> ブロック基準でずれているため対象外にしている。
+      - name: Check diff coverage
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          python -m pip install -r requirements-coverage.txt
+          diff-cover test/unit/coverage/lcov.info \
+            --compare-branch "origin/${BASE_REF}" \
+            --include 'src/**/*.js' \
+            --fail-under 80 \
+            --format "markdown:${GITHUB_STEP_SUMMARY}"
 
   e2e:
     name: E2E smoke (Playwright)

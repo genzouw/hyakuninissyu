@@ -97,6 +97,13 @@ To set up the project locally for development:
 6. Check for style issues with `bun run lint`.
 7. Execute unit tests using `bun run unit`. `test/unit/jest.conf.js` の `coverageThreshold` はカバレッジの下限（ラチェット）で、割れると失敗します。実測値ではなく「下げてはいけない値」なので、実測が安定して上回ってから引き上げてください。
    CI ではテストの順序をシャッフルする `--randomize` を付けて実行します。CI だけで失敗した場合は、ログ末尾に表示される `Seed:` の値を使い `bun run unit --randomize --seed=<Seed>` で同じ順序を再現してください。
+   PR の CI では、追加・変更した `src/**/*.js` の行のうち単体テストで実行された割合が 80% 未満だと失敗します（[diff-cover](https://github.com/Bachmann1234/diff_cover)。`.vue` は対象外）。手元では `bun run unit` の後に、次のコマンドで確かめられます（Python 3.11 以上が必要です）。
+
+   ```bash
+   pip install -r requirements-coverage.txt
+   diff-cover test/unit/coverage/lcov.info --compare-branch origin/main --include 'src/**/*.js' --fail-under 80
+   ```
+
 8. Perform end-to-end testing with `bun run test:e2e`. 初回のみ `bun x playwright install chromium webkit` でブラウザを取得してください。
 
 ## セキュリティおよび漏洩防止 (Security and Leak Prevention)
