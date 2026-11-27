@@ -286,7 +286,12 @@ export default {
       // 問題データ
       questions: [],
       currentQuestionIndex: 0,
-      currentQuestion: {},
+      currentQuestion: {
+        id: null,
+        question: '',
+        answer: '',
+        author: '',
+      },
       choices: [],
       correctAnswerIndex: -1,
 
