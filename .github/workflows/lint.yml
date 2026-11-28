@@ -167,6 +167,7 @@ jobs:
 
       # PR で追加・変更した src の JS の行のうち、単体テストで実行された割合を検査する。
       # .vue は lcov.info の行番号が <script> ブロック基準でずれているため対象外にしている。
+      # jest の collectCoverageFrom で除外している src/main.js・src/router/index.js も、lcov.info に載らないため対象外になる。
       - name: Check diff coverage
         if: github.event_name == 'pull_request'
         env:
