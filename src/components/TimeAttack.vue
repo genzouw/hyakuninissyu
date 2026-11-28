@@ -141,9 +141,11 @@ export default {
       currentQuestionIndex: 0,
       score: 0,
       questionData: {
+        id: null,
         question: '',
         choices: [],
-        answer: ''
+        answer: '',
+        author: ''
       },
       choice: null,
       thinking: false,
@@ -164,11 +166,13 @@ export default {
     this.questionList = _.shuffle(poems)
 
     // ゲーム開始
+    // eslint-disable-next-line vue/no-undef-properties -- mapActions で定義済み。ルールは methods より前のフックの参照を未定義と判定する
     this.startGame()
     this.loadQuestion()
   },
   beforeUnmount () {
     // コンポーネント破棄時にタイマーを停止
+    // eslint-disable-next-line vue/no-undef-properties -- mapActions で定義済み。ルールは methods より前のフックの参照を未定義と判定する
     this.stopGame()
   },
   methods: {

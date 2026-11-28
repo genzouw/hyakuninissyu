@@ -114,9 +114,11 @@ export default {
       score: 0,
       countOfQuestions: 0,
       questionData: {
+        id: null,
         question: '',
         choices: [],
-        answer: ''
+        answer: '',
+        author: ''
       },
       choice: null,
       thinking: false,
